@@ -1,0 +1,29 @@
+{
+  "name": "hopefuture-blog",
+  "version": "0.0.0",
+  "authors": [
+    "linder0209 <linder0209@126.com>"
+  ],
+  "description": "This is a blog(Hope Future Blog).",
+  "main": "app.js",
+  "keywords": [
+    "hope",
+    "future",
+    "blog"
+  ],
+  "dependencies": {
+    "jquery": "*",
+    "bootstrap": "*",
+    "html5shiv": "*",
+    "respond": "*"
+  },
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "public/components",
+    "test",
+    "tests"
+  ]
+}
