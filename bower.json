@@ -11,11 +11,12 @@
     "future",
     "blog"
   ],
-  "dependencies": {
-    "jquery": "*",
-    "bootstrap": "*",
-    "html5shiv": "*",
-    "respond": "*"
+  "devDependencies": {
+    "jquery": "2.1.0",
+    "bootstrap": "3.1.1",
+    "html5shiv": "3.7.0",
+    "respond": "1.4.2",
+    "angular": "1.2.14"
   },
   "license": "MIT",
   "private": true,
