@@ -1,3 +1,5 @@
 .idea
 node_modules
-public/components
+dist
+.tmp
+app/bower_components
