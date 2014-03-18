@@ -1,5 +1,5 @@
 {
-  "node": true,
+  "node": true,//node环境
   "browser": true,
   "esnext": true,
   "bitwise": true,
@@ -19,6 +19,7 @@
   "trailing": true,
   "smarttabs": true,
   "globals": {
-    "angular": false
+    "angular": false,
+    "jQuery": false
   }
 }
