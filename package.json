@@ -29,6 +29,8 @@
     "load-grunt-tasks": "~0.2.0",
     "time-grunt": "~0.2.1",
     "karma": "^0.12.1",
+    "karma-chrome-launcher": "^0.1.2",
+    "karma-jasmine": "^0.1.5",
     "grunt-karma": "^0.8.2"
   },
   "engines": {
