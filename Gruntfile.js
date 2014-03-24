@@ -24,7 +24,8 @@ module.exports = function (grunt) {
     yeoman: {
       // configurable paths
       app: require('./bower.json').appPath || 'app',
-      dist: 'dist'
+      dist: 'dist',
+      server: 'server'
     },
 
     // Watches files for changes and runs tasks based on the changed files
@@ -49,46 +50,19 @@ module.exports = function (grunt) {
       },
       livereload: {
         options: {
-          livereload: '<%= connect.options.livereload %>'
+          livereload: '35729'
         },
         files: [
           '<%= yeoman.app %>/{,*/}*.html',
           '.tmp/styles/{,*/}*.css',
           '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
         ]
-      }
-    },
-
-    // The actual grunt server settings
-    connect: {
-      options: {
-        port: 9000,
-        // Change this to '0.0.0.0' to access the server from outside.
-        hostname: 'localhost',
-        livereload: 35729
       },
-      livereload: {
+      express: {
+        files: [ '<%= yeoman.server %>/{,*/}*.js' ],
+        tasks: [ 'express:dev' ],
         options: {
-          open: true,
-          base: [
-            '.tmp',
-            '<%= yeoman.app %>'
-          ]
-        }
-      },
-      test: {
-        options: {
-          port: 9001,
-          base: [
-            '.tmp',
-            'test',
-            '<%= yeoman.app %>'
-          ]
-        }
-      },
-      dist: {
-        options: {
-          base: '<%= yeoman.dist %>'
+          spawn: false // for grunt-contrib-watch v0.5.0+, "nospawn: true" for lower versions. Without this option specified express won't be reloaded
         }
       }
     },
@@ -302,32 +276,7 @@ module.exports = function (grunt) {
         'svgmin'
       ]
     },
-    express: {
-      options: {
-        port: 9000,
-        hostname: '*'
-      },
-      livereload: {
-        options: {
-          server: path.resolve('./server/app.js'),
-          livereload: true,
-          serverreload: true,
-          bases: [path.resolve('./.tmp'), path.resolve(__dirname, '<%= yeoman.app %>')]
-        }
-      },
-      test: {
-        options: {
-          server: path.resolve('./server/app.js'),
-          bases: [path.resolve('./.tmp'), path.resolve(__dirname, 'test')]
-        }
-      },
-      dist: {
-        options: {
-          server: path.resolve('./server/app.js'),
-          bases: path.resolve(__dirname, '<%= yeoman.dist %>')
-        }
-      }
-    },
+
     // By default, your `index.html`'s <!-- Usemin block --> will take care of
     // minification. These next options are pre-configured if you do not wish
     // to use the Usemin blocks.
@@ -360,13 +309,34 @@ module.exports = function (grunt) {
         configFile: 'karma.conf.js',
         singleRun: true
       }
+    },
+
+    express: {
+      options: {
+        port: 9000
+      },
+      dev: {
+        options: {
+          script: './app.js'
+        }
+      },
+      dist: {
+        options: {
+          script: 'path/to/prod/server.js',
+          node_env: 'production'
+        }
+      },
+      test: {
+        options: {
+          script: 'path/to/test/server.js'
+        }
+      }
     }
   });
 
-
   grunt.registerTask('serve', function (target) {
     if (target === 'dist') {
-      return grunt.task.run(['build', 'connect:dist:keepalive','express:dist:keepalive']);
+      return grunt.task.run(['build','express:dist']);
     }
 
     grunt.task.run([
@@ -374,8 +344,7 @@ module.exports = function (grunt) {
       'bower-install',
       'concurrent:server',
       'autoprefixer',
-      'express:livereload',
-      'connect:livereload',
+      'express:dev',
       'watch'
     ]);
   });
@@ -389,7 +358,6 @@ module.exports = function (grunt) {
     'clean:server',
     'concurrent:test',
     'autoprefixer',
-    'connect:test',
     'express:test',
     'karma'
   ]);

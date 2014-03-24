@@ -4,8 +4,8 @@
  */
 
 var express = require('express');
-var routes = require('./routes');
-var user = require('./routes/user');
+var routes = require('./server/routes');
+var user = require('./server/routes/user');
 var http = require('http');
 var path = require('path');
 var ejs = require('ejs');
@@ -42,6 +42,8 @@ if ('development' === app.get('env')) {
 //定义路由
 app.get('/', routes.index);
 app.get('/users', user.list);
+
+module.exports = app;
 
 http.createServer(app).listen(app.get('port'), function () {
   console.log('Express server listening on port ' + app.get('port'));
