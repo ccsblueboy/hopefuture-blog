@@ -24,10 +24,7 @@ app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
 app.use(app.router);
-
-//设置多个 static-files ，这样在加载的时候就可以不用书写public和components
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'public/components')));
+app.use(require('less-middleware')({ src: path.join(__dirname, 'app') }));
 
 // development only
 if ('development' === app.get('env')) {

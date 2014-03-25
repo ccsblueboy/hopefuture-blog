@@ -1,8 +1,6 @@
 // Generated on 2014-03-17 using generator-angular 0.7.1
 'use strict';
 
-var path = require('path');
-
 // # Globbing
 // for performance reasons we're only matching one level down:
 // 'test/spec/{,*/}*.js'
@@ -319,24 +317,13 @@ module.exports = function (grunt) {
         options: {
           script: './app.js'
         }
-      },
-      dist: {
-        options: {
-          script: 'path/to/prod/server.js',
-          node_env: 'production'
-        }
-      },
-      test: {
-        options: {
-          script: 'path/to/test/server.js'
-        }
       }
     }
   });
 
   grunt.registerTask('serve', function (target) {
     if (target === 'dist') {
-      return grunt.task.run(['build','express:dist']);
+      return grunt.task.run(['build']);
     }
 
     grunt.task.run([
@@ -358,7 +345,6 @@ module.exports = function (grunt) {
     'clean:server',
     'concurrent:test',
     'autoprefixer',
-    'express:test',
     'karma'
   ]);
 
