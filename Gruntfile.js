@@ -57,7 +57,7 @@ module.exports = function (grunt) {
         ]
       },
       express: {
-        files: [ '<%= yeoman.server %>/{,*/}*.js' ],
+        files: [ 'app.js', '<%= yeoman.server %>/{,*/}*.js' ],
         tasks: [ 'express:dev' ],
         options: {
           spawn: false // for grunt-contrib-watch v0.5.0+, "nospawn: true" for lower versions. Without this option specified express won't be reloaded
@@ -73,7 +73,8 @@ module.exports = function (grunt) {
       },
       all: [
         'Gruntfile.js',
-        '<%= yeoman.app %>/scripts/{,*/}*.js'
+        '<%= yeoman.app %>/scripts/{,*/}*.js',
+        '<%= yeoman.server %>/{,*/}*.js'
       ],
       test: {
         options: {
@@ -249,6 +250,12 @@ module.exports = function (grunt) {
             cwd: '.tmp/images',
             dest: '<%= yeoman.dist %>/images',
             src: ['generated/*']
+          },
+          {
+            expand: true,
+            cwd: '<%= yeoman.server %>',
+            dest: '<%= yeoman.dist %>',
+            src: ['server/*']
           }
         ]
       },
