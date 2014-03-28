@@ -9,9 +9,9 @@
 * 搭建项目框架
 * 参考同类产品
 
-##version 0.0.1  搭建框架(2014-3-28)
+##version 0.0.1  搭建基本框架(2014-3-28)
 
 * 用 yeoman 搭建 基于 angular 项目
-* 后端使用 express
+* 使用后台 express
 * 加入 grunt express task
-* 参考同类产品
+* 修改Gruntfile.js文件，watch express 代码，grunt build express
