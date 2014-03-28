@@ -1,0 +1,39 @@
+{
+  "name": "hopefuture-blog",
+  "version": "0.0.0",
+  "authors": [
+    "linder0209 <linder0209@126.com>"
+  ],
+  "description": "This app is a free, open source blog(Hope Future Blog).",
+  "keywords": [
+    "hope",
+    "future",
+    "blog"
+  ],
+  "dependencies": {
+    "express": "~3.4.8",
+    "ejs": "~1.0.0",
+    "less-middleware": "0.1.15"
+  },
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/linder0209/hopefuture-blog.git"
+  },
+  "bugs": {
+    "url": "https://github.com/linder0209/hopefuture-blog/issues"
+  },
+  "homepage": "https://github.com/linder0209/hopefuture-blog",
+  "engines": {
+    "node": "0.10.x"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/linder0209/hopefuture-blog/blob/master/LICENSE.md"
+    }
+  ]
+}

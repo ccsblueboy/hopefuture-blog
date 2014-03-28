@@ -26,14 +26,15 @@ app.use(express.methodOverride());
 app.use(app.router);
 app.use(require('less-middleware')({ src: path.join(__dirname, 'app') }));
 
+//app.set('env', 'production');
 // development only
 if ('development' === app.get('env')) {
   app.set('views', __dirname + '/app');
   app.use(express.static(path.join(__dirname, 'app')));
   app.use(express.errorHandler());
 } else {
-  app.set('views', __dirname + '/dist');
-  app.use(express.static(path.join(__dirname, 'dist')));
+  app.set('views', __dirname);
+  app.use(express.static(path.join(__dirname, '')));
 }
 
 //定义路由

@@ -1,6 +1,15 @@
 {
   "name": "hopefuture-blog",
   "version": "0.0.0",
+  "authors": [
+    "linder0209 <linder0209@126.com>"
+  ],
+  "description": "This app is a free, open source blog(Hope Future Blog).",
+  "keywords": [
+    "hope",
+    "future",
+    "blog"
+  ],
   "dependencies": {
     "express": "~3.4.8",
     "ejs": "~1.0.0",

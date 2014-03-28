@@ -23,7 +23,8 @@ module.exports = function (grunt) {
       // configurable paths
       app: require('./bower.json').appPath || 'app',
       dist: 'dist',
-      server: 'server'
+      server: 'server',
+      publish: 'publish'
     },
 
     // Watches files for changes and runs tasks based on the changed files
@@ -93,7 +94,8 @@ module.exports = function (grunt) {
             src: [
               '.tmp',
               '<%= yeoman.dist %>/*',
-              '!<%= yeoman.dist %>/.git*'
+              '!<%= yeoman.dist %>/.git*',
+              '!<%= yeoman.dist %>/node_modules/**'
             ]
           }
         ]
@@ -253,9 +255,21 @@ module.exports = function (grunt) {
           },
           {
             expand: true,
-            cwd: '<%= yeoman.server %>',
+            cwd: './',
             dest: '<%= yeoman.dist %>',
-            src: ['server/*']
+            src: ['<%= yeoman.server %>/**']
+          },
+          {
+            expand: true,
+            cwd: './',
+            dest: '<%= yeoman.dist %>',
+            src: ['app.js']
+          },
+          {
+            expand: true,
+            cwd: '<%= yeoman.publish %>',
+            dest: '<%= yeoman.dist %>',
+            src: ['**']
           }
         ]
       },
