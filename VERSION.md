@@ -19,3 +19,4 @@
 ##version 0.0.2  完善项目基本框架()
 
 * 调整文件夹 app 编译（build）后放到 webapp目录下
+* 整合 mongodb 数据库
