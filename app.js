@@ -33,8 +33,8 @@ if ('development' === app.get('env')) {
   app.use(express.static(path.join(__dirname, 'app')));
   app.use(express.errorHandler());
 } else {
-  app.set('views', __dirname);
-  app.use(express.static(path.join(__dirname, '')));
+  app.set('views', __dirname + '/webapp');
+  app.use(express.static(path.join(__dirname, 'webapp')));
 }
 
 //定义路由

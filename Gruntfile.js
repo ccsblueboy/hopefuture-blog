@@ -24,7 +24,8 @@ module.exports = function (grunt) {
       app: require('./bower.json').appPath || 'app',
       dist: 'dist',
       server: 'server',
-      publish: 'publish'
+      publish: 'publish',
+      webapp: 'dist/webapp'
     },
 
     // Watches files for changes and runs tasks based on the changed files
@@ -146,10 +147,11 @@ module.exports = function (grunt) {
     // Reads HTML for usemin blocks to enable smart builds that automatically
     // concat, minify and revision files. Creates configurations in memory so
     // additional tasks can operate on them
+    // 该task 会整合 concat、uglify、cssmin
     useminPrepare: {
       html: '<%= yeoman.app %>/index.html',
       options: {
-        dest: '<%= yeoman.dist %>'
+        dest: '<%= yeoman.webapp %>'
       }
     },
 
@@ -170,7 +172,7 @@ module.exports = function (grunt) {
             expand: true,
             cwd: '<%= yeoman.app %>/images',
             src: '{,*/}*.{png,jpg,jpeg,gif}',
-            dest: '<%= yeoman.dist %>/images'
+            dest: '<%= yeoman.webapp %>/images'
           }
         ]
       }
@@ -182,7 +184,7 @@ module.exports = function (grunt) {
             expand: true,
             cwd: '<%= yeoman.app %>/images',
             src: '{,*/}*.svg',
-            dest: '<%= yeoman.dist %>/images'
+            dest: '<%= yeoman.webapp %>/images'
           }
         ]
       }
@@ -236,7 +238,7 @@ module.exports = function (grunt) {
             expand: true,
             dot: true,
             cwd: '<%= yeoman.app %>',
-            dest: '<%= yeoman.dist %>',
+            dest: '<%= yeoman.webapp %>',
             src: [
               '*.{ico,png,txt}',
               '.htaccess',
@@ -250,20 +252,14 @@ module.exports = function (grunt) {
           {
             expand: true,
             cwd: '.tmp/images',
-            dest: '<%= yeoman.dist %>/images',
+            dest: '<%= yeoman.webapp %>/images',
             src: ['generated/*']
           },
           {
             expand: true,
             cwd: './',
             dest: '<%= yeoman.dist %>',
-            src: ['<%= yeoman.server %>/**']
-          },
-          {
-            expand: true,
-            cwd: './',
-            dest: '<%= yeoman.dist %>',
-            src: ['app.js']
+            src: ['app.js', '<%= yeoman.server %>/**']
           },
           {
             expand: true,
