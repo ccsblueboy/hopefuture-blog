@@ -9,7 +9,7 @@ var user = require('./server/routes/user');
 var http = require('http');
 var path = require('path');
 var ejs = require('ejs');
-
+var routes = require('./server/routes/routes');
 var app = express();
 
 // all environments
@@ -38,8 +38,7 @@ if ('development' === app.get('env')) {
 }
 
 //定义路由
-app.get('/', routes.index);
-app.get('/users', user.list);
+routes(app);
 
 module.exports = app;
 
