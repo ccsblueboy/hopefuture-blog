@@ -10,9 +10,13 @@
 module.exports = function (grunt) {
 
   // Load grunt tasks automatically
+  // 自动加载grunt tasks
+  // https://github.com/sindresorhus/load-grunt-tasks
   require('load-grunt-tasks')(grunt);
 
   // Time how long tasks take. Can help when optimizing build times
+  // 统计显示各任务执行的时间
+  // https://github.com/sindresorhus/time-grunt
   require('time-grunt')(grunt);
 
   // Define the configuration for all the tasks
@@ -59,7 +63,7 @@ module.exports = function (grunt) {
         ]
       },
       express: {
-        files: [ 'app.js', '<%= yeoman.server %>/{,*/}*.js' ],
+        files: [ 'app.js', '<%= yeoman.server %>/**/*.js' ],
         tasks: [ 'express:dev' ],
         options: {
           spawn: false // for grunt-contrib-watch v0.5.0+, "nospawn: true" for lower versions. Without this option specified express won't be reloaded
@@ -125,6 +129,10 @@ module.exports = function (grunt) {
     'bower-install': {
       app: {
         html: '<%= yeoman.app %>/index.html',
+        ignorePath: '<%= yeoman.app %>/'
+      },
+      demo: {
+        html: '<%= yeoman.app %>/demo.html',
         ignorePath: '<%= yeoman.app %>/'
       }
     },
