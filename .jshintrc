@@ -2,13 +2,14 @@
   "node": true,//node环境
   "browser": true,
   "esnext": true,
-  "bitwise": true,
-  "camelcase": true,
-  "curly": true,
-  "eqeqeq": true,
-  "immed": true,
-  "indent": 2,
-  "latedef": true,
+  "bitwise": true,//禁用位运算操作，提高代码执行效率
+  "camelcase": true,//使用驼峰式命名
+  "curly": true,//if、while、for等必须加上{}
+  "eqeqeq": true,//用 === 代替 == ，用 !== 代替 !=
+  "freeze": true,// 当复写对象prototype存在的方法时，会提示错误警告。
+  "immed": true,// 立即调用函数表达式时，需要用()包裹函数
+  "indent": 2,// 代码排版缩进两个空格
+  "latedef": true,//在调用变量或函数时，必须确保这些变量和函数在调用之前已经声明过，也就是说声明代码必须写在调用代码的前面，而不能写在后面
   "newcap": true,
   "noarg": true,
   "quotmark": "single",
