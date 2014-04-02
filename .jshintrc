@@ -1,7 +1,8 @@
 {
   "node": true,//node环境
-  "browser": true,
-  "esnext": true,
+  "jquery": true,// jQuery 环境
+  "browser": true,// 基于现代浏览器
+  "esnext": true,// 告诉JSHint用 ECMAScript 6 规范检测js代码
   "bitwise": true,//禁用位运算操作，提高代码执行效率
   "camelcase": true,//使用驼峰式命名
   "curly": true,//if、while、for等必须加上{}
@@ -13,14 +14,13 @@
   "newcap": true,
   "noarg": true,
   "quotmark": "single",
-  "regexp": true,
-  "undef": true,
-  "unused": true,
-  "strict": true,
-  "trailing": true,
-  "smarttabs": true,
+  "regexp": true,// 则正则中不允许使用 . 或者 [^…]
+  "undef": true,// 变量必须先声明后才能使用
+  "unused": true,// 表示如果声明了变量，但没有使用，会提示错误警告的。
+  "strict": true,// 表明SHint会要求你使用use strict;语法
+  "trailing": true,// 不能用 \ 定义多行字符串
+  "smarttabs": true,// 不能混合使用tab和空格
   "globals": {
-    "angular": false,
-    "jQuery": false
+    "angular": false
   }
 }

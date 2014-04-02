@@ -112,13 +112,13 @@ module.exports = function (grunt) {
     // Add vendor prefixed styles
     autoprefixer: {
       options: {
-        browsers: ['last 1 version']
+        browsers: ['last 1 version']// 指定浏览器版本
       },
       dist: {
         files: [
           {
             expand: true,
-            cwd: '.tmp/styles/',
+            cwd: '.tmp/styles/',// 指定当前文件夹
             src: '{,*/}*.css',
             dest: '.tmp/styles/'
           }
