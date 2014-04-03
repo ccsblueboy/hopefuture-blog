@@ -110,6 +110,7 @@ module.exports = function (grunt) {
     },
 
     // Add vendor prefixed styles
+    // 该任务用来分析css并为css3加上各浏览器前缀
     autoprefixer: {
       options: {
         browsers: ['last 1 version']// 指定浏览器版本
@@ -127,27 +128,36 @@ module.exports = function (grunt) {
     },
 
     // Automatically inject Bower components into the app
-    'bower-install': {
-      app: {
-        html: '<%= yeoman.app %>/index.html',
-        ignorePath: '<%= yeoman.app %>/'
-      },
-      demo: {
-        html: '<%= yeoman.app %>/demo.html',
-        ignorePath: '<%= yeoman.app %>/'
+    bowerInstall: {
+      target: {
+        // Point to the files that should be updated when
+        // you run `grunt bower-install`
+        src: [
+          '<%= yeoman.app %>/index.html',   // .html support...
+          '<%= yeoman.app %>/demo.html'
+        ],
+
+        // Optional:
+        // ---------
+        cwd: '',
+        dependencies: true,
+        devDependencies: false,
+        exclude: [],
+        fileTypes: {},
+        ignorePath: ''
       }
     },
 
-
     // Renames files for browser caching purposes
+    // 该任务用来重新命名文件
     rev: {
       dist: {
         files: {
           src: [
-            '<%= yeoman.dist %>/scripts/{,*/}*.js',
-            '<%= yeoman.dist %>/styles/{,*/}*.css',
-            '<%= yeoman.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
-            '<%= yeoman.dist %>/styles/fonts/*'
+            '<%= yeoman.webapp %>/scripts/{,*/}*.js',
+            '<%= yeoman.webapp %>/styles/{,*/}*.css',
+            '<%= yeoman.webapp %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
+            '<%= yeoman.webapp %>/styles/fonts/*'
           ]
         }
       }
@@ -156,20 +166,30 @@ module.exports = function (grunt) {
     // Reads HTML for usemin blocks to enable smart builds that automatically
     // concat, minify and revision files. Creates configurations in memory so
     // additional tasks can operate on them
-    // 该task 会整合 concat、uglify、cssmin
+    // 该task 会启用 concat、uglify、cssmin 来处理转换文件，会处理html中类似以下定义的块
+    /**
+     * <!-- build:js js/app.js -->
+     <script src="js/app.js"></script>
+     <script src="js/controllers/thing-controller.js"></script>
+     <script src="js/models/thing-model.js"></script>
+     <script src="js/views/thing-view.js"></script>
+     <!-- endbuild -->
+    **/
     useminPrepare: {
-      html: '<%= yeoman.app %>/index.html',
       options: {
-        dest: '<%= yeoman.webapp %>'
+        dest: '<%= yeoman.webapp %>'//输出路径
+      },
+      app: {
+        src: ['<%= yeoman.app %>/index.html', '<%= yeoman.app %>/demo.html']
       }
     },
 
     // Performs rewrites based on rev and the useminPrepare configuration
     usemin: {
-      html: ['<%= yeoman.dist %>/{,*/}*.html'],
-      css: ['<%= yeoman.dist %>/styles/{,*/}*.css'],
+      html: ['<%= yeoman.webapp %>/{,*/}*.html'],
+      css: ['<%= yeoman.webapp %>/styles/{,*/}*.css'],
       options: {
-        assetsDirs: ['<%= yeoman.dist %>']
+        assetsDirs: ['<%= yeoman.webapp %>']
       }
     },
 
@@ -178,7 +198,7 @@ module.exports = function (grunt) {
       dist: {
         files: [
           {
-            expand: true,
+            expand: true,// Enable dynamic expansion
             cwd: '<%= yeoman.app %>/images',
             src: '{,*/}*.{png,jpg,jpeg,gif}',
             dest: '<%= yeoman.webapp %>/images'
@@ -201,17 +221,17 @@ module.exports = function (grunt) {
     htmlmin: {
       dist: {
         options: {
-          collapseWhitespace: true,
-          collapseBooleanAttributes: true,
-          removeCommentsFromCDATA: true,
+          collapseWhitespace: true,// 合并多余的空格
+          collapseBooleanAttributes: true,// Collapse boolean attributes. <input disabled="disabled"> => <input disabled>
+          removeCommentsFromCDATA: true,//删除script 和style中的注解
           removeOptionalTags: true
         },
         files: [
           {
             expand: true,
-            cwd: '<%= yeoman.dist %>',
+            cwd: '<%= yeoman.webapp %>',
             src: ['*.html', 'views/{,*/}*.html'],
-            dest: '<%= yeoman.dist %>'
+            dest: '<%= yeoman.webapp %>'
           }
         ]
       }
@@ -331,7 +351,7 @@ module.exports = function (grunt) {
     karma: {
       unit: {
         configFile: 'karma.conf.js',
-        singleRun: true
+        singleRun: false
       }
     },
 
@@ -353,11 +373,11 @@ module.exports = function (grunt) {
     }
 
     grunt.task.run([
-      'clean:server',
-      'bower-install',
-      'concurrent:server',
-      'autoprefixer',
-      'express:dev',
+      'clean:server', // clean .tmp
+      'bowerInstall',
+      'concurrent:server',// 把样式copy到临时目录中
+      'autoprefixer',// 分析css 并给css3加上浏览器前缀
+      'express:dev',// 启动 express
       'watch'
     ]);
   });
@@ -375,20 +395,20 @@ module.exports = function (grunt) {
   ]);
 
   grunt.registerTask('build', [
-    'clean:dist',
-    'bower-install',
-    'useminPrepare',
-    'concurrent:dist',
-    'autoprefixer',
+    'clean:dist',// clean dist
+    'bowerInstall',
+    'useminPrepare',//合并压缩文件
+    'concurrent:dist',//copy css image 和 svg
+    'autoprefixer',// 处理css
     'concat',
-    'ngmin',
-    'copy:dist',
-    'cdnify',
-    'cssmin',
-    'uglify',
-    'rev',
-    'usemin',
-    'htmlmin'
+    'ngmin',// 处理angular 在 .tmp下
+    'copy:dist',// copy 文件
+    'cdnify',// 处理 google cdn
+    'cssmin',// 压缩 css
+    'uglify',// 压缩 js
+    'rev',// 重新命名文件名，在 webapp下
+    'usemin', // 用压缩的文件替换
+    'htmlmin' // 处理html文件
   ]);
 
   grunt.registerTask('default', [
