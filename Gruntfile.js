@@ -113,7 +113,8 @@ module.exports = function (grunt) {
     // 该任务用来分析css并为css3加上各浏览器前缀
     autoprefixer: {
       options: {
-        browsers: ['last 1 version']// 指定浏览器版本
+        //cascade: true,// 设置层叠显示分格
+        browsers: ['last 1 version']// 指定浏览器版本，该设置表示浏览器最新版本，详见 https://github.com/ai/autoprefixer#browsers
       },
       dist: {
         files: [
@@ -181,6 +182,7 @@ module.exports = function (grunt) {
       },
       app: {
         src: ['<%= yeoman.app %>/index.html', '<%= yeoman.app %>/demo.html']
+        //src: ['<%= yeoman.app %>/demo.html']
       }
     },
 
@@ -351,7 +353,7 @@ module.exports = function (grunt) {
     karma: {
       unit: {
         configFile: 'karma.conf.js',
-        singleRun: false
+        singleRun: true
       }
     },
 
@@ -400,15 +402,15 @@ module.exports = function (grunt) {
     'useminPrepare',//合并压缩文件
     'concurrent:dist',//copy css image 和 svg
     'autoprefixer',// 处理css
-    'concat',
+    'concat',// 用 useminPrepare 生成的 concat config 连接文件
     'ngmin',// 处理angular 在 .tmp下
     'copy:dist',// copy 文件
     'cdnify',// 处理 google cdn
-    'cssmin',// 压缩 css
-    'uglify',// 压缩 js
+    'cssmin',// 用 useminPrepare 生成的 cssmin config 压缩 css
+    'uglify',// 用 useminPrepare 生成的 uglify config 压缩 js
     'rev',// 重新命名文件名，在 webapp下
-    'usemin', // 用压缩的文件替换
-    'htmlmin' // 处理html文件
+    'usemin', // 用重新命名的压缩文件替换
+    'htmlmin' // 处理html文件（删除多余的代码，包括空格和换行，注释等）
   ]);
 
   grunt.registerTask('default', [
