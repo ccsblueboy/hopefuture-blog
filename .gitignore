@@ -4,3 +4,4 @@ dist
 .tmp
 app/bower_components
 npm-debug.log
+jshint.log

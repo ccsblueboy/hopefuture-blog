@@ -22,7 +22,7 @@
 ##相关技术
 * 项目管理：Grunt Bower
 * 书写代码辅助工具： emment（快速书写html代码，前身是 zen coding）
-* 制定通用、简单的html 和 css 规范
+* 制定通用、简单的html 、css 和 javascript 规范，可以参考[这里](http://codeguide.bootcss.com/)
 * CSS：基于Bootstrap运用less快速开发构建css，掌握常用的css3，并且能用css3工具快速生成code
 * Javascript：基于Node.js能熟练构建项目,  Angular, jQuery
 * Javascript模块化管理开发：选国产Sea.js，使用Sea.js延伸的技术，如： spm

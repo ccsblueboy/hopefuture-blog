@@ -1,3 +1,3 @@
 'use strict';
 
-angular.module('demoApp', []);
+angular.module('hopefutureBlogApp', []);

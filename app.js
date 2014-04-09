@@ -5,7 +5,6 @@
 
 var express = require('express');
 var routes = require('./server/routes');
-var user = require('./server/routes/user');
 var http = require('http');
 var path = require('path');
 var ejs = require('ejs');
