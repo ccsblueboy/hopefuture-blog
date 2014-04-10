@@ -5,10 +5,10 @@ var schema = new Schema({
   id: { type: Schema.ObjectId },
   title: { type: String },
   content: { type: String },
-  created_date: { type: Date, default: Date.now },
-  created_by: String,
-  updated_date: { type: Date, default: Date.now },
-  updated_by: String
+  createdDate: { type: Date, default: Date.now },
+  createdBy: String,
+  updatedDate: { type: Date, default: Date.now },
+  updatedBy: String
 });
 
 mongoose.model('Blog', schema);
