@@ -135,7 +135,8 @@ module.exports = function (grunt) {
         // you run `grunt bower-install`
         src: [
           '<%= yeoman.app %>/index.html',   // .html support...
-          '<%= yeoman.app %>/demo.html'
+          '<%= yeoman.app %>/demo-grid.html',
+          '<%= yeoman.app %>/demo-pagination.html'
         ],
 
         // Optional:
@@ -175,14 +176,17 @@ module.exports = function (grunt) {
      <script src="js/models/thing-model.js"></script>
      <script src="js/views/thing-view.js"></script>
      <!-- endbuild -->
-    **/
+     **/
     useminPrepare: {
       options: {
         dest: '<%= yeoman.webapp %>'//输出路径
       },
       app: {
-        src: ['<%= yeoman.app %>/index.html', '<%= yeoman.app %>/demo.html']
-        //src: ['<%= yeoman.app %>/demo.html']
+        src: ['<%= yeoman.app %>/index.html',
+          '<%= yeoman.app %>/demo-grid.html',
+          '<%= yeoman.app %>/demo-pagination.html'
+        ]
+        //src: ['<%= yeoman.app %>/grid.html']
       }
     },
 
@@ -409,8 +413,8 @@ module.exports = function (grunt) {
     'cssmin',// 用 useminPrepare 生成的 cssmin config 压缩 css
     'uglify',// 用 useminPrepare 生成的 uglify config 压缩 js
     'rev',// 重新命名文件名，在 webapp下
-    'usemin', // 用重新命名的压缩文件替换
-    'htmlmin' // 处理html文件（删除多余的代码，包括空格和换行，注释等）
+    'usemin'//, // 用重新命名的压缩文件替换
+    //'htmlmin' // 处理html文件（删除多余的代码，包括空格和换行，注释等）
   ]);
 
   grunt.registerTask('default', [

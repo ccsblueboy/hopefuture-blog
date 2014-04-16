@@ -11,9 +11,9 @@ describe('Filter: demo', function () {
     demo = $filter('demo');
   }));
 
-  it('should return the input prefixed with "demo filter:"', function () {
+  it('should return the input prefixed with "grid filter:"', function () {
     var text = 'angularjs';
-    expect(demo(text)).toBe('demo filter: ' + text);
+    expect(demo(text)).toBe('grid filter: ' + text);
   });
 
 });

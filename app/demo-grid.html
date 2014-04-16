@@ -8,7 +8,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- build:css styles/vendor.css -->
+  <!-- build:css styles/demo-grid.css -->
   <!-- bower:css -->
   <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
   <!-- endbower -->
@@ -21,16 +21,15 @@
 <% include /views/common/examples-nav.html %>
 <div class="jumbotron">
   <div class="container">
-    <h1>分页显示例子</h1>
+    <h1>Grid List 例子</h1>
 
-    <p>这是一个基本的分页显示例子，涵盖了常用的增删改查功能。操作采用模态窗口方式，数据交互采用 Ajax。</p>
-
-    <p>分页例子用的 UI 是基于 <a href="https://github.com/angular-ui/bootstrap">Angular UI</a> 的。</p>
+    <p>这是一个基本的Grid（不带分页）例子，涵盖了常用的增删改查功能。操作采用模态窗口方式，数据交互采用 Ajax。</p>
+    <p>模态窗口是基于 <a href="https://github.com/angular-ui/bootstrap" target="_blank">Angular UI</a> 的。</p>
   </div>
 </div>
-<div class="container" ng-include="'views/examples/demo.html'" ng-controller="DemoCtrl"></div>
+<div class="container" ng-include="'views/examples/demo-grid.html'" ng-controller="DemoGridCtrl"></div>
 
-<!-- build:js scripts/vendor.js -->
+<!-- build:js scripts/vendor-grid.js -->
 <!-- bower:js -->
 <script src="bower_components/jquery/dist/jquery.js"></script>
 <script src="bower_components/angular/angular.js"></script>
@@ -39,11 +38,12 @@
 <!-- endbower -->
 <!-- endbuild -->
 
-<!-- build:js({.tmp,app}) scripts/demo.js -->
-<script src="scripts/apps/examples/app-demo.js"></script>
+<!-- build:js({.tmp,app}) scripts/grid.js -->
+<script src="scripts/apps/examples/app-demo-grid.js"></script>
 <script src="scripts/services/httpInterceptor.js"></script>
-<script src="scripts/services/examples/service-demo.js"></script>
-<script src="scripts/controllers/examples/controller-demo.js"></script>
+<script src="scripts/services/examples/service-demo-grid.js"></script>
+<script src="scripts/controllers/examples/controller-demo-grid.js"></script>
+<script src="scripts/controllers/controller-common.js"></script>
 <!-- endbuild -->
 </body>
 </html>

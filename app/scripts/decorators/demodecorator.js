@@ -2,7 +2,7 @@
 
 angular.module('hopefutureBlogApp')
   .config(function ($provide) {
-    $provide.decorator('demo', function ($delegate) {
+    $provide.decorator('grid', function ($delegate) {
       // decorate the $delegate
       return $delegate;
     });

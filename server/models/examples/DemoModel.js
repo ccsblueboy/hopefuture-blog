@@ -1,8 +1,8 @@
-var mongoose = require('mongoose'),
-  Schema = mongoose.Schema;
+var mongoose = require('mongoose');
+var mongodb = require('../../mongodb');
+var Schema = mongoose.Schema;
 
 var schema = new Schema({
-  id: { type: Schema.ObjectId },
   title: { type: String },
   content: { type: String },
   createdDate: { type: Date, default: Date.now },
@@ -11,4 +11,5 @@ var schema = new Schema({
   updatedBy: String
 });
 
-mongoose.model('Blog', schema);
+// 创建 Model
+module.exports = mongodb.model('Demo', schema);

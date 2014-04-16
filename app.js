@@ -13,7 +13,7 @@ var app = express();
 
 // all environments
 // 环境变量
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 9000);
 //让ejs模板改为扩展名为html
 app.engine('.html', ejs.__express);
 app.set('view engine', 'html');

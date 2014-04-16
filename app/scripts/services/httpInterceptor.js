@@ -47,11 +47,11 @@ angular.module('hopefutureBlogApp')
       //      } else {
       //        $('#sspAjaxLoading').show();
       //      }
-      console.log(headersGetter);
+      //console.log(headersGetter);
       return data;
     });
     $httpProvider.defaults.transformResponse.push(function (data, headersGetter) {
-      console.log(headersGetter);
+      //console.log(headersGetter);
       return data;
     });
 
@@ -73,9 +73,9 @@ angular.module('hopefutureBlogApp')
           });
         return defer.promise;
       },
-      post: function (url, config) {
+      post: function (url, data, config) {
         var defer = $q.defer();
-        $http.post(url, config).
+        $http.post(url, data, config).
           success(function (data, status) {
             defer.resolve(data);
           }).
