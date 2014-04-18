@@ -370,6 +370,29 @@ module.exports = function (grunt) {
           script: './app.js'
         }
       }
+    },
+    less: {
+      development: {
+        options: {
+          paths: ['<%= yeoman.app %>/styles']
+        },
+        files: {
+          "path/to/result.css": "path/to/source.less"
+        }
+      },
+      production: {
+        options: {
+          paths: ["assets/css"],
+          cleancss: true,
+          modifyVars: {
+            imgPath: '"http://mycdn.com/path/to/images"',
+            bgColor: 'red'
+          }
+        },
+        files: {
+          "path/to/result.css": "path/to/source.less"
+        }
+      }
     }
   });
 
