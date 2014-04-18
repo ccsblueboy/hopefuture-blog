@@ -49,8 +49,10 @@ DemoDao.prototype.pagination = function (dataPage, callback) {
   var model = this.model;
   model.count({}, function (err, count) {
     if (err === null) {
+      dataPage.setTotalItems(count);
       model.find({}, null, {skip: skip, limit: limit}, function (err, docs) {
-        return callback(err, docs, count);
+        dataPage.setItems(docs);
+        return callback(err, dataPage);
       });
     }
   });
@@ -72,4 +74,28 @@ DemoDao.prototype.delete = function (conditions, callback) {
     return callback(err);
   });
   query.exec();
+};
+
+/**
+ * 保存分页数据
+ * @param data
+ * @param callback
+ */
+DemoDao.prototype.savePagination = function (data, callback) {
+  if (data._id) {
+    var update = {
+      title: data.title,
+      content: data.content,
+      updatedDate: new Date()
+    };
+    this.model.update({_id: data._id}, update, function (err, numberAffected, rawResponse) {
+      return callback(err, {updatedDate: update.updatedDate});
+    });
+  } else {
+    var entity = new this.model(data);
+    //当有错误发生时，返回err；product 是返回生成的实体，numberAffected which will be 1 when the document was found and updated in the database, otherwise 0.
+    entity.save(function (err, product, numberAffected) {
+      return callback(err);
+    });
+  }
 };

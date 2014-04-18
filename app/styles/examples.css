@@ -6,6 +6,11 @@ body {
 .h-margin10-L {
   margin-left: 10px;
 }
-.h-demo-modal .modal-dialog{
+
+.h-demo-modal .modal-dialog {
   width: 800px;
+}
+
+.pagination a {
+  cursor: pointer;
 }

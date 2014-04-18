@@ -17,14 +17,13 @@ var pagination = {
       currentPage: req.query.currentPage
     };
     var dataPage = new DataPage(options);
-    demoDao.pagination(dataPage, function (err, docs, count) {
+    demoDao.pagination(dataPage, function (err, data) {
       if (err) {
         res.send({success: false});
       } else {
         res.send({
           success: true,
-          items: docs,
-          totalItems: count
+          dataPage : data
         });
       }
     });
@@ -32,7 +31,7 @@ var pagination = {
 
   save: function (req, res) {
     var data = req.body;
-    demoDao.save(data, function (err, doc) {
+    demoDao.savePagination(data, function (err, doc) {
       if (err) {
         console.error(err);
         res.send({success: false, err: err});

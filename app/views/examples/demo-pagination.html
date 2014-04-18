@@ -37,8 +37,21 @@
   </tbody>
 </table>
 
-<pagination total-items="totalItems" page="currentPage" items-per-page="itemsPerPage" max-size="maxSize" boundary-links="true"
-            num-pages="numPages"></pagination>
+<div class="row">
+  <div class="col-sm-9">
+    <pagination total-items="totalItems" page="currentPage" items-per-page="itemsPerPage" max-size="maxSize"
+                boundary-links="true" num-pages="numPages" on-select-page="loadPageData()"></pagination>
+  </div>
+
+  <div class="col-sm-3">
+    <ul class="pagination pull-right">
+      <li class="active">
+        <a>总记录数：{{totalItems}} / 总页数：{{numPages}}</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
 
 <script type="text/ng-template" id="demoModalContent.html">
   <div class="modal-header">
@@ -69,4 +82,3 @@
     <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
   </div>
 </script>
-
