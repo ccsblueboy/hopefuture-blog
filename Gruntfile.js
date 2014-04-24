@@ -361,6 +361,7 @@ module.exports = function (grunt) {
       }
     },
 
+    // express 启动任务
     express: {
       options: {
         port: 9000
@@ -371,26 +372,39 @@ module.exports = function (grunt) {
         }
       }
     },
+
+    // 把less 转换为 css 任务
     less: {
       development: {
         options: {
-          paths: ['<%= yeoman.app %>/styles']
+          paths: ['<%= yeoman.app %>/']
         },
         files: {
-          "path/to/result.css": "path/to/source.less"
+          '<%= yeoman.app %>/styles/base.css': '<%= yeoman.app %>/less/base.less'
         }
-      },
-      production: {
+      }
+    },
+
+    /**
+     * javascript API 生成器 任务
+     * docstrap 模板
+     template: 'jsdoc-templetes/ink-docstrap/template',
+     configure: 'jsdoc-templetes/ink-docstrap/template/jsdoc.conf.json'
+
+     Jaguar 模板
+     template: 'jsdoc-templetes/jaguar',
+     configure: 'jsdoc-templetes/jaguar/conf.json'
+
+     jsdoc3Template 模板，本地运行有问题，待研究
+     template: 'jsdoc-templetes/jsdoc3Template'
+     */
+    jsdoc: {
+      examples: {
+        src: ['examples/jsdoc/src/*.js'],
         options: {
-          paths: ["assets/css"],
-          cleancss: true,
-          modifyVars: {
-            imgPath: '"http://mycdn.com/path/to/images"',
-            bgColor: 'red'
-          }
-        },
-        files: {
-          "path/to/result.css": "path/to/source.less"
+          destination: 'examples/jsdoc/doc',
+          template: 'jsdoc-templetes/ink-docstrap/template',
+          configure: 'jsdoc-templetes/ink-docstrap/template/jsdoc.conf.json'
         }
       }
     }
@@ -404,6 +418,7 @@ module.exports = function (grunt) {
     grunt.task.run([
       'clean:server', // clean .tmp
       'bowerInstall',
+      'less',//把less转换为css
       'concurrent:server',// 把样式copy到临时目录中
       'autoprefixer',// 分析css 并给css3加上浏览器前缀
       'express:dev',// 启动 express
@@ -426,6 +441,7 @@ module.exports = function (grunt) {
   grunt.registerTask('build', [
     'clean:dist',// clean dist
     'bowerInstall',
+    'less',
     'useminPrepare',//合并压缩文件
     'concurrent:dist',//copy css image 和 svg
     'autoprefixer',// 处理css
@@ -444,5 +460,16 @@ module.exports = function (grunt) {
     'newer:jshint',
     'test',
     'build'
+  ]);
+
+  /**
+   * 以下任务为开发过程中测试用
+   */
+  grunt.registerTask('buildless', [
+    'less'
+  ]);
+
+  grunt.registerTask('buildjsdoc', [
+    'jsdoc:examples'
   ]);
 };
