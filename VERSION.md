@@ -18,5 +18,14 @@
 
 ##version 0.0.2  完善项目基本框架()
 
-* 调整文件夹 app 编译（build）后放到 webapp目录下
+* 调整文件夹 app 编译（build）后放到 webapp 目录下
+* 完善 grunt 相关任务帮助文档
 * 整合 mongodb 数据库
+* 加入 Angular UI Bootstrap
+* 加入对 less 的支持，并整合 grunt-contrib-less 任务
+* 实现项目简单例子
+    1. 分页显示例子，url相对路径为 example-pagination/
+    2. 基本Grid 列表，url相对路径为 example-grid/
+* 整合 grunt-jsdoc ，并生成 doc 帮助文档
+* 整理书写单元测试，并给出相关例子
+
