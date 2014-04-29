@@ -27,5 +27,7 @@
     1. 分页显示例子，url相对路径为 example-pagination/
     2. 基本Grid 列表，url相对路径为 example-grid/
 * 整合 grunt-jsdoc ，并生成 doc 帮助文档
-* 整理书写单元测试，并给出相关例子
+* 前端测试
+    1. 单元测试， grunt + karma + Jasmine
+    2. 端对端（e2e）测试， protractor
 
