@@ -358,6 +358,10 @@ module.exports = function (grunt) {
       unit: {
         configFile: 'karma.conf.js',
         singleRun: true
+      },
+      examples: {
+        configFile: './examples/jasmine/grunt-karma-jasmine/karma.conf.js',
+        singleRun: true
       }
     },
 
@@ -471,5 +475,9 @@ module.exports = function (grunt) {
 
   grunt.registerTask('buildjsdoc', [
     'jsdoc:examples'
+  ]);
+
+  grunt.registerTask('unitexamples', [
+    'karma:examples'
   ]);
 };
