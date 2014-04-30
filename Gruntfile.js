@@ -8,7 +8,6 @@
 // 'test/spec/**/*.js'
 
 module.exports = function (grunt) {
-
   // Load grunt tasks automatically
   // 自动加载grunt tasks
   // https://github.com/sindresorhus/load-grunt-tasks
@@ -437,9 +436,10 @@ module.exports = function (grunt) {
 
   grunt.registerTask('test', [
     'clean:server',
+    'less',//把less转换为css
     'concurrent:test',
     'autoprefixer',
-    'karma'
+    'karma:unit'
   ]);
 
   grunt.registerTask('build', [

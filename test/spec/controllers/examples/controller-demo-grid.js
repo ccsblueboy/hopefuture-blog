@@ -1,17 +1,17 @@
 'use strict';
 
-describe('Controller: DemoCtrl', function () {
+describe('Controller: DemoGridCtrl', function () {
 
   // load the controller's module
   beforeEach(module('hopefutureBlogApp'));
 
-  var DemoCtrl,
+  var demoGridCtrl,
     scope;
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($controller, $rootScope) {
     scope = $rootScope.$new();
-    DemoCtrl = $controller('DemoCtrl', {
+    demoGridCtrl = $controller('DemoGridCtrl', {
       $scope: scope
     });
   }));

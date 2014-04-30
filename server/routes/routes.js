@@ -9,6 +9,9 @@ module.exports = function (app) {
   app.get('/', index.index);
   app.get('/users', user.list);
 
+  app.get('/examples',function(req, res){
+    res.render('./examples.html');
+  });
   //没有分页 Grid 路由
   app.get('/example-grid', grid.index);
   app.get('/example-grid/list', grid.list);
