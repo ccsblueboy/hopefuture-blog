@@ -10,22 +10,18 @@ angular.module('hopefutureBlogApp')
 
     /**
      * 分页数据
+     * FIXME 这里如果定义为 $scope.currentPage = 1，则$scope.currentPage的值始终是1，
+     * FIXME 这是 angular的一个 bug，我们可以在外边再包一层，换成 $scope.page = {currentPage: 1};
+     * FIXME 这样就不会报错了，当然也可以跟踪 angular ui 的源代码，利用最原始的方法来动态改变 $scope.currentPage 的值，代码如下：
+     * FIXME $scope.currentPage = $scope.$$childHead.$$childHead.page; 不建议这样做
      */
-    $scope.currentPage = 1;
+    $scope.page = {currentPage: 1};
     $scope.maxSize = 5;
     $scope.itemsPerPage = 2;
 
-    $scope.loadPageData = function (page) {
-      /**
-       * FIXME 这里有一个bug（应该是angular ui的bug，待升级解决），不能直接获取 $scope.currentPage，待解决
-       */
-      if (page) {
-        $scope.currentPage = page;
-      } else if ($scope.$$childHead) {
-        $scope.currentPage = $scope.$$childHead.$$childHead.page;
-      }
+    $scope.loadPageData = function () {
       var params = {
-        currentPage: $scope.currentPage,
+        currentPage: $scope.page.currentPage,
         itemsPerPage: $scope.itemsPerPage
       };
       demoPaginationService.paging({params: params}, function (data) {
@@ -36,7 +32,7 @@ angular.module('hopefutureBlogApp')
       });
     };
 
-    $scope.loadPageData(1);
+    $scope.loadPageData();
 
     $scope.create = function () {
       openFormModal($modal, $scope);
@@ -57,7 +53,7 @@ angular.module('hopefutureBlogApp')
       modalInstance.result.then(function () {
         demoPaginationService.delete({params: {ids: [item._id]}}, function (data) {
           if (data.success === true) {
-            $scope.loadPageData(1);
+            $scope.loadPageData();
           }
         });
       });
@@ -96,6 +92,17 @@ angular.module('hopefutureBlogApp')
       });
     };
 
+    $scope.selectItem = function () {
+      var checked = false;
+      angular.forEach($scope.items, function (item, index) {
+        if (item.checked) {
+          checked = true;
+          return false;
+        }
+      });
+      $scope.grid.checked = checked;
+    };
+
     function openFormModal($modal, $scope, item, index) {
       $modal.open({
         backdrop: 'static',// 设置为 static 表示当鼠标点击页面其他地方，modal不会关闭
@@ -132,13 +139,12 @@ angular.module('hopefutureBlogApp')
         content: item.content
       };
     }
-    $scope.ok = function () {
+    $scope.save = function () {
       demoPaginationService.save($scope.demo, function (data) {
         if (data.success === true) {
           if (item) {
             angular.extend($scope.items[formData.index], $scope.demo, data.item);
           } else {
-            $scope.items.unshift(data.item);
             $scope.loadPageData(1);
           }
         }

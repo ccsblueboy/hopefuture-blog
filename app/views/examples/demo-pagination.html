@@ -22,9 +22,9 @@
   </thead>
   <tbody>
   <tr ng-repeat="item in items" id="{{item._id}}">
-    <td><input type="checkbox" ng-model="item.checked"/></td>
-    <td>{{item.title}}</td>
-    <td>{{item.content}}</td>
+    <td><input type="checkbox" ng-model="item.checked" ng-change="selectItem()"/></td>
+    <td>{{item.title | truncate:10}}</td>
+    <td>{{item.content | truncate:10}}</td>
     <td>{{item.createdDate}}</td>
     <td>{{item.createdBy}}</td>
     <td>{{item.updatedDate}}</td>
@@ -39,8 +39,8 @@
 
 <div class="row">
   <div class="col-sm-9">
-    <pagination total-items="totalItems" page="currentPage" items-per-page="itemsPerPage" max-size="maxSize"
-                boundary-links="true" num-pages="numPages" on-select-page="loadPageData()"></pagination>
+    <pagination total-items="totalItems" ng-model="page.currentPage" items-per-page="itemsPerPage" max-size="maxSize"
+                boundary-links="true" num-pages="numPages" ng-change="loadPageData()"></pagination>
   </div>
 
   <div class="col-sm-3">
@@ -54,17 +54,18 @@
 
 
 <script type="text/ng-template" id="demoModalContent.html">
-  <div class="modal-header">
-    <button type="button" class="close" ng-click="cancel()" title="Close">&times;</button>
-    <h4 class="modal-title">Add/Edit</h4>
-  </div>
-  <div class="modal-body">
-    <form class="form-horizontal" role="form">
+  <form class="form-horizontal" name="paginationForm" hf-pagination-validator>
+    <div class="modal-header">
+      <button type="button" class="close" ng-click="cancel()" title="Close">&times;</button>
+      <h4 class="modal-title">Add/Edit</h4>
+    </div>
+    <div class="modal-body">
       <div class="form-group">
         <label for="title" class="col-sm-2 control-label">Title</label>
 
         <div class="col-sm-10">
-          <input type="text" class="form-control" id="title" name="title" placeholder="Title" ng-model="demo.title">
+          <input type="text" class="form-control" id="title" name="title" placeholder="Title" ng-model="demo.title" required
+                 maxlength="100">
         </div>
       </div>
       <div class="form-group">
@@ -72,13 +73,13 @@
 
         <div class="col-sm-10">
           <textarea class="form-control" name="content" id="content" cols="30" rows="10" placeholder="Content"
-                    ng-model="demo.content"></textarea>
+                    ng-model="demo.content" required></textarea>
         </div>
       </div>
-    </form>
-  </div>
-  <div class="modal-footer">
-    <button type="submit" class="btn btn-primary" ng-click="ok()">OK</button>
-    <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
-  </div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-primary" ng-disabled="paginationForm.$pristine">OK</button>
+      <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
+    </div>
+  </form>
 </script>

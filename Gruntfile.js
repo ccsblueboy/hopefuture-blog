@@ -33,6 +33,10 @@ module.exports = function (grunt) {
 
     // Watches files for changes and runs tasks based on the changed files
     watch: {
+      bower: {
+        files: ['bower.json'],
+        tasks: ['bowerInstall']
+      },
       js: {
         files: ['<%= yeoman.app %>/scripts/{,*/}*.js'],
         tasks: ['newer:jshint:all'],
@@ -135,7 +139,8 @@ module.exports = function (grunt) {
         src: [
           '<%= yeoman.app %>/index.html',   // .html support...
           '<%= yeoman.app %>/demo-grid.html',
-          '<%= yeoman.app %>/demo-pagination.html'
+          '<%= yeoman.app %>/demo-pagination.html',
+          '<%= yeoman.app %>/examples.html'
         ],
 
         // Optional:
@@ -183,7 +188,8 @@ module.exports = function (grunt) {
       app: {
         src: ['<%= yeoman.app %>/index.html',
           '<%= yeoman.app %>/demo-grid.html',
-          '<%= yeoman.app %>/demo-pagination.html'
+          '<%= yeoman.app %>/demo-pagination.html',
+          '<%= yeoman.app %>/examples.html'
         ]
         //src: ['<%= yeoman.app %>/grid.html']
       }
@@ -293,7 +299,7 @@ module.exports = function (grunt) {
             expand: true,
             cwd: './',
             dest: '<%= yeoman.dist %>',
-            src: ['app.js', '<%= yeoman.server %>/**']
+            src: ['<%= yeoman.server %>/**']
           },
           {
             expand: true,
@@ -411,6 +417,28 @@ module.exports = function (grunt) {
           configure: 'jsdoc-templetes/ink-docstrap/template/jsdoc.conf.json'
         }
       }
+    },
+
+    /**
+     * 替换文件中的内容
+     * 默认会替换@@开头指定的内容，我们可以用option prefix 来改变，也可以用 usePrefix 禁用替换@@开头的内容，而设为替换任意指定的内容
+     * 支持正则表达式
+     */
+    replace: {
+      dist: {
+        options: {
+          usePrefix: false,// Default: true And  prefix Default: @@
+          patterns: [
+            {
+              match: 'environment = \'development\'',
+              replacement: 'environment = \'production\''
+            }
+          ]
+        },
+        files: [
+          {expand: true, flatten: true, src: ['app.js'], dest: 'dist/'}
+        ]
+      }
     }
   });
 
@@ -453,12 +481,13 @@ module.exports = function (grunt) {
     'concat',// 用 useminPrepare 生成的 concat config 连接文件
     'ngmin',// 处理angular 在 .tmp下
     'copy:dist',// copy 文件
+    'replace:dist',//替换文件
     'cdnify',// 处理 google cdn
     'cssmin',// 用 useminPrepare 生成的 cssmin config 压缩 css
     'uglify',// 用 useminPrepare 生成的 uglify config 压缩 js
     'rev',// 重新命名文件名，在 webapp下
-    'usemin', // 用重新命名的压缩文件替换
-    'htmlmin' // 处理html文件（删除多余的代码，包括空格和换行，注释等）
+    'usemin' // 用重新命名的压缩文件替换
+    //'htmlmin' // 处理html文件（删除多余的代码，包括空格和换行，注释等）
   ]);
 
   grunt.registerTask('default', [

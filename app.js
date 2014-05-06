@@ -25,7 +25,8 @@ app.use(express.methodOverride());
 app.use(app.router);
 app.use(require('less-middleware')({ src: path.join(__dirname, 'app') }));
 
-//app.set('env', 'production');
+var environment = 'development';
+app.set('env', environment);
 // development only
 if ('development' === app.get('env')) {
   app.set('views', __dirname + '/app');
