@@ -46,7 +46,7 @@ module.exports = function (grunt) {
       },
       styles: {
         files: ['<%= yeoman.app %>/styles/{,*/}*.css'],
-        tasks: ['newer:copy:styles', 'autoprefixer']
+        tasks: ['less','newer:copy:styles', 'autoprefixer']
       },
       gruntfile: {
         files: ['Gruntfile.js']
@@ -383,7 +383,8 @@ module.exports = function (grunt) {
           paths: ['<%= yeoman.app %>/']
         },
         files: {
-          '<%= yeoman.app %>/styles/base.css': '<%= yeoman.app %>/less/base.less'
+          '<%= yeoman.app %>/styles/base.css': '<%= yeoman.app %>/less/base.less',
+          '<%= yeoman.app %>/styles/examples.css': '<%= yeoman.app %>/less/examples.less'
         }
       }
     },
@@ -435,7 +436,7 @@ module.exports = function (grunt) {
   });
 
   grunt.registerTask('test', [
-    'clean:server',
+    //'clean:server',
     'less',//把less转换为css
     'concurrent:test',
     'autoprefixer',

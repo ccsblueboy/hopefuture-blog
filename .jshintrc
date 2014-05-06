@@ -20,6 +20,7 @@
   "strict": true,// 表明SHint会要求你使用use strict;语法
   "trailing": true,// 不能用 \ 定义多行字符串
   "smarttabs": true,// 不能混合使用tab和空格
+  "forin": true,
   "globals": {
     "angular": false
   }

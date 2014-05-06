@@ -2,25 +2,31 @@
 
 angular.module('hopefutureBlogApp')
   .controller('DemoGridCtrl', function ($scope, $modal, demoGridService) {
-    //初始化记录
+    /**
+     * 列表数据
+     * @type {Array}
+     */
     $scope.items = [];
+    /**
+     * 是否选中全部列表
+     * @type {{checked: boolean}}
+     */
     $scope.grid = {
       checked: false
     };
 
     /**
-     * 分页数据
-     * @type {number}
+     * 返回列表
      */
-    $scope.totalItems = 175;
-    $scope.currentPage = 4;
-    $scope.maxSize = 5;
-
     demoGridService.list(function (data) {
       if (data.success === true) {
         $scope.items = data.items;
       }
     });
+
+    /**
+     * 创建新的记录
+     */
     $scope.create = function () {
       openFormModal($modal, $scope);
     };
@@ -49,6 +55,18 @@ angular.module('hopefutureBlogApp')
     };
 
     $scope.deleteAll = function () {
+      if ($scope.grid.checked === false) {
+        $modal.open({
+          templateUrl: './views/templates/alertModal.html',
+          controller: 'AlertModalCtrl',
+          resolve: {
+            alertContent: function () {
+              return 'Please select at least one record.';
+            }
+          }
+        });
+        return;
+      }
       var modalInstance = $modal.open({
         backdrop: 'static',
         templateUrl: './views/templates/confirmModal.html',
@@ -89,6 +107,17 @@ angular.module('hopefutureBlogApp')
       });
     };
 
+    $scope.selectItem = function () {
+      var checked = false;
+      angular.forEach($scope.items, function (item, index) {
+        if (item.checked) {
+          checked = true;
+          return false;
+        }
+      });
+      $scope.grid.checked = checked;
+    };
+
     function openFormModal($modal, $scope, item, index) {
       $modal.open({
         backdrop: 'static',// 设置为 static 表示当鼠标点击页面其他地方，modal不会关闭
@@ -123,13 +152,11 @@ angular.module('hopefutureBlogApp')
         content: item.content
       };
     }
-    $scope.ok = function () {
+    $scope.save = function () {
       demoGridService.save($scope.demo, function (data) {
         if (data.success === true) {
           if (item) {
-            angular.extend($scope.items[formData.index], $scope.demo, data.item
-            )
-            ;
+            angular.extend($scope.items[formData.index], $scope.demo, data.item);
           } else {
             $scope.items.unshift(data.item);
           }

@@ -13,6 +13,7 @@ describe('Service: myFactory', function () {
 
   it('should do something', function () {
     expect(!!myFactory).toBe(true);
+    expect(myFactory.someMethod()).toBe(42);
   });
 
 });

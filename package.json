@@ -41,7 +41,7 @@
     "jshint-stylish": "~0.1.5",
     "load-grunt-tasks": "~0.2.1",
     "time-grunt": "~0.2.10",
-    "karma": "^0.12.1",
+    "karma": "^0.12.14",
     "karma-chrome-launcher": "^0.1.2",
     "karma-jasmine": "^0.1.5",
     "grunt-karma": "^0.8.2",
@@ -54,7 +54,8 @@
   },
   "scripts": {
     "test": "grunt test",
-    "start": "node app.js"
+    "start": "node app.js",
+    "protractor": "protractor test/protractor-conf.js"
   },
   "licenses": [
     {

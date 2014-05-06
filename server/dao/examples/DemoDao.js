@@ -73,7 +73,7 @@ DemoDao.prototype.delete = function (conditions, callback) {
   var query = this.model.remove(conditions, function (err) {
     return callback(err);
   });
-  query.exec();
+  //query.exec();
 };
 
 /**

@@ -13,8 +13,8 @@ describe('Directive: demo', function () {
   }));
 
   it('should make hidden element visible', inject(function ($compile) {
-    element = angular.element('<grid></grid>');
-    element = $compile(element)(scope);
-    expect(element.text()).toBe('this is the grid directive');
+    element = angular.element('<demo></demo>');//创建指令
+    element = $compile(element)(scope);//编译指令
+    expect(element.text()).toBe('this is the demo directive');
   }));
 });

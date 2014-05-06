@@ -3,7 +3,6 @@
   "description": "基于 AngularJS 的单元测试",
   "devDependencies": {
     "karma": "^0.12.14",
-    "protractor": "~0.22.0",
     "http-server": "^0.6.1"
   },
   "scripts": {
