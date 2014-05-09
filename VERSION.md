@@ -26,7 +26,7 @@
 * 实现项目简单例子
     1. 分页显示例子，url相对路径为 example-pagination/
     2. 基本Grid 列表，url相对路径为 example-grid/
-* 整合 grunt-jsdoc ，并生成 doc 帮助文档
+* 整合 grunt-jsdoc ，并生成 doc 帮助文档（基于angular书写的代码没有完成，待找到合适的专门用来生成angular文档的插件补上）
 * 前端测试
     1. 单元测试， grunt + karma + Jasmine
     2. 端对端（e2e）测试， protractor

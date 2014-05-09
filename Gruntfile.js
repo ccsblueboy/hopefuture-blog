@@ -512,7 +512,7 @@ module.exports = function (grunt) {
   });
 
   grunt.registerTask('test', [
-    //'clean:server',
+    'clean:server',
     'less',//把less转换为css
     'concurrent:test',
     'autoprefixer',
@@ -534,14 +534,14 @@ module.exports = function (grunt) {
     'cssmin',// 用 useminPrepare 生成的 cssmin config 压缩 css
     'uglify',// 用 useminPrepare 生成的 uglify config 压缩 js
     'rev',// 重新命名文件名，在 webapp下
-    'usemin' // 用重新命名的压缩文件替换
-    //'htmlmin' // 处理html文件（删除多余的代码，包括空格和换行，注释等）
+    'usemin', // 用重新命名的压缩文件替换
+    'htmlmin' // 处理html文件（删除多余的代码，包括空格和换行，注释等）
   ]);
 
   grunt.registerTask('generatedoc', [
-    //'clean:jsdoc',
+    'clean:jsdoc',
     'replace:version',
-    //'jsdoc:server',
+    'jsdoc:server',
     'jsdoc:app'
   ]);
 
