@@ -14,3 +14,10 @@
     >git push --set-upstream origin master
 3. 我们也可以直接用以下命令先把远程代码clone到本地，再add commit。这种方式比较简单一些
     >git clone git@github.com:linder0209/hopefuture-blog.git
+4. 创建分支
+   ```
+   git branch v0.0.1 创建本地分支
+   git checkout v0.0.1 切换到本地分支
+   git merge -m "Merge from master" master 合并分支
+   git push origin v0.0.1 提交到服务器端
+   ```

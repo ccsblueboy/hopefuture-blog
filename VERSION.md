@@ -16,7 +16,7 @@
 * 加入 grunt express task
 * 修改Gruntfile.js文件，watch express 代码，grunt build express
 
-##version 0.0.2  完善项目基本框架()
+##version 0.0.2  完善项目基本框架(2014-5-9)
 
 * 调整文件夹 app 编译（build）后放到 webapp 目录下
 * 完善 grunt 相关任务帮助文档
