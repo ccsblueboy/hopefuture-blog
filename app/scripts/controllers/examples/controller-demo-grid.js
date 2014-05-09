@@ -1,7 +1,17 @@
 'use strict';
 
+/**
+ * 例子： 基本 Grid 列表 Controller
+ * @class DemoGridCtrl
+ * @since 0.0.2
+ * @version @@currentVersion
+ * @author Linder linder0209@126.com
+ * @createdDate 2014-5-9
+ * */
+
 angular.module('hopefutureBlogApp')
   .controller('DemoGridCtrl', function ($scope, $modal, demoGridService) {
+
     /**
      * 列表数据
      * @type {Array}
@@ -26,6 +36,7 @@ angular.module('hopefutureBlogApp')
 
     /**
      * 创建新的记录
+     * @method DemoGridCtrl.create
      */
     $scope.create = function () {
       openFormModal($modal, $scope);

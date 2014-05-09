@@ -434,9 +434,9 @@ module.exports = function (grunt) {
         }
       },
       app: {
-        src: ['examples/jsdoc/src/*.js'],
+        src: ['.tmp/jsdoc/app/scripts/**/*.js'],
         options: {
-          destination: 'examples/jsdoc/doc',
+          destination: 'doc/app',
           template: 'jsdoc-templetes/ink-docstrap/template',
           configure: 'jsdoc-templetes/ink-docstrap/template/jsdoc.conf.json'
         }
@@ -484,7 +484,7 @@ module.exports = function (grunt) {
           ]
         },
         files: [
-          {expand: true, src: ['<%= yeoman.server %>/**/*.js'], dest: '.tmp/jsdoc/'}
+          {expand: true, src: ['<%= yeoman.server %>/**/*.js','<%= yeoman.app %>/scripts/**/*.js'], dest: '.tmp/jsdoc/'}
         ]
       }
     }
@@ -541,7 +541,8 @@ module.exports = function (grunt) {
   grunt.registerTask('generatedoc', [
     //'clean:jsdoc',
     'replace:version',
-    'jsdoc:server'
+    //'jsdoc:server',
+    'jsdoc:app'
   ]);
 
   grunt.registerTask('default', [
