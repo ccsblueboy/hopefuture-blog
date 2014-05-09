@@ -28,7 +28,8 @@ module.exports = function (grunt) {
       dist: 'dist',
       server: 'server',
       publish: 'publish',
-      webapp: 'dist/webapp'
+      webapp: 'dist/webapp',
+      version: require('./package.json').version || '0.0.1',
     },
 
     // Watches files for changes and runs tasks based on the changed files
@@ -109,7 +110,20 @@ module.exports = function (grunt) {
           }
         ]
       },
-      server: '.tmp'
+      server: '.tmp',
+      jsdoc: {
+        options: {
+          force: true
+        },
+        files: [
+          {
+            dot: true,
+            src: [
+              '.tmp/jsdoc'
+            ]
+          }
+        ]
+      }
     },
 
     // Add vendor prefixed styles
@@ -397,7 +411,9 @@ module.exports = function (grunt) {
 
     /**
      * javascript API 生成器 任务
-     * docstrap 模板
+     * 以下是几个模板，个人觉得 docstrap 模板 不错
+
+     docstrap 模板
      template: 'jsdoc-templetes/ink-docstrap/template',
      configure: 'jsdoc-templetes/ink-docstrap/template/jsdoc.conf.json'
 
@@ -416,6 +432,22 @@ module.exports = function (grunt) {
           template: 'jsdoc-templetes/ink-docstrap/template',
           configure: 'jsdoc-templetes/ink-docstrap/template/jsdoc.conf.json'
         }
+      },
+      app: {
+        src: ['examples/jsdoc/src/*.js'],
+        options: {
+          destination: 'examples/jsdoc/doc',
+          template: 'jsdoc-templetes/ink-docstrap/template',
+          configure: 'jsdoc-templetes/ink-docstrap/template/jsdoc.conf.json'
+        }
+      },
+      server: {
+        src: ['.tmp/jsdoc/server/**/*.js'],
+        options: {
+          destination: 'doc/server',
+          template: 'jsdoc-templetes/ink-docstrap/template',
+          configure: 'jsdoc-templetes/ink-docstrap/template/jsdoc.conf.json'
+        }
       }
     },
 
@@ -423,6 +455,8 @@ module.exports = function (grunt) {
      * 替换文件中的内容
      * 默认会替换@@开头指定的内容，我们可以用option prefix 来改变，也可以用 usePrefix 禁用替换@@开头的内容，而设为替换任意指定的内容
      * 支持正则表达式
+     * 这里顺便说一下参数 expand: true, flatten: true,
+     * expand 表示展开，flatten设为false表示按照源文件的目录结构copy，设为true会把所有文件copy到一个文件夹下
      */
     replace: {
       dist: {
@@ -437,6 +471,20 @@ module.exports = function (grunt) {
         },
         files: [
           {expand: true, flatten: true, src: ['app.js'], dest: 'dist/'}
+        ]
+      },
+      version: {
+        options: {
+          force: true,
+          patterns: [
+            {
+              match: 'currentVersion',
+              replacement: '<%= yeoman.version %>'
+            }
+          ]
+        },
+        files: [
+          {expand: true, src: ['<%= yeoman.server %>/**/*.js'], dest: '.tmp/jsdoc/'}
         ]
       }
     }
@@ -488,6 +536,12 @@ module.exports = function (grunt) {
     'rev',// 重新命名文件名，在 webapp下
     'usemin' // 用重新命名的压缩文件替换
     //'htmlmin' // 处理html文件（删除多余的代码，包括空格和换行，注释等）
+  ]);
+
+  grunt.registerTask('generatedoc', [
+    //'clean:jsdoc',
+    'replace:version',
+    'jsdoc:server'
   ]);
 
   grunt.registerTask('default', [

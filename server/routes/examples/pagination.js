@@ -69,4 +69,21 @@ var pagination = {
   }
 };
 
-module.exports = pagination;
+/**
+ * 分页显示 路由
+ * 该路由中包含了以下 url
+
+ > 1. pagination.index  app.get('/example-pagination', pagination.index); 显示分页首页
+ > 2. pagination.paging app.get('/example-pagination/paging', pagination.paging); 获取分页数据
+ > 3. pagination.save app.post('/example-pagination', pagination.save); 保存数据
+ > 4. pagination.edit app.get('/example-pagination/:id', pagination.edit); 编辑数据
+ > 5. pagination.delete app.delete('/example-pagination', pagination.delete); 删除数据（一条或多条）
+
+ * @module pagination
+ * @since 0.0.2
+ * @version @@currentVersion
+ * @author Linder linder0209@126.com
+ * @createdDate 2014-5-9
+ * */
+
+ module.exports = pagination;

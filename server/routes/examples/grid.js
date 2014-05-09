@@ -50,6 +50,7 @@ var grid = {
       }
     });
   },
+
   delete: function (req, res) {
     var ids = req.query.ids;// ids is Array
     if(Object.prototype.toString.call(ids) !== '[object Array]'){
@@ -62,4 +63,20 @@ var grid = {
   }
 };
 
+/**
+ * 基本Grid 列表 路由
+ * 该路由中包含了以下 url
+
+ > 1. grid.index  app.get('/example-grid', grid.index); 显示Grid 首页
+ > 2. grid.list app.get('/example-grid/list', grid.list); 获取Grid list 数据
+ > 3. grid.save app.post('/example-grid', grid.save); 保存数据
+ > 4. grid.edit app.get('/example-grid/:id', grid.edit); 编辑数据
+ > 5. grid.delete app.delete('/example-grid', grid.delete); 删除数据（一条或多条）
+
+ * @module grid
+ * @since 0.0.2
+ * @version @@currentVersion
+ * @author Linder linder0209@126.com
+ * @createdDate 2014-5-9
+ * */
 module.exports = grid;
