@@ -67,7 +67,7 @@ npm install -g protractor
 webdriver-manager update // 在项目当前目录下运行
 npm run protractor
 ```
-注意端到端测试前，请确保项目是在启动中，参见上面的 项目运行
+注意端到端测试前，请确保项目是在启动中，参见上面的 ***项目运行***
 
 ### 打包编译
 ```
@@ -77,7 +77,7 @@ grunt build
 ```
 grunt generatedoc
 ```
-## 好的意见和建议以及bug
+## 意见和建议以及bug
 
 如果你有好的意见和建议，可以点击[这里](https://github.com/linder0209/hopefuture-blog/issues/new)发表你的看法，当然你也可以在[这里](https://github.com/linder0209/hopefuture-blog/issues/new)提交bug。
 
