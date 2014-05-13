@@ -69,15 +69,26 @@ var pagination = {
   }
 };
 
+var express = require('express');
+var router = express.Router();
+
+router.get('/', pagination.index);
+router.get('/paging', pagination.paging);
+router.post('/', pagination.save);
+router.get('/:id', pagination.edit);
+router.delete('/', pagination.delete);
+
 /**
  * 分页显示 路由
  * 该路由中包含了以下 url
 
- > 1. pagination.index  app.get('/example-pagination', pagination.index); 显示分页首页
- > 2. pagination.paging app.get('/example-pagination/paging', pagination.paging); 获取分页数据
- > 3. pagination.save app.post('/example-pagination', pagination.save); 保存数据
- > 4. pagination.edit app.get('/example-pagination/:id', pagination.edit); 编辑数据
- > 5. pagination.delete app.delete('/example-pagination', pagination.delete); 删除数据（一条或多条）
+ > 1. pagination.index  app.get('/', pagination.index); 显示分页首页
+ > 2. pagination.paging app.get('/paging', pagination.paging); 获取分页数据
+ > 3. pagination.save app.post('/', pagination.save); 保存数据
+ > 4. pagination.edit app.get('/:id', pagination.edit); 编辑数据
+ > 5. pagination.delete app.delete('/', pagination.delete); 删除数据（一条或多条）
+
+ 注意路由的前缀是由 `app.use('/example-pagination', pagination);` 定义的，即实际访问 url 时在路由前需加上/example-pagination
 
  * @module pagination
  * @since 0.0.2
@@ -86,4 +97,4 @@ var pagination = {
  * @createdDate 2014-5-9
  * */
 
- module.exports = pagination;
+module.exports = router;

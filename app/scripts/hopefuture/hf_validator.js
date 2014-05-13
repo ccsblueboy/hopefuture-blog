@@ -1,12 +1,12 @@
 'use strict';
 
-(function() {
+(function () {
   $.validator.setDefaults({
     //延迟校验
-    onfocusout: function(e) {
-      setTimeout(function(){
+    onfocusout: function (e) {
+      setTimeout(function () {
         $(e).valid();
-      },150);
+      }, 150);
     },
     // For the invisible tags, we need to validate too.
     ignore: 'input[type="hidden"], :button',
@@ -17,8 +17,8 @@
   var customMethod = {
     method1: {
       message: '',
-      fn: function(value, element, param) {
-       return true;
+      fn: function (value, element, param) {
+        return true;
       }
     }
   };

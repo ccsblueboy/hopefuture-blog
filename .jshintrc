@@ -10,14 +10,14 @@
   "freeze": true,// 当复写对象prototype存在的方法时，会提示错误警告。
   "immed": true,// 立即调用函数表达式时，需要用()包裹函数
   "indent": 2,// 代码排版缩进两个空格
-  "latedef": true,//在调用变量或函数时，必须确保这些变量和函数在调用之前已经声明过，也就是说声明代码必须写在调用代码的前面，而不能写在后面
+  "latedef": "nofunc",//在调用变量或函数时，必须确保这些变量和函数在调用之前已经声明过，也就是说声明代码必须写在调用代码的前面，而不能写在后面，设为nofunc 允许函数放在调用之后
   "newcap": true,// 一个构造函数当类使用时，首字符需要大写
   "noarg": true,// 不允许使用arguments.caller和arguments.callee。
   "quotmark": "single",// 使用单引号
   "regexp": true,// 则正则中不允许使用 . 或者 [^…]
   "undef": true,// 变量必须先声明后才能使用
-  "unused": true,// 表示如果声明了变量，但没有使用，会提示错误警告的。
-  "strict": true,// 表明SHint会要求你使用use strict;语法
+  "unused": "vars",// 表示如果声明了变量，但没有使用，会提示错误警告的。设为vars不会坚持函数的参数
+  "strict": true,// 表明jsHint会要求你使用use strict;语法
   "trailing": true,// 不能用 \ 定义多行字符串
   "smarttabs": true,// 不能混合使用tab和空格
   "forin": true,

@@ -70,6 +70,7 @@ angular.module('hopefutureBlogApp')
             defer.resolve(data);
           }).
           error(function (data, status) {
+            console.error(data);
           });
         return defer.promise;
       },
@@ -80,6 +81,7 @@ angular.module('hopefutureBlogApp')
             defer.resolve(data);
           }).
           error(function (data, status) {
+            console.error(data);
           });
         return defer.promise;
       },
@@ -93,6 +95,7 @@ angular.module('hopefutureBlogApp')
             defer.resolve(data);
           }).
           error(function (data, status) {
+            console.error(data);
           });
         return defer.promise;
       }

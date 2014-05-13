@@ -320,6 +320,12 @@ module.exports = function (grunt) {
             cwd: '<%= yeoman.publish %>',
             dest: '<%= yeoman.dist %>',
             src: ['**']
+          },
+          {
+            expand: true,
+            cwd: 'bin',
+            dest: '<%= yeoman.dist %>/bin',
+            src: ['**']
           }
         ]
       },
@@ -334,9 +340,6 @@ module.exports = function (grunt) {
     // Run some tasks in parallel to speed up the build process
     concurrent: {
       server: [
-        'copy:styles'
-      ],
-      test: [
         'copy:styles'
       ],
       dist: [
@@ -391,7 +394,7 @@ module.exports = function (grunt) {
       },
       dev: {
         options: {
-          script: './app.js'
+          script: './bin/hopefuture-blog'
         }
       }
     },
@@ -512,17 +515,13 @@ module.exports = function (grunt) {
   });
 
   grunt.registerTask('test', [
-    'clean:server',
-    'less',//把less转换为css
-    'concurrent:test',
-    'autoprefixer',
     'karma:unit'
   ]);
 
   grunt.registerTask('build', [
     'clean:dist',// clean dist
     'bowerInstall',
-    'less',
+    'less',//把less转换为css
     'useminPrepare',//合并压缩文件
     'concurrent:dist',//copy css image 和 svg
     'autoprefixer',// 处理css

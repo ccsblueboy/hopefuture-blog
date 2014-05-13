@@ -63,15 +63,26 @@ var grid = {
   }
 };
 
+var express = require('express');
+var router = express.Router();
+
+router.get('/', grid.index);
+router.get('/list', grid.list);
+router.post('/', grid.save);
+router.get('/:id', grid.edit);
+router.delete('', grid.delete);
+
 /**
  * 基本Grid 列表 路由
  * 该路由中包含了以下 url
 
- > 1. grid.index  app.get('/example-grid', grid.index); 显示Grid 首页
- > 2. grid.list app.get('/example-grid/list', grid.list); 获取Grid list 数据
- > 3. grid.save app.post('/example-grid', grid.save); 保存数据
- > 4. grid.edit app.get('/example-grid/:id', grid.edit); 编辑数据
- > 5. grid.delete app.delete('/example-grid', grid.delete); 删除数据（一条或多条）
+ > 1. grid.index  app.get('/', grid.index); 显示Grid 首页
+ > 2. grid.list app.get('/list', grid.list); 获取Grid list 数据
+ > 3. grid.save app.post('/', grid.save); 保存数据
+ > 4. grid.edit app.get('/:id', grid.edit); 编辑数据
+ > 5. grid.delete app.delete('/', grid.delete); 删除数据（一条或多条）
+
+ 注意路由的前缀是由 `app.use('/example-grid', grid);` 定义的，即实际访问 url 时在路由前需加上/example-grid
 
  * @module grid
  * @since 0.0.2
@@ -79,4 +90,4 @@ var grid = {
  * @author Linder linder0209@126.com
  * @createdDate 2014-5-9
  * */
-module.exports = grid;
+module.exports = router;

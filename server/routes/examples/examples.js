@@ -4,12 +4,12 @@ var express = require('express');
 var router = express.Router();
 
 router.get('/', function (req, res) {
-  res.render('index', { title: 'Express AngularJS app' });
+  res.render('examples');
 });
 
 /**
- * 首页路由
- * @module index
+ * 例子路由
+ * @module examples
  * @since 0.0.2
  * @version @@currentVersion
  * @author Linder linder0209@126.com

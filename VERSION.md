@@ -31,3 +31,9 @@
     1. 单元测试， grunt + karma + Jasmine
     2. 端对端（e2e）测试， protractor
 
+##version 0.0.3  进一步完善项目基本框架，使之成为一个通用的项目框架()
+
+* 升级[express](http://expressjs.com/)到4.x
+* 支持url上下文部署（没有解决，先不考虑这个，利用相对路径来开发）
+* 引入javascript模块化管理，可以用 [RequireJS](http://www.requirejs.org/)  或 [Sea.js](http://seajs.org/docs/)
+* 调试的使用（包括开发和测试的调试）
