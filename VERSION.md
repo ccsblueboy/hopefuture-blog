@@ -39,3 +39,4 @@
 `generator-angular` 结构不太适合模块化管理，我们可以安装 `npm install -g generator-angular-require` ，然后用 `yo angular-require [app-name] `
 来生成基于 angular 和 require的项目框架。我们也可以用 `npm install -g generator-angular-with-require yo angular-with-require` 来生成项目框架
 * 调试的使用（包括开发和测试的调试），具体开发中补充
+*  **后续会基于该分支创建基于angular和require（seajs）的项目基本框架**
