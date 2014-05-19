@@ -31,9 +31,11 @@
     1. 单元测试， grunt + karma + Jasmine
     2. 端对端（e2e）测试， protractor
 
-##version 0.0.3  进一步完善项目基本框架，使之成为一个通用的项目框架()
+##version 0.1.0  进一步完善项目基本框架，使之成为一个通用的项目框架(2014-5-19)
 
 * 升级[express](http://expressjs.com/)到4.x
 * 支持url上下文部署（没有解决，先不考虑这个，利用相对路径来开发）
 * 引入javascript模块化管理，可以用 [RequireJS](http://www.requirejs.org/)  或 [Sea.js](http://seajs.org/docs/)
-* 调试的使用（包括开发和测试的调试）
+`generator-angular` 结构不太适合模块化管理，我们可以安装 `npm install -g generator-angular-require` ，然后用 `yo angular-require [app-name] `
+来生成基于 angular 和 require的项目框架。我们也可以用 `npm install -g generator-angular-with-require yo angular-with-require` 来生成项目框架
+* 调试的使用（包括开发和测试的调试），具体开发中补充
