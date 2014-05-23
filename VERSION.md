@@ -41,3 +41,5 @@
 来生成基于 angular 和 require的项目框架。我们也可以用 `npm install -g generator-angular-with-require yo angular-with-require` 来生成项目框架
 * 调试的使用（包括开发和测试的调试），具体开发中补充
 *  **后续会基于该分支创建基于angular和require（seajs）的项目基本框架**
+
+##version 0.2.0  根据Blog业务需求编写代码，实现一个简单版的blog
