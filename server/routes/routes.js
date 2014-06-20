@@ -1,9 +1,14 @@
 'use strict';
 
-var index = require('./index');
+var main = require('./main');
 var examples = require('./examples/examples');
 var grid = require('./examples/grid');
 var pagination = require('./examples/pagination');
+var account = require('./account/account');
+var login = require('./account/login');
+var blog = require('./blog/blog');
+var article = require('./blog/article');
+var category = require('./blog/category');
 
 /**
  * 页面相关路由抽象实现，即访问页面的url
@@ -20,8 +25,16 @@ var pagination = require('./examples/pagination');
  * */
 
 module.exports = function (app) {
-  app.use('/', index);
+  app.use('/', main);
   app.use('/examples', examples);
-  app.use('/example-grid', grid);
-  app.use('/example-pagination', pagination);
+  app.use('/examples/grid', grid);
+  app.use('/examples/pagination', pagination);
+  app.use('/account', account);
+  app.use('/login', login);
+  //用 url 变量来区分每个用户的博客
+  app.use('/:blog', blog);
+
+  app.use('/:blog/manage/article',article);// 管理文章
+  app.use('/:blog/manage/category',category);// 分类目录管理
+
 };

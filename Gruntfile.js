@@ -29,7 +29,7 @@ module.exports = function (grunt) {
       server: 'server',
       publish: 'publish',
       webapp: 'dist/webapp',
-      version: require('./package.json').version || '0.0.1',
+      version: require('./package.json').version || '0.0.1'
     },
 
     // Watches files for changes and runs tasks based on the changed files
@@ -51,7 +51,7 @@ module.exports = function (grunt) {
       },
       styles: {
         files: ['<%= yeoman.app %>/styles/{,*/}*.css'],
-        tasks: ['less','newer:copy:styles', 'autoprefixer']
+        tasks: ['newer:copy:styles', 'autoprefixer']
       },
       gruntfile: {
         files: ['Gruntfile.js']
@@ -72,6 +72,10 @@ module.exports = function (grunt) {
         options: {
           spawn: false // for grunt-contrib-watch v0.5.0+, "nospawn: true" for lower versions. Without this option specified express won't be reloaded
         }
+      },
+      less: {
+        files: ['<%= yeoman.app %>/less/{,*/}*.less'],
+        tasks: ['less']
       }
     },
 
@@ -390,7 +394,7 @@ module.exports = function (grunt) {
     // express 启动任务
     express: {
       options: {
-        port: 9000
+        port: 9090
       },
       dev: {
         options: {
@@ -407,6 +411,10 @@ module.exports = function (grunt) {
         },
         files: {
           '<%= yeoman.app %>/styles/base.css': '<%= yeoman.app %>/less/base.less',
+          '<%= yeoman.app %>/styles/blog.css': '<%= yeoman.app %>/less/blog.less',
+          '<%= yeoman.app %>/styles/validate.css': '<%= yeoman.app %>/less/validate.less',
+          '<%= yeoman.app %>/styles/manage-blog.css': '<%= yeoman.app %>/less/manage-blog.less',
+          '<%= yeoman.app %>/styles/ng-animate.css': '<%= yeoman.app %>/less/ng-animate.less',
           '<%= yeoman.app %>/styles/examples.css': '<%= yeoman.app %>/less/examples.less'
         }
       }

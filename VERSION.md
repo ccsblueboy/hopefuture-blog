@@ -43,3 +43,8 @@
 *  **后续会基于该分支创建基于angular和require（seajs）的项目基本框架**
 
 ##version 0.2.0  根据Blog业务需求编写代码，实现一个简单版的blog
+
+* 制作博客相关静态页面
+* 加入百度的富文本编辑器[UEditor](https://github.com/fex-team/ueditor)
+* 加入[KindEditor](https://github.com/kindsoft/kindeditor)富文本编辑器
+* 加入[CKEditor](http://ckeditor.com/)富文本编辑器

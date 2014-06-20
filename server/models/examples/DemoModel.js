@@ -32,4 +32,4 @@ var schema = new Schema({
  * @author Linder linder0209@126.com
  * @createdDate 2014-5-9
  * */
-module.exports = mongodb.model('DemoModel', schema);
+module.exports = mongodb.model('Demo', schema);

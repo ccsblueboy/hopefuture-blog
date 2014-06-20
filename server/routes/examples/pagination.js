@@ -5,7 +5,7 @@ var DataPage = require('../../utils/DataPage');
 
 var pagination = {
   index: function (req, res) {
-    res.render('demo-pagination', {
+    res.render('examples/demo-pagination', {
       title: 'This is a Pagination Example.',
       navTitle: '例子 -> 分页显示Grid'
     });

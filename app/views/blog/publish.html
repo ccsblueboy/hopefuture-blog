@@ -1,0 +1,207 @@
+<h3>撰写新文章</h3>
+
+<form name="articleForm" method="post" article-validator>
+  <div class="row">
+    <div class="col-md-9">
+      <div class="form-group">
+        <lable for="title">文章标题</lable>
+        <input type="text" id="title" name="title" class="form-control" ng-model="article.title"
+               placeholder="在此输入标题"
+               autocomplete="off" required maxbyteslength="400">
+      </div>
+      <div class="form-group">
+        <lable>文章内容</lable>
+        <textarea id="content" name="content" kind-editor="kindEditorContent"
+                  style="width:100%;height:500px;visibility:hidden;">撰写博客内容</textarea>
+      </div>
+    </div>
+    <!--.col-md-9-->
+
+    <div class="col-md-3">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">发布</h3>
+        </div>
+        <div class="panel-body">
+          <p>
+            <button class="btn btn-success" type="button">预览</button>
+          </p>
+          <!--公开度 start-->
+          <div class="margin10-B" ng-controller="PublicityCtrl">
+            <div>
+              <span class="glyphicon glyphicon-eye-open"></span>
+              <span>公开度：</span>
+              <strong>{{publicityStatus}}</strong>
+              <a href="" class="margin10-L" ng-click="publicityPanel=true;" ng-hide="publicityPanel">编辑</a>
+            </div>
+
+            <div class="animate-show ng-hide" ng-show="publicityPanel">
+              <ul class="list-unstyled">
+                <li class="radio">
+                  <label><input type="radio" name="publicityStatus" ng-model="publicity.publicityStatus" value="public" /> 公开 </label>
+
+                  <div class="checkbox" ng-show="show.top">
+                    <label><input type="checkbox" name="top" ng-model="publicity.top"> 将文章置于首页顶端</label>
+                  </div>
+                </li>
+                <li class="radio form-inline" style="margin-top: 10px;">
+                  <label><input type="radio" name="publicityStatus" ng-model="publicity.publicityStatus" value="protected" /> 密码保护 </label>
+
+                  <div class="form-group margin10-T" ng-show="show.protectedPassword">
+                    <lable for="protectedPassword">密码：</lable>
+                    <input type="text" class="form-control" id="protectedPassword" name="protectedPassword" ng-model="publicity.protectedPassword"/>
+                  </div>
+                </li>
+                <li class="radio">
+                  <label><input type="radio" name="publicityStatus" ng-model="publicity.publicityStatus" value="private"> 私密 </label>
+                </li>
+              </ul>
+              <p>
+                <button class="btn btn-default" type="button" ng-click="setPublicityStatus()">确定</button>
+                <a class="margin10-L" href="" ng-click="publicityPanel=false;">取消</a>
+              </p>
+            </div>
+          </div>
+          <!--公开度 end-->
+
+          <!--发布方式 start-->
+          <div ng-controller="PublishTypeCtrl">
+            <div>
+              <span class="glyphicon glyphicon-calendar"></span>
+              <span>发布方式</span>
+            </div>
+            <ul class="list-unstyled">
+              <li class="radio">
+                <label><input type="radio" name="publishType" ng-model="article.publishType" value="immediate" /> 立即发布 </label>
+              </li>
+              <li class="radio">
+                <label><input type="radio" name="publishType" ng-model="article.publishType" value="delay" /> 定时发布 </label>
+
+                <p class="margin10-T">
+                  <lable for="title">发布时间：</lable>
+                </p>
+                <div class="form-group ">
+                  <div class="input-group">
+                    <input type="text" class="form-control" name="publishDate" ng-model="article.publishDate"
+                           datepicker-popup="{{format}}" is-open="opened" close-text="Close" ng-click="openDatepicker($event)"/>
+                    <span class="input-group-btn">
+                      <button type="button" class="btn btn-info" ng-click="openDatepicker($event)"><span class="glyphicon glyphicon-calendar"></span>
+                      </button>
+                    </span>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <!--发布方式 end-->
+        </div>
+
+        <div class="panel-footer">
+          <button class="btn btn-info" type="submit">发布</button>
+          <button class="btn btn-default" type="button">保存草稿</button>
+        </div>
+      </div>
+      <!--发布-->
+
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">文章类型</h3>
+        </div>
+        <div class="panel-body">
+          <div class="radio">
+            <label><input type="radio" name="type" ng-model="article.type" value="richText"> 富文本编辑器 </label>
+          </div>
+          <div class="radio">
+            <label><input type="radio" name="type" ng-model="article.type" value="markdown"> Markdown 编辑器</label>
+          </div>
+        </div>
+      </div>
+      <!--文章类型-->
+
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">分类目录</h3>
+        </div>
+        <div class="panel-body">
+          <tabset>
+            <tab heading="所有分类目录">
+              <div article-category></div>
+              <div class="checkbox">
+                <label><input type="checkbox" name="category"> JavaScript</label>
+              </div>
+              <div class="checkbox">
+                <label><input type="checkbox" name="category"> HTML</label>
+              </div>
+              <div class="checkbox">
+                <label><input type="checkbox" name="category"> CSS</label>
+              </div>
+            </tab>
+            <tab select="alertMe()">
+              <tab-heading>
+                最常用
+              </tab-heading>
+              <div class="checkbox">
+                <label><input type="checkbox" name="category"> JavaScript</label>
+              </div>
+              <div class="checkbox">
+                <label><input type="checkbox" name="category"> CSS</label>
+              </div>
+            </tab>
+          </tabset>
+
+          <div class="form-group">
+            <button class="btn btn-link" type="button"> + 添加新分类目录</button>
+          </div>
+          <div>
+            <div class="form-group">
+              <input type="text" placeholder="分类目录" id="newcategory" name="newcategory"
+                     class="form-control"/>
+            </div>
+            <div class="form-group">
+              <select class="form-control" name="allcategory" id="allcategory">
+                <option value="-1">&mdash; 父级分类目录 &mdash;</option>
+                <option value="3" class="level-0">JavaScript</option>
+                <option value="4" class="level-1">&nbsp;&nbsp;&nbsp;jQuery</option>
+                <option value="5" class="level-2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;jQuery ui</option>
+                <option value="1" class="level-0">未分类</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <button class="btn btn-info" type="button">添加</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 文章分类 -->
+
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">标签</h3>
+        </div>
+        <div class="panel-body form-inline">
+          <div class="form-group">
+            <input type="text" class="form-control" name="newlabel" id="newlabel">
+            <button type="button" class="btn btn-info">添加</button>
+          </div>
+          <p></p>
+
+          <p>多个标签请用英文逗号（,）分开</p>
+
+          <div>
+            <span class="text-info">Angular</span>
+            <span class="text-info">jQuery</span>
+          </div>
+          <div class="form-group">
+            <button class="btn btn-link" type="button"> 从常用标签中选择</button>
+          </div>
+          <ul class="breadcrumb">
+            <li><a href="#">Angular</a></li>
+            <li><a href="#">jQuery</a></li>
+          </ul>
+        </div>
+      </div>
+      <!--标签-->
+
+    </div>
+  </div>
+</form>

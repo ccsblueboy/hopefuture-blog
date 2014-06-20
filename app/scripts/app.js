@@ -1,3 +1,7 @@
+.when('/myroute', {
+  templateUrl: 'views/myroute.html',
+  controller: 'MyrouteCtrl'
+})
 'use strict';
 
 /**

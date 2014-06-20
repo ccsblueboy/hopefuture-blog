@@ -3,7 +3,7 @@
 var demoDao = require('./../../dao/examples/DemoDao.js');
 var grid = {
   index: function (req, res) {
-    res.render('demo-grid', {
+    res.render('examples/demo-grid', {
       title: 'This is a Grid Example.',
       navTitle: '例子 -> Grid List'
     });

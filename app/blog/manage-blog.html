@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title><%= title %></title>
+  <meta name="description" content="">
+  <!-- 兼容性问题，使用浏览器最高版本来渲染-->
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- build:css styles/bootstrap.css -->
+  <!-- bower:css -->
+  <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css"/>
+  <!-- endbower -->
+  <!-- endbuild -->
+  <!-- build:css(.tmp) styles/blog.css -->
+  <link rel="stylesheet" href="../styles/base.css">
+  <link rel="stylesheet" href="../styles/manage-blog.css">
+  <link rel="stylesheet" href="../styles/validate.css">
+  <link rel="stylesheet" href="../styles/ng-animate.css">
+  <!-- endbuild -->
+</head>
+<body ng-app="hopefutureBlogApp" ng-controller="MainCtrl">
+<% include ../views/common/header.html %>
+
+<div class="container-fluid" ng-controller="ManageBlogCtrl">
+
+  <div class="row">
+
+    <div class="col-sm-3 col-md-2 sidebar">
+      <ul class="nav nav-sidebar">
+        <li link-active="active"><a href="" ng-href="#/publish">发布编辑文章</a></li>
+        <li link-active="active"><a href="" ng-href="#/article">文章管理</a></li>
+        <li link-active="active"><a href="" ng-href="#/category">分类管理</a></li>
+        <li link-active="active"><a href="" ng-href="#/comment">评论管理</a></li>
+        <li link-active="active"><a href="" ng-href="#/setting">博客设置</a></li>
+      </ul>
+    </div>
+
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" ng-view>
+
+    </div>
+  </div>
+  <!-- /.row -->
+</div>
+<!-- /.container -->
+
+<!-- build:js scripts/vendor-blog.js -->
+<!-- bower:js -->
+<script src="../bower_components/jquery/dist/jquery.js"></script>
+<script src="../bower_components/angular/angular.js"></script>
+<script src="../bower_components/angular-route/angular-route.js"></script>
+<script src="../bower_components/angular-animate/angular-animate.js"></script>
+<script src="../bower_components/angular-sanitize/angular-sanitize.js"></script>
+<script src="../bower_components/jquery-validation/dist/jquery.validate.js"></script>
+<script src="../bower_components/bootstrap/dist/js/bootstrap.js"></script>
+<script src="../bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+<!-- endbower -->
+
+<!--校验国际化 -->
+<script src="../bower_components/jquery-validation/src/localization/messages_zh.js"></script>
+<!-- endbuild -->
+
+<!-- KindEditor -->
+<link rel="stylesheet" href="../bower_components/kindeditor/themes/default/default.css"/>
+<script type="text/javascript" src="../bower_components/kindeditor/kindeditor.js"></script>
+<script type="text/javascript" src="../bower_components/kindeditor/lang/zh_CN.js"></script>
+
+<!-- build:js({.tmp,app}) scripts/blog.js -->
+<script src="../scripts/hopefuture/hf_validate.js"></script>
+<script src="../scripts/hopefuture/hf_collection.js"></script>
+<script src="../scripts/apps/blog/app-manage-blog.js"></script>
+<script src="../scripts/services/httpInterceptor.js"></script>
+
+<script src="../scripts/services/blog/service-manage-blog.js"></script>
+<script src="../scripts/services/blog/service-article.js"></script>
+<script src="../scripts/services/blog/service-category.js"></script>
+<script src="../scripts/services/blog/service-comment.js"></script>
+<script src="../scripts/services/blog/service-publish.js"></script>
+<script src="../scripts/services/blog/service-setting.js"></script>
+
+<script src="../scripts/controllers/controller-common.js"></script>
+<script src="../scripts/controllers/controller-blog.js"></script>
+<script src="../scripts/controllers/blog/controller-manage-blog.js"></script>
+<script src="../scripts/controllers/blog/controller-article.js"></script>
+<script src="../scripts/controllers/blog/controller-category.js"></script>
+<script src="../scripts/controllers/blog/controller-comment.js"></script>
+<script src="../scripts/controllers/blog/controller-publish.js"></script>
+<script src="../scripts/controllers/blog/controller-setting.js"></script>
+
+<script src="../scripts/directives/blog/directive-link-active.js"></script>
+<script src="../scripts/directives/blog/directive-publish.js"></script>
+<script src="../scripts/directives/blog/directive-category.js"></script>
+
+<script src="../scripts/filters/filter-truncate.js"></script>
+
+<!-- endbuild -->
+</body>
+</html>
