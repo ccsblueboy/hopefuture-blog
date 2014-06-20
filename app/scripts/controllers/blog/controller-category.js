@@ -10,7 +10,7 @@
  * */
 
 angular.module('hopefutureBlogApp')
-    .controller('CategoryCtrl', function ($scope, $modal, $sce, categoryService) {
+    .controller('CategoryCtrl', function ($scope, $modal, $sce, categoryService, categoryMethod) {
       /**
        * 列表数据
        * @type {Array}
@@ -30,7 +30,7 @@ angular.module('hopefutureBlogApp')
       categoryService.list(function (data) {
         if (data.success === true) {
           angular.forEach(data.items, function (item, index) {
-            item.alias = joinStr(item.level, ' —') + ' ' + item.name;
+            item.alias = categoryMethod.joinStr(item.level, ' —') + ' ' + item.name;
           });
           //重新排序，按照所属级别关系排序，属于同一个父节点的放到一起
           var coll = new $.hopefuture.Collection(function (o) {
@@ -49,7 +49,7 @@ angular.module('hopefutureBlogApp')
               parentItem = collection.itemAt(index);
               step = index + 1;
               nextItem = collection.itemAt(step);
-              while (isChild(parentItem, nextItem)) {
+              while (categoryMethod.isChild(parentItem, nextItem)) {
                 step++;
                 nextItem = collection.itemAt(step);
               }
@@ -63,25 +63,6 @@ angular.module('hopefutureBlogApp')
           $scope.items = collection.items;
         }
       });
-
-      // 节点是否是其孩子节点
-      function isChild(item1, item2) {
-        if (!item1 || !item2) {
-          return false;
-        }
-        if (item1._id === item2.parent) {
-          return true;
-        }
-        return false;
-      }
-
-      function joinStr(count, str) {
-        var result = '';
-        for (var i = 0; i < count; i++) {
-          result += str;
-        }
-        return result;
-      }
 
       /**
        * 创建新的记录
