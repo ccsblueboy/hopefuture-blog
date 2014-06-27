@@ -40,15 +40,16 @@ ArticleDao.prototype.save = function (data, callback) {
     var entity = new this.model(data);
     //先保存添加的标签
     labelDao.update(data.labels, function (err) {
-      if(!err){
-        entity.save(function (err, product, numberAffected) {
-          if(err){
-            return callback(err);
-          }else{
-            return callback(err, product._doc);
-          }
-        });
+      if (err) {
+        return callback(err);
       }
+      entity.save(function (err, product, numberAffected) {
+        if (err) {
+          return callback(err);
+        } else {
+          return callback(err, product._doc);
+        }
+      });
     });
   }
 };

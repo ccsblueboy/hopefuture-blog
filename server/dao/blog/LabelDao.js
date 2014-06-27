@@ -84,11 +84,15 @@ LabelDao.prototype.delete = function (conditions, callback) {
  * @param callback {function} 回调函数
  */
 LabelDao.prototype.update = function (labels, callback) {
-  if(underscore.isEmpty(labels)){
-    return callback('labels is empty.');
+  if (underscore.isEmpty(labels)) {
+    return callback(null);
   }
-  var conditions = {name: {$in: labels}};
-  this.model.update(conditions, {count: {$inc: {count: 1}}}, {upsert: true }, function (err, numberAffected, rawResponse) {
-    callback(err);
-  });
+  var label;
+  for (var i = 0, len = labels.length; i < len; i++) {
+    label = labels[i];
+    this.model.update({name: label}, {$inc: {count: 1}, $setOnInsert: { name: label, createdDate: new Date()}}, {upsert: true},
+      function (err, numberAffected, rawResponse) {
+        return callback(err);
+      });
+  }
 };

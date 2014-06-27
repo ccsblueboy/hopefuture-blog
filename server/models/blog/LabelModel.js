@@ -11,7 +11,7 @@ var Schema = mongoose.Schema;
 var schema = new Schema({
   name: { type: String },
   accountId: { type: String },
-  count: { type: String },//文章使用次数
+  count: { type: Number },//文章使用次数
   createdDate: { type: Date, default: Date.now }
 });
 
