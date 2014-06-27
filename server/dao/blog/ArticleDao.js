@@ -16,9 +16,7 @@ function ArticleDao(Model) {
 var ArticleModel = require('../../models/blog/ArticleModel');
 var articleDao = new ArticleDao(ArticleModel);
 
-var LabelModel = require('../../models/blog/LabelModel');
-var LabelDao = require('LabelDao');
-var labelDao = new LabelDao(LabelModel);
+var labelDao = require('./LabelDao');
 
 module.exports = articleDao;
 
@@ -40,16 +38,16 @@ ArticleDao.prototype.save = function (data, callback) {
     });
   } else {
     var entity = new this.model(data);
-    //先添加修改标签
-    labelDao.update({name: $in: ids});
-
-    //当有错误发生时，返回err；product 是返回生成的实体，numberAffected which will be 1 when the document was found and updated in the database, otherwise 0.
-    entity.save(function (err, product, numberAffected) {
-      if(err){
-        return callback(err);
-      }else{
-
-        return callback(err, product._doc);
+    //先保存添加的标签
+    labelDao.update(data.labels, function (err) {
+      if(!err){
+        entity.save(function (err, product, numberAffected) {
+          if(err){
+            return callback(err);
+          }else{
+            return callback(err, product._doc);
+          }
+        });
       }
     });
   }

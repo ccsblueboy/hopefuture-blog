@@ -7,16 +7,18 @@
  * @since 0.2.0
  * @version @@currentVersion
  * @author Linder linder0209@126.com
- * @createdDate 2014-6-25
+ * @createdDate 2014-6-27
  * */
 function LabelDao(Model) {
   this.model = Model;
 }
 
 var LabelModel = require('../../models/blog/LabelModel');
-var accountDao = new LabelDao(LabelModel);
+var labelDao = new LabelDao(LabelModel);
 
-module.exports = accountDao;
+module.exports = labelDao;
+
+var underscore = require('underscore');
 
 /**
  * 返回数据列表
@@ -72,5 +74,21 @@ LabelDao.prototype.findById = function (id, callback) {
 LabelDao.prototype.delete = function (conditions, callback) {
   this.model.remove(conditions, function (err) {
     return callback(err);
+  });
+};
+
+/**
+ * 根据name值，修改label，如果不存在则添加新的记录
+ * @method
+ * @param labels { Array } name 组成的数组
+ * @param callback {function} 回调函数
+ */
+LabelDao.prototype.update = function (labels, callback) {
+  if(underscore.isEmpty(labels)){
+    return callback('labels is empty.');
+  }
+  var conditions = {name: {$in: labels}};
+  this.model.update(conditions, {count: {$inc: {count: 1}}}, {upsert: true }, function (err, numberAffected, rawResponse) {
+    callback(err);
   });
 };
