@@ -9,7 +9,9 @@
  * @createdDate 2014-5-9
  * */
 angular.module('hopefutureBlogApp')
-  .controller('ConfirmModalCtrl', function ($scope, $modalInstance) {
+  .controller('ConfirmModalCtrl', function ($scope, $modalInstance, config) {
+    $scope.modalTitle = config.modalTitle;
+    $scope.modalContent = config.modalContent;
     $scope.ok = function () {
       $modalInstance.close();
     };
@@ -27,8 +29,9 @@ angular.module('hopefutureBlogApp')
  * @author Linder linder0209@126.com
  * @createdDate 2014-5-9
  * */
-  .controller('AlertModalCtrl', function ($scope, $modalInstance, alertContent) {
-    $scope.alertContent = alertContent;
+  .controller('AlertModalCtrl', function ($scope, $modalInstance, config) {
+    $scope.modalTitle = config.modalTitle;
+    $scope.modalContent = config.modalContent;
     $scope.ok = function () {
       $modalInstance.close();
     };

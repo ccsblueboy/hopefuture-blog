@@ -25,7 +25,7 @@ var article = {
 
   save: function (req, res) {
     var data = req.body;
-    articleDao.savePagination(data, function (err, doc) {
+    articleDao.save(data, function (err, doc) {
       if (err) {
         console.error(err);
         res.send({success: false, err: err});

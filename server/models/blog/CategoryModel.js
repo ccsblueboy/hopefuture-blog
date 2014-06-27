@@ -7,14 +7,13 @@ var Schema = mongoose.Schema;
 /**
  * 文章分类目录 Schema
  * 在命令窗口插入一条记录
- * db.categories.save({"name":"meifenlei",level:0,createDate:new Date()})
+ * db.categories.save({"name":"meifenlei",createDate:new Date()})
  * @type {Schema}
  */
 var schema = new Schema({
   name: { type: String },
   description: { type: String },
   parent: { type: String },
-  level: { type: Number },
   createdDate: { type: Date, default: Date.now }
 });
 

@@ -1,4 +1,4 @@
-<h3>撰写新文章</h3>
+<h3>{{header}}</h3>
 
 <form name="articleForm" method="post" article-validator>
   <div class="row">
@@ -6,8 +6,7 @@
       <div class="form-group">
         <lable for="title">文章标题</lable>
         <input type="text" id="title" name="title" class="form-control" ng-model="article.title"
-               placeholder="在此输入标题"
-               autocomplete="off" required maxbyteslength="400">
+               placeholder="在此输入标题" autocomplete="off" required maxbyteslength="400" maxlength="400">
       </div>
       <div class="form-group">
         <lable>文章内容</lable>
@@ -82,7 +81,7 @@
                 </p>
                 <div class="form-group ">
                   <div class="input-group">
-                    <input type="text" class="form-control" name="publishDate" ng-model="article.publishDate"
+                    <input type="text" class="form-control" id="publishDate" name="publishDate" ng-model="article.publishDate"
                            datepicker-popup="{{format}}" is-open="opened" close-text="Close" ng-click="openDatepicker($event)"/>
                     <span class="input-group-btn">
                       <button type="button" class="btn btn-info" ng-click="openDatepicker($event)"><span class="glyphicon glyphicon-calendar"></span>
@@ -98,7 +97,7 @@
 
         <div class="panel-footer">
           <button class="btn btn-info" type="submit">发布</button>
-          <button class="btn btn-default" type="button">保存草稿</button>
+          <button class="btn btn-default" type="button" ng-click="publish('draft');">保存草稿</button>
         </div>
       </div>
       <!--发布-->
@@ -174,30 +173,33 @@
       </div>
       <!-- 文章分类 -->
 
-      <div class="panel panel-default">
+      <div class="panel panel-default" ng-controller="ArticleLabelCtrl">
         <div class="panel-heading">
           <h3 class="panel-title">标签</h3>
         </div>
         <div class="panel-body form-inline">
           <div class="form-group">
-            <input type="text" class="form-control" name="newlabel" id="newlabel">
-            <button type="button" class="btn btn-info">添加</button>
+            <input type="text" class="form-control" name="label" id="label" ng-model="label" maxlength="20" />
+            <button type="button" class="btn btn-info" ng-click="addLabel()">添加</button>
           </div>
           <p></p>
 
           <p>多个标签请用英文逗号（,）分开</p>
 
-          <div>
-            <span class="text-info">Angular</span>
-            <span class="text-info">jQuery</span>
+          <p class="label-list clearfix">
+            <span class="text-info" ng-repeat="label in displayLabels">
+              <a href="" ng-click="removeLabel(label.name)">X</a>
+              {{label.name}}
+            </span>
+          </p>
+
+          <p>
+            <a href="" ng-click="openLabelPanel();">从常用标签中选择</a>
+          </p>
+          <div class="well well-sm animate-show ng-hide" ng-show="showLabelPanel">
+            <a href="" ng-repeat="label in labels" ng-click="addLabelFromC(label)">{{label}}</a>
           </div>
-          <div class="form-group">
-            <button class="btn btn-link" type="button"> 从常用标签中选择</button>
-          </div>
-          <ul class="breadcrumb">
-            <li><a href="#">Angular</a></li>
-            <li><a href="#">jQuery</a></li>
-          </ul>
+
         </div>
       </div>
       <!--标签-->

@@ -2,12 +2,12 @@
  * 一个拥有数字下标（numeric indexes）和键值（key）的集合类
  * 参考ExtJs实现，Ext.util.MixedCollection 去掉了部分功能
  */
-(function ($, undefined) {
+(function (hf, undefined) {
   'use strict';
   /**
    * javascript 集合类
    *
-   * @returns {$.hopefuture.Collection}
+   * @returns {HopeFuture.Collection}
    */
   function collection(keyFn) {
     /*jshint -W040 */
@@ -20,13 +20,18 @@
     }
   }
 
-  $.extend(collection.prototype, {
+  jQuery.extend(collection.prototype, {
     /**
      * default return object id
      */
     getKey: function (o) {
       return o.id;
     },
+
+    getItems: function(){
+     return this.items;
+    },
+
     /**
      * add to a item
      */
@@ -123,10 +128,6 @@
      * @param {String} key The key of the item to remove.
      * @return {Object} The item removed or false if no item was removed.
      */
-    removeKey : function(key){
-      return this.removeAt(this.indexOfKey(key));
-    },
-
     removeByKey: function (key) {
       return this.removeAt(this.indexOfKey(key));
     },
@@ -186,7 +187,6 @@
     }
   });
 
-  $.hopefuture = $.hopefuture || {};
-  $.hopefuture.Collection = collection;
+  hf.Collection = collection;
 
-})(jQuery);
+})(HopeFuture);/*jshint -W117 */

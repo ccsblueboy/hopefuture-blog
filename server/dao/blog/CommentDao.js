@@ -21,7 +21,7 @@ module.exports = accountDao;
 /**
  * 保存数据，包括添加和修改
  * @method
- * @param data {AccountModel} AccountModel 实例
+ * @param data {LabelModel} AccountModel 实例
  * @param callback {function}回调函数
  */
 AccountDao.prototype.save = function (data, callback) {
@@ -103,7 +103,7 @@ AccountDao.prototype.delete = function (conditions, callback) {
 /**
  * 保存分页数据
  * @method
- * @param data  {AccountModel} AccountModel 实例
+ * @param data  {LabelModel} AccountModel 实例
  * @param callback  {function} 回调函数
  */
 AccountDao.prototype.savePagination = function (data, callback) {

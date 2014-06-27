@@ -1,31 +1,77 @@
 'use strict';
 
 var categoryDao = require('./../../dao/blog/CategoryDao.js');
+var underscore = require('underscore');
+
+function setItemLevel(docs) {
+  /**
+   * 递归设置节点 level
+   * @param item
+   * @param map
+   * @returns {*}
+   */
+  var setLevel = function (item, map) {
+    if (!item.parent) {
+      return 0;
+    }
+    var level = item.level;
+    if (level !== undefined) {
+      return level;
+    } else {
+      level = setLevel(map[item.parent], map);
+      item.level = level + 1;
+      return level + 1;
+    }
+  };
+
+  // 给数据加上level
+  var i, len = docs.length, item, map = {}, items = [];
+  for (i = 0; i < len; i++) {
+    var doc = docs[i]._doc;
+    item = {
+      _id: doc._id,
+      name: doc.name,
+      parent: doc.parent
+    };
+    items.push(item);
+    map[doc._id] = item;
+  }
+  for (i = 0; i < len; i++) {
+    item = items[i];
+    if (item.level === undefined) {
+      item.level = setLevel(item, map);
+    }
+  }
+  return items;
+}
+
 var category = {
 
   list: function (req, res) {
     categoryDao.list(function (err, docs) {
-      if (err) {
-        res.send({success: false});
-      } else {
+      if (!err) {
+        var items = setItemLevel(docs);
         res.send({
           success: true,
-          items: docs
+          items: items
         });
+      } else {
+        res.send({success: false});
       }
     });
   },
 
   save: function (req, res) {
     var data = req.body;
-    categoryDao.save(data, function (err, doc) {
+    categoryDao.save(data, function (err, docs) {
       if (err) {
         console.error(err);
         res.send({success: false, err: err});
       } else {
+        var items = setItemLevel(docs);
         res.send({
           success: true,
-          item: doc
+          items: items
         });
       }
     });
@@ -46,13 +92,43 @@ var category = {
   },
 
   delete: function (req, res) {
-    var ids = req.query.ids;// ids is Array
-    if(Object.prototype.toString.call(ids) !== '[object Array]'){
-      ids = [ids];
+    var items = req.query.items;// items is Array
+    if (!underscore.isArray(items)) {
+      items = [items];
     }
-    var conditions = { _id: { $in: ids } };
-    categoryDao.delete(conditions, function (err) {
-      res.send({success: err === null});
+    categoryDao.delete(items, function (err, docs) {
+      if (err) {
+        console.error(err);
+        res.send({success: false, err: err});
+      } else {
+        var newItems = setItemLevel(docs);
+        res.send({
+          success: true,
+          items: newItems
+        });
+      }
+    });
+  },
+
+  /**
+   * 校验重名
+   * @param req
+   * @param res
+   */
+  duplicate: function (req, res) {
+    var name = req.query.name,
+        parent = req.query.parent === '' ? null : req.query.parent,
+        id = req.query.id;
+    var conditions = {name: name, parent: parent};
+    if (id) {
+      conditions._id = { $ne: id };
+    }
+    categoryDao.find(conditions, function (err, model) {
+      if (err) {
+        res.send(false);
+      } else {
+        res.send(model.length === 0);
+      }
     });
   }
 };
@@ -64,6 +140,7 @@ router.get('/', category.list);
 router.post('/', category.save);
 router.get('/:id', category.edit);
 router.delete('/', category.delete);
+router.get('/validate/duplicate', category.duplicate);
 
 /**
  * 分类目录路由

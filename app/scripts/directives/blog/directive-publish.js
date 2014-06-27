@@ -21,6 +21,13 @@ angular.module('hopefutureBlogApp')
         restrict: 'AC',
         link: function postLink(scope, element, attrs) {
           $(element).validate({
+            errorPlacement: function(error, el) {
+              if(el.is('#publishDate')){
+                error.insertAfter(el.parent());
+              }else{
+                error.insertAfter(el);
+              }
+            },
             submitHandler: function () {
               scope.$apply(function () {
                 scope.publish();

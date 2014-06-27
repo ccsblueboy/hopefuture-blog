@@ -16,6 +16,10 @@ function ArticleDao(Model) {
 var ArticleModel = require('../../models/blog/ArticleModel');
 var articleDao = new ArticleDao(ArticleModel);
 
+var LabelModel = require('../../models/blog/LabelModel');
+var LabelDao = require('LabelDao');
+var labelDao = new LabelDao(LabelModel);
+
 module.exports = articleDao;
 
 /**
@@ -36,22 +40,19 @@ ArticleDao.prototype.save = function (data, callback) {
     });
   } else {
     var entity = new this.model(data);
+    //先添加修改标签
+    labelDao.update({name: $in: ids});
+
     //当有错误发生时，返回err；product 是返回生成的实体，numberAffected which will be 1 when the document was found and updated in the database, otherwise 0.
     entity.save(function (err, product, numberAffected) {
-      return callback(err, product._doc);
+      if(err){
+        return callback(err);
+      }else{
+
+        return callback(err, product._doc);
+      }
     });
   }
-};
-
-/**
- * 返回数据列表
- * @method
- * @param callback {function} 回调函数
- */
-ArticleDao.prototype.list = function (callback) {
-  this.model.find({}, function (err, docs) {
-    return callback(err, docs);
-  });
 };
 
 /**
@@ -67,10 +68,11 @@ ArticleDao.prototype.pagination = function (dataPage, callback) {
   model.count({}, function (err, count) {
     if (err === null) {
       dataPage.setTotalItems(count);
-      model.find({}, null, {skip: skip, limit: limit}, function (err, docs) {
-        dataPage.setItems(docs);
-        return callback(err, dataPage);
-      });
+      model.find({}, {_id: 1, title: 1, status: 1, articleLink: 1, categories: 1, labels: 1, readCounts: 1, commentCounts: 1, createdDate: 1},
+        {skip: skip, limit: limit}, function (err, docs) {
+          dataPage.setItems(docs);
+          return callback(err, dataPage);
+        });
     }
   });
 };
@@ -82,7 +84,7 @@ ArticleDao.prototype.pagination = function (dataPage, callback) {
  * @param callback {function} 回调函数
  */
 ArticleDao.prototype.findById = function (id, callback) {
-  this.model.findOne({_id: id}, function (err, model) {
+  this.model.findById(id, function (err, model) {
     return callback(err, model);
   });
 };
@@ -97,58 +99,5 @@ ArticleDao.prototype.findById = function (id, callback) {
 ArticleDao.prototype.delete = function (conditions, callback) {
   this.model.remove(conditions, function (err) {
     return callback(err);
-  });
-};
-
-/**
- * 保存分页数据
- * @method
- * @param data  {ArticleModel} ArticleModel 实例
- * @param callback  {function} 回调函数
- */
-ArticleDao.prototype.savePagination = function (data, callback) {
-  if (data._id) {
-    var update = {
-      title: data.title,
-      content: data.content,
-      updatedDate: new Date()
-    };
-    this.model.update({_id: data._id}, update, function (err, numberAffected, rawResponse) {
-      return callback(err, {updatedDate: update.updatedDate});
-    });
-  } else {
-    var entity = new this.model(data);
-    //当有错误发生时，返回err；product 是返回生成的实体，numberAffected which will be 1 when the document was found and updated in the database, otherwise 0.
-    entity.save(function (err, product, numberAffected) {
-      return callback(err);
-    });
-  }
-};
-
-/**
- * 判断登录名和密码是否正确
- * 采用异步回调处理同步 Promise
- * http://mongoosejs.com/docs/api.html#promise_Promise
- * @param data
- * @param callback
- */
-ArticleDao.prototype.findByLoginNameAndPassword = function (data, callback) {
-  var loginName = data.loginName,
-    password = data.password;
-  var model = this.model;
-
-  var promise = model.findOne({loginName: loginName}).exec();
-  promise.then(function (login) {
-    if (login) {
-      return model.findOne({loginName: loginName, password: password}).exec();
-    } else {
-      callback(-1);
-    }
-  }).then(function (login) {
-    if (login) {
-      callback(1, login);
-    } else {
-      callback(-2);
-    }
   });
 };

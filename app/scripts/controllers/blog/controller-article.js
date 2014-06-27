@@ -10,7 +10,7 @@
  * */
 
 angular.module('hopefutureBlogApp')
-  .controller('ArticleCtrl', function ($scope, $modal, articleService) {
+  .controller('ArticleCtrl', function ($scope, $location, $modal, articleService) {
     //初始化记录
     $scope.items = [];
     $scope.grid = {
@@ -34,52 +34,68 @@ angular.module('hopefutureBlogApp')
         }
       });
     };
-
     $scope.loadPageData();
 
     $scope.create = function () {
+      $location.path('/publish');
     };
 
-    $scope.edit = function (id, index) {
+    $scope.edit = function (id) {
+      $location.path('/editarticle');
     };
 
+    /**
+     * 包括删除一条或多条记录
+     * @param item
+     */
     $scope.delete = function (item) {
-      var modalInstance = $modal.open({
-        backdrop: 'static',
-        templateUrl: '../views/templates/confirmModal.html',
-        controller: 'ConfirmModalCtrl'
-      });
-      modalInstance.result.then(function () {
-        demoPaginationService.delete({params: {ids: [item._id]}}, function (data) {
-          if (data.success === true) {
-            $scope.loadPageData();
-          }
-        });
-      });
-    };
-
-    $scope.deleteAll = function () {
-      var modalInstance = $modal.open({
-        backdrop: 'static',
-        templateUrl: '../views/templates/confirmModal.html',
-        controller: 'ConfirmModalCtrl'
-      });
-      /**
-       * 点击ok和cancel执行的回调
-       * modalInstance.result.then(function () {}, function () {});
-       */
-      modalInstance.result.then(function () {
+      var json;
+      if (!item) {//没有传参数，表示执行的是删除多条记录
+        if ($scope.grid.checked === false) {
+          $modal.open({
+            templateUrl: '../views/templates/alertModal.html',
+            controller: 'AlertModalCtrl',
+            resolve: {
+              config: function () {
+                return {
+                  modalContent: '请至少选择一条记录！'
+                };
+              }
+            }
+          });
+          return;
+        }
         var ids = [];
         angular.forEach($scope.items, function (item, index) {
           if (item.checked === true) {
             ids.push(item._id);
           }
         });
-        var json = {params: {ids: ids}};
-        demoPaginationService.delete(json, function (data) {
+        json = {params: {ids: ids}};
+      } else {
+        json = {params: {ids: [item._id]}};
+      }
+      var modalInstance = $modal.open({
+        backdrop: 'static',
+        templateUrl: '../views/templates/confirmModal.html',
+        controller: 'ConfirmModalCtrl',
+        resolve: {
+          config: function () {
+            return {
+              modalContent: '确定要删除所选的记录吗？'
+            };
+          }
+        }
+      });
+      modalInstance.result.then(function () {
+        articleService.delete(json, function (data) {
           if (data.success === true) {
-            $scope.loadPageData(1);
-            $scope.grid.checked = false;
+            if (item) {
+              $scope.loadPageData();
+            } else {
+              $scope.loadPageData(1);
+              $scope.grid.checked = false;
+            }
           }
         });
       });

@@ -3,21 +3,17 @@
 angular.module('hopefutureBlogApp')
     .factory('publishService', ['hfbHttpService', function (hfbHttpService) {
       return {
-        paging: function (data, success) {
-          hfbHttpService.get('manage/article', data).then(success);
-        },
         save: function (data, success) {
           hfbHttpService.post('manage/article', data).then(success);
         },
         edit: function (id, success) {
           hfbHttpService.get('manage/article/' + id).then(success);
         },
-
-        'delete': function (data, success) {
-          hfbHttpService.delete('manage/article', data).then(success);
-        },
         getCategory: function(data, success){
           hfbHttpService.get('manage/category', data).then(success);
+        },
+        getLabel: function(success){
+          hfbHttpService.get('manage/label').then(success);
         }
       };
     }])

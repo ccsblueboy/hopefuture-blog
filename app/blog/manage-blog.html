@@ -29,9 +29,10 @@
 
     <div class="col-sm-3 col-md-2 sidebar">
       <ul class="nav nav-sidebar">
-        <li link-active="active"><a href="" ng-href="#/publish">发布编辑文章</a></li>
+        <li link-active="active"><a href="" ng-href="#/publish">发布文章</a></li>
         <li link-active="active"><a href="" ng-href="#/article">文章管理</a></li>
         <li link-active="active"><a href="" ng-href="#/category">分类管理</a></li>
+        <li link-active="active"><a href="" ng-href="#/label">标签管理</a></li>
         <li link-active="active"><a href="" ng-href="#/comment">评论管理</a></li>
         <li link-active="active"><a href="" ng-href="#/setting">博客设置</a></li>
       </ul>
@@ -67,6 +68,7 @@
 <script type="text/javascript" src="../bower_components/kindeditor/lang/zh_CN.js"></script>
 
 <!-- build:js({.tmp,app}) scripts/blog.js -->
+<script src="../scripts/hopefuture/hopefuture.js"></script>
 <script src="../scripts/hopefuture/hf_validate.js"></script>
 <script src="../scripts/hopefuture/hf_collection.js"></script>
 <script src="../scripts/apps/blog/app-manage-blog.js"></script>
@@ -93,6 +95,7 @@
 <script src="../scripts/directives/blog/directive-category.js"></script>
 
 <script src="../scripts/filters/filter-truncate.js"></script>
+<script src="../scripts/filters/filter-common.js"></script>
 
 <!-- endbuild -->
 </body>

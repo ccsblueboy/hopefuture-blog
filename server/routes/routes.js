@@ -9,6 +9,7 @@ var login = require('./account/login');
 var blog = require('./blog/blog');
 var article = require('./blog/article');
 var category = require('./blog/category');
+var label = require('./blog/label');
 
 /**
  * 页面相关路由抽象实现，即访问页面的url
@@ -36,5 +37,6 @@ module.exports = function (app) {
 
   app.use('/:blog/manage/article',article);// 管理文章
   app.use('/:blog/manage/category',category);// 分类目录管理
+  app.use('/:blog/manage/label',label);// 标签
 
 };

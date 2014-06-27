@@ -12,12 +12,14 @@ angular.module('hopefutureBlogApp')
      * @param str 要计算的字符串
      * @param length 要截取的长度
      * @param bytes 是否是字节长度
+     * @param ellipsis 超长时显示省略内容，默认为空字符串
      */
-    return function (str, length, bytes) {
+    return function (str, length, bytes, ellipsis) {
       if (str == null || typeof length !== 'number' || length <= 0) {
         return '';
       }
       str = typeof str === 'string' ? str : str.toString();
+      ellipsis = ellipsis || '';
       if (bytes) {
         var actualLen = 0,
           i = 0,
@@ -34,9 +36,9 @@ angular.module('hopefutureBlogApp')
             break;
           }
         }
-        return str.substring(0, i + 1);
+        return i === len ? str : str.substring(0, i) + ellipsis;
       } else {
-        return str.length > length ? str.substring(0, length) : str;
+        return str.length > length ? str.substring(0, length) + ellipsis : str;
       }
     };
   });

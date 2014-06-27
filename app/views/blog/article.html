@@ -1,6 +1,7 @@
+<h3 class="ng-scope">文章管理</h3>
 <div>
   <div class="btn-group">
-    <button type="button" class="btn btn-primary" ng-click="deleteAll();">
+    <button type="button" class="btn btn-primary" ng-click="delete();">
       <span class="glyphicon glyphicon-remove"></span> 删除
     </button>
   </div>
@@ -22,6 +23,11 @@
     </div>
   </div>
 
+  <div class="btn-group margin10-L">
+    <button type="button" class="btn btn-primary" ng-click="">
+       高级查询
+    </button>
+  </div>
 </div>
 <hr/>
 
@@ -32,22 +38,27 @@
     <th>标题</th>
     <th>分类</th>
     <th>标签</th>
+    <th>状态</th>
     <th>浏览次数</th>
     <th>评论</th>
-    <th>发表日期</th>
+    <th>创建日期</th>
     <th>&nbsp;</th>
   </tr>
   </thead>
   <tbody>
   <tr ng-repeat="item in items" id="{{item._id}}">
     <td><input type="checkbox" ng-model="item.checked" ng-change="selectItem()"/></td>
-    <td>{{item.title | truncate:20:true}}</td>
-    <td>{{item.createdDate}}</td>
-    <td>{{item.createdBy}}</td>
-    <td>{{item.updatedDate}}</td>
-    <td>{{item.updatedBy}}</td>
     <td>
-      <a class="glyphicon glyphicon-pencil" href="" ng-click="edit(item._id,$index);"></a>
+      <div popover="{{item.title}}" popover-trigger="mouseenter" popover-popup-delay="300">{{item.title | truncate:50:true:' ...'}}</div>
+    </td>
+    <td>{{item.categories | arrayToStr:'、':'未分类' | truncate:20:true:' ...'}}</td>
+    <td>{{item.lables | arrayToStr:'、':'—' | truncate:20:true:' ...'}}</td>
+    <td>{{item.status}}</td>
+    <td>{{item.readCounts}}</td>
+    <td>{{item.commentCounts}}</td>
+    <td>{{item.createdDate | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+    <td>
+      <a class="glyphicon glyphicon-pencil" href="" ng-click="edit(item._id);"></a>
       <a class="glyphicon glyphicon-trash" href="" ng-click="delete(item);"></a>
     </td>
   </tr>

@@ -36,6 +36,10 @@
   color: #fff;
   background-color: #428bca;
 }
-/*
- * Main content
- */
+
+.label-list span{
+  display: block;
+  float: left;
+  margin-right: 10px;
+  padding: 3px 0;
+}
