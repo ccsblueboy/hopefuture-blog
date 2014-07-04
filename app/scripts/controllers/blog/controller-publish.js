@@ -13,14 +13,16 @@ angular.module('hopefutureBlogApp')
   .controller('PublishCtrl', function ($scope, $filter, $location, publishService) {
 
     $scope.header = '撰写新文章';
+    $scope.submitBtnName = '发布';
     if ($location.path() === '/editarticle') {
       $scope.header = '编辑文章';
+      $scope.submitBtnName = '更新';
     }
-
     $scope.article = {
+      _id: undefined,
       title: '',
       content: '',
-      status: 'publish',
+      status: '',
       publicityStatus: 'public',//公开度，默认公开
       protectedPassword: '',//密码保护，需输入密码才能查看
       top: false,//文章置顶
@@ -29,20 +31,42 @@ angular.module('hopefutureBlogApp')
       articleLink: '',//文章永久链接，取相对地址
       type: 'richText',//文章类型
       categories: [],//文章所属分类
-      labels: []//文章标签
+      labels: [],//文章标签
+      updateStatus: false//修改状态
     };
 
-    $scope.publish = function (status) {
-      if (status) {
-        $scope.article.status = status;
+    /**
+     * 保存草稿
+     */
+    $scope.saveDraft = function () {
+      if ($scope.validator.valid()) {
+        $scope.publish('draft');
       }
-      $scope.article.content = $scope.kindEditorContent.html();
+    };
+
+    /**
+     * 发布
+     * @param status
+     */
+    $scope.publish = function (status) {
+      status = status || 'publish';
+      $scope.article.status = status;
+      $scope.article.content = $scope.tinymceContent.getContent();
       $scope.article.publishDate = $scope.article.publishType === 'immediate' ? '' : $filter('date')($scope.article.publishDate, 'yyyy-MM-dd');
       publishService.save($scope.article, function (data) {
         if (data.success === true) {
+          $scope.header = '编辑文章';
+          if (status === 'publish') {
+            $scope.publishInfo = $scope.article.updateStatus === true ? '文章已修改' : '文章已发布';
+          } else {
+            $scope.publishInfo = $scope.article.updateStatus === true ? '文章草稿已修改' : '文章草稿已保存';
+          }
 
-        } else {
-
+          $scope.article._id = data.item._id;
+          $scope.article.articleLink = data.item.articleLink;
+          $scope.article.status = data.item.status;
+          $scope.article.updateStatus = data.item.status;
+          $scope.showPublishInfo = true;
         }
       });
     };
@@ -119,7 +143,30 @@ angular.module('hopefutureBlogApp')
     };
 
   })
-  .controller('PublishTypeCtrl', function ($scope) {//发布方式
+  .controller('PublishTypeCtrl', function ($scope, publishTypeStatus) {//发布方式
+    $scope.publishTypeStatus = publishTypeStatus.immediate;
+    $scope.publishTypePanel = false;
+
+    //文章发布方式
+    $scope.publishType = {
+      publishTypeStatus: 'immediate',
+      publishDate: ''
+    };
+
+    $scope.setPublishTypeStatus = function () {
+      var status = $scope.publishType.publishTypeStatus;
+      if (status === 'immediate') {
+        $scope.publishType.publishDate = '';
+      }
+      angular.extend($scope.$parent.article, $scope.publishType);
+      $scope.publishTypeStatus = publishTypeStatus[status];
+      $scope.publishTypePanel = false;
+    };
+
+    $scope.$watch('publishType.publishTypeStatus', function (newValue, oldValue) {
+      $scope.showPublishDate = newValue === 'delay';
+    });
+
     $scope.format = 'yyyy-MM-dd';
     $scope.openDatepicker = function ($event) {
       $event.preventDefault();
@@ -129,6 +176,11 @@ angular.module('hopefutureBlogApp')
   })
   .controller('ArticleLabelCtrl', function ($scope, publishService) {// 标签
 
+    /**
+     * jshint global
+     -HopeFuture
+     * 用来处理显示 label 中间变量（集合）
+     */
     var collection = new HopeFuture.Collection(function (o) {
       return o.name;
     });
@@ -141,8 +193,8 @@ angular.module('hopefutureBlogApp')
       var labels = $scope.label.split(',');
       angular.forEach(labels, function (item, index) {
         var _item = collection.key(item);
-        if(!_item){//创建新的
-          _item ={
+        if (!_item) {//创建新的
+          _item = {
             name: item
           };
           collection.add(_item);
@@ -155,34 +207,150 @@ angular.module('hopefutureBlogApp')
 
     $scope.addLabelFromC = function (item) {
       var _item = collection.key(item);
-      if(!_item){//创建新的
-        _item ={
-          name: item
+      if (!_item) {//创建新的
+        _item = {
+          name: item.name
         };
         collection.add(_item);
-        $scope.$parent.article.labels.push(item);
+        $scope.displayLabels = collection.getItems();
+        $scope.$parent.article.labels.push(item.name);
       }
     };
 
-    $scope.removeLabel = function(item){
+    $scope.removeLabel = function (item) {
       collection.removeByKey(item);
       $scope.displayLabels = collection.getItems();
 
       var labels = $scope.$parent.article.labels;
       var index = labels.indexOf(item);
-      labels.splice(index,1);
+      labels.splice(index, 1);
     };
 
     $scope.openLabelPanel = function () {
       if (!$scope.showLabelPanel) {
         publishService.getLabel(function (data) {
           if (data.success === true) {
-            $scope.labels = data.items;
+            var items = angular.copy(data.items);
+            data.items.sort(function (item, next) {
+              return item.count > next.count;
+            });
+            var minCount = data.items[0].count,
+              maxCount = data.items[data.items.length - 1].count,
+              sub = maxCount - minCount;
+            /**
+             * 根据 count 大小设置字体大小，最大的为 30px，最小为14px,
+             * 最大和最小差值为16
+             * 如果 sub 为 0，则取最小字体14px
+             */
+            angular.forEach(items, function (item, index) {
+              if (sub === 0) {
+                item.style = {fontSize: '14px'};
+              } else {
+                item.style = {fontSize: (14 + 16 / sub * (item.count - 1)) + 'px'};
+              }
+            });
+            $scope.labels = items;
           }
         });
       }
       $scope.showLabelPanel = !$scope.showLabelPanel;
     };
+  })
+  .controller('ArticleCategoryCtrl', function ($scope, publishService, categoryMethod, publishMethod) {// 文章分类
+    /**
+     * 返回文章分类列表和常用的分类列表
+     */
+    publishService.getCategoryAndFrequentCategory(function (data) {
+      if (data[0].success === true) {
+        var collection = categoryMethod.sortItems(data[0].items);
+        var items = collection.getItems();
+        angular.forEach(items, function (item, index) {
+          item.style = {marginLeft: item.level * 20 + 'px'};
+        });
+        $scope.categories = items;
+      }
+
+      if (data[1].success === true) {
+        $scope.frequentCategories = data[1].items;
+      }
+    });
+
+    var categories = [];
+    $scope.changeCategory = function (category, from) {
+      if (category.checked === true) {
+        if (categories.indexOf(category._id) === -1) {
+          categories.push(category._id);
+        }
+      } else {
+        var index = categories.indexOf(category._id);
+        categories.splice(index, 1);
+      }
+
+      var _categories;
+      if (from === 'frequent') {
+        _categories = $scope.categories;
+      } else {
+        _categories = $scope.frequentCategories;
+      }
+      if (_categories) {
+        for (var i = 0, len = _categories.length; i < len; i++) {
+          if (_categories[i]._id === category._id) {
+            _categories[i].checked = category.checked;
+            break;
+          }
+        }
+      }
+      $scope.$parent.article.categories = categories;
+    };
+
+    //添加新的分类目录
+    $scope.category = {
+      name: '',
+      parentCategory: ''
+    };
+
+    $scope.addCategory = function () {
+      if ($('#category').val() === '') {
+        $scope.$parent.alerts = [
+          {type: 'danger', message: '分类名称不能为空！'}
+        ];
+        return;
+      } else {
+        var valid = publishMethod.validCategory($scope);
+        if (!valid) {
+          return;
+        }
+      }
+      var parentCategory = $scope.category.parentCategory;
+      var category = angular.copy($scope.category);
+      delete category.parentCategory;
+      if (parentCategory) {
+        category.parent = parentCategory._id;
+      }
+      publishService.addCategory(category, function (data) {
+        if (data.success === true) {
+          var collection = categoryMethod.sortItems(data.items);
+          var items = collection.getItems();
+          angular.forEach(items, function (item, index) {
+            item.style = {marginLeft: item.level * 20 + 'px'};
+          });
+          $scope.categories = items;
+
+          $scope.category.name = '';
+          $scope.category.parentCategory = '';
+        }
+      });
+    };
+    $scope.$watch('category.name', function (newValue, oldValue) {
+      if (newValue !== '') {
+        $scope.$parent.alerts = [];
+        publishMethod.validCategory($scope);
+      }
+    });
+    $scope.$watch('category.parentCategory', function (newValue, oldValue) {
+      if ($scope.category.name !== '') {
+        publishMethod.validCategory($scope);
+      }
+    });
+
   });
-
-

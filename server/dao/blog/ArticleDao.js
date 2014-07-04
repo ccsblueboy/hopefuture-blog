@@ -17,6 +17,7 @@ var ArticleModel = require('../../models/blog/ArticleModel');
 var articleDao = new ArticleDao(ArticleModel);
 
 var labelDao = require('./LabelDao');
+var categoryDao = require('./CategoryDao');
 
 module.exports = articleDao;
 
@@ -28,27 +29,36 @@ module.exports = articleDao;
  */
 ArticleDao.prototype.save = function (data, callback) {
   if (data._id) {
-    var update = {
-      title: data.title,
-      content: data.content,
-      updatedDate: new Date()
-    };
-    this.model.update({_id: data._id}, update, function (err, numberAffected, rawResponse) {
-      return callback(err, {updatedDate: update.updatedDate});
+    this.model.update({_id: data._id}, data, function (err, numberAffected, rawResponse) {
+      return callback(err, {
+          _id: data._id,
+          status: data.status,
+          articleLink: data.articleLink
+      });
     });
   } else {
     var entity = new this.model(data);
+    //这里应该用异步添加的方式实现
     //先保存添加的标签
     labelDao.update(data.labels, function (err) {
       if (err) {
         return callback(err);
       }
-      entity.save(function (err, product, numberAffected) {
+      categoryDao.updateCount(data.categories, function (err) {
         if (err) {
           return callback(err);
-        } else {
-          return callback(err, product._doc);
         }
+        entity.save(function (err, product, numberAffected) {
+          if (err) {
+            return callback(err);
+          } else {
+            return callback(err, {
+              _id: product._doc._id,
+              status: product._doc.status,
+              articleLink: product._doc.articleLink
+            });
+          }
+        });
       });
     });
   }

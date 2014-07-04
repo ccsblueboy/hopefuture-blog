@@ -9,7 +9,7 @@
       }, 150);
     },
     // For the invisible tags, we need to validate too.
-    ignore: 'input[type="hidden"], :button',
+    ignore: 'input[type="hidden"], :button, :hidden',
     errorClass: 'text-danger'
   });
 

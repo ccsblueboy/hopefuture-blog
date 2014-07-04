@@ -394,7 +394,7 @@ module.exports = function (grunt) {
     // express 启动任务
     express: {
       options: {
-        port: 9090
+        port: 9000
       },
       dev: {
         options: {
@@ -415,7 +415,8 @@ module.exports = function (grunt) {
           '<%= yeoman.app %>/styles/validate.css': '<%= yeoman.app %>/less/validate.less',
           '<%= yeoman.app %>/styles/manage-blog.css': '<%= yeoman.app %>/less/manage-blog.less',
           '<%= yeoman.app %>/styles/ng-animate.css': '<%= yeoman.app %>/less/ng-animate.less',
-          '<%= yeoman.app %>/styles/examples.css': '<%= yeoman.app %>/less/examples.less'
+          '<%= yeoman.app %>/styles/examples.css': '<%= yeoman.app %>/less/examples.less',
+          '<%= yeoman.app %>/styles/tinymce.css': '<%= yeoman.app %>/less/tinymce.less'
         }
       }
     },

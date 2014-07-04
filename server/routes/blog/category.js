@@ -63,6 +63,10 @@ var category = {
 
   save: function (req, res) {
     var data = req.body;
+    if(underscore.isEmpty(data.name)){
+      res.send({success: false, err: '分类名称不能为空！'});
+      return;
+    }
     categoryDao.save(data, function (err, docs) {
       if (err) {
         console.error(err);
@@ -117,8 +121,8 @@ var category = {
    */
   duplicate: function (req, res) {
     var name = req.query.name,
-        parent = req.query.parent === '' ? null : req.query.parent,
-        id = req.query.id;
+      parent = req.query.parent === '' ? null : req.query.parent,
+      id = req.query.id;
     var conditions = {name: name, parent: parent};
     if (id) {
       conditions._id = { $ne: id };
@@ -128,6 +132,25 @@ var category = {
         res.send(false);
       } else {
         res.send(model.length === 0);
+      }
+    });
+  },
+
+  /**
+   * 返回常用的分类目录列表
+   * @param req
+   * @param res
+   */
+  frequentList: function (req, res) {
+    var num = req.params.num;
+    categoryDao.frequentList(num, function (err, docs) {
+      if (!err) {
+        res.send({
+          success: true,
+          items: docs
+        });
+      } else {
+        res.send({success: false});
       }
     });
   }
@@ -141,6 +164,7 @@ router.post('/', category.save);
 router.get('/:id', category.edit);
 router.delete('/', category.delete);
 router.get('/validate/duplicate', category.duplicate);
+router.get('/records/frequent', category.frequentList);//常用的分类
 
 /**
  * 分类目录路由

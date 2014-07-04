@@ -36,10 +36,35 @@
   color: #fff;
   background-color: #428bca;
 }
-
-.label-list span{
-  display: block;
+.label-list > span,
+.label-list > a {
+  display: inline-block;
   float: left;
   margin-right: 10px;
   padding: 3px 0;
+}
+.category-list {
+  max-height: 300px;
+  overflow: auto;
+  padding: 0 10px;
+  border: 1px solid #ddd;
+  border-top-width: 0;
+}
+/**
+ * 解决 TinyMCE 冲突
+**/
+div.mce-fullscreen {
+  z-index: 2000;
+}
+.hf-callout {
+  background-color: #eee;
+  border-color: #ccc;
+  border-radius: 3px;
+  border-style: solid;
+  border-width: 1px 1px 1px 5px;
+  margin: 20px 0;
+  padding: 10px;
+}
+.hf-callout-info {
+  border-left-color: #5bc0de;
 }

@@ -13,9 +13,9 @@ function CategoryDao(Model) {
   this.model = Model;
 }
 
-var mongoose = require('mongoose');
 var CategoryModel = require('../../models/blog/CategoryModel');
 var categoryDao = new CategoryDao(CategoryModel);
+var underscore = require('underscore');
 
 module.exports = categoryDao;
 
@@ -39,9 +39,9 @@ CategoryDao.prototype.save = function (data, callback) {
         return callback(err);
       } else {
         self.model.find({}, {_id: 1, name: 1, parent: 1}).sort({_id: 1})
-            .exec(function (err, docs) {
-              return callback(err, docs);
-            });
+          .exec(function (err, docs) {
+            return callback(err, docs);
+          });
       }
     });
   } else {
@@ -52,9 +52,9 @@ CategoryDao.prototype.save = function (data, callback) {
         return callback(err);
       } else {
         self.model.find({}, {_id: 1, name: 1, parent: 1}).sort({_id: 1})
-            .exec(function (err, docs) {
-              return callback(err, docs);
-            });
+          .exec(function (err, docs) {
+            return callback(err, docs);
+          });
       }
     });
   }
@@ -67,9 +67,9 @@ CategoryDao.prototype.save = function (data, callback) {
  */
 CategoryDao.prototype.list = function (callback) {
   this.model.find({}, {_id: 1, name: 1, parent: 1}).sort({_id: 1})
-      .exec(function (err, docs) {
-        return callback(err, docs);
-      });
+    .exec(function (err, docs) {
+      return callback(err, docs);
+    });
 };
 
 /**
@@ -107,15 +107,15 @@ CategoryDao.prototype.delete = function (items, callback) {
     //var promise = new mongoose.Promise();
     for (i = 0; i < len; i++) {
       item = JSON.parse(items[i]);
-      model.update({parent: item._id}, { parent: item.parent || null },function (err) {
+      model.update({parent: item._id}, { parent: item.parent || null }, function (err) {
         //promise.resolve(err);
       });
     }
     //promise.then(function(){
-      model.find({}, {_id: 1, name: 1, parent: 1}).sort({_id: 1})
-          .exec(function (err, docs) {
-            return callback(err, docs);
-          });
+    model.find({}, {_id: 1, name: 1, parent: 1}).sort({_id: 1})
+      .exec(function (err, docs) {
+        return callback(err, docs);
+      });
     //});
   });
 };
@@ -129,4 +129,37 @@ CategoryDao.prototype.find = function (conditions, callback) {
   this.model.find(conditions, function (err, model) {
     return callback(err, model);
   });
+};
+
+/**
+ *  取经常使用的分类目录，默认取前十条
+ * @param num
+ * @param callback
+ */
+CategoryDao.prototype.frequentList = function (num, callback) {
+  num = num || 10;//默认为10
+  this.model.find({count: { $gt: 0 }}, {_id: 1, name: 1, count: 1}).sort({count: -1}).limit(10)
+    .exec(function (err, docs) {
+      return callback(err, docs);
+    });
+};
+
+/**
+ * 修改 count 值，加一
+ * @method
+ * @param categories { Array } id 组成的数组
+ * @param callback {function} 回调函数
+ */
+CategoryDao.prototype.updateCount = function (categories, callback) {
+  if (underscore.isEmpty(categories)) {
+    return callback(null);
+  }
+  var category;
+  for (var i = 0, len = categories.length; i < len; i++) {
+    category = categories[i];
+    this.model.update({_id:category }, {$inc: {count: 1}},
+      function (err, numberAffected, rawResponse) {
+        return callback(err);
+      });
+  }
 };

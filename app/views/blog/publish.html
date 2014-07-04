@@ -1,6 +1,10 @@
 <h3>{{header}}</h3>
+<div class="animate-show ng-hide hf-callout hf-callout-info" ng-show="showPublishInfo">
+    <span>{{publishInfo}} 永久链接: {{article.articleLink}}</span>
+    <a class="margin10-L" ng-href="article.articleLink">查看文章</a>
+</div>
 
-<form name="articleForm" method="post" article-validator>
+<form name="articleForm" method="post" article-validator="validator">
   <div class="row">
     <div class="col-md-9">
       <div class="form-group">
@@ -10,8 +14,7 @@
       </div>
       <div class="form-group">
         <lable>文章内容</lable>
-        <textarea id="content" name="content" kind-editor="kindEditorContent"
-                  style="width:100%;height:500px;visibility:hidden;">撰写博客内容</textarea>
+        <textarea id="content" name="content" tinymce="tinymceContent">撰写博客内容</textarea>
       </div>
     </div>
     <!--.col-md-9-->
@@ -67,37 +70,46 @@
           <div ng-controller="PublishTypeCtrl">
             <div>
               <span class="glyphicon glyphicon-calendar"></span>
-              <span>发布方式</span>
+              <span>发布方式：</span>
+              <strong>{{publishTypeStatus}}</strong>
+              <a href="" class="margin10-L" ng-click="publishTypePanel=true;" ng-hide="publishTypePanel">编辑</a>
             </div>
-            <ul class="list-unstyled">
-              <li class="radio">
-                <label><input type="radio" name="publishType" ng-model="article.publishType" value="immediate" /> 立即发布 </label>
-              </li>
-              <li class="radio">
-                <label><input type="radio" name="publishType" ng-model="article.publishType" value="delay" /> 定时发布 </label>
-
-                <p class="margin10-T">
-                  <lable for="title">发布时间：</lable>
-                </p>
-                <div class="form-group ">
-                  <div class="input-group">
-                    <input type="text" class="form-control" id="publishDate" name="publishDate" ng-model="article.publishDate"
-                           datepicker-popup="{{format}}" is-open="opened" close-text="Close" ng-click="openDatepicker($event)"/>
-                    <span class="input-group-btn">
-                      <button type="button" class="btn btn-info" ng-click="openDatepicker($event)"><span class="glyphicon glyphicon-calendar"></span>
-                      </button>
-                    </span>
+            <div class="animate-show ng-hide" ng-show="publishTypePanel">
+              <ul class="list-unstyled">
+                <li class="radio">
+                  <label><input type="radio" name="publishType" ng-model="publishType.publishTypeStatus" value="immediate" /> 立即发布 </label>
+                </li>
+                <li class="radio">
+                  <label><input type="radio" name="publishType" ng-model="publishType.publishTypeStatus" value="delay" /> 定时发布 </label>
+                  <div class="animate-show ng-hide" ng-show="showPublishDate">
+                    <p class="margin10-T">
+                      <lable for="title">发布时间：</lable>
+                    </p>
+                    <div class="form-group ">
+                      <div class="input-group">
+                        <input type="text" class="form-control" id="publishDate" name="publishDate" ng-model="publishType.publishDate"
+                               datepicker-popup="{{format}}" is-open="opened" close-text="Close" ng-click="openDatepicker($event)"/>
+                        <span class="input-group-btn">
+                          <button type="button" class="btn btn-info" ng-click="openDatepicker($event)"><span class="glyphicon glyphicon-calendar"></span>
+                          </button>
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </li>
-            </ul>
+                </li>
+              </ul>
+              <p>
+                <button class="btn btn-default" type="button" ng-click="setPublishTypeStatus()">确定</button>
+                <a class="margin10-L" href="" ng-click="publishTypePanel=false;">取消</a>
+              </p>
+            </div>
           </div>
           <!--发布方式 end-->
         </div>
 
         <div class="panel-footer">
-          <button class="btn btn-info" type="submit">发布</button>
-          <button class="btn btn-default" type="button" ng-click="publish('draft');">保存草稿</button>
+          <button class="btn btn-info" type="submit">{{article.status==='publish'? '更新':'发布'}}</button>
+          <button class="btn btn-default" type="button" ng-click="saveDraft();" ng-hide="article.status==='publish'">保存草稿</button>
         </div>
       </div>
       <!--发布-->
@@ -117,61 +129,54 @@
       </div>
       <!--文章类型-->
 
-      <div class="panel panel-default">
+      <!-- 文章分类 start -->
+      <div class="panel panel-default"  ng-controller="ArticleCategoryCtrl">
         <div class="panel-heading">
           <h3 class="panel-title">分类目录</h3>
         </div>
         <div class="panel-body">
           <tabset>
             <tab heading="所有分类目录">
-              <div article-category></div>
-              <div class="checkbox">
-                <label><input type="checkbox" name="category"> JavaScript</label>
-              </div>
-              <div class="checkbox">
-                <label><input type="checkbox" name="category"> HTML</label>
-              </div>
-              <div class="checkbox">
-                <label><input type="checkbox" name="category"> CSS</label>
+              <div class="category-list">
+                <div class="checkbox" ng-repeat="category in categories" ng-style="category.style">
+                  <label><input type="checkbox" name="category" ng-model="category.checked" ng-change="changeCategory(category,'all')"/>{{category.name}}</label>
+                </div>
               </div>
             </tab>
-            <tab select="alertMe()">
-              <tab-heading>
-                最常用
-              </tab-heading>
-              <div class="checkbox">
-                <label><input type="checkbox" name="category"> JavaScript</label>
-              </div>
-              <div class="checkbox">
-                <label><input type="checkbox" name="category"> CSS</label>
+
+            <tab>
+              <tab-heading>最常用</tab-heading>
+              <div class="category-list">
+                <div class="checkbox" ng-repeat="category in frequentCategories">
+                  <label><input type="checkbox" name="category" ng-model="category.checked"  ng-change="changeCategory(category,'frequent')" />{{category.name}}</label>
+                </div>
               </div>
             </tab>
           </tabset>
 
-          <div class="form-group">
-            <button class="btn btn-link" type="button"> + 添加新分类目录</button>
+          <div class="margin10-T">
+            <a href="" ng-click="showAddCategory = !showAddCategory;"> + 添加新分类目录</a>
           </div>
-          <div>
+
+          <div class="margin10-T animate-show ng-hide" ng-show="showAddCategory">
+
+            <div class="well-sm" alert ng-repeat="alert in alerts" type="{{alert.type}}" >{{alert.message}}</div>
             <div class="form-group">
-              <input type="text" placeholder="分类目录" id="newcategory" name="newcategory"
+              <input type="text" placeholder="分类目录" id="category" name="category" ng-model="category.name"
                      class="form-control"/>
             </div>
             <div class="form-group">
-              <select class="form-control" name="allcategory" id="allcategory">
-                <option value="-1">&mdash; 父级分类目录 &mdash;</option>
-                <option value="3" class="level-0">JavaScript</option>
-                <option value="4" class="level-1">&nbsp;&nbsp;&nbsp;jQuery</option>
-                <option value="5" class="level-2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;jQuery ui</option>
-                <option value="1" class="level-0">未分类</option>
+              <select id="categoryParent" name="categoryParent" ng-model="category.parentCategory" class="form-control" ng-options="c.alias for c in categories">
+                <option value="">&mdash; 父级分类目录 &mdash;</option>
               </select>
             </div>
             <div class="form-group">
-              <button class="btn btn-info" type="button">添加</button>
+              <button class="btn btn-info" type="button" ng-click="addCategory()">添加</button>
             </div>
           </div>
         </div>
       </div>
-      <!-- 文章分类 -->
+      <!-- 文章分类 end -->
 
       <div class="panel panel-default" ng-controller="ArticleLabelCtrl">
         <div class="panel-heading">
@@ -196,8 +201,8 @@
           <p>
             <a href="" ng-click="openLabelPanel();">从常用标签中选择</a>
           </p>
-          <div class="well well-sm animate-show ng-hide" ng-show="showLabelPanel">
-            <a href="" ng-repeat="label in labels" ng-click="addLabelFromC(label)">{{label}}</a>
+          <div class="well well-sm label-list clearfix animate-show ng-hide" ng-show="showLabelPanel">
+            <a href="" ng-repeat="label in labels" ng-click="addLabelFromC(label)" ng-style="label.style">{{label.name}}</a>
           </div>
 
         </div>
