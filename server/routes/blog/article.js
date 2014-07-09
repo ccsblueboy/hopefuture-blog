@@ -17,7 +17,7 @@ var article = {
       } else {
         res.send({
           success: true,
-          dataPage : data
+          dataPage: data
         });
       }
     });
@@ -25,14 +25,14 @@ var article = {
 
   save: function (req, res) {
     var data = req.body;
-    articleDao.save(data, function (err, doc) {
+    articleDao.save(data, function (err, id) {
       if (err) {
         console.error(err);
         res.send({success: false, err: err});
       } else {
         res.send({
           success: true,
-          item: doc
+          _id: id
         });
       }
     });

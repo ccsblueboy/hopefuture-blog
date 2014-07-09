@@ -41,7 +41,8 @@ angular.module('hopefutureBlogApp')
     };
 
     $scope.edit = function (id) {
-      $location.path('/editarticle');
+      $scope.$parent.showPublishInfo = false;
+      $location.path('/article/' + id);
     };
 
     /**

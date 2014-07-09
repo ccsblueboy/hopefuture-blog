@@ -23,7 +23,6 @@ var schema = new Schema({
   readCounts: { type: Number },//浏览总数
   commentCounts: { type: Number },//评论总数
   createdDate: { type: Date, default: Date.now },
-  updateStatus: { type: Boolean },
   updatedDate: { type: Date, default: Date.now }
 });
 

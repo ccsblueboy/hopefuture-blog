@@ -12,6 +12,6 @@
 angular.module('hopefutureBlogApp')
   .controller('ManageBlogCtrl', function ($scope, manageBlogService) {
     $scope.$parent.loginName = 'linder';
-
+    $scope.showPublishInfo = false;//是否显示发布成功信息
 
   });

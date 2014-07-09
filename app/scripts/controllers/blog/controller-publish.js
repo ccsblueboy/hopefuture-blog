@@ -13,11 +13,8 @@ angular.module('hopefutureBlogApp')
   .controller('PublishCtrl', function ($scope, $filter, $location, publishService) {
 
     $scope.header = '撰写新文章';
-    $scope.submitBtnName = '发布';
-    if ($location.path() === '/editarticle') {
-      $scope.header = '编辑文章';
-      $scope.submitBtnName = '更新';
-    }
+    $scope.editStatus = false;
+
     $scope.article = {
       _id: undefined,
       title: '',
@@ -34,6 +31,21 @@ angular.module('hopefutureBlogApp')
       labels: [],//文章标签
       updateStatus: false//修改状态
     };
+
+    var reg = /article\/\w+/;
+    var path = $location.path();
+    if (reg.test(path) === true) {
+      $scope.header = '编辑文章';
+      $scope.editStatus = true;
+      var id = path.substring(path.lastIndexOf('/') + 1);
+
+      publishService.edit(id, function (data) {
+        if (data.success === true) {
+          angular.extend($scope.article, data.item);
+        }
+      });
+
+    }
 
     /**
      * 保存草稿
@@ -55,24 +67,15 @@ angular.module('hopefutureBlogApp')
       $scope.article.publishDate = $scope.article.publishType === 'immediate' ? '' : $filter('date')($scope.article.publishDate, 'yyyy-MM-dd');
       publishService.save($scope.article, function (data) {
         if (data.success === true) {
-          $scope.header = '编辑文章';
-          if (status === 'publish') {
-            $scope.publishInfo = $scope.article.updateStatus === true ? '文章已修改' : '文章已发布';
-          } else {
-            $scope.publishInfo = $scope.article.updateStatus === true ? '文章草稿已修改' : '文章草稿已保存';
+          $scope.$parent.showPublishInfo = true;
+          $scope.publishInfo = status === 'draft' ? '文章草稿已更新' : '文章已发布';
+          if ($scope.editStatus === false) {
+            $location.path('/article/' + data._id);
           }
-
-          $scope.article._id = data.item._id;
-          $scope.article.articleLink = data.item.articleLink;
-          $scope.article.status = data.item.status;
-          $scope.article.updateStatus = data.item.status;
-          $scope.showPublishInfo = true;
         }
       });
     };
-
   })
-
   .controller('PublicityCtrl', function ($scope, publicityStatus) {
 
     $scope.publicityStatus = publicityStatus.public;

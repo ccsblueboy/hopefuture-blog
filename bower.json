@@ -21,7 +21,9 @@
     "ueditor": "https://github.com/fex-team/ueditor.git",
     "kindeditor": "https://github.com/kindsoft/kindeditor.git",
     "ckeditor": "~4.4.1",
-    "tinymce": "~4.1.0"
+    "tinymce": "~4.1.0",
+    "moment": "~2.7.0",
+    "jsreader": "~1.0.0-beta"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.18",

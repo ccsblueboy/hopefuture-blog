@@ -48,7 +48,12 @@ angular.module('hopefutureBlogApp')
       var modalInstance = $modal.open({
         backdrop: 'static',
         templateUrl: '../views/templates/confirmModal.html',
-        controller: 'ConfirmModalCtrl'
+        controller: 'ConfirmModalCtrl',
+        resolve: {
+          config: function () {
+            return {};
+          }
+        }
       });
       modalInstance.result.then(function () {
         demoPaginationService.delete({params: {ids: [item._id]}}, function (data) {
@@ -60,10 +65,29 @@ angular.module('hopefutureBlogApp')
     };
 
     $scope.deleteAll = function () {
+      if ($scope.grid.checked === false) {
+        $modal.open({
+          templateUrl: '../views/templates/alertModal.html',
+          controller: 'AlertModalCtrl',
+          resolve: {
+            config: function () {
+              return {
+                modalContent: 'Please select at least one record.'
+              };
+            }
+          }
+        });
+        return;
+      }
       var modalInstance = $modal.open({
         backdrop: 'static',
         templateUrl: '../views/templates/confirmModal.html',
-        controller: 'ConfirmModalCtrl'
+        controller: 'ConfirmModalCtrl',
+        resolve: {
+          config: function () {
+            return {};
+          }
+        }
       });
       /**
        * 点击ok和cancel执行的回调

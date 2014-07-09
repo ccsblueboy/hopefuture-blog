@@ -32,6 +32,7 @@ angular.module('hopefutureBlogApp')
   .controller('AlertModalCtrl', function ($scope, $modalInstance, config) {
     $scope.modalTitle = config.modalTitle;
     $scope.modalContent = config.modalContent;
+    $scope.hideClose = config.hideClose;
     $scope.ok = function () {
       $modalInstance.close();
     };

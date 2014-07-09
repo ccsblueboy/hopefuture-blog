@@ -1,0 +1,71 @@
+<div class="container">
+
+  <div class="row">
+
+    <div class="col-sm-4">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <span class="glyphicon glyphicon-cog"></span>
+          日历表
+        </div>
+        <div class="panel-body">
+          <div class="calendar-header">
+            <div class="calendar-title">
+              <span class="calendar-icon-prev" data-prev-month></span>
+              <span data-current-date>{{:currentDate}}</span>
+              <span class="calendar-icon-next" data-prev-next></span>
+            </div>
+            <div class="calendar-week clearfix">
+              <span>一</span>
+              <span>二</span>
+              <span>三</span>
+              <span>四</span>
+              <span>五</span>
+              <span>六</span>
+              <span>日</span>
+            </div>
+          </div>
+          <div class="calendar-body">
+            <div class="clearfix" data-month>
+              {{:daysHtml}}
+            </div>
+          </div>
+        </div>
+        <div class="panel-footer">
+          <span>
+            <i class="dot dot-default"></i>
+            已添加设置的日历
+          </span>
+          <span style="margin-left: 50px;">
+            <i class="dot dot-active"></i>
+            当前日期
+          </span>
+        </div>
+      </div>
+
+    </div>
+    <div class="col-sm-8">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <div class="clearfix">
+            <span class="pull-left"><span data-current-ymd>{{:currentYMD}}</span>的日程设置：</span>
+            <span class="pull-right">最小时段：30分钟</span>
+          </div>
+        </div>
+        <div class="panel-body" style="padding: 5px;">
+
+          <div class="clearfix" data-calendar-items>
+            {{:calendarItems}}
+          </div>
+
+          <div class="clearfix" style="margin: 10px 0;">
+            <div class="pull-right">
+              <button type="button" class="btn btn-primary">保存</button>
+              <button type="button" class="btn btn-primary">清空当日时段</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

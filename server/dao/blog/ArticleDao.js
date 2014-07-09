@@ -30,11 +30,7 @@ module.exports = articleDao;
 ArticleDao.prototype.save = function (data, callback) {
   if (data._id) {
     this.model.update({_id: data._id}, data, function (err, numberAffected, rawResponse) {
-      return callback(err, {
-          _id: data._id,
-          status: data.status,
-          articleLink: data.articleLink
-      });
+      return callback(err);
     });
   } else {
     var entity = new this.model(data);
@@ -52,11 +48,7 @@ ArticleDao.prototype.save = function (data, callback) {
           if (err) {
             return callback(err);
           } else {
-            return callback(err, {
-              _id: product._doc._id,
-              status: product._doc.status,
-              articleLink: product._doc.articleLink
-            });
+            return callback(err, product._doc._id);
           }
         });
       });

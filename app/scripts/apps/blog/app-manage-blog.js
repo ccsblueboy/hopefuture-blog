@@ -9,13 +9,13 @@
  * @createdDate 2014-6-13
  * */
 angular.module('hopefutureBlogApp', ['ngRoute', 'ngAnimate', 'ngSanitize', 'ui.bootstrap'])
-  .config(['$routeProvider', function ($routeProvider) {
+  .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
     $routeProvider
       .when('/publish', {//发表文章
         templateUrl: '../views/blog/publish.html',
         controller: 'PublishCtrl'
       })
-      .when('/editarticle', {//发表文章
+      .when('/article/:articleId', {//编辑文章
         templateUrl: '../views/blog/publish.html',
         controller: 'PublishCtrl'
       })
@@ -42,4 +42,5 @@ angular.module('hopefutureBlogApp', ['ngRoute', 'ngAnimate', 'ngSanitize', 'ui.b
       .otherwise({
         redirectTo: '/article'
       });
+    //$locationProvider.html5Mode(true);
   }]);
