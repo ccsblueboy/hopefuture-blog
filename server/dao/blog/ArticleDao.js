@@ -15,11 +15,12 @@ function ArticleDao(Model) {
 
 var ArticleModel = require('../../models/blog/ArticleModel');
 var articleDao = new ArticleDao(ArticleModel);
+module.exports = articleDao;
 
 var labelDao = require('./LabelDao');
 var categoryDao = require('./CategoryDao');
+var underscore = require('underscore');
 
-module.exports = articleDao;
 
 /**
  * 保存数据，包括添加和修改
@@ -29,8 +30,72 @@ module.exports = articleDao;
  */
 ArticleDao.prototype.save = function (data, callback) {
   if (data._id) {
-    this.model.update({_id: data._id}, data, function (err, numberAffected, rawResponse) {
-      return callback(err);
+    var model = this.model;
+    var promise = model.findById(data._id).exec();
+    promise.then(function (doc) {
+      if (doc) {
+        //分类
+        var categories = doc.categories;
+        var copyCat = underscore.clone(data.categories);
+        var _categories = [];
+        var i, len, index;
+        for (i = 0, len = categories.length; i < len; i++) {
+          index = copyCat.indexOf(categories[i]);
+          if (index === -1) {
+            _categories.push({
+              _id: categories[i],
+              increase: false
+            });
+          } else {
+            copyCat.splice(index, 1);
+          }
+        }
+        for (i = 0, len = copyCat.length; i < len; i++) {
+          _categories.push({
+            _id: copyCat[i],
+            increase: true
+          });
+        }
+
+        //标签
+        var labels = doc.labels;
+        var copyLabels = underscore.clone(data.labels);
+        var _labels = [];
+        for (i = 0, len = labels.length; i < len; i++) {
+          index = copyLabels.indexOf(labels[i]);
+          if (index === -1) {
+            _labels.push({
+              name: labels[i],
+              increase: false
+            });
+          } else {
+            copyLabels.splice(index, 1);
+          }
+        }
+        for (i = 0, len = copyLabels.length; i < len; i++) {
+          _labels.push({
+            name: copyLabels[i],
+            increase: true
+          });
+        }
+
+        categoryDao.updateCount(_categories, function (err) {
+          if (err) {
+            return callback(err);
+          }
+          labelDao.update(_labels, function (err) {
+            if (err) {
+              return callback(err);
+            }
+            data.updatedDate = new Date();
+            model.update({_id: data._id}, data, function (err, numberAffected, rawResponse) {
+              return callback(err);
+            });
+          });
+        });
+      } else {
+        callback('operate error！');
+      }
     });
   } else {
     var entity = new this.model(data);

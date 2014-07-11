@@ -19,7 +19,7 @@ angular.module('hopefutureBlogApp')
       _id: undefined,
       title: '',
       content: '',
-      status: '',
+      status: 'draft',
       publicityStatus: 'public',//公开度，默认公开
       protectedPassword: '',//密码保护，需输入密码才能查看
       top: false,//文章置顶
@@ -28,8 +28,29 @@ angular.module('hopefutureBlogApp')
       articleLink: '',//文章永久链接，取相对地址
       type: 'richText',//文章类型
       categories: [],//文章所属分类
-      labels: [],//文章标签
-      updateStatus: false//修改状态
+      labels: []//文章标签
+    };
+
+    /**
+     * jshint global
+     -HopeFuture
+     * 用来处理显示 label（集合）
+     */
+    $scope.labelCollection = new HopeFuture.Collection(function (o) {
+      return o.name;
+    });
+
+    //jshint -W106
+    $scope.tinymceOptions = {
+      height: 400,
+      menubar: false, //Disable all menu
+      content_css: '/styles/tinymce.css',
+      plugins: [
+        "autolink link image preview hr code fullscreen table textcolor charmap"
+      ],
+      toolbar: 'undo redo | bold italic underline strikethrough subscript superscript | styleselect | fontselect fontsizeselect formatselect ' +
+        '| forecolor backcolor removeformat | bullist numlist outdent indent blockquote | alignleft aligncenter alignright alignjustify | ' +
+        'hr image link unlink | charmap table code preview fullscreen'
     };
 
     var reg = /article\/\w+/;
@@ -42,17 +63,21 @@ angular.module('hopefutureBlogApp')
       publishService.edit(id, function (data) {
         if (data.success === true) {
           angular.extend($scope.article, data.item);
+          var labels = $scope.article.labels;
+          for (var i = 0, len = labels.length; i < len; i++) {
+            $scope.labelCollection.add({name: labels[i]});
+          }
         }
       });
 
     }
 
     /**
-     * 保存草稿
+     * 保存草稿或更新
      */
-    $scope.saveDraft = function () {
+    $scope.update = function (status) {
       if ($scope.validator.valid()) {
-        $scope.publish('draft');
+        $scope.publish(status);
       }
     };
 
@@ -63,13 +88,24 @@ angular.module('hopefutureBlogApp')
     $scope.publish = function (status) {
       status = status || 'publish';
       $scope.article.status = status;
-      $scope.article.content = $scope.tinymceContent.getContent();
+      //$scope.article.content = $scope.tinymceContent.getContent();
       $scope.article.publishDate = $scope.article.publishType === 'immediate' ? '' : $filter('date')($scope.article.publishDate, 'yyyy-MM-dd');
       publishService.save($scope.article, function (data) {
         if (data.success === true) {
           $scope.$parent.showPublishInfo = true;
-          $scope.publishInfo = status === 'draft' ? '文章草稿已更新' : '文章已发布';
+          switch(status){
+            case 'draft':
+              $scope.$parent.publishInfo = '文章草稿已更新';
+              break;
+            case 'publish':
+              $scope.$parent.publishInfo = '文章已发布';
+              break;
+            case 'modified':
+              $scope.$parent.publishInfo = '文章已更新';
+              break;
+          }
           if ($scope.editStatus === false) {
+            tinymce.get('content').destroy();
             $location.path('/article/' + data._id);
           }
         }
@@ -178,52 +214,38 @@ angular.module('hopefutureBlogApp')
     };
   })
   .controller('ArticleLabelCtrl', function ($scope, publishService) {// 标签
-
-    /**
-     * jshint global
-     -HopeFuture
-     * 用来处理显示 label 中间变量（集合）
-     */
-    var collection = new HopeFuture.Collection(function (o) {
-      return o.name;
-    });
-
-    $scope.displayLabels = [];
+    var labelCollection = $scope.$parent.labelCollection;
     $scope.addLabel = function () {
       if (!$scope.label) {
         return;
       }
       var labels = $scope.label.split(',');
       angular.forEach(labels, function (item, index) {
-        var _item = collection.key(item);
+        var _item = labelCollection.key(item);
         if (!_item) {//创建新的
           _item = {
             name: item
           };
-          collection.add(_item);
+          labelCollection.add(_item);
           $scope.$parent.article.labels.push(item);
         }
       });
-      $scope.displayLabels = collection.getItems();
       $scope.label = '';
     };
 
     $scope.addLabelFromC = function (item) {
-      var _item = collection.key(item);
+      var _item = labelCollection.key(item);
       if (!_item) {//创建新的
         _item = {
           name: item.name
         };
-        collection.add(_item);
-        $scope.displayLabels = collection.getItems();
+        labelCollection.add(_item);
         $scope.$parent.article.labels.push(item.name);
       }
     };
 
     $scope.removeLabel = function (item) {
-      collection.removeByKey(item);
-      $scope.displayLabels = collection.getItems();
-
+      labelCollection.removeByKey(item);
       var labels = $scope.$parent.article.labels;
       var index = labels.indexOf(item);
       labels.splice(index, 1);
@@ -260,33 +282,45 @@ angular.module('hopefutureBlogApp')
     };
   })
   .controller('ArticleCategoryCtrl', function ($scope, publishService, categoryMethod, publishMethod) {// 文章分类
+
+    var selectedCategories = [];
     /**
      * 返回文章分类列表和常用的分类列表
      */
     publishService.getCategoryAndFrequentCategory(function (data) {
+      var categories = $scope.$parent.article.categories;
       if (data[0].success === true) {
         var collection = categoryMethod.sortItems(data[0].items);
         var items = collection.getItems();
         angular.forEach(items, function (item, index) {
           item.style = {marginLeft: item.level * 20 + 'px'};
+          if (categories.indexOf(item._id) !== -1) {
+            item.checked = true;
+            selectedCategories.push(item._id);
+          }
         });
+
         $scope.categories = items;
       }
 
       if (data[1].success === true) {
         $scope.frequentCategories = data[1].items;
+        angular.forEach($scope.frequentCategories, function (item, index) {
+          if (categories.indexOf(item._id) !== -1) {
+            item.checked = true;
+          }
+        });
       }
     });
 
-    var categories = [];
     $scope.changeCategory = function (category, from) {
       if (category.checked === true) {
-        if (categories.indexOf(category._id) === -1) {
-          categories.push(category._id);
+        if (selectedCategories.indexOf(category._id) === -1) {
+          selectedCategories.push(category._id);
         }
       } else {
-        var index = categories.indexOf(category._id);
-        categories.splice(index, 1);
+        var index = selectedCategories.indexOf(category._id);
+        selectedCategories.splice(index, 1);
       }
 
       var _categories;
@@ -303,7 +337,7 @@ angular.module('hopefutureBlogApp')
           }
         }
       }
-      $scope.$parent.article.categories = categories;
+      $scope.$parent.article.categories = selectedCategories;
     };
 
     //添加新的分类目录
@@ -332,10 +366,14 @@ angular.module('hopefutureBlogApp')
       }
       publishService.addCategory(category, function (data) {
         if (data.success === true) {
+          var categories = $scope.$parent.article.categories;
           var collection = categoryMethod.sortItems(data.items);
           var items = collection.getItems();
           angular.forEach(items, function (item, index) {
             item.style = {marginLeft: item.level * 20 + 'px'};
+            if (categories.indexOf(item._id) !== -1) {
+              item.checked = true;
+            }
           });
           $scope.categories = items;
 

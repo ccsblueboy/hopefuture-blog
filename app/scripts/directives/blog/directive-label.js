@@ -1,26 +1,23 @@
 'use strict';
 
 angular.module('hopefutureBlogApp')
-  .directive('categoryValidator', function ($parse) {
+  .directive('labelValidator', function () {
     return {
       restrict: 'AC',
       link: function postLink(scope, element, attrs) {
-        var validator = $(element).validate({
+        $(element).validate({
           rules: {
             name: {
               remote: {
-                url: 'manage/category/validate/duplicate',
+                url: 'manage/label/validate/duplicate',
                 type: 'get',
                 dataType: 'json',
                 data: {
                   id: function () {
-                    return scope.category._id || '';
+                    return scope.label._id || '';
                   },
                   name: function () {
-                    return scope.category.name;
-                  },
-                  parent: function () {
-                    return scope.category.parentCategory ? scope.category.parentCategory._id : '';
+                    return scope.label.name;
                   }
                 }
               }
@@ -28,7 +25,7 @@ angular.module('hopefutureBlogApp')
           },
           messages: {
             name: {
-              remote: '一个拥有相同名字的父级项目已存在。'
+              remote: '该标签已存在。'
             }
           },
           submitHandler: function () {
@@ -37,10 +34,6 @@ angular.module('hopefutureBlogApp')
             });
           }
         });
-
-        var model = $parse(attrs.categoryValidator);
-        model.assign(scope.$parent, validator);
-        model.assign(scope, validator);
       }
     };
   })
@@ -49,15 +42,13 @@ angular.module('hopefutureBlogApp')
       restrict: 'A',
       link: function postLink(scope, element, attrs) {
         var count = attrs.articleCount;
-        if(count > 0){
+        if (count > 0) {
           element.html('<a href="">' + count + '</a>');
-        }else{
+        } else {
           element.text('0');
         }
       }
     };
   });
-
-
 
 

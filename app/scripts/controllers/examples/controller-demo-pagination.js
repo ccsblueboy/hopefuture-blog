@@ -103,7 +103,7 @@ angular.module('hopefutureBlogApp')
         var json = {params: {ids: ids}};
         demoPaginationService.delete(json, function (data) {
           if (data.success === true) {
-            $scope.loadPageData(1);
+            $scope.loadPageData();
             $scope.grid.checked = false;
           }
         });

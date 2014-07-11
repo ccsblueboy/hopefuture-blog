@@ -10,7 +10,7 @@ angular.module('hopefutureBlogApp')
         hfbHttpService.get('manage/article/' + id).then(success);
       },
       getLabel: function (success) {
-        hfbHttpService.get('manage/label').then(success);
+        hfbHttpService.get('manage/label/records/frequent').then(success);
       },
       getCategoryAndFrequentCategory: function (success) {
         var url1 = 'manage/category';

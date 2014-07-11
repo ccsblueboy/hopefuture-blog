@@ -1,6 +1,6 @@
 <h3>{{header}}</h3>
 <div class="animate-show ng-hide hf-callout hf-callout-info" ng-show="$parent.showPublishInfo">
-  <span>{{publishInfo}}</span>
+  <span>{{$parent.publishInfo}}</span>
   <a class="margin10-L" ng-href="article.articleLink">查看文章</a>
 </div>
 
@@ -14,7 +14,7 @@
   </div>
   <div class="form-group">
     <lable>文章内容</lable>
-    <textarea ng-model="article.content" id="content" name="content" tinymce="tinymceContent" class="sr-only"></textarea>
+    <textarea id="content" name="content" ui-tinymce="tinymceOptions" ng-model="article.content" class="sr-only"></textarea>
   </div>
 </div>
 <!--.col-md-9-->
@@ -111,8 +111,9 @@
     </div>
 
     <div class="panel-footer">
-      <button class="btn btn-info" type="submit">{{article.status === 'publish' ? '更新' : '发布'}}</button>
-      <button class="btn btn-default" type="button" ng-click="saveDraft();" ng-hide="article.status==='publish'">保存草稿</button>
+      <button class="btn btn-info ng-hide" type="submit" ng-show="article.status === 'draft'">发布</button>
+      <button class="btn btn-info ng-hide" type="button" ng-show="article.status !== 'draft'" ng-click="update('modified');" >更新</button>
+      <button class="btn btn-default ng-hide" type="button" ng-click="update('draft');" ng-show="article.status==='draft'">保存草稿</button>
     </div>
   </div>
   <!--发布-->
@@ -196,7 +197,7 @@
       <p>多个标签请用英文逗号（,）分开</p>
 
       <p class="label-list clearfix">
-            <span class="text-info" ng-repeat="label in displayLabels">
+            <span class="text-info" ng-repeat="label in $parent.labelCollection.items">
               <a href="" ng-click="removeLabel(label.name)">X</a>
               {{label.name}}
             </span>

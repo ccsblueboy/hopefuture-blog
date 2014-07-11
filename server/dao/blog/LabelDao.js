@@ -20,36 +20,58 @@ module.exports = labelDao;
 
 var underscore = require('underscore');
 
-/**
- * 返回数据列表
- * @method
- * @param callback {function} 回调函数
- */
-LabelDao.prototype.list = function (callback) {
-  this.model.find({}, function (err, docs) {
-    return callback(err, docs);
-  });
-};
 
 /**
  * 分页显示
  * @method
  * @param dataPage {DataPage} 分页数据
+ * @param searchContent {String} 搜索内容
  * @param callback {function} 回调函数
  */
-LabelDao.prototype.pagination = function (dataPage, callback) {
+LabelDao.prototype.pagination = function (dataPage, searchContent, callback) {
   var skip = dataPage.itemsPerPage * (dataPage.currentPage - 1);
   var limit = dataPage.itemsPerPage;
   var model = this.model;
-  model.count({}, function (err, count) {
+  var conditions = {};
+  if (searchContent) {
+    var match = new RegExp(searchContent,'ig');
+    conditions = { $or: [
+      { name: match } ,
+      { description: match }
+    ] };
+  }
+  model.count(conditions, function (err, count) {
     if (err === null) {
       dataPage.setTotalItems(count);
-      model.find({}, null, {skip: skip, limit: limit}, function (err, docs) {
+      model.find(conditions, null, {skip: skip, limit: limit, sort: {_id: -1}}, function (err, docs) {
         dataPage.setItems(docs);
         return callback(err, dataPage);
       });
     }
   });
+};
+
+/**
+ * 保存数据，包括添加和修改
+ * @method
+ * @param data {LabelModel} LabelModel 实例
+ * @param callback {function}回调函数
+ */
+
+LabelDao.prototype.save = function (data, callback) {
+  var id = data._id;
+  if (id) {
+    delete data._id;
+    this.model.update({_id: id}, data, function (err, numberAffected, rawResponse) {
+      return callback(err);
+    });
+  } else {
+    var entity = new this.model(data);
+    //当有错误发生时，返回err；product 是返回生成的实体，numberAffected which will be 1 when the document was found and updated in the database, otherwise 0.
+    entity.save(function (err, product, numberAffected) {
+      return callback(err, product._doc);
+    });
+  }
 };
 
 /**
@@ -62,6 +84,30 @@ LabelDao.prototype.findById = function (id, callback) {
   this.model.findOne({_id: id}, function (err, model) {
     return callback(err, model);
   });
+};
+
+/**
+ * 根据给定的条件查询记录
+ * @param conditions {Object} 条件
+ * @param callback {function} 回调函数
+ */
+LabelDao.prototype.find = function (conditions, callback) {
+  this.model.find(conditions, function (err, model) {
+    return callback(err, model);
+  });
+};
+
+/**
+ * 取经常使用的标签，默认取前十条
+ * @param num
+ * @param callback
+ */
+LabelDao.prototype.frequentList = function (num, callback) {
+  num = num || 10;//默认为10
+  this.model.find({count: { $gt: 0 }}, {_id: 1, name: 1, count: 1}).sort({count: -1}).limit(num)
+    .exec(function (err, docs) {
+      return callback(err, docs);
+    });
 };
 
 /**
@@ -79,6 +125,7 @@ LabelDao.prototype.delete = function (conditions, callback) {
 
 /**
  * 根据name值，修改label，如果不存在则添加新的记录
+ * 添加和修改文章的时候，会调用该方法
  * @method
  * @param labels { Array } name 组成的数组
  * @param callback {function} 回调函数
@@ -90,9 +137,16 @@ LabelDao.prototype.update = function (labels, callback) {
   var label;
   for (var i = 0, len = labels.length; i < len; i++) {
     label = labels[i];
-    this.model.update({name: label}, {$inc: {count: 1}, $setOnInsert: { name: label, createdDate: new Date()}}, {upsert: true},
+    var conditions = {name: label};
+    var update = {$inc: {count: 1}, $setOnInsert: { name: label, createdDate: new Date()}};
+    if (underscore.isObject(label)) {
+      conditions = {name: label.name };
+      update = {$inc: {count: label.increase ? 1 : -1}, $setOnInsert: { name: label.name, createdDate: new Date()}};
+    }
+    this.model.update(conditions, update, {upsert: true},
       function (err, numberAffected, rawResponse) {
-        return callback(err);
+
       });
   }
+  return callback();
 };

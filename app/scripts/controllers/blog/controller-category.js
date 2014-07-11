@@ -27,12 +27,20 @@ angular.module('hopefutureBlogApp')
     /**
      * 返回列表
      */
-    categoryService.list(function (data) {
-      if (data.success === true) {
-        var collection = categoryMethod.sortItems(data.items);
-        $scope.items = collection.items;
+    $scope.query = function () {
+      var conditions;
+      if ($scope.searchContent) {
+        conditions = {params: {searchContent: $scope.searchContent}};
       }
-    });
+      categoryService.query(conditions, function (data) {
+        if (data.success === true) {
+          var collection = categoryMethod.sortItems(data.items);
+          $scope.items = collection.items;
+        }
+      });
+    };
+
+    $scope.query();
 
     /**
      * 创建新的记录
@@ -191,7 +199,6 @@ angular.module('hopefutureBlogApp')
       $modalInstance.dismiss('cancel');
     };
 
-    //$scope.va
     $scope.validateName = function () {
       $scope.validator.resetForm();
       $('#name').valid();

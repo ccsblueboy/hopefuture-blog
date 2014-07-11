@@ -12,10 +12,12 @@ var schema = new Schema({
   title: { type: String },
   content: { type: String },
   accountId: { type: String },//即作者
-  status: { type: String },//文章状态，如发布，草稿等
+  status: { type: String },//文章状态，如发布，草稿，发布后再修改等 publish，draft modified
   commentStatus: { type: String },
   publicityStatus: { type: String },//公开度
   protectedPassword: { type: String },//公开度（密码保护），需输入密码才能查看
+  publishType: { type: String },// 发布方式，立即和定时
+  publishDate: { type: Date},// 定时发布时间
   articleLink: { type: String },//文章永久链接，取相对地址
   type: { type: String },//文章类型
   categories: { type: Array },//文章所属分类

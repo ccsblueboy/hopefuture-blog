@@ -63,10 +63,19 @@ CategoryDao.prototype.save = function (data, callback) {
 /**
  * 返回数据列表
  * @method
+ * @param searchContent {String} 搜索内容
  * @param callback {function} 回调函数
  */
-CategoryDao.prototype.list = function (callback) {
-  this.model.find({}, {_id: 1, name: 1, parent: 1}).sort({_id: 1})
+CategoryDao.prototype.list = function (searchContent, callback) {
+  var conditions = {};
+  if (searchContent) {
+    var match = new RegExp(searchContent,'ig');
+    conditions = { $or: [
+      { name: match } ,
+      { description: match }
+    ] };
+  }
+  this.model.find(conditions, {_id: 1, name: 1, count: 1, parent: 1}).sort({_id: 1})
     .exec(function (err, docs) {
       return callback(err, docs);
     });
@@ -138,14 +147,15 @@ CategoryDao.prototype.find = function (conditions, callback) {
  */
 CategoryDao.prototype.frequentList = function (num, callback) {
   num = num || 10;//默认为10
-  this.model.find({count: { $gt: 0 }}, {_id: 1, name: 1, count: 1}).sort({count: -1}).limit(10)
+  this.model.find({count: { $gt: 0 }}, {_id: 1, name: 1, count: 1}).sort({count: -1}).limit(num)
     .exec(function (err, docs) {
       return callback(err, docs);
     });
 };
 
 /**
- * 修改 count 值，加一
+ * 修改 count 值
+ * 添加和修改文章的时候会调用该方法
  * @method
  * @param categories { Array } id 组成的数组
  * @param callback {function} 回调函数
@@ -157,9 +167,17 @@ CategoryDao.prototype.updateCount = function (categories, callback) {
   var category;
   for (var i = 0, len = categories.length; i < len; i++) {
     category = categories[i];
-    this.model.update({_id:category }, {$inc: {count: 1}},
+    var conditions = {_id: category };
+    var update = {$inc: {count: 1}};
+    if (underscore.isObject(category)) {
+      conditions = {_id: category._id };
+      update = {$inc: {count: category.increase ? 1 : -1}};
+    }
+    this.model.update(conditions, update,
       function (err, numberAffected, rawResponse) {
-        return callback(err);
+
       });
   }
+
+  return callback();
 };

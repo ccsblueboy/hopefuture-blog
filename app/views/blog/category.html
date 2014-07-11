@@ -15,9 +15,9 @@
 
   <div class="btn-group margin10-L">
     <div class="input-group has-success">
-      <input type="text" placeholder="搜索分类目录" class="form-control">
+      <input type="text" placeholder="搜索分类目录" class="form-control" ng-model="searchContent" />
           <span class="input-group-btn">
-            <button class="btn btn-primary" type="button">
+            <button class="btn btn-primary" type="button" ng-click="query();">
               <span class="glyphicon glyphicon-search"></span>
             </button>
           </span>
@@ -40,7 +40,7 @@
   <tr ng-repeat="item in items" id="{{item._id}}">
     <td><input type="checkbox" ng-model="item.checked" ng-change="selectItem()"/></td>
     <td>{{item.alias | truncate:40:true}}</td>
-    <td><a href="">{{item.articleCount}}</a></td>
+    <td article-count="{{item.count}}"></td>
     <td>
       <a class="glyphicon glyphicon-pencil" href="" ng-click="edit(item._id);"></a>
       <a class="glyphicon glyphicon-trash" href="" ng-click="delete(item);"></a>

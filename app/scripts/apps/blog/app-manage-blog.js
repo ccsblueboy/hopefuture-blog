@@ -8,7 +8,7 @@
  * @author Linder linder0209@126.com
  * @createdDate 2014-6-13
  * */
-angular.module('hopefutureBlogApp', ['ngRoute', 'ngAnimate', 'ngSanitize', 'ui.bootstrap'])
+angular.module('hopefutureBlogApp', ['ngRoute', 'ngAnimate', 'ngSanitize', 'ui.bootstrap', 'ui.tinymce'])
   .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
     $routeProvider
       .when('/publish', {//发表文章

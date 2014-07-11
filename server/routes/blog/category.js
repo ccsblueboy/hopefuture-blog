@@ -31,6 +31,7 @@ function setItemLevel(docs) {
     item = {
       _id: doc._id,
       name: doc.name,
+      count: doc.count,
       parent: doc.parent
     };
     items.push(item);
@@ -48,7 +49,22 @@ function setItemLevel(docs) {
 var category = {
 
   list: function (req, res) {
-    categoryDao.list(function (err, docs) {
+    categoryDao.list(null, function (err, docs) {
+      if (!err) {
+        var items = setItemLevel(docs);
+        res.send({
+          success: true,
+          items: items
+        });
+      } else {
+        res.send({success: false});
+      }
+    });
+  },
+
+  query: function (req, res) {
+    var searchContent = req.query.searchContent;
+    categoryDao.list(searchContent, function (err, docs) {
       if (!err) {
         var items = setItemLevel(docs);
         res.send({
@@ -63,7 +79,7 @@ var category = {
 
   save: function (req, res) {
     var data = req.body;
-    if(underscore.isEmpty(data.name)){
+    if (underscore.isEmpty(data.name)) {
       res.send({success: false, err: '分类名称不能为空！'});
       return;
     }
@@ -165,6 +181,7 @@ router.get('/:id', category.edit);
 router.delete('/', category.delete);
 router.get('/validate/duplicate', category.duplicate);
 router.get('/records/frequent', category.frequentList);//常用的分类
+router.get('/records/query', category.query);//常用的分类
 
 /**
  * 分类目录路由

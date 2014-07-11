@@ -1,18 +1,35 @@
 'use strict';
 
 /**
- * 文章管理 Controller
- * @class ArticleCtrl
+ * 标签 Controller
+ * @class LabelCtrl
  * @since 0.2.0
  * @version @@currentVersion
  * @author Linder linder0209@126.com
- * @createdDate 2014-6-16
+ * @createdDate 2014-7-11
  * */
 
 angular.module('hopefutureBlogApp')
-  .controller('ArticleCtrl', function ($scope, $location, $modal, articleService) {
-    //初始化记录
+  .controller('LabelCtrl', function ($scope, $modal, labelService) {
+
+    $scope.label = {
+      _id: undefined,
+      name: '',
+      description: ''
+    };
+    $scope.index = undefined;
+
+    $scope.labelFormTitle = '添加标签';
+
+    /**
+     * 列表数据
+     * @type {Array}
+     */
     $scope.items = [];
+    /**
+     * 是否选中全部列表
+     * @type {{checked: boolean}}
+     */
     $scope.grid = {
       checked: false
     };
@@ -26,8 +43,11 @@ angular.module('hopefutureBlogApp')
         currentPage: $scope.page.currentPage,
         itemsPerPage: $scope.itemsPerPage
       };
+      if ($scope.searchContent) {
+        params.searchContent = $scope.searchContent;
+      }
 
-      articleService.paging({params: params}, function (data) {
+      labelService.paging({params: params}, function (data) {
         if (data.success === true) {
           $scope.items = data.dataPage.items;
           $scope.totalItems = data.dataPage.totalItems;
@@ -36,22 +56,60 @@ angular.module('hopefutureBlogApp')
     };
     $scope.loadPageData();
 
-    $scope.create = function () {
-      $location.path('/publish');
+    $scope.search = function () {
+      $scope.loadPageData();
     };
 
-    $scope.edit = function (id) {
-      $scope.$parent.showPublishInfo = false;
-      $location.path('/article/' + id);
+    $scope.create = function () {
+      $scope.labelFormTitle = '添加标签';
+      angular.element('#labelFormPanel').removeClass('form-editor-panel');
+      $scope.showLabelForm = true;
+    };
+
+    $scope.edit = function (id, index) {
+      labelService.edit(id, function (data) {
+        if (data.success === true) {
+          $scope.index = index;
+          var item = data.item;
+          $scope.label._id = item._id;
+          $scope.label.name = item.name;
+          $scope.label.description = item.description;
+
+          var offset = angular.element('#' + id).offset();
+          angular.element('#labelFormPanel').addClass('form-editor-panel')
+            .css({top: offset.top - 50});
+          $scope.labelFormTitle = '修改标签 — ' + item.name;
+          $scope.showLabelForm = true;
+        }
+      });
+    };
+
+    $scope.save = function () {
+      labelService.save($scope.label, function (data) {
+        if (data.success === true) {
+          if ($scope.label._id) {//修改
+            angular.extend($scope.items[$scope.index], $scope.label);
+          } else {
+            $scope.loadPageData();
+          }
+          $scope.showLabelForm = false;
+          //清空
+          $scope.label = {
+            _id: undefined,
+            name: '',
+            description: ''
+          };
+        }
+      });
     };
 
     /**
      * 包括删除一条或多条记录
-     * @param item
+     * @param label
      */
-    $scope.delete = function (item) {
+    $scope.delete = function (label) {
       var json;
-      if (!item) {//没有传参数，表示执行的是删除多条记录
+      if (!label) {//没有传参数，表示执行的是删除多条记录
         if ($scope.grid.checked === false) {
           $modal.open({
             templateUrl: '../views/templates/alertModal.html',
@@ -74,7 +132,7 @@ angular.module('hopefutureBlogApp')
         });
         json = {params: {ids: ids}};
       } else {
-        json = {params: {ids: [item._id]}};
+        json = {params: {ids: label._id}};
       }
       var modalInstance = $modal.open({
         backdrop: 'static',
@@ -89,10 +147,10 @@ angular.module('hopefutureBlogApp')
         }
       });
       modalInstance.result.then(function () {
-        articleService.delete(json, function (data) {
+        labelService.delete(json, function (data) {
           if (data.success === true) {
             $scope.loadPageData();
-            if (!item) {
+            if (!label) {
               $scope.grid.checked = false;
             }
           }
@@ -116,5 +174,4 @@ angular.module('hopefutureBlogApp')
       });
       $scope.grid.checked = checked;
     };
-
   });
