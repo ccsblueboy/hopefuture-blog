@@ -18,6 +18,8 @@ var account = {
         message = '你输入的密码不正确！请重新输入';
       } else {
         //TODO: 这里需要设置session
+        var session = req.session;
+        session.loginName = doc.loginName;
         success = true;
       }
       res.send({success: success, message: message});

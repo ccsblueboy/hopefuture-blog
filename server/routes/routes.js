@@ -33,7 +33,7 @@ module.exports = function (app) {
   app.use('/account', account);
   app.use('/login', login);
   //用 url 变量来区分每个用户的博客，用户注册时不能用项目中存在的链接名称，注册时需要过滤一下，
-  //有：examples account login
+  //有：examples account login manage
   app.use('/:blog', blog);
 
   app.use('/:blog/manage/article',article);// 管理文章

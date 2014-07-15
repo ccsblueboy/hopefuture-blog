@@ -8,7 +8,7 @@ angular.module('hopefutureBlogApp')
         $(element).validate({
           submitHandler: function () {
             scope.$apply(function () {
-              scope.submit();
+              scope.login();
             });
           }
         });

@@ -11,26 +11,23 @@
     "blog"
   ],
   "dependencies": {
-    "angular": "~1.2.18",
+    "angular": "~1.2.20",
     "json3": "~3.2.6",
     "es5-shim": "~2.1.0",
-    "jquery": "~2.1.0",
-    "jquery-validation": "~1.12.0",
-    "bootstrap": "~3.1.1",
+    "jquery": "~2.1.1",
+    "jquery-validation": "~1.13.0",
+    "bootstrap": "~3.2.0",
     "angular-bootstrap": "~0.11.0",
-    "ueditor": "https://github.com/fex-team/ueditor.git",
-    "kindeditor": "https://github.com/kindsoft/kindeditor.git",
-    "ckeditor": "~4.4.1",
     "tinymce": "~4.1.0",
     "angular-ui-tinymce": "~0.0.5",
     "moment": "~2.7.0"
   },
   "devDependencies": {
-    "angular-mocks": "~1.2.18",
-    "angular-scenario": "~1.2.18",
-    "angular-route": "~1.2.18",
-    "angular-animate": "~1.2.18",
-    "angular-sanitize": "~1.2.18"
+    "angular-mocks": "~1.2.20",
+    "angular-scenario": "~1.2.20",
+    "angular-route": "~1.2.20",
+    "angular-animate": "~1.2.20",
+    "angular-sanitize": "~1.2.20"
   },
   "license": "MIT",
   "ignore": [
