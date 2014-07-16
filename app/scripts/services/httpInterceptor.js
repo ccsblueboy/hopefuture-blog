@@ -37,6 +37,7 @@ angular.module('hopefutureBlogApp')
     //为 $httpProvider 加入拦击器 hfbHttpInterceptor
     $httpProvider.interceptors.push('hfbHttpInterceptor');
     $httpProvider.defaults.transformRequest.push(function (data, headersGetter) {
+      //发送请求的时候执行，在这里可以拦截发送数据，data指发送的数据
       //      if ($('#sspAjaxLoadingBackdrop').length === 0) {
       //        $('body').append('<div class="ajax-loading-backdrop" id="sspAjaxLoadingBackdrop"></div>');
       //      } else {
@@ -52,6 +53,14 @@ angular.module('hopefutureBlogApp')
     });
     $httpProvider.defaults.transformResponse.push(function (data, headersGetter) {
       //console.log(headersGetter);
+      //发送请求完响应的时候执行，在这里可以拦截响应数据，data是响应返回的数据
+      if (data.success === false) {
+        switch (data.errorCode) {
+          case '9001':
+            document.location.href = '/login?errorCode=' + data.errorCode;
+            break;
+        }
+      }
       return data;
     });
 

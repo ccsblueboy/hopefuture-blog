@@ -10,15 +10,37 @@
  * */
 
 angular.module('hopefutureBlogApp')
-  .controller('LoginCtrl', function ($scope, loginService) {
+  .controller('LoginCtrl', function ($scope, $location, $modal, loginService, errorCodes) {
 
+    var url = $location.absUrl();
+    var error = url.match(/errorCode=(\w+)/);
+    if (error !== null) {
+      var modalInstance = $modal.open({
+        templateUrl: '../views/templates/alertModal.html',
+        controller: 'AlertModalCtrl',
+        resolve: {
+          config: function () {
+            return {
+              hideClose: true,
+              modalContent: errorCodes[error[1]]
+            };
+          }
+        }
+      });
+      modalInstance.result.then(function () {
+        $location.$$absUrl = url.replace(/\?errorCode=\w+/, '');
+      });
+    }
     $scope.account = {
       loginName: '',
       password: '',
       keepSigned: false
     };
 
-    $scope.login = function(){
+    /**
+     * 登录
+     */
+    $scope.login = function () {
       $scope.account.loginName = $('#loginName').val();
       $scope.account.password = $('#password').val();
 
@@ -36,5 +58,4 @@ angular.module('hopefutureBlogApp')
         }
       });
     };
-
   });

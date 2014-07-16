@@ -1,0 +1,75 @@
+<div class="container margin50-T well">
+  <form class="form-horizontal" name="signForm" method="post" signup-validator>
+
+    <div class="form-group">
+      <div class="col-sm-offset-4 col-sm-4">
+        <div alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.message}}</div>
+        <h2>个人用户注册</h2>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="loginName" class="control-label col-sm-3"><i class="required">*</i> 用户名</label>
+
+      <div class="col-sm-6">
+        <input type="text" class="form-control" id="loginName" name="loginName" minlength="4" maxlength="80" required
+               validateloginname="true" ng-model="account.loginName" placeholder="全站唯一" autocomplete="off"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="loginName" class="control-label col-sm-3">别名</label>
+
+      <div class="col-sm-6">
+        <input type="text" class="form-control" id="name" name="name" maxlength="80"
+               ng-model="account.name"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="password" class="control-label col-sm-3"><i class="required">*</i> 密码</label>
+
+      <div class="col-sm-6">
+        <input type="password" class="form-control" id="password" name="password" minlength="6" maxlength="30" required
+               ng-model="account.password" placeholder="请输入密码" autocomplete="off"/>
+
+        <!-- 密码强度由弱到强样式：progress-bar-danger progress-bar-warning progress-bar-info progress-bar-success -->
+        <div class="progress margin10-T" style="display:none;margin-bottom: 0;">
+          <div class="progress-bar progress-bar-danger" style="width: 100%;">弱</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="password" class="control-label col-sm-3"><i class="required">*</i> 确认密码</label>
+
+      <div class="col-sm-6">
+        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" minlength="6" maxlength="30" required
+               ng-model="account.confirmPassword" placeholder="请再次输入密码" autocomplete="off"/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="password" class="control-label col-sm-3"><i class="required">*</i> 注册邮箱</label>
+
+      <div class="col-sm-6">
+        <input type="email" class="form-control" id="email" name="email" minlength="6" maxlength="80" required
+               ng-model="account.email" placeholder="请输入邮箱，需通过邮件激活该账户"/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-sm-offset-3 col-sm-6">
+        <div class="checkbox">
+          <label style="display: block;">
+            <input type="checkbox" id="accept" name="accept" value="true" required/> 我已经阅读并同意
+            <a target="_blank" href="" class="btn-link">注册条款</a>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-sm-offset-3 col-sm-6">
+        <button type="submit" class="btn btn-primary" ng-disabled="signForm.$pristine">注册</button>
+      </div>
+    </div>
+  </form>
+</div>

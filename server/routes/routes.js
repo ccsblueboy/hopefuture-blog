@@ -6,6 +6,7 @@ var grid = require('./examples/grid');
 var pagination = require('./examples/pagination');
 var account = require('./account/account');
 var login = require('./account/login');
+var signup = require('./account/signup');
 var blog = require('./blog/blog');
 var article = require('./blog/article');
 var category = require('./blog/category');
@@ -32,12 +33,20 @@ module.exports = function (app) {
   app.use('/examples/pagination', pagination);
   app.use('/account', account);
   app.use('/login', login);
+  app.use('/logout', function (req, res) {
+    var session = req.session;
+    session.loginName = undefined;
+    res.send({success: true});
+  });
+
+  app.use('/signup', signup);
+
   //用 url 变量来区分每个用户的博客，用户注册时不能用项目中存在的链接名称，注册时需要过滤一下，
-  //有：examples account login manage
+  //有：examples account login logout signup manage admin
   app.use('/:blog', blog);
 
-  app.use('/:blog/manage/article',article);// 管理文章
-  app.use('/:blog/manage/category',category);// 分类目录管理
-  app.use('/:blog/manage/label',label);// 标签
+  app.use('/:blog/manage/article', article);// 管理文章
+  app.use('/:blog/manage/category', category);// 分类目录管理
+  app.use('/:blog/manage/label', label);// 标签
 
 };

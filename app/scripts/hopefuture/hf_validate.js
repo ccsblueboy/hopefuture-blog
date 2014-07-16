@@ -20,6 +20,12 @@
       fn: function (value, element, param) {
         return this.optional(element) || value.replace(/[^\x00-\xFF]/g, '**').length <= param;
       }
+    },
+    validateloginname: {
+      message: '用户名只能由字母、数字以及符号（_ . @ -）组成',
+      fn: function (value, element, param) {
+        return !value || /^[a-zA-Z\d_.@-]*$/.test(value);
+      }
     }
   };
 

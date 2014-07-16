@@ -42,12 +42,13 @@ app.use(function (req, res, next) {
   var session = req.session;
   var path = req.path;
   if (path.indexOf('/manage') !== -1 && session.loginName == null) {
-    if(req.headers.xrequestedwith === 'XMLHttpRequest'){
+    if (req.headers.xrequestedwith === 'XMLHttpRequest') {
       res.send({
         success: false,
-        errorCode: errorCodes['9001']
+        errorCode: '9001',
+        errorMessage: errorCodes['9001']
       });
-    }else{
+    } else {
       //必须显式的设置 301 重定向，如 res.redirect('/login'); 只会把地址输入到页面，还需手工点击，不信你试试？
       //设置为 301 firefox 有问题，这里设为 302
       res.redirect(302, '/login');
@@ -55,6 +56,12 @@ app.use(function (req, res, next) {
   } else {
     next();
   }
+});
+app.use(function (req, res, next) {
+  var session = req.session;
+  res.locals.logined = session.loginName ? true : false;
+  res.locals.loginName = session.loginName || '';
+  next();
 });
 
 //定义路由

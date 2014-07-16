@@ -11,23 +11,18 @@
   <!-- build:css styles/bootstrap.css -->
   <!-- bower:css -->
   <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css" />
-  <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/lavish-bootstrap2.css"/>
   <!-- endbower -->
   <!-- endbuild -->
-  <!-- build:css(.tmp) styles/blog.css -->
+  <!-- build:css(.tmp) styles/login.css -->
   <link rel="stylesheet" href="../styles/base.css">
-  <link rel="stylesheet" href="../styles/blog.css">
   <link rel="stylesheet" href="../styles/validate.css">
   <!-- endbuild -->
 </head>
 <body ng-app="hopefutureBlogApp" ng-controller="HopefutureBlogCtrl">
 <% include ../views/common/header.html %>
+<div ng-include="'views/account/signup.html'" ng-controller="SignupCtrl"></div>
 
-<div ng-include="'../views/blog/blog.html'" ng-controller="BlogCtrl"></div>
-
-<% include ../views/common/footer.html %>
-
-<!-- build:js scripts/vendor-blog.js -->
+<!-- build:js scripts/vendor-login.js -->
 <!-- bower:js -->
 <script src="../bower_components/jquery/dist/jquery.js"></script>
 <script src="../bower_components/angular/angular.js"></script>
@@ -40,15 +35,20 @@
 <script src="../bower_components/jquery-validation/src/localization/messages_zh.js"></script>
 <!-- endbuild -->
 
-<!-- build:js({.tmp,app}) scripts/blog.js -->
+<!-- build:js({.tmp,app}) scripts/signup.js -->
 <script src="../scripts/hopefuture/hf_validate.js"></script>
-<script src="../scripts/apps/blog/app-blog.js"></script>
-<script src="../scripts/services/service-hopefuture-blog.js"></script>
-<script src="../scripts/controllers/controller-hopefuture-blog.js"></script>
+<script src="../scripts/apps/account/app-signup.js"></script>
+
+
 <script src="../scripts/services/httpInterceptor.js"></script>
-<script src="../scripts/services/blog/service-blog.js"></script>
-<script src="../scripts/controllers/blog/controller-blog.js"></script>
-<script src="../scripts/directives/blog/directive-blog.js"></script>
+<script src="../scripts/services/service-hopefuture-blog.js"></script>
+<script src="../scripts/services/account/service-signup.js"></script>
+
+<script src="../scripts/controllers/controller-common.js"></script>
+<script src="../scripts/controllers/controller-hopefuture-blog.js"></script>
+<script src="../scripts/controllers/account/controller-signup.js"></script>
+
+<script src="../scripts/directives/account/directive-signup.js"></script>
 <!-- endbuild -->
 </body>
 </html>

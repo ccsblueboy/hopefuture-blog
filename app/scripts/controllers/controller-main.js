@@ -11,6 +11,5 @@
 
 angular.module('hopefutureBlogApp')
   .controller('MainCtrl', function ($scope, mainService) {
-    $scope.$parent.loginName = 'linder';
 
   });
