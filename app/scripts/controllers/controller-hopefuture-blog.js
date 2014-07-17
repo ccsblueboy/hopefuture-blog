@@ -12,24 +12,11 @@
  * */
 
 angular.module('hopefutureBlogApp')
-  .controller('HopefutureBlogCtrl', function ($scope, hopefutureBlogService) {
-    //用户登录名，可以用来设置二级域名，这样每个用户对应一个唯一的地址
-    $scope.loginName = '';
+  .controller('HopefutureBlogCtrl', function ($scope) {
 
     //页面中输出的alert提示信息
     $scope.alerts = [];
     $scope.closeAlert = function (index) {
       $scope.alerts.splice(index, 1);
-    };
-
-    /**
-     * 登出
-     */
-    $scope.logout = function () {
-      hopefutureBlogService.logout(function (data) {
-        if (data.success === true) {
-          window.location.href = '/';
-        }
-      });
     };
   });

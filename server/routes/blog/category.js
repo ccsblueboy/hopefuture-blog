@@ -49,7 +49,8 @@ function setItemLevel(docs) {
 var category = {
 
   list: function (req, res) {
-    categoryDao.list(null, function (err, docs) {
+    var loginName = req.baseUrl.split('/')[1];
+    categoryDao.list(null, loginName, function (err, docs) {
       if (!err) {
         var items = setItemLevel(docs);
         res.send({
@@ -64,7 +65,8 @@ var category = {
 
   query: function (req, res) {
     var searchContent = req.query.searchContent;
-    categoryDao.list(searchContent, function (err, docs) {
+    var loginName = req.baseUrl.split('/')[1];
+    categoryDao.list(searchContent, loginName, function (err, docs) {
       if (!err) {
         var items = setItemLevel(docs);
         res.send({
@@ -83,6 +85,8 @@ var category = {
       res.send({success: false, err: '分类名称不能为空！'});
       return;
     }
+    var loginName = req.baseUrl.split('/')[1];
+    data.account = loginName;
     categoryDao.save(data, function (err, docs) {
       if (err) {
         console.error(err);
@@ -139,7 +143,8 @@ var category = {
     var name = req.query.name,
       parent = req.query.parent === '' ? null : req.query.parent,
       id = req.query.id;
-    var conditions = {name: name, parent: parent};
+    var loginName = req.baseUrl.split('/')[1];
+    var conditions = {name: name, parent: parent, account: loginName};
     if (id) {
       conditions._id = { $ne: id };
     }
@@ -159,7 +164,8 @@ var category = {
    */
   frequentList: function (req, res) {
     var num = req.params.num;
-    categoryDao.frequentList(num, function (err, docs) {
+    var loginName = req.baseUrl.split('/')[1];
+    categoryDao.frequentList(num, loginName, function (err, docs) {
       if (!err) {
         res.send({
           success: true,

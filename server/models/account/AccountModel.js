@@ -14,7 +14,8 @@ var Schema = mongoose.Schema;
 var schema = new Schema({
   loginName: { type: String },//用户名，登录名，全站唯一
   name: { type: String },//用户别名
-  password: { type: String },
+  salt: { type: String },//加密密钥
+  hashPassword: { type: String },//加密密码
   email: { type: String }, //有效地址，需要发送确认邮件激活
   //TODO: 待完成邮件激活，把该默认值改为 false，而点击激活的时候设为 true
   activated: {type: Boolean, default: true },//是否被激活

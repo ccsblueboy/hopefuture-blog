@@ -17,13 +17,13 @@ var account = {
   /**
    * 校验重名
    * 需要过滤掉以下用户
-   * [examples account login logout signup manage admin]
+   * [examples account login logout signup manage admin terms]
    * @param req
    * @param res
    */
   duplicate: function (req, res) {
     var loginName = req.query.loginName;
-    var filters = ['examples', 'account', 'login', 'logout', 'signup', 'manage', 'admin'];
+    var filters = ['examples', 'account', 'login', 'logout', 'signup', 'manage', 'admin', 'terms'];
     if (filters.indexOf(loginName) !== -1) {
       res.send(false);
       return;

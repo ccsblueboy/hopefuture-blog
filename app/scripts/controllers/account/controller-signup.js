@@ -19,20 +19,20 @@ angular.module('hopefutureBlogApp')
       email: ''
     };
 
+    $scope.showForm = true;
     /**
      * 注册
      */
     $scope.signup = function () {
       signupService.signup($scope.account, function (data) {
         if (data.success === true) {
-          window.location.href = '/';
+          $scope.showForm = false;
         } else {
           //注意这里，对于父 Controller中的赋值，需要加上 $parent
           //如果是取值，直接写 $scope.alerts 就可以了
           $scope.$parent.alerts = [
             {type: 'danger', message: data.message}
           ];
-          $scope.account.password = '';
         }
       });
     };

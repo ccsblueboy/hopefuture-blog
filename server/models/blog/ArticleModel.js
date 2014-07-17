@@ -11,7 +11,7 @@ var Schema = mongoose.Schema;
 var schema = new Schema({
   title: { type: String },
   content: { type: String },
-  accountId: { type: String },//即作者
+  account: { type: String },//即作者，这里保存账户登录名，登录名是唯一的
   status: { type: String },//文章状态，如发布，草稿，发布后再修改等 publish，draft modified
   commentStatus: { type: String },
   publicityStatus: { type: String },//公开度

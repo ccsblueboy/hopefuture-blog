@@ -11,6 +11,7 @@ var blog = require('./blog/blog');
 var article = require('./blog/article');
 var category = require('./blog/category');
 var label = require('./blog/label');
+var sessionManage = require('../utils/sessionManage');
 
 /**
  * 页面相关路由抽象实现，即访问页面的url
@@ -34,15 +35,19 @@ module.exports = function (app) {
   app.use('/account', account);
   app.use('/login', login);
   app.use('/logout', function (req, res) {
-    var session = req.session;
-    session.loginName = undefined;
-    res.send({success: true});
+    sessionManage.clearAccountSession(req);
+    res.redirect(302, '/');
   });
-
   app.use('/signup', signup);
 
+  app.use('/terms', function (req, res) {
+    res.render('account/terms', {
+      title: '注册条款'
+    });
+  });
+
   //用 url 变量来区分每个用户的博客，用户注册时不能用项目中存在的链接名称，注册时需要过滤一下，
-  //有：examples account login logout signup manage admin
+  //有：examples account login logout signup manage admin terms
   app.use('/:blog', blog);
 
   app.use('/:blog/manage/article', article);// 管理文章

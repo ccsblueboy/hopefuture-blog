@@ -64,16 +64,19 @@ CategoryDao.prototype.save = function (data, callback) {
  * 返回数据列表
  * @method
  * @param searchContent {String} 搜索内容
+ * @param loginName {String} 用户名
  * @param callback {function} 回调函数
  */
-CategoryDao.prototype.list = function (searchContent, callback) {
-  var conditions = {};
+CategoryDao.prototype.list = function (searchContent, loginName, callback) {
+  var conditions = {account: loginName};
   if (searchContent) {
-    var match = new RegExp(searchContent,'ig');
-    conditions = { $or: [
-      { name: match } ,
-      { description: match }
-    ] };
+    var match = new RegExp(searchContent, 'ig');
+    underscore.extend(conditions, {
+      $or: [
+        { name: match } ,
+        { description: match }
+      ]
+    });
   }
   this.model.find(conditions, {_id: 1, name: 1, count: 1, parent: 1}).sort({_id: 1})
     .exec(function (err, docs) {
@@ -143,11 +146,12 @@ CategoryDao.prototype.find = function (conditions, callback) {
 /**
  *  取经常使用的分类目录，默认取前十条
  * @param num
+ * @param loginName 用户名
  * @param callback
  */
-CategoryDao.prototype.frequentList = function (num, callback) {
+CategoryDao.prototype.frequentList = function (num, loginName, callback) {
   num = num || 10;//默认为10
-  this.model.find({count: { $gt: 0 }}, {_id: 1, name: 1, count: 1}).sort({count: -1}).limit(num)
+  this.model.find({account: loginName, count: { $gt: 0 }}, {_id: 1, name: 1, count: 1}).sort({count: -1}).limit(num)
     .exec(function (err, docs) {
       return callback(err, docs);
     });

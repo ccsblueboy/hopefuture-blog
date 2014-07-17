@@ -1,6 +1,8 @@
 'use strict';
 
 var accountDao = require('./../../dao/account/AccountDao.js');
+var sessionManage = require('../../utils/sessionManage');
+
 var account = {
   index: function (req, res) {
     res.render('login', {
@@ -17,8 +19,10 @@ var account = {
       } else if (err === -2) {
         message = '你输入的密码不正确！请重新输入';
       } else {
-        var session = req.session;
-        session.loginName = doc.loginName;
+        sessionManage.setAccountSession(req, {
+          _id: doc._id,
+          loginName: doc.loginName
+        });
         success = true;
       }
       res.send({success: success, message: message});

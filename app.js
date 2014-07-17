@@ -15,6 +15,7 @@ var ejs = require('ejs');
 var routes = require('./server/routes/routes');
 var session = require('express-session');
 var errorCodes = require('./server/utils/errorCodes');
+var sessionManage = require('./server/utils/sessionManage');
 
 var app = express();
 
@@ -31,7 +32,7 @@ app.use(cookieParser());
 app.use(session({
   resave: false, // don't save session if unmodified
   saveUninitialized: false, // don't create session until something stored
-  secret: 'keyboard cat'
+  secret: 'shhhh, very secret'
 }));
 
 /**
@@ -39,28 +40,45 @@ app.use(session({
  * 当路径中包含 manage 时，表示是访问的后台链接
  */
 app.use(function (req, res, next) {
-  var session = req.session;
+  var account = sessionManage.getAccountSession(req);
   var path = req.path;
-  if (path.indexOf('/manage') !== -1 && session.loginName == null) {
-    if (req.headers.xrequestedwith === 'XMLHttpRequest') {
-      res.send({
-        success: false,
-        errorCode: '9001',
-        errorMessage: errorCodes['9001']
-      });
+  if (/\/\w+\/manage($|\/)/.test(path)) {
+    if (account === null) {
+      if (req.headers.xrequestedwith === 'XMLHttpRequest') {
+        res.send({
+          success: false,
+          errorCode: '9001',
+          errorMessage: errorCodes['9001']
+        });
+      } else {
+        //必须显式的设置 301 重定向，如 res.redirect('/login'); 只会把地址输入到页面，还需手工点击，不信你试试？
+        //设置为 301 firefox 有问题，这里设为 302
+        res.redirect(302, '/login');
+      }
     } else {
-      //必须显式的设置 301 重定向，如 res.redirect('/login'); 只会把地址输入到页面，还需手工点击，不信你试试？
-      //设置为 301 firefox 有问题，这里设为 302
-      res.redirect(302, '/login');
+      var loginName = req.path.split('/')[1];
+      if (account.loginName !== loginName) {//非法操作
+        if(req.headers.xrequestedwith === 'XMLHttpRequest'){
+          res.send({
+            success: false,
+            errorCode: '9002',
+            errorMessage: errorCodes['9002']
+          });
+        }else{
+          res.render('errors/illegal');
+        }
+      }else{
+        next();
+      }
     }
   } else {
     next();
   }
 });
 app.use(function (req, res, next) {
-  var session = req.session;
-  res.locals.logined = session.loginName ? true : false;
-  res.locals.loginName = session.loginName || '';
+  res.locals.logined = sessionManage.isLogined(req);
+  var account = sessionManage.getAccountSession(req);
+  res.locals.loginName = account ? account.loginName : '';
   next();
 });
 
@@ -89,7 +107,7 @@ app.use(function (req, res, next) {
 // error handler
 app.use(function (err, req, res, next) {
   res.status(err.status || 500);
-  res.render('error', {
+  res.render('errors/error', {
     message: err.message,
     error: err
   });

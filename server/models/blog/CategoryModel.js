@@ -12,6 +12,7 @@ var Schema = mongoose.Schema;
  */
 var schema = new Schema({
   name: { type: String },
+  account: { type: String },//即作者，这里保存账户登录名，登录名是唯一的
   description: { type: String },
   parent: { type: String },
   count: { type: Number, default: 0 },//文章使用次数

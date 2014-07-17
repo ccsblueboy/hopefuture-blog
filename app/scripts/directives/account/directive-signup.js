@@ -15,7 +15,7 @@ angular.module('hopefutureBlogApp')
           },
           rules: {
             loginName: {
-              url: 'signup/validate/duplicate'
+              remote: 'signup/validate/duplicate'
             },
             confirmPassword: {equalTo: '#password'}
           },

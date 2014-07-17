@@ -26,19 +26,20 @@ var underscore = require('underscore');
  * @method
  * @param dataPage {DataPage} 分页数据
  * @param searchContent {String} 搜索内容
+ * @param loginName {String} 用户名
  * @param callback {function} 回调函数
  */
-LabelDao.prototype.pagination = function (dataPage, searchContent, callback) {
+LabelDao.prototype.pagination = function (dataPage, searchContent, loginName, callback) {
   var skip = dataPage.itemsPerPage * (dataPage.currentPage - 1);
   var limit = dataPage.itemsPerPage;
   var model = this.model;
-  var conditions = {};
+  var conditions = {account: loginName};
   if (searchContent) {
-    var match = new RegExp(searchContent,'ig');
-    conditions = { $or: [
+    var match = new RegExp(searchContent, 'ig');
+    underscore.extend(conditions, { $or: [
       { name: match } ,
       { description: match }
-    ] };
+    ] })
   }
   model.count(conditions, function (err, count) {
     if (err === null) {
@@ -100,11 +101,12 @@ LabelDao.prototype.find = function (conditions, callback) {
 /**
  * 取经常使用的标签，默认取前十条
  * @param num
+ * @param loginName 用户名
  * @param callback
  */
-LabelDao.prototype.frequentList = function (num, callback) {
+LabelDao.prototype.frequentList = function (num, loginName, callback) {
   num = num || 10;//默认为10
-  this.model.find({count: { $gt: 0 }}, {_id: 1, name: 1, count: 1}).sort({count: -1}).limit(num)
+  this.model.find({account: loginName, count: { $gt: 0 }}, {_id: 1, name: 1, count: 1}).sort({count: -1}).limit(num)
     .exec(function (err, docs) {
       return callback(err, docs);
     });

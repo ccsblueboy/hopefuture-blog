@@ -1,6 +1,12 @@
 'use strict';
 
 /**
+ * 加密算法
+ * @type {hash}
+ */
+var hash = require('../../utils/passwordCrypto').hash;
+
+/**
  * 创建 Account Dao 用来操作 AccountModel，实现数据的增删改查等功能
  * @module AccountDao
  * @class
@@ -13,11 +19,6 @@ function AccountDao(Model) {
   this.model = Model;
 }
 
-var AccountModel = require('../../models/account/AccountModel');
-var accountDao = new AccountDao(AccountModel);
-
-module.exports = accountDao;
-
 /**
  * 判断登录名和密码是否正确
  * 采用异步回调处理同步 Promise
@@ -28,20 +29,21 @@ module.exports = accountDao;
 AccountDao.prototype.findByLoginNameAndPassword = function (data, callback) {
   var loginName = data.loginName,
     password = data.password;
-  var model = this.model;
 
-  var promise = model.findOne({loginName: loginName}).exec();
-  promise.then(function (login) {
+  this.model.findOne({loginName: loginName}, function (err, login) {
     if (login) {
-      return model.findOne({loginName: loginName, password: password}).exec();
-    } else {
-      callback(-1);
-    }
-  }).then(function (login) {
-    if (login) {
-      callback(1, login);
-    } else {
-      callback(-2);
+      hash(password, login.salt, function (err, hash) {
+        if (err) {
+          return callback(-2);
+        }
+        if (hash === login.hashPassword) {
+          return callback(1, login);
+        } else {//密码不正确
+          return callback(-2);
+        }
+      });
+    } else {//登录名不正确
+      return callback(-1);
     }
   });
 };
@@ -53,10 +55,22 @@ AccountDao.prototype.findByLoginNameAndPassword = function (data, callback) {
  * @param callback {function}回调函数
  */
 AccountDao.prototype.signup = function (data, callback) {
-  var entity = new this.model(data);
-  //当有错误发生时，返回err；product 是返回生成的实体，numberAffected which will be 1 when the document was found and updated in the database, otherwise 0.
-  entity.save(function (err, product, numberAffected) {
-    return callback(err);
+  var password = data.password;
+  delete data.password;
+
+  var model = this.model;
+  hash(password, function (err, salt, hash) {
+    if (err) {
+      return callback(err);
+    }
+    data.salt = salt;
+    data.hashPassword = hash;
+
+    var entity = new model(data);
+    //当有错误发生时，返回err；product 是返回生成的实体，numberAffected which will be 1 when the document was found and updated in the database, otherwise 0.
+    entity.save(function (err, product, numberAffected) {
+      return callback(err);
+    });
   });
 };
 
@@ -70,3 +84,7 @@ AccountDao.prototype.find = function (conditions, callback) {
     return callback(err, model);
   });
 };
+
+var AccountModel = require('../../models/account/AccountModel');
+var accountDao = new AccountDao(AccountModel);
+module.exports = accountDao;

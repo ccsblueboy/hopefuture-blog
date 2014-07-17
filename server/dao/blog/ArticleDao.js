@@ -124,17 +124,18 @@ ArticleDao.prototype.save = function (data, callback) {
 /**
  * 分页显示
  * @method
+ * @param loginName {String} 账户登录名
  * @param dataPage {DataPage} 分页数据
  * @param callback {function} 回调函数
  */
-ArticleDao.prototype.pagination = function (dataPage, callback) {
+ArticleDao.prototype.pagination = function (loginName, dataPage, callback) {
   var skip = dataPage.itemsPerPage * (dataPage.currentPage - 1);
   var limit = dataPage.itemsPerPage;
   var model = this.model;
   model.count({}, function (err, count) {
     if (err === null) {
       dataPage.setTotalItems(count);
-      model.find({}, {_id: 1, title: 1, status: 1, articleLink: 1, categories: 1, labels: 1, readCounts: 1, commentCounts: 1, createdDate: 1},
+      model.find({account: loginName}, {_id: 1, title: 1, status: 1, articleLink: 1, categories: 1, labels: 1, readCounts: 1, commentCounts: 1, createdDate: 1},
         {skip: skip, limit: limit}, function (err, docs) {
           dataPage.setItems(docs);
           return callback(err, dataPage);

@@ -1,12 +1,12 @@
 <div class="container margin50-T well">
-  <form class="form-horizontal" name="signForm" method="post" signup-validator>
-
-    <div class="form-group">
-      <div class="col-sm-offset-4 col-sm-4">
-        <div alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.message}}</div>
-        <h2>个人用户注册</h2>
-      </div>
+  <div class="row margin10-B">
+    <div class="col-sm-offset-4 col-sm-4">
+      <div alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.message}}</div>
+      <h2>个人用户注册</h2>
     </div>
+  </div>
+
+  <form class="form-horizontal ng-hide" name="signForm" method="post" signup-validator ng-show="showForm" autocomplete="off">
     <div class="form-group">
       <label for="loginName" class="control-label col-sm-3"><i class="required">*</i> 用户名</label>
 
@@ -60,7 +60,7 @@
         <div class="checkbox">
           <label style="display: block;">
             <input type="checkbox" id="accept" name="accept" value="true" required/> 我已经阅读并同意
-            <a target="_blank" href="" class="btn-link">注册条款</a>
+            <a target="_blank" href="" ng-href="/terms" class="btn-link">注册条款</a>
           </label>
         </div>
       </div>
@@ -72,4 +72,15 @@
       </div>
     </div>
   </form>
+
+  <div class="row ng-hide" ng-show="!showForm">
+    <div class="col-sm-offset-1 col-sm-10">
+      <p>注册成功，系统自动给你发送了一份邮件，请查收并激活该账户，如果没有收到邮件，请点击这里重新发送</p>
+
+      <p>已激活，登录</p>
+
+      <p>以上功能待实现</p>
+    </div>
+  </div>
+
 </div>

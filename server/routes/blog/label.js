@@ -12,8 +12,9 @@ var label = {
     };
     var dataPage = new DataPage(options);
     var searchContent = req.query.searchContent;
+    var loginName = req.baseUrl.split('/')[1];
 
-    labelDao.pagination(dataPage, searchContent, function (err, data) {
+    labelDao.pagination(dataPage, searchContent, loginName, function (err, data) {
       if (err) {
         res.send({success: false});
       } else {
@@ -30,6 +31,8 @@ var label = {
       res.send({success: false, err: '标签名称不能为空！'});
       return;
     }
+    var loginName = req.baseUrl.split('/')[1];
+    data.account = loginName;
     labelDao.save(data, function (err, doc) {
       if (err) {
         console.error(err);
@@ -76,7 +79,8 @@ var label = {
   duplicate: function (req, res) {
     var name = req.query.name,
       id = req.query.id;
-    var conditions = {name: name};
+    var loginName = req.baseUrl.split('/')[1];
+    var conditions = {name: name, account: loginName};
     if (id) {
       conditions._id = { $ne: id };
     }
@@ -96,7 +100,9 @@ var label = {
    */
   frequentList: function (req, res) {
     var num = req.params.num;
-    labelDao.frequentList(num, function (err, docs) {
+    var loginName = req.baseUrl.split('/')[1];
+
+    labelDao.frequentList(num, loginName, function (err, docs) {
       if (!err) {
         res.send({
           success: true,

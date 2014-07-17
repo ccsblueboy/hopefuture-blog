@@ -10,8 +10,9 @@ var article = {
       itemsPerPage: req.query.itemsPerPage,
       currentPage: req.query.currentPage
     };
+    var loginName = req.baseUrl.split('/')[1];
     var dataPage = new DataPage(options);
-    articleDao.pagination(dataPage, function (err, data) {
+    articleDao.pagination(loginName, dataPage, function (err, data) {
       if (err) {
         res.send({success: false});
       } else {
@@ -25,6 +26,8 @@ var article = {
 
   save: function (req, res) {
     var data = req.body;
+    var loginName = req.baseUrl.split('/')[1];
+    data.account = loginName;
     articleDao.save(data, function (err, id) {
       if (err) {
         console.error(err);

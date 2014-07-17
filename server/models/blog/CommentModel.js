@@ -10,7 +10,7 @@ var Schema = mongoose.Schema;
  */
 var schema = new Schema({
   articleID: { type: String },
-  accountId: { type: String },
+  account: { type: String },//即作者，这里保存账户登录名，登录名是唯一的
   accountEmail: { type: String },
   accountIP: { type: String },
   content: { type: String },
