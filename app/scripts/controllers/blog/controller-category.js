@@ -10,12 +10,22 @@
  * */
 
 angular.module('hopefutureBlogApp')
-  .controller('CategoryCtrl', function ($scope, $modal, $sce, categoryService, categoryMethod) {
+  .controller('CategoryCtrl', function ($scope, $modal, $sce, $filter, categoryService, categoryMethod) {
     /**
      * 列表数据
      * @type {Array}
      */
     $scope.items = [];
+
+    /**
+     * 过滤数据
+     * @type {Object}
+     */
+    $scope.filterObject = {
+      items: [],
+      searchContent: ''
+    };
+
     /**
      * 是否选中全部列表
      * @type {{checked: boolean}}
@@ -24,23 +34,24 @@ angular.module('hopefutureBlogApp')
       checked: false
     };
 
-    /**
-     * 返回列表
-     */
-    $scope.query = function () {
-      var conditions;
-      if ($scope.searchContent) {
-        conditions = {params: {searchContent: $scope.searchContent}};
+    categoryService.query(null, function (data) {
+      if (data.success === true) {
+        var collection = categoryMethod.sortItems(data.items);
+        $scope.items = collection.items;
+        $scope.filterObject.items = angular.copy($scope.items);
       }
-      categoryService.query(conditions, function (data) {
-        if (data.success === true) {
-          var collection = categoryMethod.sortItems(data.items);
-          $scope.items = collection.items;
-        }
-      });
-    };
+    });
 
-    $scope.query();
+    /**
+     * 搜索
+     * 这里只在前端以过滤数据的方式来搜索
+     * 如果是从后台动态搜索，需要传递
+     * {params: {searchContent: $scope.searchContent}}
+     * 可以参考label中的实现，不过以这种方式实现，后台现在的数据解析有问题，待完善
+     */
+    $scope.search = function () {
+      $scope.filterObject.items = $filter('filter')($scope.items, {name: $scope.filterObject.searchContent});
+    };
 
     /**
      * 创建新的记录
@@ -77,7 +88,7 @@ angular.module('hopefutureBlogApp')
           return;
         }
         var items = [];
-        angular.forEach($scope.items, function (item, index) {
+        angular.forEach($scope.filterObject.items, function (item, index) {
           if (item.checked === true) {
             items.push({_id: item._id, parent: item.parent});
           }
@@ -109,6 +120,8 @@ angular.module('hopefutureBlogApp')
           if (data.success === true) {
             var collection = categoryMethod.sortItems(data.items);
             $scope.items = collection.items;
+            $scope.filterObject.items = angular.copy($scope.items);
+            $scope.filterObject.searchContent = '';
             $scope.grid.checked = false;
           }
         });
@@ -116,14 +129,14 @@ angular.module('hopefutureBlogApp')
     };
 
     $scope.selectAll = function () {
-      angular.forEach($scope.items, function (item, index) {
+      angular.forEach($scope.filterObject.items, function (item, index) {
         item.checked = $scope.grid.checked;
       });
     };
 
     $scope.selectItem = function () {
       var checked = false;
-      angular.forEach($scope.items, function (item, index) {
+      angular.forEach($scope.filterObject.items, function (item, index) {
         if (item.checked) {
           checked = true;
           return false;
@@ -131,9 +144,21 @@ angular.module('hopefutureBlogApp')
       });
       $scope.grid.checked = checked;
     };
+
+    /**
+     * 这里需要监听 $scope.items ，如果发生变化 $scope.filterItems 也需要变化，同时清空$scope.searchContent
+     * 防止新添加或修改的数据被过滤掉而不能显示在页面中
+     * 监听对于modal中修改的值有问题
+     * 故采取其他方式实现
+     */
+//    $scope.$watch('items', function (newValue, oldValue) {
+//      $scope.filterItems = angular.copy(newValue);
+//      $scope.searchContent = '';
+//    });
   })
   .controller('CategoryFormCtrl', function ($scope, $modalInstance, categoryService, formData, categoryMethod) {
     $scope.items = formData.items;
+    $scope.filterObject = formData.filterObject;
     $scope.dialogTitle = '添加分类目录';
     $scope.category = {
       _id: undefined,
@@ -170,8 +195,11 @@ angular.module('hopefutureBlogApp')
         if (data.success === true) {
           var collection = categoryMethod.sortItems(data.items);
           $scope.items.length = 0;
+          $scope.filterObject.items.length = 0;
+          $scope.filterObject.searchContent = '';
           angular.forEach(collection.items, function (item, index) {
             $scope.items.push(item);
+            $scope.filterObject.items.push(item);
           });
 
           /**

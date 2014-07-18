@@ -36,7 +36,7 @@ AccountDao.prototype.findByLoginNameAndPassword = function (data, callback) {
         if (err) {
           return callback(-2);
         }
-        if (hash === login.hashPassword) {
+        if (hash === login.hash) {
           return callback(1, login);
         } else {//密码不正确
           return callback(-2);
@@ -64,7 +64,7 @@ AccountDao.prototype.signup = function (data, callback) {
       return callback(err);
     }
     data.salt = salt;
-    data.hashPassword = hash;
+    data.hash = hash;
 
     var entity = new model(data);
     //当有错误发生时，返回err；product 是返回生成的实体，numberAffected which will be 1 when the document was found and updated in the database, otherwise 0.

@@ -67,8 +67,9 @@ angular.module('hopefutureBlogApp')
     /**
      * Setting HTTP Headers 详细看官方文档，可以设置http headers
      * http://docs.angularjs.org/api/ng/service/$http
+     * Ajax请求，标准用法 x-requested-with = XMLHttpRequest
      */
-    $httpProvider.defaults.headers.common.xRequestedWith = 'XMLHttpRequest';
+    $httpProvider.defaults.headers.common['x-requested-with'] = 'XMLHttpRequest';
   })
   .factory('hfbHttpService', ['$http', '$q', function ($http, $q) {// 创建 custom Http Service
     return {

@@ -105,7 +105,8 @@ angular.module('hopefutureBlogApp')
             formData: function () {
               return  {
                 item: item,
-                items: $scope.items
+                items: $scope.items,
+                filterObject: $scope.filterObject
               };
             }
           }

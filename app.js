@@ -44,7 +44,7 @@ app.use(function (req, res, next) {
   var path = req.path;
   if (/\/\w+\/manage($|\/)/.test(path)) {
     if (account === null) {
-      if (req.headers.xrequestedwith === 'XMLHttpRequest') {
+      if (req.headers['x-requested-with'] === 'XMLHttpRequest') {//Ajax请求
         res.send({
           success: false,
           errorCode: '9001',
