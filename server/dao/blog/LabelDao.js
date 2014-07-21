@@ -129,10 +129,11 @@ LabelDao.prototype.delete = function (conditions, callback) {
  * 根据name值，修改label，如果不存在则添加新的记录
  * 添加和修改文章的时候，会调用该方法
  * @method
+ * @param loginName {String} 账户登录名
  * @param labels { Array } name 组成的数组
  * @param callback {function} 回调函数
  */
-LabelDao.prototype.update = function (labels, callback) {
+LabelDao.prototype.update = function (loginName, labels, callback) {
   if (underscore.isEmpty(labels)) {
     return callback(null);
   }
@@ -140,10 +141,10 @@ LabelDao.prototype.update = function (labels, callback) {
   for (var i = 0, len = labels.length; i < len; i++) {
     label = labels[i];
     var conditions = {name: label};
-    var update = {$inc: {count: 1}, $setOnInsert: { name: label, createdDate: new Date()}};
+    var update = {$inc: {count: 1}, $setOnInsert: { name: label, createdDate: new Date(), account: loginName}};
     if (underscore.isObject(label)) {
       conditions = {name: label.name };
-      update = {$inc: {count: label.increase ? 1 : -1}, $setOnInsert: { name: label.name, createdDate: new Date()}};
+      update = {$inc: {count: label.increase ? 1 : -1}, $setOnInsert: { name: label.name, createdDate: new Date(), account: loginName}};
     }
     this.model.update(conditions, update, {upsert: true},
       function (err, numberAffected, rawResponse) {

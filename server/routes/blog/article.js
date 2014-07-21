@@ -60,7 +60,8 @@ var article = {
       ids = [ids];
     }
     var conditions = { _id: { $in: ids } };
-    articleDao.delete(conditions, function (err) {
+    var loginName = req.baseUrl.split('/')[1];
+    articleDao.delete(loginName, conditions, function (err) {
       res.send({success: err === null});
     });
   }

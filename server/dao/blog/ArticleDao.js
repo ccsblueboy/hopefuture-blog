@@ -83,7 +83,7 @@ ArticleDao.prototype.save = function (data, callback) {
           if (err) {
             return callback(err);
           }
-          labelDao.update(_labels, function (err) {
+          labelDao.update(data.account, _labels, function (err) {
             if (err) {
               return callback(err);
             }
@@ -101,7 +101,7 @@ ArticleDao.prototype.save = function (data, callback) {
     var entity = new this.model(data);
     //这里应该用异步添加的方式实现
     //先保存添加的标签
-    labelDao.update(data.labels, function (err) {
+    labelDao.update(data.account, data.labels, function (err) {
       if (err) {
         return callback(err);
       }
@@ -159,12 +159,44 @@ ArticleDao.prototype.findById = function (id, callback) {
 /**
  * 删除记录
  * @method
+ * @param loginName {String} 账户登录名
  * @param conditions { Object }
  * 要删除数据的条件，例如：{ field: { $n: [<value1>, <value2>, ... <valueN> ] } }
  * @param callback {function} 回调函数
  */
-ArticleDao.prototype.delete = function (conditions, callback) {
-  this.model.remove(conditions, function (err) {
-    return callback(err);
+ArticleDao.prototype.delete = function (loginName, conditions, callback) {
+  var model = this.model;
+
+  model.find(conditions, {categories: 1, labels: 1}, function (err, docs) {
+    var _categories = [], _labels = [];
+    var i, j, lenI, lenJ;
+    for (i = 0, lenI = docs.length; i < lenI; i++) {
+      for (j = 0, lenJ = docs[i].categories.length; j < lenJ; j++) {
+        _categories.push({
+          _id: docs[i].categories[j],
+          increase: false
+        });
+      }
+      for (j = 0, lenJ = docs[i].labels.length; j < lenJ; j++) {
+        _labels.push({
+          name: docs[i].labels[j],
+          increase: false
+        });
+      }
+    }
+
+    categoryDao.updateCount(_categories, function (err) {
+      if (err) {
+        return callback(err);
+      }
+      labelDao.update(loginName, _labels, function (err) {
+        if (err) {
+          return callback(err);
+        }
+        model.remove(conditions, function (err) {
+          return callback(err);
+        });
+      });
+    });
   });
 };

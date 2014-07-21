@@ -93,7 +93,7 @@ angular.module('hopefutureBlogApp')
       publishService.save($scope.article, function (data) {
         if (data.success === true) {
           $scope.$parent.showPublishInfo = true;
-          switch(status){
+          switch (status) {
             case 'draft':
               $scope.$parent.publishInfo = '文章草稿已更新';
               break;
@@ -259,21 +259,23 @@ angular.module('hopefutureBlogApp')
             data.items.sort(function (item, next) {
               return item.count > next.count;
             });
-            var minCount = data.items[0].count,
-              maxCount = data.items[data.items.length - 1].count,
-              sub = maxCount - minCount;
-            /**
-             * 根据 count 大小设置字体大小，最大的为 30px，最小为14px,
-             * 最大和最小差值为16
-             * 如果 sub 为 0，则取最小字体14px
-             */
-            angular.forEach(items, function (item, index) {
-              if (sub === 0) {
-                item.style = {fontSize: '14px'};
-              } else {
-                item.style = {fontSize: (14 + 16 / sub * (item.count - 1)) + 'px'};
-              }
-            });
+            if (data.items.length > 0) {
+              var minCount = data.items[0].count,
+                maxCount = data.items[data.items.length - 1].count,
+                sub = maxCount - minCount;
+              /**
+               * 根据 count 大小设置字体大小，最大的为 30px，最小为14px,
+               * 最大和最小差值为16
+               * 如果 sub 为 0，则取最小字体14px
+               */
+              angular.forEach(items, function (item, index) {
+                if (sub === 0) {
+                  item.style = {fontSize: '14px'};
+                } else {
+                  item.style = {fontSize: (14 + 16 / sub * (item.count - 1)) + 'px'};
+                }
+              });
+            }
             $scope.labels = items;
           }
         });
