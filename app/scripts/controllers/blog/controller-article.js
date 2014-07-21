@@ -30,6 +30,7 @@ angular.module('hopefutureBlogApp')
       articleService.paging({params: params}, function (data) {
         if (data.success === true) {
           $scope.items = data.dataPage.items;
+          angular.forEach
           $scope.totalItems = data.dataPage.totalItems;
         }
       });

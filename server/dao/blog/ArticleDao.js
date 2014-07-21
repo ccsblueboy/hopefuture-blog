@@ -29,8 +29,8 @@ var underscore = require('underscore');
  * @param callback {function}回调函数
  */
 ArticleDao.prototype.save = function (data, callback) {
+  var model = this.model;
   if (data._id) {
-    var model = this.model;
     var promise = model.findById(data._id).exec();
     promise.then(function (doc) {
       if (doc) {
@@ -87,9 +87,41 @@ ArticleDao.prototype.save = function (data, callback) {
             if (err) {
               return callback(err);
             }
-            data.updatedDate = new Date();
-            model.update({_id: data._id}, data, function (err, numberAffected, rawResponse) {
-              return callback(err);
+
+            var conditions = {name: { $in: data.labels }, account: data.account};
+            labelDao.find(conditions, function (err, docs) {
+              if (err) {
+                return callback(err);
+              } else {
+                var labels = [];
+                for (var i = 0, len = docs.length; i < len; i++) {
+                  labels.push({
+                    _id: docs[i]._id,
+                    name: docs[i].name
+                  });
+                }
+                data.labels = labels;
+                conditions = {_id: { $in: data.categories }};
+                categoryDao.find(conditions, function (err, docs) {
+                  if (err) {
+                    return callback(err);
+                  } else {
+                    var categories = [];
+                    for (var i = 0, len = docs.length; i < len; i++) {
+                      categories.push({
+                        _id: docs[i]._id,
+                        name: docs[i].name
+                      });
+                    }
+                    data.categories = categories;
+
+                    data.updatedDate = new Date();
+                    model.update({_id: data._id}, data, function (err, numberAffected, rawResponse) {
+                      return callback(err);
+                    });
+                  }
+                });
+              }
             });
           });
         });
@@ -98,22 +130,57 @@ ArticleDao.prototype.save = function (data, callback) {
       }
     });
   } else {
-    var entity = new this.model(data);
     //这里应该用异步添加的方式实现
     //先保存添加的标签
     labelDao.update(data.account, data.labels, function (err) {
       if (err) {
         return callback(err);
       }
+      //保存添加的分类
       categoryDao.updateCount(data.categories, function (err) {
         if (err) {
           return callback(err);
         }
-        entity.save(function (err, product, numberAffected) {
+        //查询标签列表
+        var conditions = {name: { $in: data.labels }, account: data.account};
+        labelDao.find(conditions, function (err, docs) {
           if (err) {
             return callback(err);
           } else {
-            return callback(err, product._doc._id);
+            var labels = [];
+            for (var i = 0, len = docs.length; i < len; i++) {
+              labels.push({
+                _id: docs[i]._id,
+                name: docs[i].name
+              });
+            }
+            data.labels = labels;
+
+            //查询分类列表
+            conditions = {_id: { $in: data.categories }};
+            categoryDao.find(conditions, function (err, docs) {
+              if (err) {
+                return callback(err);
+              } else {
+                var categories = [];
+                for (var i = 0, len = docs.length; i < len; i++) {
+                  categories.push({
+                    _id: docs[i]._id,
+                    name: docs[i].name
+                  });
+                }
+                data.categories = categories;
+
+                var entity = new model(data);
+                entity.save(function (err, product, numberAffected) {
+                  if (err) {
+                    return callback(err);
+                  } else {
+                    return callback(err, product._doc._id);
+                  }
+                });
+              }
+            });
           }
         });
       });
@@ -135,11 +202,10 @@ ArticleDao.prototype.pagination = function (loginName, dataPage, callback) {
   model.count({}, function (err, count) {
     if (err === null) {
       dataPage.setTotalItems(count);
-      model.find({account: loginName}, {_id: 1, title: 1, status: 1, articleLink: 1, categories: 1, labels: 1, readCounts: 1, commentCounts: 1, createdDate: 1},
-        {skip: skip, limit: limit}, function (err, docs) {
-          dataPage.setItems(docs);
-          return callback(err, dataPage);
-        });
+      model.find({account: loginName}, {_id: 1, title: 1, status: 1, articleLink: 1, categories: 1, labels: 1, readCounts: 1, commentCounts: 1, createdDate: 1}, {skip: skip, limit: limit}, function (err, docs) {
+        dataPage.setItems(docs);
+        return callback(err, dataPage);
+      });
     }
   });
 };
