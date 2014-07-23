@@ -9,26 +9,24 @@
  * @createdDate 2014-6-12
  * */
 
-angular.module('hopefutureBlogApp')
-  .controller('BlogCtrl', function ($scope, $location, blogService, blogMethod) {
+angular.module('hopefutureBlogApp').controller('BlogCtrl', function ($scope, blogService, blogMethod) {
 
     /**
      * 创建新的文章
      */
     $scope.createBlog = function () {
-      window.location.href = window.location.href + '/manage#/publish';
+      window.location.href = window.location.origin + window.location.pathname + '/manage#/publish';
     };
 
     /**
      * 管理我的博客
      */
     $scope.manageBlog = function () {
-      window.location.href = window.location.href + '/manage#/article';
+      window.location.href = window.location.origin + window.location.pathname + '/manage#/article';
     };
 
-    var path = $location.absUrl();
-    var lastIndex = path.lastIndexOf('/') + 1;
-    var account = path.substring(lastIndex);
+    var pathname = window.location.pathname;
+    var account = pathname.substring(1);
 
     $scope.blog = {
       account: undefined,

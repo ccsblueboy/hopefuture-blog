@@ -37,84 +37,99 @@ var moment = require('moment');
 ArticleDao.prototype.save = function (data, callback) {
   var model = this.model;
   if (data._id) {
+    var article;
     var promise = model.findById(data._id).exec();
     promise.then(function (doc) {
       if (doc) {
-        //分类
-        var categories = doc.categories;
-        var copyCat = underscore.clone(data.categories);
-        var _categories = [];
-        var i, len, index;
-        for (i = 0, len = categories.length; i < len; i++) {
-          index = copyCat.indexOf(categories[i]);
-          if (index === -1) {
-            _categories.push({
-              _id: categories[i],
-              increase: false
-            });
-          } else {
-            copyCat.splice(index, 1);
-          }
+        article = doc;
+        var labelIds = [];
+        for (var i = 0, len = doc.labels.length; i < len; i++) {
+          labelIds.push(doc.labels[i]);
         }
-        for (i = 0, len = copyCat.length; i < len; i++) {
-          _categories.push({
-            _id: copyCat[i],
-            increase: true
-          });
-        }
+        return LabelModel.find({ _id: { $in: labelIds }}, {name: 1}).exec();
+      } else {
+        return callback('operate error！');
+      }
 
-        //标签
-        var labels = doc.labels;
-        var copyLabels = underscore.clone(data.labels);
-        var _labels = [];
-        for (i = 0, len = labels.length; i < len; i++) {
-          index = copyLabels.indexOf(labels[i]);
-          if (index === -1) {
-            _labels.push({
-              name: labels[i],
-              increase: false
-            });
-          } else {
-            copyLabels.splice(index, 1);
-          }
-        }
-        for (i = 0, len = copyLabels.length; i < len; i++) {
+    }).then(function (docs) {
+      var i, len, index;
+
+      //标签
+      var labels = [];
+      docs.forEach(function(item){
+        labels.push(item.name);
+      });
+      var copyLabels = underscore.clone(data.labels);
+      var _labels = [];
+      for (i = 0, len = labels.length; i < len; i++) {
+        index = copyLabels.indexOf(labels[i]);
+        if (index === -1) {
           _labels.push({
-            name: copyLabels[i],
-            increase: true
+            name: labels[i],
+            increase: false
           });
+        } else {
+          copyLabels.splice(index, 1);
         }
+      }
+      for (i = 0, len = copyLabels.length; i < len; i++) {
+        _labels.push({
+          name: copyLabels[i],
+          increase: true
+        });
+      }
 
-        categoryDao.updateCount(_categories, function (err) {
+      //分类
+      var categories = article.categories;
+      var copyCat = underscore.clone(data.categories);
+      var _categories = [];
+      for (i = 0, len = categories.length; i < len; i++) {
+        index = copyCat.indexOf(categories[i]);
+        if (index === -1) {
+          _categories.push({
+            _id: categories[i],
+            increase: false
+          });
+        } else {
+          copyCat.splice(index, 1);
+        }
+      }
+      for (i = 0, len = copyCat.length; i < len; i++) {
+        _categories.push({
+          _id: copyCat[i],
+          increase: true
+        });
+      }
+
+      categoryDao.updateCount(_categories, function (err) {
+        if (err) {
+          return callback(err);
+        }
+        labelDao.update(data.account, _labels, function (err) {
           if (err) {
             return callback(err);
           }
-          labelDao.update(data.account, _labels, function (err) {
+
+          var conditions = {name: { $in: data.labels }, account: data.account};
+          labelDao.find(conditions, function (err, docs) {
             if (err) {
               return callback(err);
-            }
+            } else {
+              data.labels = docs.map(function (item, index) {
+                return item._id.toString();
+              });
 
-            var conditions = {name: { $in: data.labels }, account: data.account};
-            labelDao.find(conditions, function (err, docs) {
-              if (err) {
+              data.updatedDate = new Date();
+              model.update({_id: data._id}, data, function (err, numberAffected, rawResponse) {
                 return callback(err);
-              } else {
-                data.labels = docs.map(function (item, index) {
-                  return item._id;
-                });
+              });
 
-                data.updatedDate = new Date();
-                model.update({_id: data._id}, data, function (err, numberAffected, rawResponse) {
-                  return callback(err);
-                });
-
-              }
-            });
+            }
           });
         });
-      } else {
-        callback('operate error！');
-      }
+      });
+    }).then(null, function (err) {
+      return callback(err);
     });
   } else {
     //这里应该用异步添加的方式实现
@@ -173,8 +188,7 @@ ArticleDao.prototype.pagination = function (loginName, dataPage, callback) {
       dataPage.setTotalItems(count);
       var categoriesId = [], labelIds = [], articlesData, labelMap = {};
 
-      var promise = model.find({account: loginName}, {_id: 1, title: 1, status: 1, articleLink: 1, categories: 1, labels: 1, readCounts: 1, commentCounts: 1, createdDate: 1},
-        {skip: skip, limit: limit}).exec();
+      var promise = model.find({account: loginName}, {_id: 1, title: 1, status: 1, articleLink: 1, categories: 1, labels: 1, readCounts: 1, commentCounts: 1, createdDate: 1}, {skip: skip, limit: limit}).exec();
 
       promise.then(function (articles) {
         articlesData = articles;
@@ -342,7 +356,7 @@ ArticleDao.prototype.findBlogData = function (loginName, callback) {
      $group：按照给定表达式组合结果
      $unwind：分割嵌入数组到自己顶层文件
      */
-    return model.aggregate({$match: {account: loginName}}, {$limit: 10}, { $group: { _id: '$createdMonth', articleCount: { $sum: 1 }}},{ $sort: { createdDate: -1 } }).exec();
+    return model.aggregate({$match: {account: loginName}}, {$limit: 10}, { $group: { _id: '$createdMonth', articleCount: { $sum: 1 }}}, { $sort: { createdDate: -1 } }).exec();
   }).then(function (articles) {
     data.articlesArchive = articles;//文章归档
 
@@ -379,10 +393,9 @@ ArticleDao.prototype.list = function (conditions, dataPage, callback) {
     }
     dataPage.setTotalItems(count);
     underscore.extend(conditions, {status: 'publish'});
-    model.find(conditions, {_id: 1, title: 1, content: 1, articleLink: 1, createdDate: 1},
-      {skip: skip, limit: limit}, function (err, docs) {
-        dataPage.setItems(docs);
-        return callback(err, dataPage);
-      });
+    model.find(conditions, {_id: 1, title: 1, content: 1, articleLink: 1, createdDate: 1}, {skip: skip, limit: limit}, function (err, docs) {
+      dataPage.setItems(docs);
+      return callback(err, dataPage);
+    });
   });
 };
