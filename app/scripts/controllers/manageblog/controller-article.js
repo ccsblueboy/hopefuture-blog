@@ -10,7 +10,7 @@
  * */
 
 angular.module('hopefutureBlogApp')
-  .controller('ArticleCtrl', function ($scope, $location, $modal, articleService) {
+  .controller('ArticleCtrl', function ($scope, $location, $modal, articleService, articleStatus) {
     //初始化记录
     $scope.items = [];
     $scope.grid = {
@@ -30,7 +30,9 @@ angular.module('hopefutureBlogApp')
       articleService.paging({params: params}, function (data) {
         if (data.success === true) {
           $scope.items = data.dataPage.items;
-          angular.forEach
+          angular.forEach($scope.items, function (item, index) {
+            item.status = articleStatus[item.status];
+          });
           $scope.totalItems = data.dataPage.totalItems;
         }
       });

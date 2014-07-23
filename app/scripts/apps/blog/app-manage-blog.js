@@ -12,31 +12,31 @@ angular.module('hopefutureBlogApp', ['ngRoute', 'ngAnimate', 'ngSanitize', 'ui.b
   .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
     $routeProvider
       .when('/publish', {//发表文章
-        templateUrl: '../views/blog/publish.html',
+        templateUrl: '../views/manageblog/publish.html',
         controller: 'PublishCtrl'
       })
       .when('/article/:articleId', {//编辑文章
-        templateUrl: '../views/blog/publish.html',
+        templateUrl: '../views/manageblog/publish.html',
         controller: 'PublishCtrl'
       })
       .when('/article', {//文章管理
-        templateUrl: '../views/blog/article.html',
+        templateUrl: '../views/manageblog/article.html',
         controller: 'ArticleCtrl'
       })
       .when('/category', {//类别管理
-        templateUrl: '../views/blog/category.html',
+        templateUrl: '../views/manageblog/category.html',
         controller: 'CategoryCtrl'
       })
       .when('/label', {//标签管理
-        templateUrl: '../views/blog/label.html',
+        templateUrl: '../views/manageblog/label.html',
         controller: 'LabelCtrl'
       })
       .when('/comment', {//评论管理
-        templateUrl: '../views/blog/comment.html',
+        templateUrl: '../views/manageblog/comment.html',
         controller: 'CommentCtrl'
       })
       .when('/setting', {//博客管理
-        templateUrl: '../views/blog/setting.html',
+        templateUrl: '../views/manageblog/setting.html',
         controller: 'SettingCtrl'
       })
       .otherwise({

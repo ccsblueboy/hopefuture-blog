@@ -22,7 +22,8 @@
 <body ng-app="hopefutureBlogApp" ng-controller="HopefutureBlogCtrl">
 <% include ../views/common/header.html %>
 
-<div ng-include="'../views/blog/blog.html'" ng-controller="BlogCtrl"></div>
+<% include ../views/blog/blog.html %>
+
 
 <% include ../views/common/footer.html %>
 
@@ -30,6 +31,8 @@
 <!-- bower:js -->
 <script src="../bower_components/jquery/dist/jquery.js"></script>
 <script src="../bower_components/angular/angular.js"></script>
+<script src="../bower_components/angular-route/angular-route.js"></script>
+<script src="../bower_components/angular-sanitize/angular-sanitize.js"></script>
 <script src="../bower_components/jquery-validation/dist/jquery.validate.js"></script>
 <script src="../bower_components/bootstrap/dist/js/bootstrap.js"></script>
 <script src="../bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
@@ -42,11 +45,18 @@
 <!-- build:js({.tmp,app}) scripts/blog.js -->
 <script src="../scripts/hopefuture/hf_validate.js"></script>
 <script src="../scripts/apps/blog/app-blog.js"></script>
-<script src="../scripts/controllers/controller-hopefuture-blog.js"></script>
+
 <script src="../scripts/services/httpInterceptor.js"></script>
+<script src="../scripts/services/service-hopefuture-blog.js"></script>
 <script src="../scripts/services/blog/service-blog.js"></script>
+
+<script src="../scripts/controllers/controller-hopefuture-blog.js"></script>
 <script src="../scripts/controllers/blog/controller-blog.js"></script>
+<script src="../scripts/controllers/blog/controller-articles.js"></script>
+
 <script src="../scripts/directives/blog/directive-blog.js"></script>
+
+
 <!-- endbuild -->
 </body>
 </html>

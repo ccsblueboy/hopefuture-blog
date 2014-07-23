@@ -14,9 +14,13 @@ var Schema = mongoose.Schema;
 var schema = new Schema({
   loginName: { type: String },//用户名，登录名，全站唯一
   name: { type: String },//用户别名
+  englishName: {type: String},// 英文名字
+  residence: {type: String},// 来至于那里
+  position: {type: String},// 职位
   salt: { type: String },//加密密钥
   hash: { type: String },//加密密码
   email: { type: String }, //有效地址，需要发送确认邮件激活
+  signature: { type: String},// 我的签名
   //TODO: 待完成邮件激活，把该默认值改为 false，而点击激活的时候设为 true
   activated: {type: Boolean, default: true },//是否被激活
   createdDate: { type: Date, default: Date.now },

@@ -10,5 +10,9 @@ angular.module('hopefutureBlogApp')
         hfbHttpService.delete('manage/article', data).then(success);
       }
     };
-  }]);
-
+  }])
+  .constant('articleStatus', {//文章状态
+    publish: '已发布',
+    draft: '草稿',
+    modified: '已发布'
+  });

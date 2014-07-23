@@ -10,21 +10,42 @@
  * */
 
 angular.module('hopefutureBlogApp')
-  .controller('BlogCtrl', function ($scope, blogService) {
-    $scope.$parent.loginName = 'linder';
+  .controller('BlogCtrl', function ($scope, $location, blogService, blogMethod) {
 
     /**
      * 创建新的文章
      */
-    $scope.createBlog = function(){
-
+    $scope.createBlog = function () {
+      window.location.href = window.location.href + '/manage#/publish';
     };
 
     /**
      * 管理我的博客
      */
-    $scope.manageBlog = function(){
-      window.location.href = window.location.href + '/manage';
+    $scope.manageBlog = function () {
+      window.location.href = window.location.href + '/manage#/article';
     };
+
+    var path = $location.absUrl();
+    var lastIndex = path.lastIndexOf('/') + 1;
+    var account = path.substring(lastIndex);
+
+    $scope.blog = {
+      account: undefined,
+      hotArticles: undefined,
+      recentArticles: undefined,
+      articlesArchive: undefined,
+      categories: undefined,
+      labels: undefined
+    };
+    /**
+     * 加载博客相关数据
+     */
+    blogService.blog(account, function (data) {
+      if (data.success === true) {
+        data.blogData.labels = blogMethod.parseArticleLabel(data.blogData.labels);
+        $scope.blog = data.blogData;
+      }
+    });
 
   });

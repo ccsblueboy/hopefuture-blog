@@ -91,11 +91,18 @@ LabelDao.prototype.findById = function (id, callback) {
  * 根据给定的条件查询记录
  * @param conditions {Object} 条件
  * @param callback {function} 回调函数
+ * @param fields {Object} 显示的列
  */
-LabelDao.prototype.find = function (conditions, callback) {
-  this.model.find(conditions, function (err, model) {
-    return callback(err, model);
-  });
+LabelDao.prototype.find = function (conditions, callback, fields) {
+  if (fields) {
+    this.model.find(conditions, fields, function (err, docs) {
+      return callback(err, docs);
+    });
+  } else {
+    this.model.find(conditions, function (err, docs) {
+      return callback(err, docs);
+    });
+  }
 };
 
 /**

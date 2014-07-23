@@ -19,7 +19,13 @@ module.exports = articleDao;
 
 var labelDao = require('./LabelDao');
 var categoryDao = require('./CategoryDao');
+
+var LabelModel = require('../../models/blog/LabelModel');
+var CategoryModel = require('../../models/blog/CategoryModel');
+var accountModel = require('../../models/account/AccountModel');
+
 var underscore = require('underscore');
+var moment = require('moment');
 
 
 /**
@@ -93,34 +99,15 @@ ArticleDao.prototype.save = function (data, callback) {
               if (err) {
                 return callback(err);
               } else {
-                var labels = [];
-                for (var i = 0, len = docs.length; i < len; i++) {
-                  labels.push({
-                    _id: docs[i]._id,
-                    name: docs[i].name
-                  });
-                }
-                data.labels = labels;
-                conditions = {_id: { $in: data.categories }};
-                categoryDao.find(conditions, function (err, docs) {
-                  if (err) {
-                    return callback(err);
-                  } else {
-                    var categories = [];
-                    for (var i = 0, len = docs.length; i < len; i++) {
-                      categories.push({
-                        _id: docs[i]._id,
-                        name: docs[i].name
-                      });
-                    }
-                    data.categories = categories;
-
-                    data.updatedDate = new Date();
-                    model.update({_id: data._id}, data, function (err, numberAffected, rawResponse) {
-                      return callback(err);
-                    });
-                  }
+                data.labels = docs.map(function (item, index) {
+                  return item._id;
                 });
+
+                data.updatedDate = new Date();
+                model.update({_id: data._id}, data, function (err, numberAffected, rawResponse) {
+                  return callback(err);
+                });
+
               }
             });
           });
@@ -147,38 +134,17 @@ ArticleDao.prototype.save = function (data, callback) {
           if (err) {
             return callback(err);
           } else {
-            var labels = [];
-            for (var i = 0, len = docs.length; i < len; i++) {
-              labels.push({
-                _id: docs[i]._id,
-                name: docs[i].name
-              });
-            }
-            data.labels = labels;
+            data.labels = docs.map(function (item, index) {
+              return item._id.toString();
+            });
+            data.createdMonth = new moment().format('YYYY-MM');
 
-            //查询分类列表
-            conditions = {_id: { $in: data.categories }};
-            categoryDao.find(conditions, function (err, docs) {
+            var entity = new model(data);
+            entity.save(function (err, product, numberAffected) {
               if (err) {
                 return callback(err);
               } else {
-                var categories = [];
-                for (var i = 0, len = docs.length; i < len; i++) {
-                  categories.push({
-                    _id: docs[i]._id,
-                    name: docs[i].name
-                  });
-                }
-                data.categories = categories;
-
-                var entity = new model(data);
-                entity.save(function (err, product, numberAffected) {
-                  if (err) {
-                    return callback(err);
-                  } else {
-                    return callback(err, product._doc._id);
-                  }
-                });
+                return callback(err, product._doc._id);
               }
             });
           }
@@ -190,6 +156,8 @@ ArticleDao.prototype.save = function (data, callback) {
 
 /**
  * 分页显示
+ * 该查询比较复杂，由于mongodb不支持多表关联查询，所以需要自己写代码实现
+ * 主要用到了异步 promise 来分别查询关联的字段，最后利用键值处理
  * @method
  * @param loginName {String} 账户登录名
  * @param dataPage {DataPage} 分页数据
@@ -199,13 +167,70 @@ ArticleDao.prototype.pagination = function (loginName, dataPage, callback) {
   var skip = dataPage.itemsPerPage * (dataPage.currentPage - 1);
   var limit = dataPage.itemsPerPage;
   var model = this.model;
+
   model.count({}, function (err, count) {
     if (err === null) {
       dataPage.setTotalItems(count);
-      model.find({account: loginName}, {_id: 1, title: 1, status: 1, articleLink: 1, categories: 1, labels: 1, readCounts: 1, commentCounts: 1, createdDate: 1}, {skip: skip, limit: limit}, function (err, docs) {
-        dataPage.setItems(docs);
+      var categoriesId = [], labelIds = [], articlesData, labelMap = {};
+
+      var promise = model.find({account: loginName}, {_id: 1, title: 1, status: 1, articleLink: 1, categories: 1, labels: 1, readCounts: 1, commentCounts: 1, createdDate: 1},
+        {skip: skip, limit: limit}).exec();
+
+      promise.then(function (articles) {
+        articlesData = articles;
+        var labels = articles.map(function (item) {
+          return item.labels;
+        });
+        var i , j, lenI, lenJ, label, category;
+        for (i = 0, lenI = labels.length; i < lenI; i++) {
+          label = labels[i];
+          for (j = 0, lenJ = label.length; j < lenJ; j++) {
+            labelIds.push(label[j]);
+          }
+        }
+        //underscore.uniq([1, 2, 1, 3, 1, 4]);
+        //=> [1, 2, 3, 4]
+        labelIds = underscore.uniq(labelIds);
+
+        var categories = articles.map(function (item) {
+          return item.categories;
+        });
+        for (i = 0, lenI = categories.length; i < lenI; i++) {
+          category = categories[i];
+          for (j = 0, lenJ = category.length; j < lenJ; j++) {
+            categoriesId.push(category[j]);
+          }
+        }
+        categoriesId = underscore.uniq(categoriesId);
+
+        return LabelModel.find({ _id: { $in: labelIds }}).exec();
+      }).then(function (labels) {
+        labels.forEach(function (item, index) {
+          labelMap[item._id] = item.name;
+        });
+        return CategoryModel.find({ _id: { $in: categoriesId }}).exec();
+      }).then(function (categories) {
+        var categoryMap = {};
+        categories.forEach(function (item, index) {
+          categoryMap[item._id] = item.name;
+        });
+
+        articlesData.forEach(function (item, index) {
+          item.labels = item.labels.map(function (item) {
+            return labelMap[item];
+          });
+          item.categories = item.categories.map(function (item) {
+            return categoryMap[item];
+          });
+
+        });
+
+        dataPage.setItems(articlesData);
         return callback(err, dataPage);
+      }).then(null, function (err) {
+        return callback(err);
       });
+
     }
   });
 };
@@ -218,7 +243,20 @@ ArticleDao.prototype.pagination = function (loginName, dataPage, callback) {
  */
 ArticleDao.prototype.findById = function (id, callback) {
   this.model.findById(id, function (err, model) {
-    return callback(err, model);
+    if (err) {
+      return callback(err);
+    }
+    var conditions = {_id: { $in: model.labels }};
+    /*jshint -W083 */
+    labelDao.find(conditions, function (err, labels) {
+      if (err) {
+        return callback(err);
+      }
+      model.labels = labels.map(function (item, index) {
+        return item.name;
+      });
+      return callback(err, model);
+    }, {name: 1});
   });
 };
 
@@ -264,5 +302,87 @@ ArticleDao.prototype.delete = function (loginName, conditions, callback) {
         });
       });
     });
+  });
+};
+
+/**
+ * 根据二级域名（账户登录名）返回 相关博客数据
+ * @param loginName {String} 账户登录名
+ * @param callback {function} 回调函数
+ */
+ArticleDao.prototype.findBlogData = function (loginName, callback) {
+  //以下代码加载博客数据，包括个人信息，最热文章，近期文章，文章归档（近期五个月文章数），分类目录，近期评论
+  var data = {};
+  var model = this.model;
+  var conditions = {account: loginName, status: 'publish'};
+
+  var promise = accountModel.findOne({loginName: loginName}, {_id: 1, name: 1, englishName: 1, residence: 1, position: 1,
+    email: 1, signature: 1}).exec();
+
+  promise.then(function (account) {
+    data.account = account;//用户信息
+
+    return model.find(conditions, {_id: 1, title: 1, articleLink: 1, readCounts: 1}, {limit: 10}).sort({readCounts: -1}).exec();
+  }).then(function (articles) {
+    data.hotArticles = articles;//最热文章
+
+    return model.find(conditions, {_id: 1, title: 1, articleLink: 1, createdDate: 1}, {limit: 10}).sort({createdDate: -1}).exec();
+  }).then(function (articles) {
+    data.recentArticles = articles;//近期文章
+    /**
+     * 分组查询
+     * http://blog.csdn.net/xtqve/article/details/8983868
+     * http://docs.mongodb.org/manual/reference/sql-aggregation-comparison/
+     * 操作符介绍：
+     $project：包含、排除、重命名和显示字段
+     $match：查询，需要同find()一样的参数
+     $limit：限制结果数量
+     $skip：忽略结果的数量
+     $sort：按照给定的字段排序结果
+     $group：按照给定表达式组合结果
+     $unwind：分割嵌入数组到自己顶层文件
+     */
+    return model.aggregate({$match: {account: loginName}}, {$limit: 10}, { $group: { _id: '$createdMonth', articleCount: { $sum: 1 }}},{ $sort: { createdDate: -1 } }).exec();
+  }).then(function (articles) {
+    data.articlesArchive = articles;//文章归档
+
+    return CategoryModel.find({account: loginName}, {_id: 1, name: 1, count: 1}).exec();
+  }).then(function (categories) {
+    data.categories = categories;//分类目录
+
+    return LabelModel.find({account: loginName}, {_id: 1, name: 1, count: 1}).exec();
+  }).then(function (labels) {
+    data.labels = labels;// 标签
+
+    return callback(null, data);
+  }).then(null, function (err) {
+    return callback(err);
+  });
+};
+
+
+/**
+ * 分页显示 个人博客
+ * @method
+ * @param conditions {Object} 查询条件
+ * @param dataPage {DataPage} 分页数据
+ * @param callback {function} 回调函数
+ */
+ArticleDao.prototype.list = function (conditions, dataPage, callback) {
+  var skip = dataPage.itemsPerPage * (dataPage.currentPage - 1);
+  var limit = dataPage.itemsPerPage;
+  var model = this.model;
+
+  model.count({}, function (err, count) {
+    if (err) {
+      return callback(err);
+    }
+    dataPage.setTotalItems(count);
+    underscore.extend(conditions, {status: 'publish'});
+    model.find(conditions, {_id: 1, title: 1, content: 1, articleLink: 1, createdDate: 1},
+      {skip: skip, limit: limit}, function (err, docs) {
+        dataPage.setItems(docs);
+        return callback(err, dataPage);
+      });
   });
 };
