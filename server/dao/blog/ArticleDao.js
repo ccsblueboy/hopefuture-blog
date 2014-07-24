@@ -421,8 +421,8 @@ ArticleDao.prototype.articleInfo = function (loginName, articleId, callback) {
   var promise = model.findById(articleId, {_id: 1, title: 1, content: 1, labels: 1, articleLink: 1, createdDate: 1}).exec();
 
   promise.then(function (article) {
-    data.article = article;//文章信息
-    data.article.createdDate = moment(article.createdDate).format('YYYY年MM月DD日');
+    data.article = article._doc;//文章信息
+    data.article.createdDate = moment( data.article.createdDate).format('YYYY年MM月DD');
 
     articleLabels = article.labels;
 
