@@ -58,15 +58,33 @@ var blog = {
         });
       }
     });
+  },
+
+  article: function (req, res) {
+    var loginName = req.baseUrl.split('/')[1];
+    var articleId = req.params.articleId;
+    articleDao.articleInfo(loginName, articleId, function (err, data) {
+      if (err) {
+        res.send({
+          success: false
+        });
+      } else {
+        res.send({
+          success: true,
+          articleInfo: data
+        });
+      }
+    });
   }
 };
 
 var express = require('express');
 var router = express.Router();
 
-router.get('/', blog.index);
-router.get('/manage', blog.manage);
-router.get('/blog', blog.blog);
-router.get('/articles', blog.articles);
+router.get('/', blog.index);//我的博客首页
+router.get('/manage', blog.manage);//管理我的博客，需要登录
+router.get('/blog', blog.blog);//获取博客相关数据
+router.get('/articles', blog.articles);//文章列表
+router.get('/article/:articleId', blog.article);//文章相关信息
 
 module.exports = router;

@@ -15,10 +15,10 @@ angular.module('hopefutureBlogApp', ['ngRoute', 'ngSanitize', 'ui.bootstrap'])
         templateUrl: '../views/blog/articles.html',
         controller: 'ArticlesCtrl'
       })
-//      .when('/article', {//每一篇文章
-//        templateUrl: '../views/blog/publish.html',
-//        controller: 'PublishCtrl'
-//      })
+      .when('/article/:articleId', {//文章
+        templateUrl: '../views/blog/article.html',
+        controller: 'ArticleCtrl'
+      })
 //      .when('/category', {//分类文章列表
 //        templateUrl: '../views/blog/category.html',
 //        controller: 'CategoryCtrl'

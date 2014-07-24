@@ -8,9 +8,9 @@ var account = require('./account/account');
 var login = require('./account/login');
 var signup = require('./account/signup');
 var blog = require('./blog/blog');
-var article = require('./blog/article');
-var category = require('./blog/category');
-var label = require('./blog/label');
+var article = require('./manageblog/article');
+var category = require('./manageblog/category');
+var label = require('./manageblog/label');
 var sessionManage = require('../utils/sessionManage');
 
 /**

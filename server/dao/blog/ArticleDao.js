@@ -23,6 +23,9 @@ var categoryDao = require('./CategoryDao');
 var LabelModel = require('../../models/blog/LabelModel');
 var CategoryModel = require('../../models/blog/CategoryModel');
 var accountModel = require('../../models/account/AccountModel');
+var commentModel = require('../../models/blog/CommentModel');
+var commonMethod = require('./../../utils/commonMethod');
+var ObjectId = require('mongoose').Types.ObjectId;
 
 var underscore = require('underscore');
 var moment = require('moment');
@@ -56,7 +59,7 @@ ArticleDao.prototype.save = function (data, callback) {
 
       //标签
       var labels = [];
-      docs.forEach(function(item){
+      docs.forEach(function (item) {
         labels.push(item.name);
       });
       var copyLabels = underscore.clone(data.labels);
@@ -188,7 +191,9 @@ ArticleDao.prototype.pagination = function (loginName, dataPage, callback) {
       dataPage.setTotalItems(count);
       var categoriesId = [], labelIds = [], articlesData, labelMap = {};
 
-      var promise = model.find({account: loginName}, {_id: 1, title: 1, status: 1, articleLink: 1, categories: 1, labels: 1, readCounts: 1, commentCounts: 1, createdDate: 1}, {skip: skip, limit: limit}).exec();
+      var promise = model.find({account: loginName},
+        {_id: 1, title: 1, status: 1, articleLink: 1, categories: 1, labels: 1, readCounts: 1, commentCounts: 1, createdDate: 1},
+        {skip: skip, limit: limit}).exec();
 
       promise.then(function (articles) {
         articlesData = articles;
@@ -356,7 +361,8 @@ ArticleDao.prototype.findBlogData = function (loginName, callback) {
      $group：按照给定表达式组合结果
      $unwind：分割嵌入数组到自己顶层文件
      */
-    return model.aggregate({$match: {account: loginName}}, {$limit: 10}, { $group: { _id: '$createdMonth', articleCount: { $sum: 1 }}}, { $sort: { createdDate: -1 } }).exec();
+    return model.aggregate({$match: {account: loginName}}, {$limit: 10}, { $group: { _id: '$createdMonth', articleCount: { $sum: 1 }}},
+      { $sort: { createdDate: -1 } }).exec();
   }).then(function (articles) {
     data.articlesArchive = articles;//文章归档
 
@@ -393,9 +399,73 @@ ArticleDao.prototype.list = function (conditions, dataPage, callback) {
     }
     dataPage.setTotalItems(count);
     underscore.extend(conditions, {status: 'publish'});
-    model.find(conditions, {_id: 1, title: 1, content: 1, articleLink: 1, createdDate: 1}, {skip: skip, limit: limit}, function (err, docs) {
+    model.find(conditions, {_id: 1, title: 1, content: 1, articleLink: 1, createdDate: 1}, {skip: skip, limit: limit, sort: {_id: -1}}, function (err, docs) {
       dataPage.setItems(docs);
       return callback(err, dataPage);
     });
+  });
+};
+
+/**
+ * 获取文章相关数据
+ * @param loginName {String} 账户登录名
+ * @param articleId {String} 文章id
+ * @param callback {function} 回调函数
+ */
+ArticleDao.prototype.articleInfo = function (loginName, articleId, callback) {
+  //以下加载文章内容，相关文章，前后文章，评论列表
+  var data = {};
+  var model = this.model;
+  var conditions = {account: loginName, status: 'publish'};
+  var articleLabels;
+  var promise = model.findById(articleId, {_id: 1, title: 1, content: 1, labels: 1, articleLink: 1, createdDate: 1}).exec();
+
+  promise.then(function (article) {
+    data.article = article;//文章信息
+    data.article.createdDate = moment(article.createdDate).format('YYYY年MM月DD日');
+
+    articleLabels = article.labels;
+
+    return commentModel.find({articleID: articleId }, {_id: 1, author: 1, content: 1, createdDate: 1, commentParent: 1}).sort({_id: 1}).exec();
+  }).then(function (comments) {
+    if (comments) {
+      var items = comments.map(function (item) {
+        return {
+          _id: item._id.toString(),
+          author: item.author,
+          content: item.content,
+          commentParent: item.commentParent
+        };
+      });
+      // FIXME 这里没有按照评论相关联排序，交由前端实现，也可在后台实现
+      // FIXME 文章评论，这里一次性加载，不再分页，后期再考虑分页显示
+      items = commonMethod.setItemLevel(items, 'commentParent');
+      data.comments = items;
+    }
+
+    //前一篇文章
+    return model.findOne({_id: { $lt: ObjectId(articleId)}}, {_id: 1, title: 1, articleLink: 1}).exec();
+  }).then(function (article) {
+    data.prevArticle = article;//前一篇文章
+
+    //后一篇文章
+    return model.findOne({_id: { $gt: ObjectId(articleId)}}, {_id: 1, title: 1, articleLink: 1}).exec();
+  }).then(function (article) {
+    data.nextArticle = article;//后一篇文章
+
+    //查询相关文章，目前以文章相关标签为依据来查询
+    var labels = articleLabels;
+    var _labels = labels.map(function (item) {
+      return item;
+    });
+    var _conditions = conditions;
+    underscore.extend(_conditions, {_id: {$ne: ObjectId(articleId)}, labels: { $in: _labels }});
+    return model.find(_conditions, {_id: 1, title: 1, articleLink: 1, createdDate: 1}, {limit: 5}).sort({_id: -1}).exec();
+  }).then(function (articles) {
+    data.relatedArticle = articles;//相关文章
+
+    return callback(null, data);
+  }).then(null, function (err) {
+    return callback(err);
   });
 };

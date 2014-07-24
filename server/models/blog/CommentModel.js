@@ -10,12 +10,13 @@ var Schema = mongoose.Schema;
  */
 var schema = new Schema({
   articleID: { type: String },
-  account: { type: String },//即作者，这里保存账户登录名，登录名是唯一的
-  accountEmail: { type: String },
-  accountIP: { type: String },
-  content: { type: String },
-  browserAgent: { type: String },//浏览器 Agent
-  commentParent: { type: String },//所属父评论，默认为0
+  account: { type: String },//即文章作者，这里保存账户登录名，
+  author: { type: String },//即评论者，如果用户已登录，取其登录名
+  accountEmail: { type: String },//评论者邮箱，同样用户已登录，取其邮箱
+  accountIP: { type: String },//评论者IP
+  content: { type: String },//评论内容
+  browserAgent: { type: String },//评论者 浏览器 Agent
+  commentParent: { type: String },//所属父评论
   createdDate: { type: Date, default: Date.now },
   updatedDate: { type: Date, default: Date.now }
 });

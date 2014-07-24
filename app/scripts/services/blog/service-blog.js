@@ -9,6 +9,10 @@ angular.module('hopefutureBlogApp')
 
       articles: function (account, data, success) {
         hfbHttpService.get(account + '/articles', data).then(success);
+      },
+
+      articleInfo: function (account, id, success) {
+        hfbHttpService.get(account + '/article/' + id).then(success);
       }
     };
   }]);

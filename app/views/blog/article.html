@@ -1,0 +1,155 @@
+<h3>{{article.title}} {{article.createdDate}}</h3>
+
+<div class="margin10-TB">
+  <strong>转载请标注出处： </strong> <a ng-href="{{articleLink}}">{{articleLink}}</a>
+</div>
+<div class="blog-content" ng-bind-html="article.content">
+
+</div>
+<!--/.blog-content -->
+
+<div class="margin10-TB">
+  <strong>转载请标注出处： </strong> <a ng-href="{{articleLink}}">{{articleLink}}</a>
+</div>
+
+<div class="navigation-post">
+  <ul class="pager">
+    <li class="previous" ng-if="prevArticle">
+      <a ng-href="{{prevArticle.articleLink}}">
+        <span class="glyphicon glyphicon-chevron-left"></span> {{prevArticle.title}}
+      </a>
+    </li>
+    <li class="next" ng-if="nextArticle">
+      <a ng-href="{{nextArticle.articleLink}}">
+        {{nextArticle.title}} <span class="glyphicon glyphicon-chevron-right"></span>
+      </a>
+    </li>
+  </ul>
+</div>
+
+<div class="panel panel-info">
+  <div class="panel-heading">
+    <h3 class="panel-title">相关文章</h3>
+  </div>
+  <div class="panel-body">
+    <ul>
+      <li ng-repeat="article in relatedArticle"><a ng-href="{{article.articleLink}}">{{article.title}}</a> <span>{{article.createdDate}}</span></li>
+    </ul>
+  </div>
+</div>
+
+<div class="blog-comment">
+  <h3>评论</h3>
+  <hr/>
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h3 class="panel-title"></h3>
+    </div>
+    <div class="panel-body">
+      <textarea style="width:95%;height: 200px;"></textarea>
+
+      <div class="margin10-T">
+        <button class="btn btn-primary btn-default" type="button">发表评论</button>
+      </div>
+    </div>
+  </div>
+  <ul class="list-unstyled comment">
+    <li>
+      <div class="clearfix">
+        <img class="pull-left" src="./images/head-portrait.png" alt="头像" width="50px" height="50px"/>
+
+        <div class="pull-left margin20-L">
+          <p><a href="#">2014年5月23日 at 上午10:26</a></p>
+
+          <p>Linder</p>
+        </div>
+      </div>
+      <div class="comment-content">
+        写的不错，学习了
+      </div>
+      <div>
+        <a href=""><span class="glyphicon glyphicon-share-alt"></span> 回复</a>
+      </div>
+      <ul class="list-unstyled comment">
+        <li>
+          <div class="clearfix">
+            <img class="pull-left" src="./images/head-portrait.png" alt="头像" width="50px" height="50px"/>
+
+            <div class="pull-left margin20-L">
+              <p><a href="#">2014年5月23日 at 上午10:26</a></p>
+
+              <p>Linder</p>
+            </div>
+          </div>
+          <div class="comment-content">
+            回复1
+          </div>
+          <div>
+            <a href=""><span class="glyphicon glyphicon-share-alt"></span> 回复</a>
+          </div>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <div class="clearfix">
+        <img class="pull-left" src="./images/head-portrait.png" alt="头像" width="50px" height="50px"/>
+
+        <div class="pull-left margin20-L">
+          <p><a href="#">2014年5月23日 at 上午10:26</a></p>
+
+          <p>Linder</p>
+        </div>
+      </div>
+      <div class="comment-content">
+        评论二
+      </div>
+      <div>
+        <a href=""><span class="glyphicon glyphicon-share-alt"></span> 回复</a>
+      </div>
+    </li>
+    <li>
+      <div class="clearfix">
+        <img class="pull-left" src="./images/head-portrait.png" alt="头像" width="50px" height="50px"/>
+
+        <div class="pull-left margin20-L">
+          <p><a href="#">2014年5月23日 at 上午10:26</a></p>
+
+          <p>Linder</p>
+        </div>
+      </div>
+      <div class="comment-content">
+        评论三
+      </div>
+      <div>
+        <a href=""><span class="glyphicon glyphicon-share-alt"></span> 回复</a>
+      </div>
+    </li>
+  </ul>
+
+  <ul class="pagination">
+    <li><a href="#">&laquo;</a></li>
+    <li><a href="#">‹</a></li>
+    <li><a href="#">1</a></li>
+    <li><a href="#">2</a></li>
+    <li><a href="#">3</a></li>
+    <li><a href="#">›</a></li>
+    <li><a href="#">&raquo;</a></li>
+  </ul>
+
+  <hr/>
+
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h3 class="panel-title"></h3>
+    </div>
+    <div class="panel-body">
+      <textarea style="width:95%;height: 200px;"></textarea>
+
+      <div class="margin10-T">
+        <button class="btn btn-primary btn-default" type="button">发表评论</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+<!--/.blog-comment -->

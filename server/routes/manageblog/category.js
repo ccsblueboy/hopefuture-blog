@@ -1,50 +1,8 @@
 'use strict';
 
-var categoryDao = require('./../../dao/blog/CategoryDao.js');
+var categoryDao = require('./../../dao/blog/CategoryDao');
+var commonMethod = require('./../../utils/commonMethod');
 var underscore = require('underscore');
-
-function setItemLevel(docs) {
-  /**
-   * 递归设置节点 level
-   * @param item
-   * @param map
-   * @returns {*}
-   */
-  var setLevel = function (item, map) {
-    if (!item.parent) {
-      return 0;
-    }
-    var level = item.level;
-    if (level !== undefined) {
-      return level;
-    } else {
-      level = setLevel(map[item.parent], map);
-      item.level = level + 1;
-      return level + 1;
-    }
-  };
-
-  // 给数据加上level
-  var i, len = docs.length, item, map = {}, items = [];
-  for (i = 0; i < len; i++) {
-    var doc = docs[i]._doc;
-    item = {
-      _id: doc._id,
-      name: doc.name,
-      count: doc.count,
-      parent: doc.parent
-    };
-    items.push(item);
-    map[doc._id] = item;
-  }
-  for (i = 0; i < len; i++) {
-    item = items[i];
-    if (item.level === undefined) {
-      item.level = setLevel(item, map);
-    }
-  }
-  return items;
-}
 
 var category = {
 
@@ -52,7 +10,15 @@ var category = {
     var loginName = req.baseUrl.split('/')[1];
     categoryDao.list(null, loginName, function (err, docs) {
       if (!err) {
-        var items = setItemLevel(docs);
+        var items = docs.map(function (item) {
+          return {
+            _id: item._id.toString(),
+            name: item.name,
+            count: item.count,
+            parent: item.parent
+          };
+        });
+        items = commonMethod.setItemLevel(items);
         res.send({
           success: true,
           items: items
@@ -68,7 +34,15 @@ var category = {
     var loginName = req.baseUrl.split('/')[1];
     categoryDao.list(searchContent, loginName, function (err, docs) {
       if (!err) {
-        var items = setItemLevel(docs);
+        var items = docs.map(function (item) {
+          return {
+            _id: item._id.toString(),
+            name: item.name,
+            count: item.count,
+            parent: item.parent
+          };
+        });
+        items = commonMethod.setItemLevel(items);
         res.send({
           success: true,
           items: items
@@ -92,7 +66,15 @@ var category = {
         console.error(err);
         res.send({success: false, err: err});
       } else {
-        var items = setItemLevel(docs);
+        var items = docs.map(function (item) {
+          return {
+            _id: item._id.toString(),
+            name: item.name,
+            count: item.count,
+            parent: item.parent
+          };
+        });
+        items = commonMethod.setItemLevel(items);
         res.send({
           success: true,
           items: items
@@ -125,7 +107,15 @@ var category = {
         console.error(err);
         res.send({success: false, err: err});
       } else {
-        var newItems = setItemLevel(docs);
+        var newItems = docs.map(function (item) {
+          return {
+            _id: item._id.toString(),
+            name: item.name,
+            count: item.count,
+            parent: item.parent
+          };
+        });
+        newItems = commonMethod.setItemLevel(newItems);
         res.send({
           success: true,
           items: newItems
