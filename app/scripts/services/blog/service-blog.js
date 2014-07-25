@@ -13,6 +13,10 @@ angular.module('hopefutureBlogApp')
 
       articleInfo: function (account, id, success) {
         hfbHttpService.get(account + '/article/' + id).then(success);
+      },
+
+      comment: function (account, data, success) {
+        hfbHttpService.post(account + '/comment', data).then(success);
       }
     };
   }]);

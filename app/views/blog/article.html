@@ -1,17 +1,37 @@
-<h3>{{article.title}} {{article.createdDate}}</h3>
+<article>
+  <h3>{{article.title}} <span class="article-subtitle">{{article.createdDate}}</span></h3>
 
-<div class="margin10-TB">
-  <strong>转载请标注出处： </strong> <a ng-href="{{articleLink}}">{{articleLink}}</a>
-</div>
-<div class="blog-content" ng-bind-html="article.content">
+  <div class="margin10-TB" style="display:none;">
+    <strong>转载请标注出处： </strong> <a ng-href="{{articleLink}}">{{articleLink}}</a>
+  </div>
+  <div class="blog-content" ng-bind-html="article.content">
 
-</div>
-<!--/.blog-content -->
+  </div>
+  <!--/.blog-content -->
 
-<div class="margin10-TB">
-  <strong>转载请标注出处： </strong> <a ng-href="{{articleLink}}">{{articleLink}}</a>
-</div>
+  <div class="margin10-TB" style="display:none;">
+    <strong>转载请标注出处： </strong> <a ng-href="{{articleLink}}">{{articleLink}}</a>
+  </div>
 
+  <aside class="article-meta">
+    <ul class="list-unstyled clearfix">
+      <li>
+        <span class="glyphicon glyphicon-folder-close"></span>
+        <a ng-repeat="category in article.categories" title="查看{{category.name}}中的全部文章" href="">{{category.name}}</a>
+      </li>
+      <li>
+        <span class="glyphicon glyphicon-heart-empty"></span>
+        <a title="文章《{{article.title}}》的评论数" href="#">{{comments.length}} 条评论</a>
+      </li>
+      <li class="tags">
+        <span class="glyphicon glyphicon-tags"></span>
+        <a ng-repeat="label in article.labels" href="">{{category.label}}</a>
+
+      </li>
+    </ul>
+
+  </aside>
+</article>
 <div class="navigation-post">
   <ul class="pager">
     <li class="previous" ng-if="prevArticle">
@@ -33,7 +53,8 @@
   </div>
   <div class="panel-body">
     <ul>
-      <li ng-repeat="article in relatedArticle"><a ng-href="{{article.articleLink}}">{{article.title}}</a> <span>{{article.createdDate}}</span></li>
+      <li ng-repeat="article in relatedArticle"><a ng-href="{{article.articleLink}}">{{article.title}}</a>
+        <span>{{article.createdDate}}</span></li>
     </ul>
   </div>
 </div>
@@ -41,18 +62,9 @@
 <div class="blog-comment">
   <h3>评论</h3>
   <hr/>
-  <div class="panel panel-primary">
-    <div class="panel-heading">
-      <h3 class="panel-title"></h3>
-    </div>
-    <div class="panel-body">
-      <textarea style="width:95%;height: 200px;"></textarea>
 
-      <div class="margin10-T">
-        <button class="btn btn-primary btn-default" type="button">发表评论</button>
-      </div>
-    </div>
-  </div>
+  <div id="commentList"></div>
+
   <ul class="list-unstyled comment">
     <li>
       <div class="clearfix">
@@ -126,28 +138,45 @@
     </li>
   </ul>
 
-  <ul class="pagination">
-    <li><a href="#">&laquo;</a></li>
-    <li><a href="#">‹</a></li>
-    <li><a href="#">1</a></li>
-    <li><a href="#">2</a></li>
-    <li><a href="#">3</a></li>
-    <li><a href="#">›</a></li>
-    <li><a href="#">&raquo;</a></li>
-  </ul>
-
   <hr/>
 
   <div class="panel panel-primary">
     <div class="panel-heading">
-      <h3 class="panel-title"></h3>
+      <h3 class="panel-title">发表评论</h3>
     </div>
     <div class="panel-body">
-      <textarea style="width:95%;height: 200px;"></textarea>
+      <form name="commentForm" comment-validator="validator">
+        <textarea rows="5" class="form-control" ng-model="comment.content" required=""></textarea>
 
-      <div class="margin10-T">
-        <button class="btn btn-primary btn-default" type="button">发表评论</button>
-      </div>
+        <div class="row margin10-T" ng-if="!$parent.account">
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label for="commentator"><i class="required">*</i> 昵称</label>
+              <input type="text" placeholder="请输入昵称或姓名" id="commentator" class="form-control" ng-model="comment.commentator" required=""
+                     maxlength="100"/>
+            </div>
+          </div>
+
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label for="email"><i class="required">*</i> Email</label>
+              <input type="email" placeholder="请输入您的email，方便交流" id="email" class="form-control" ng-model="comment.email" required=""
+                     maxlength="100"/>
+            </div>
+          </div>
+
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label for="site">个人博客或站点</label>
+              <input type="text" id="site" class="form-control" ng-model="comment.site" maxlength="100"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="margin10-T">
+          <button class="btn btn-primary btn-default" type="button" ng-click="publishComment();">发表评论</button>
+        </div>
+      </form>
     </div>
   </div>
 

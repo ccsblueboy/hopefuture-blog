@@ -9,7 +9,7 @@
 var commonMethod = {
 
   /**
-   * 根据 array 数据 存在父节点管理来动态设置其 level
+   * 对 items {Array} 数据（存在父子节点关系）动态设置其 level
    * @param items 要设置的数组
    * @param parentField 父节点字段名称
    * @returns {Array}
@@ -51,6 +51,47 @@ var commonMethod = {
       }
     }
     return items;
+  },
+
+  /**
+   * 把 items {Array} 数据（存在父子节点关系）转换为树形数据
+   * @param items 要转换的数组
+   * @param parentField 父节点字段名称
+   * @returns {Array}
+   */
+  convertTreeNode: function (items, parentField) {
+    parentField = parentField || 'parent';
+    var array = [];
+
+    var i, len = items.length, map = {};
+    //数组转换为键值对
+    for (i = 0; i < len; i++) {
+      items[i].children = [];
+      map[items[i]._id] = items[i];
+    }
+
+    var hashMap = {};
+    items.forEach(function (item) {
+      if (!hashMap[item._id]) {//如果没有处理该item
+        hashMap[item._id] = item;//标记为处理
+
+        var parentId = item[parentField];
+        if (parentId) {//有父节点
+          if (hashMap[parentId]) {//父节点是否被处理过（即放入到array中）
+            hashMap[parentId].children.push(item);
+          } else {
+            var parentNode = map[parentId];
+            //设置子节点
+            parentNode.children.push(item);
+            array.push(parentNode);//放置父节点
+            hashMap[parentId] = parentNode;//标记为处理过
+          }
+        } else {//没有父节点，直接放入array中
+          array.push(item);
+        }
+      }
+    });
+    return array;
   }
 };
 

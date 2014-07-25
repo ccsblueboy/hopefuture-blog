@@ -1,8 +1,10 @@
 'use strict';
 
-var articleDao = require('./../../dao/blog/ArticleDao.js');
+var articleDao = require('./../../dao/blog/ArticleDao');
 var DataPage = require('../../utils/DataPage');
-var accountDao = require('./../../dao/account/AccountDao.js');
+var accountDao = require('./../../dao/account/AccountDao');
+var sessionManage = require('./../../utils/sessionManage');
+var commentDao = require('./../../dao/blog/CommentDao');
 
 var blog = {
   index: function (req, res) {
@@ -69,9 +71,39 @@ var blog = {
           success: false
         });
       } else {
+        // 如果登陆，设置用户信息
+        var account = sessionManage.getAccountSession(req);
+        if (account) {
+          data.account = {
+            commentator: account.loginName,
+            email: account.email
+          };
+        }
         res.send({
           success: true,
           articleInfo: data
+        });
+      }
+    });
+  },
+
+  comment: function (req, res) {
+    var loginName = req.baseUrl.split('/')[1];
+    var comment = req.body;
+    comment.account = loginName;
+    comment.browserAgent = req.headers['user-agent'];
+    comment.ip = req._remoteAddress;
+
+    commentDao.save(comment, function (err, data) {
+      if (err) {
+        res.send({
+          success: false,
+          errMessage: err
+        });
+      } else {
+        res.send({
+          success: true,
+          comment: data
         });
       }
     });
@@ -86,5 +118,6 @@ router.get('/manage', blog.manage);//管理我的博客，需要登录
 router.get('/blog', blog.blog);//获取博客相关数据
 router.get('/articles', blog.articles);//文章列表
 router.get('/article/:articleId', blog.article);//文章相关信息
+router.post('/comment', blog.comment);//发表评论
 
 module.exports = router;

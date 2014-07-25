@@ -11,9 +11,10 @@ var Schema = mongoose.Schema;
 var schema = new Schema({
   articleID: { type: String },
   account: { type: String },//即文章作者，这里保存账户登录名，
-  author: { type: String },//即评论者，如果用户已登录，取其登录名
-  accountEmail: { type: String },//评论者邮箱，同样用户已登录，取其邮箱
-  accountIP: { type: String },//评论者IP
+  commentator: { type: String },//即评论者，如果用户已登录，取其登录名
+  email: { type: String },//评论者邮箱，同样用户已登录，取其邮箱
+  ip: { type: String },//评论者IP
+  site: { type: String },//评论者个人站点或个人博客
   content: { type: String },//评论内容
   browserAgent: { type: String },//评论者 浏览器 Agent
   commentParent: { type: String },//所属父评论

@@ -10,7 +10,7 @@
  * */
 
 angular.module('hopefutureBlogApp')
-  .controller('ArticleCtrl', function ($scope, $location, blogService) {
+  .controller('ArticleCtrl', function ($scope, $location, $modal, blogService, errorCodes, blogMethod) {
 
     var pathname = window.location.pathname;
     var account = pathname.substring(1);
@@ -25,12 +25,22 @@ angular.module('hopefutureBlogApp')
     $scope.nextArticle = undefined;
     $scope.relatedArticle = [];
 
-    var path = $location.path();
+    // 评论表单
+    $scope.comment = {
+      articleID: undefined,
+      commentator: '',
+      content: '',
+      email: '',
+      site: '',
+      commentParent: undefined
+    };
 
+    var path = $location.path();
     var id = path.substring(path.lastIndexOf('/') + 1);
     blogService.articleInfo(account, id, function (data) {
       if (data.success === true) {
         $scope.article = data.articleInfo.article;
+
         $scope.comments = data.articleInfo.comments;
         if (data.articleInfo.prevArticle) {
           $scope.prevArticle = data.articleInfo.prevArticle;
@@ -46,7 +56,44 @@ angular.module('hopefutureBlogApp')
         angular.forEach(function (item) {
           item.articleLink = absUrl.replace(articleIdReg, '/' + item._id);
         });
+
+        $scope.comment.articleID = data.articleInfo.article._id;
+        if (data.account) {
+          angular.extend($scope.comment, data.account);
+        }
+
+        //FIXME 这里递归渲染没有使用指令实现（以后有机会再研究），只是简单的通过模板来渲染html
+        var html = blogMethod.renderComment($scope.comments);
+        $('#commentList').html(html);
       }
     });
 
+    //发表评论
+    $scope.publishComment = function () {
+      if ($('form[name="commentForm"]').valid()) {
+        publishComment();
+      }
+    };
+
+    //提交发表评论
+    function publishComment() {
+      blogService.comment(account, $scope.comment, function (data) {
+        if (data.success) {
+          console.info(1);
+        } else {
+          var errCode = data.errMessage;
+          $modal.open({
+            templateUrl: '../views/templates/alertModal.html',
+            controller: 'AlertModalCtrl',
+            resolve: {
+              config: function () {
+                return {
+                  modalContent: errorCodes[errCode]
+                };
+              }
+            }
+          });
+        }
+      });
+    }
   });

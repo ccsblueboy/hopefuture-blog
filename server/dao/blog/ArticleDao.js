@@ -418,13 +418,27 @@ ArticleDao.prototype.articleInfo = function (loginName, articleId, callback) {
   var model = this.model;
   var conditions = {account: loginName, status: 'publish'};
   var articleLabels;
-  var promise = model.findById(articleId, {_id: 1, title: 1, content: 1, labels: 1, articleLink: 1, createdDate: 1}).exec();
+  var categories;
+
+  var promise = model.findById(articleId, {_id: 1, title: 1, content: 1, categories: 1, labels: 1, articleLink: 1, createdDate: 1}).exec();
 
   promise.then(function (article) {
     data.article = article._doc;//文章信息
-    data.article.createdDate = moment( data.article.createdDate).format('YYYY年MM月DD');
+    data.article.createdDate = moment(data.article.createdDate).format('YYYY年MM月DD HH:mm:ss');
+    articleLabels = article.labels.map(function (item) {
+      return item;
+    });
+    categories = article.categories.map(function (item) {
+      return item;
+    });
 
-    articleLabels = article.labels;
+    return CategoryModel.find({_id: { $in:categories }}, {_id: 1, name: 1}).exec();
+  }).then(function (categories) {
+    data.article.categories =categories;//文章分类
+
+    return LabelModel.find({_id: { $in:articleLabels }}, {_id: 1, name: 1}).exec();
+  }).then(function (labels) {
+    data.article.labels =labels;//文章标签
 
     return commentModel.find({articleID: articleId }, {_id: 1, author: 1, content: 1, createdDate: 1, commentParent: 1}).sort({_id: 1}).exec();
   }).then(function (comments) {
@@ -439,7 +453,8 @@ ArticleDao.prototype.articleInfo = function (loginName, articleId, callback) {
       });
       // FIXME 这里没有按照评论相关联排序，交由前端实现，也可在后台实现
       // FIXME 文章评论，这里一次性加载，不再分页，后期再考虑分页显示
-      items = commonMethod.setItemLevel(items, 'commentParent');
+      // 转换为树形数据
+      items = commonMethod.convertTreeNode(items, 'commentParent');
       data.comments = items;
     }
 
@@ -454,12 +469,8 @@ ArticleDao.prototype.articleInfo = function (loginName, articleId, callback) {
     data.nextArticle = article;//后一篇文章
 
     //查询相关文章，目前以文章相关标签为依据来查询
-    var labels = articleLabels;
-    var _labels = labels.map(function (item) {
-      return item;
-    });
     var _conditions = conditions;
-    underscore.extend(_conditions, {_id: {$ne: ObjectId(articleId)}, labels: { $in: _labels }});
+    underscore.extend(_conditions, {_id: {$ne: ObjectId(articleId)}, labels: { $in: articleLabels }});
     return model.find(_conditions, {_id: 1, title: 1, articleLink: 1, createdDate: 1}, {limit: 5}).sort({_id: -1}).exec();
   }).then(function (articles) {
     data.relatedArticle = articles;//相关文章
