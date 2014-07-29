@@ -4,6 +4,24 @@ angular.module('hopefutureBlogApp')
   .factory('blogMethod', function () {
 
     var re = /\{\{:([\w-]+)\}\}/g;
+    var ifRe = /\{\{if\s*([\w-]+)\}\}(.*?)\{\{\/if\}\}/g;//*? 表示懒惰匹配
+
+    //渲染评论模板
+    var tmpl =
+      '   <div class="clearfix">' +
+      '     <span class="pull-left head-portrait" title="头像"></span>' +
+      '     <div class="pull-left margin20-L">' +
+      '       <p><a href="">{{:createdDate}}</a></p>' +
+      '       <p>{{:commentator}}</p>' +
+      '     </div>' +
+      '   </div>' +
+      '   <div class="comment-content">{{:content}}</div>' +
+      '   {{if showReply}}' +
+      '      <div class="margin10-B">' +
+      '         <a href="" data-reply-comment="{{:_id}}"><span class="glyphicon glyphicon-share-alt"></span> 回复</a>' +
+      '     </div>' +
+      '   {{/if}}';
+
     // Public API here
     return {
       /**
@@ -14,6 +32,9 @@ angular.module('hopefutureBlogApp')
        * @returns {*}
        */
       applyTemplate: function (template, values) {
+        template = template.replace(ifRe, function (match, group1, group2) {
+          return values[group1] === true ? group2 : '';
+        });
         return template.replace(re, function (m, name) {
           return values[name] !== undefined ? values[name] : '';
         });
@@ -50,35 +71,28 @@ angular.module('hopefutureBlogApp')
         return items;
       },
 
-      renderComment: function (comments) {
+      /**
+       * 渲染所有的评论
+       * @param comments
+       * @returns {*}
+       */
+      renderComments: function (comments) {
         var self = this;
-        var tmpl =
-          '   <div class="clearfix">' +
-          '     <img class="pull-left" src="./images/head-portrait.png" alt="头像" width="50px" height="50px"/>' +
-          '     <div class="pull-left margin20-L">' +
-          '       <p><a href="#">2014年5月23日 at 上午10:26</a></p>' +
-          '       <p>Linder</p>' +
-          '     </div>' +
-          '   </div>' +
-          '   <div class="comment-content">' +
-          '     写的不错，学习了' +
-          '   </div>' +
-          '   <div>' +
-          '     <a href=""><span class="glyphicon glyphicon-share-alt"></span> 回复</a>' +
-          '   </div>';
 
-        function render(items) {
-          if (!items || items.length === 0) {
+        function render(items, level) {
+          if (!items) {
             return;
           }
-          var html = '<ul class="list-unstyled comment">';
+          var comentCls = items.length > 0 && level === 1 ? 'comment-has-content' : '';
+          var html = '<ul class="list-unstyled comment ' + comentCls + '">';
           var item;
           for (var i = 0, len = items.length; i < len; i++) {
-            html += '<li>';
             item = items[i];
+            html += '<li data-comment-id="' + item._id + '" comment-level="' + level + '">';
+            item.showReply = level < 5;
             html += self.applyTemplate(tmpl, item);
             if (item.children && item.children.length > 0) {
-              html += render(item.children);
+              html += render(item.children, level + 1);
             }
             html += '</li>';
           }
@@ -87,7 +101,21 @@ angular.module('hopefutureBlogApp')
           return html;
         }
 
-        var html = render(comments);
+        var html = render(comments, 1);
+        return html;
+      },
+
+      /**
+       * 渲染新添加的评论
+       * @param comments
+       * @param level
+       * @returns {*}
+       */
+      renderComment: function (comment, level) {
+        var html = '<li data-comment-id="' + comment._id + '" comment-level="' + level + '">';
+        comment.showReply = level < 5;
+        html += this.applyTemplate(tmpl, comment);
+        html += '</li>';
         return html;
       }
     };

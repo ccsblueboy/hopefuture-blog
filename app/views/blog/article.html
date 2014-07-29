@@ -61,122 +61,52 @@
 
 <div class="blog-comment">
   <h3>评论</h3>
-  <hr/>
 
   <div id="commentList"></div>
 
-  <ul class="list-unstyled comment">
-    <li>
-      <div class="clearfix">
-        <img class="pull-left" src="./images/head-portrait.png" alt="头像" width="50px" height="50px"/>
-
-        <div class="pull-left margin20-L">
-          <p><a href="#">2014年5月23日 at 上午10:26</a></p>
-
-          <p>Linder</p>
-        </div>
+  <div id="commentFormContainer">
+    <div class="panel panel-primary margin10-T" id="commentFormPanel">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          发表评论
+          <button type="button" class="close ng-hide" title="取消回复" ng-click="cancelReply();" ng-show="isReply">&times;</button>
+        </h3>
       </div>
-      <div class="comment-content">
-        写的不错，学习了
-      </div>
-      <div>
-        <a href=""><span class="glyphicon glyphicon-share-alt"></span> 回复</a>
-      </div>
-      <ul class="list-unstyled comment">
-        <li>
-          <div class="clearfix">
-            <img class="pull-left" src="./images/head-portrait.png" alt="头像" width="50px" height="50px"/>
+      <div class="panel-body">
+        <form name="commentForm" comment-validator="validator">
+          <textarea rows="5" class="form-control" ng-model="comment.content" required=""></textarea>
 
-            <div class="pull-left margin20-L">
-              <p><a href="#">2014年5月23日 at 上午10:26</a></p>
-
-              <p>Linder</p>
+          <div class="row margin10-T" ng-if="!$parent.account">
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label for="commentator"><i class="required">*</i> 昵称</label>
+                <input type="text" placeholder="请输入昵称或姓名" id="commentator" class="form-control" ng-model="comment.commentator" required=""
+                       maxlength="100"/>
+              </div>
             </div>
-          </div>
-          <div class="comment-content">
-            回复1
-          </div>
-          <div>
-            <a href=""><span class="glyphicon glyphicon-share-alt"></span> 回复</a>
-          </div>
-        </li>
-      </ul>
-    </li>
-    <li>
-      <div class="clearfix">
-        <img class="pull-left" src="./images/head-portrait.png" alt="头像" width="50px" height="50px"/>
 
-        <div class="pull-left margin20-L">
-          <p><a href="#">2014年5月23日 at 上午10:26</a></p>
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label for="email"><i class="required">*</i> Email</label>
+                <input type="email" placeholder="请输入您的email，方便交流" id="email" class="form-control" ng-model="comment.email" required=""
+                       maxlength="100"/>
+              </div>
+            </div>
 
-          <p>Linder</p>
-        </div>
-      </div>
-      <div class="comment-content">
-        评论二
-      </div>
-      <div>
-        <a href=""><span class="glyphicon glyphicon-share-alt"></span> 回复</a>
-      </div>
-    </li>
-    <li>
-      <div class="clearfix">
-        <img class="pull-left" src="./images/head-portrait.png" alt="头像" width="50px" height="50px"/>
-
-        <div class="pull-left margin20-L">
-          <p><a href="#">2014年5月23日 at 上午10:26</a></p>
-
-          <p>Linder</p>
-        </div>
-      </div>
-      <div class="comment-content">
-        评论三
-      </div>
-      <div>
-        <a href=""><span class="glyphicon glyphicon-share-alt"></span> 回复</a>
-      </div>
-    </li>
-  </ul>
-
-  <hr/>
-
-  <div class="panel panel-primary">
-    <div class="panel-heading">
-      <h3 class="panel-title">发表评论</h3>
-    </div>
-    <div class="panel-body">
-      <form name="commentForm" comment-validator="validator">
-        <textarea rows="5" class="form-control" ng-model="comment.content" required=""></textarea>
-
-        <div class="row margin10-T" ng-if="!$parent.account">
-          <div class="col-sm-4">
-            <div class="form-group">
-              <label for="commentator"><i class="required">*</i> 昵称</label>
-              <input type="text" placeholder="请输入昵称或姓名" id="commentator" class="form-control" ng-model="comment.commentator" required=""
-                     maxlength="100"/>
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label for="site">个人博客或站点</label>
+                <input type="text" id="site" class="form-control" ng-model="comment.site" maxlength="100"/>
+              </div>
             </div>
           </div>
 
-          <div class="col-sm-4">
-            <div class="form-group">
-              <label for="email"><i class="required">*</i> Email</label>
-              <input type="email" placeholder="请输入您的email，方便交流" id="email" class="form-control" ng-model="comment.email" required=""
-                     maxlength="100"/>
-            </div>
+          <div class="margin10-T">
+            <button class="btn btn-primary" type="button" ng-click="publishComment();">发表评论</button>
+            <button ng-click="cancelReply();" type="button" class="btn btn-default ng-hide" ng-show="isReply">取消回复</button>
           </div>
-
-          <div class="col-sm-4">
-            <div class="form-group">
-              <label for="site">个人博客或站点</label>
-              <input type="text" id="site" class="form-control" ng-model="comment.site" maxlength="100"/>
-            </div>
-          </div>
-        </div>
-
-        <div class="margin10-T">
-          <button class="btn btn-primary btn-default" type="button" ng-click="publishComment();">发表评论</button>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   </div>
 

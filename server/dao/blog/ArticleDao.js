@@ -347,7 +347,13 @@ ArticleDao.prototype.findBlogData = function (loginName, callback) {
 
     return model.find(conditions, {_id: 1, title: 1, articleLink: 1, createdDate: 1}, {limit: 10}).sort({createdDate: -1}).exec();
   }).then(function (articles) {
-    data.recentArticles = articles;//近期文章
+    var docs = articles.map(function (item) {
+      var doc = item._doc;
+      doc.createdDate = moment(doc.createdDate).format('YYYY年MM月DD HH:mm:ss');
+      return doc;
+    });
+    data.recentArticles = docs;//近期文章
+
     /**
      * 分组查询
      * http://blog.csdn.net/xtqve/article/details/8983868
@@ -432,22 +438,23 @@ ArticleDao.prototype.articleInfo = function (loginName, articleId, callback) {
       return item;
     });
 
-    return CategoryModel.find({_id: { $in:categories }}, {_id: 1, name: 1}).exec();
+    return CategoryModel.find({_id: { $in: categories }}, {_id: 1, name: 1}).exec();
   }).then(function (categories) {
-    data.article.categories =categories;//文章分类
+    data.article.categories = categories;//文章分类
 
-    return LabelModel.find({_id: { $in:articleLabels }}, {_id: 1, name: 1}).exec();
+    return LabelModel.find({_id: { $in: articleLabels }}, {_id: 1, name: 1}).exec();
   }).then(function (labels) {
-    data.article.labels =labels;//文章标签
+    data.article.labels = labels;//文章标签
 
-    return commentModel.find({articleID: articleId }, {_id: 1, author: 1, content: 1, createdDate: 1, commentParent: 1}).sort({_id: 1}).exec();
+    return commentModel.find({articleID: articleId }, {_id: 1, commentator: 1, content: 1, createdDate: 1, commentParent: 1}).sort({_id: 1}).exec();
   }).then(function (comments) {
     if (comments) {
       var items = comments.map(function (item) {
         return {
           _id: item._id.toString(),
-          author: item.author,
+          commentator: item.commentator,
           content: item.content,
+          createdDate: moment(item.createdDate).format('YYYY年MM月DD HH:mm:ss'),
           commentParent: item.commentParent
         };
       });

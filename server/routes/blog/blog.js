@@ -6,6 +6,10 @@ var accountDao = require('./../../dao/account/AccountDao');
 var sessionManage = require('./../../utils/sessionManage');
 var commentDao = require('./../../dao/blog/CommentDao');
 
+/**
+ * 个人博客相关route
+ *
+ */
 var blog = {
   index: function (req, res) {
     var loginName = req.baseUrl.split('/')[1];
@@ -94,11 +98,11 @@ var blog = {
     comment.browserAgent = req.headers['user-agent'];
     comment.ip = req._remoteAddress;
 
-    commentDao.save(comment, function (err, data) {
+    commentDao.comment(comment, function (err, data) {
       if (err) {
         res.send({
           success: false,
-          errMessage: err
+          errMessage: err.message
         });
       } else {
         res.send({

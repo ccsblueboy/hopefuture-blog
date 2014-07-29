@@ -10,7 +10,7 @@
  * */
 
 angular.module('hopefutureBlogApp')
-  .controller('ArticleCtrl', function ($scope, $location, $modal, blogService, errorCodes, blogMethod) {
+  .controller('ArticleCtrl', function ($scope, $location, $modal, $timeout, blogService, errorCodes, blogMethod) {
 
     var pathname = window.location.pathname;
     var account = pathname.substring(1);
@@ -26,13 +26,33 @@ angular.module('hopefutureBlogApp')
     $scope.relatedArticle = [];
 
     // 评论表单
-    $scope.comment = {
+    var comment = {
       articleID: undefined,
       commentator: '',
       content: '',
       email: '',
       site: '',
       commentParent: undefined
+    };
+
+    $scope.comment = angular.copy(comment);
+
+    $scope.isReply = false;//是否为回复评论
+    $scope.resetComment = function (isReply) {
+      $scope.isReply = isReply;
+      $scope.comment = angular.copy(comment);
+      $scope.validator.resetForm();
+    };
+
+    /**
+     * 取消回复
+     */
+    $scope.cancelReply = function () {
+      $timeout(function () {
+        var commentFormPanel = $('#commentFormPanel');
+        $('#commentFormContainer').append(commentFormPanel);
+        $scope.resetComment(false);
+      }, 100);
     };
 
     var path = $location.path();
@@ -57,14 +77,31 @@ angular.module('hopefutureBlogApp')
           item.articleLink = absUrl.replace(articleIdReg, '/' + item._id);
         });
 
+        comment.articleID = data.articleInfo.article._id;
         $scope.comment.articleID = data.articleInfo.article._id;
         if (data.account) {
+          angular.extend(comment, data.account);
           angular.extend($scope.comment, data.account);
         }
 
-        //FIXME 这里递归渲染没有使用指令实现（以后有机会再研究），只是简单的通过模板来渲染html
-        var html = blogMethod.renderComment($scope.comments);
+        //FIXME 这里递归渲染没有使用 angular 指令实现（以后有机会再研究），只是简单的通过模板来渲染html
+        var html = blogMethod.renderComments($scope.comments);
         $('#commentList').html(html);
+
+        //初始化事件
+        $('#commentList').on('click', 'a[data-reply-comment]', function (e) {
+          e.preventDefault();
+          var el = $(e.target);
+          var parentEl = el.parent();
+
+          var commentId = el.attr('data-reply-comment');
+          $scope.resetComment(true);
+          $scope.comment.commentParent = commentId;
+
+          var commentFormPanel = $('#commentFormPanel');
+          parentEl.after(commentFormPanel);
+          $scope.$apply();
+        });
       }
     });
 
@@ -79,7 +116,22 @@ angular.module('hopefutureBlogApp')
     function publishComment() {
       blogService.comment(account, $scope.comment, function (data) {
         if (data.success) {
-          console.info(1);
+          if ($scope.isReply) {
+            var commentFormPanel = $('#commentFormPanel');
+            $('#commentFormContainer').append(commentFormPanel);
+
+            var itmeEl = $('li[data-comment-id="' + $scope.comment.commentParent + '"]');
+            var html = blogMethod.renderComment(data.comment, parseInt(itmeEl.attr('comment-level')) + 1);
+            var childComment = itmeEl.children('ul.comment');
+            if (childComment.length === 0) {
+              childComment = $('<ul class="list-unstyled comment"/>').appendTo(itmeEl);
+            }
+            childComment.append(html);
+          } else {
+            $('#commentList ul.comment').append(blogMethod.renderComment(data.comment, 1));
+          }
+
+          $scope.resetComment(false);
         } else {
           var errCode = data.errMessage;
           $modal.open({

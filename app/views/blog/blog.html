@@ -61,14 +61,14 @@
         <div>
           <h3>最热文章</h3>
           <ol class="list-unstyled">
-            <li ng-repeat="article in blog.hotArticles">><a href="#">{{article.title}}</a> <span> - 539 views</span></li>
+            <li ng-repeat="article in blog.hotArticles"><a ng-href="#/article/{{article._id}}">{{article.title}}</a> <span> - 539 views</span></li>
           </ol>
         </div>
 
         <div>
           <h3>近期文章</h3>
           <ol class="list-unstyled">
-            <li ng-repeat="article in blog.recentArticles"><a href="#">{{article.title}}</a> <span>{{article.createdDate}}</span></li>
+            <li ng-repeat="article in blog.recentArticles"><a ng-href="#/article/{{article._id}}">{{article.title}}</a> <span>{{article.createdDate}}</span></li>
           </ol>
         </div>
 

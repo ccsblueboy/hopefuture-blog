@@ -65,6 +65,11 @@
   border-color: transparent transparent #fff transparent;
 }
 
+.comment-has-content {
+  border-top: 1px solid #EEEEEE;
+  margin: 20px 0;
+}
+
 .label-list > a {
   display: inline-block;
   margin-right: 10px;
@@ -85,4 +90,10 @@
 .article-meta > ul > li > a {
   margin-left: 8px;
   margin-right: 5px;
+}
+
+.head-portrait {
+  background: url("../images/head-portrait.png") no-repeat;
+  width: 50px;
+  height: 50px;
 }

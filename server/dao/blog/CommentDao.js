@@ -20,6 +20,48 @@ var moment = require('moment');
 module.exports = commentDao;
 
 /**
+ * 发布评论
+ * @method
+ * @param data {CommentModel} CommentModel 实例
+ * @param callback {function}回调函数
+ */
+CommentDao.prototype.comment = function (data, callback) {
+  var model = this.model;
+  var promise = model.findOne({articleID: data.articleID, content: data.content, commentator: data.commentator, email: data.email}, {_id: 1}).exec();
+  promise.then(function (comment) {
+    if (comment) {//评论内容不能重复
+      throw new Error('9005');
+    }
+
+    //同一篇文章同一个 ip 两次评论间隔不能小于30秒，防止灌水
+    //FIXME 关于防止灌水的算法待修改
+    var date = moment().add('s', -10).toDate();
+    return model.findOne({articleID: data.articleID, ip: data.ip, createdDate: { $gt: date}}, {_id: 1}).exec();
+  }).then(function (comment) {
+    if (comment) {
+      throw new Error('9004');
+    }
+    var entity = new model(data);
+    //当有错误发生时，返回err；product 是返回生成的实体，numberAffected which will be 1 when the document was found and updated in the database, otherwise 0.
+    entity.save(function (err, product, numberAffected) {
+      if (err) {
+        throw err;
+      } else {
+        var doc = product._doc;
+        return callback(err, {
+          _id: doc._id,
+          commentator: doc.commentator,
+          content: doc.content,
+          createdDate: moment(doc.createdDate).format('YYYY年MM月DD HH:mm:ss')
+        });
+      }
+    });
+  }).then(null, function (err) {
+    return callback(err);
+  });
+};
+
+/**
  * 保存数据，包括添加和修改
  * @method
  * @param data {CommentModel} CommentModel 实例
