@@ -16,6 +16,7 @@ function CommentDao(Model) {
 var CommentModel = require('../../models/blog/CommentModel');
 var commentDao = new CommentDao(CommentModel);
 var moment = require('moment');
+var underscore = require('underscore');
 
 module.exports = commentDao;
 
@@ -61,87 +62,36 @@ CommentDao.prototype.comment = function (data, callback) {
   });
 };
 
-/**
- * 保存数据，包括添加和修改
- * @method
- * @param data {CommentModel} CommentModel 实例
- * @param callback {function}回调函数
- */
-CommentDao.prototype.save = function (data, callback) {
-  var model = this.model;
-  if (data._id) {
-    var update = {
-    };
-    model.update({_id: data._id}, update, function (err, numberAffected, rawResponse) {
-      return callback(err);
-    });
-  } else {
-    var promise = model.findOne({articleID: data.articleID, content: data.content}, {_id: 1}).exec();
-    promise.then(function (comment) {
-      if (comment) {
-        return callback('9005');
-      }
-
-      //同一篇文章同一个 ip 两次评论间隔不能小于30秒，防止灌水
-      //FIXME 关于防止灌水的算法待修改
-      var date = moment().add('s', -30).toDate();
-      return model.findOne({articleID: data.articleID, ip: data.ip, createdDate: { $gt: date}}, {_id: 1}).exec();
-    }).then(function (comment) {
-      if (comment) {
-        return callback('9004');
-      }
-      var entity = new model(data);
-      //当有错误发生时，返回err；product 是返回生成的实体，numberAffected which will be 1 when the document was found and updated in the database, otherwise 0.
-      entity.save(function (err, product, numberAffected) {
-        return callback(err, product._doc);
-      });
-    }).then(null, function (err) {
-      return callback(err);
-    });
-  }
-};
-
-/**
- * 返回数据列表
- * @method
- * @param callback {function} 回调函数
- */
-CommentDao.prototype.list = function (callback) {
-  this.model.find({}, function (err, docs) {
-    return callback(err, docs);
-  });
-};
 
 /**
  * 分页显示
  * @method
  * @param dataPage {DataPage} 分页数据
+ * @param searchContent {String} 搜索内容
+ * @param loginName {String} 用户名
  * @param callback {function} 回调函数
  */
-CommentDao.prototype.pagination = function (dataPage, callback) {
+CommentDao.prototype.pagination = function (dataPage, searchContent, loginName, callback) {
   var skip = dataPage.itemsPerPage * (dataPage.currentPage - 1);
   var limit = dataPage.itemsPerPage;
   var model = this.model;
-  model.count({}, function (err, count) {
+  var conditions = {account: loginName};
+  if (searchContent) {
+    var match = new RegExp(searchContent, 'ig');
+    underscore.extend(conditions, { $or: [
+      { email: match },
+      { commentator: match } ,
+      { content: match }
+    ] });
+  }
+  model.count(conditions, function (err, count) {
     if (err === null) {
       dataPage.setTotalItems(count);
-      model.find({}, null, {skip: skip, limit: limit}, function (err, docs) {
+      model.find(conditions, {_id: 1, commentator: 1, email: 1, content: 1}, {skip: skip, limit: limit, sort: {_id: -1}}, function (err, docs) {
         dataPage.setItems(docs);
         return callback(err, dataPage);
       });
     }
-  });
-};
-
-/**
- * 根据id查询数据
- * @method
- * @param id {String} 主键
- * @param callback {function} 回调函数
- */
-CommentDao.prototype.findById = function (id, callback) {
-  this.model.findOne({_id: id}, function (err, model) {
-    return callback(err, model);
   });
 };
 

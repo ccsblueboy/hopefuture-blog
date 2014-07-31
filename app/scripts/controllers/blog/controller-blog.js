@@ -11,39 +11,40 @@
 
 angular.module('hopefutureBlogApp').controller('BlogCtrl', function ($scope, blogService, blogMethod) {
 
-    /**
-     * 创建新的文章
-     */
-    $scope.createBlog = function () {
-      window.location.href = window.location.origin + window.location.pathname + '/manage#/publish';
-    };
+  /**
+   * 创建新的文章
+   */
+  $scope.createBlog = function () {
+    window.location.href = window.location.origin + window.location.pathname + '/manage#/publish';
+  };
 
-    /**
-     * 管理我的博客
-     */
-    $scope.manageBlog = function () {
-      window.location.href = window.location.origin + window.location.pathname + '/manage#/article';
-    };
+  /**
+   * 管理我的博客
+   */
+  $scope.manageBlog = function () {
+    window.location.href = window.location.origin + window.location.pathname + '/manage#/article';
+  };
 
-    var pathname = window.location.pathname;
-    var account = pathname.substring(1);
+  var pathname = window.location.pathname;
+  var account = pathname.substring(1);
 
-    $scope.blog = {
-      account: undefined,
-      hotArticles: undefined,
-      recentArticles: undefined,
-      articlesArchive: undefined,
-      categories: undefined,
-      labels: undefined
-    };
-    /**
-     * 加载博客相关数据
-     */
-    blogService.blog(account, function (data) {
-      if (data.success === true) {
-        data.blogData.labels = blogMethod.parseArticleLabel(data.blogData.labels);
-        $scope.blog = data.blogData;
-      }
-    });
-
+  $scope.blog = {
+    account: undefined,
+    hotArticles: undefined,
+    recentArticles: undefined,
+    articlesArchive: undefined,
+    categories: undefined,
+    labels: undefined,
+    comments: undefined
+  };
+  /**
+   * 加载博客相关数据
+   */
+  blogService.blog(account, function (data) {
+    if (data.success === true) {
+      data.blogData.labels = blogMethod.parseArticleLabel(data.blogData.labels);
+      $scope.blog = data.blogData;
+    }
   });
+
+});

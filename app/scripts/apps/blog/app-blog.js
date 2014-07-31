@@ -19,14 +19,18 @@ angular.module('hopefutureBlogApp', ['ngRoute', 'ngSanitize', 'ui.bootstrap'])
         templateUrl: '../views/blog/article.html',
         controller: 'ArticleCtrl'
       })
-//      .when('/category', {//分类文章列表
-//        templateUrl: '../views/blog/category.html',
-//        controller: 'CategoryCtrl'
-//      })
-//      .when('/label', {//标签文章列表
-//        templateUrl: '../views/blog/label.html',
-//        controller: 'LabelCtrl'
-//      })
+      .when('/archive/:month', {//文章归档
+        templateUrl: '../views/blog/archive.html',
+        controller: 'ArchiveCtrl'
+      })
+      .when('/category/:id', {//文章分类目录
+        templateUrl: '../views/blog/category.html',
+        controller: 'CategoryCtrl'
+      })
+      .when('/label/:id', {//标签文章列表
+        templateUrl: '../views/blog/label.html',
+        controller: 'LabelCtrl'
+      })
       .otherwise({
         redirectTo: '/articles'
       });

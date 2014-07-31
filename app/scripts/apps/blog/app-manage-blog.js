@@ -35,6 +35,10 @@ angular.module('hopefutureBlogApp', ['ngRoute', 'ngAnimate', 'ngSanitize', 'ui.b
         templateUrl: '../views/manageblog/comment.html',
         controller: 'CommentCtrl'
       })
+      .when('/resource', {//资源链接
+        templateUrl: '../views/manageblog/resource.html',
+        controller: 'ResourceCtrl'
+      })
       .when('/setting', {//博客管理
         templateUrl: '../views/manageblog/setting.html',
         controller: 'SettingCtrl'

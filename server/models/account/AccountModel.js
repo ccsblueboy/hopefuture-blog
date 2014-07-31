@@ -15,6 +15,8 @@ var schema = new Schema({
   loginName: { type: String },//用户名，登录名，全站唯一
   name: { type: String },//用户别名
   englishName: {type: String},// 英文名字
+  sex: {type: String},// 性别
+  headPortrait: {type: String},// 头像
   residence: {type: String},// 来至于那里
   position: {type: String},// 职位
   salt: { type: String },//加密密钥

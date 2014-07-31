@@ -11,6 +11,9 @@ var blog = require('./blog/blog');
 var article = require('./manageblog/article');
 var category = require('./manageblog/category');
 var label = require('./manageblog/label');
+var comment = require('./manageblog/comment');
+var resource= require('./manageblog/resource');
+
 var sessionManage = require('../utils/sessionManage');
 
 /**
@@ -46,12 +49,18 @@ module.exports = function (app) {
     });
   });
 
+  app.use('/about', function (req, res) {
+    res.render('about');
+  });
+
   //用 url 变量来区分每个用户的博客，用户注册时不能用项目中存在的链接名称，注册时需要过滤一下，
-  //有：examples account login logout signup manage admin terms
+  //有：examples account login logout signup manage admin terms about
   app.use('/:account', blog);
 
   app.use('/:account/manage/article', article);// 管理文章
   app.use('/:account/manage/category', category);// 分类目录管理
   app.use('/:account/manage/label', label);// 标签
+  app.use('/:account/manage/comment', comment);// 评论
+  app.use('/:account/manage/resource', resource);// 资源链接
 
 };

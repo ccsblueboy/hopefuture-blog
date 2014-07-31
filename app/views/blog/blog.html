@@ -3,7 +3,7 @@
     <div class="container">
       <h1>我的博客</h1>
 
-      <p>{{blog.account.signature || '这家伙很懒，没有留下任何个人签名'}}</p>
+      <p ng-bind="blog.account.signature || '这家伙很懒，没有留下任何个人签名'"></p>
 
       <p><a href="mailto:{{blog.account.email}}">联系我</a></p>
     </div>
@@ -47,65 +47,77 @@
         <div>
           <h3>关于作者</h3>
 
-          <p>昵称: {{blog.account.name}}</p>
+          <p><span title="头像" class="{{blog.account.headPortrait}}"></span></p>
 
-          <p>英文名:{{blog.account.englishName}}</p>
+          <p>昵称: <span ng-bind="blog.account.name"></span></p>
 
-          <p>漂泊地: {{blog.account.residence}}</p>
+          <p>性别: <span ng-bind="blog.account.sex"></span></p>
 
-          <p>职位：{{blog.account.position}}</p>
+          <p>英文名: <span ng-bind="blog.account.englishName"></span></p>
 
-          <p>email：{{blog.account.email}}</p>
+          <p>漂泊地: <span ng-bind="blog.account.residence"></span></p>
+
+          <p>职位：<span ng-bind="blog.account.position"></span></p>
+
+          <p>email：<span ng-bind="blog.account.email"></span></p>
         </div>
 
         <div>
           <h3>最热文章</h3>
           <ol class="list-unstyled">
-            <li ng-repeat="article in blog.hotArticles"><a ng-href="#/article/{{article._id}}">{{article.title}}</a> <span> - 539 views</span></li>
+            <li ng-repeat="article in blog.hotArticles"><a ng-href="#/article/{{article._id}}">{{article.title}}</a>
+              <span> - 539 views</span></li>
           </ol>
         </div>
 
         <div>
           <h3>近期文章</h3>
           <ol class="list-unstyled">
-            <li ng-repeat="article in blog.recentArticles"><a ng-href="#/article/{{article._id}}">{{article.title}}</a> <span>{{article.createdDate}}</span></li>
+            <li ng-repeat="article in blog.recentArticles"><a ng-href="#/article/{{article._id}}">{{article.title}}</a> <span>{{article.createdDate}}</span>
+            </li>
           </ol>
         </div>
 
         <div>
           <h3>文章归档</h3>
           <ol class="list-unstyled">
-            <li ng-repeat="archive in blog.articlesArchive"><a href="#">{{archive._id}}</a> <span>（{{archive.articleCount}}）</span></li>
+            <li ng-repeat="archive in blog.articlesArchive"><a ng-href="#/archive/{{archive._id}}">{{archive.month}}</a> <span>（{{archive.articleCount}}）</span>
+            </li>
           </ol>
         </div>
 
         <div>
           <h3>分类目录</h3>
           <ol class="list-unstyled">
-            <li ng-repeat="category in blog.categories"><a href="#">{{category.name}}</a> <span>（{{category.count}}）</span></li>
+            <li ng-repeat="category in blog.categories"><a ng-href="#/category/{{category._id}}">{{category.name}}</a> <span>（{{category.count}}）</span>
+            </li>
           </ol>
         </div>
 
         <div>
           <h3>标签</h3>
 
-          <div class="well well-sm label-list clearfix">
-            <a href="" ng-repeat="label in blog.labels" ng-style="label.style">{{label.name}}</a>
+          <div class="well well-sm label-list clearfix" ng-if="blog.labels.length>0">
+            <a ng-href="#/label/{{label._id}}" ng-repeat="label in blog.labels" ng-style="label.style">{{label.name}}</a>
           </div>
         </div>
 
         <div>
           <h3>近期评论</h3>
           <ol class="list-unstyled">
-            <li>张三评论了&lt;&lt;AngularJS源码分析&gt;&gt; 这篇文章写得不错...</li>
-            <li>张三评论了&lt;&lt;AngularJS源码分析&gt;&gt; 这篇文章写得不错...</li>
+            <li ng-repeat="comment in blog.comments">
+              {{comment.commentator}}评论了
+              《<a ng-href="#/article/{{comment.articleID}}">{{comment.articleTitle}}</a>》
+            </li>
           </ol>
         </div>
 
         <div>
-          <h3>站外博客</h3>
+          <h3>资源链接</h3>
           <ol class="list-unstyled">
-            <li><a href="#">AngularJs</a></li>
+            <li ng-repeat="resource in blog.resources">
+              <a target="_blank" ng-href="{{resource.link}}">{{resource.name}}</a>
+            </li>
           </ol>
         </div>
       </aside>

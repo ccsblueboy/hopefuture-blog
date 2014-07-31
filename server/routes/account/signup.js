@@ -23,7 +23,7 @@ var account = {
    */
   duplicate: function (req, res) {
     var loginName = req.query.loginName;
-    var filters = ['examples', 'account', 'login', 'logout', 'signup', 'manage', 'admin', 'terms'];
+    var filters = ['examples', 'account', 'login', 'logout', 'signup', 'manage', 'admin', 'terms', 'about'];
     if (filters.indexOf(loginName) !== -1) {
       res.send(false);
       return;

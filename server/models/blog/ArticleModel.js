@@ -22,8 +22,6 @@ var schema = new Schema({
   type: { type: String },//文章类型
   categories: { type: Array },//文章所属分类
   labels: { type: Array },//文章标签
-  readCounts: { type: Number },//浏览总数
-  commentCounts: { type: Number },//评论总数
   createdMonth: { type: String },//创建的月份，方便文章归档显示
   createdDate: { type: Date, default: Date.now },
   updatedDate: { type: Date, default: Date.now }

@@ -10,14 +10,44 @@
  * */
 
 angular.module('hopefutureBlogApp')
-  .controller('SignupCtrl', function ($scope, signupService) {
+  .controller('SignupCtrl', function ($scope, signupService, accountInfo) {
 
     $scope.account = {
       loginName: '',
-      name: '',
       password: '',
-      email: ''
+      email: '',
+      name: '',
+      englishName: '',
+      residence: '',//居住地
+      position: '',//职位
+      headPortrait: 'head-portrait-default',//头像
+      sex: '',
+      site: '',
+      signature: ''//我的签名
     };
+
+    $scope.residence = accountInfo.residence;//居住地
+    $scope.headPortrait = accountInfo.headPortrait;//头像
+    $scope.position = accountInfo.position;//职位
+
+    //改变头像
+    $scope.changeHeadPortrait = function (event, value) {
+      $scope.account.headPortrait = value;
+      $(event.currentTarget).parent().addClass('active').siblings().removeClass('active');
+    };
+
+    //来自于，性别，职位 下拉框处理
+    $scope.selectBox = {
+      residence: false,
+      sex: false,
+      position: false
+    };
+    $scope.openDropDown = function ($event, type) {
+      $event.preventDefault();
+      $event.stopPropagation();
+      $scope.selectBox[type] = !$scope.selectBox[type];
+    };
+
 
     $scope.showForm = true;
     /**
@@ -36,4 +66,6 @@ angular.module('hopefutureBlogApp')
         }
       });
     };
+
+
   });

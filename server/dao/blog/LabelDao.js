@@ -39,7 +39,7 @@ LabelDao.prototype.pagination = function (dataPage, searchContent, loginName, ca
     underscore.extend(conditions, { $or: [
       { name: match } ,
       { description: match }
-    ] })
+    ] });
   }
   model.count(conditions, function (err, count) {
     if (err === null) {

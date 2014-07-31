@@ -1,6 +1,6 @@
 'use strict';
 
-var labelDao = require('./../../dao/blog/LabelDao.js');
+var labelDao = require('./../../dao/blog/LabelDao');
 var DataPage = require('../../utils/DataPage');
 var underscore = require('underscore');
 

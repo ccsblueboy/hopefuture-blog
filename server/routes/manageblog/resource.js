@@ -1,24 +1,20 @@
 'use strict';
 
-var articleDao = require('./../../dao/blog/ArticleDao.js');
-var DataPage = require('../../utils/DataPage');
+var resourceDao = require('./../../dao/blog/ResourceDao');
+var underscore = require('underscore');
 
-var article = {
-
-  paging: function (req, res) {
-    var options = {
-      itemsPerPage: req.query.itemsPerPage,
-      currentPage: req.query.currentPage
-    };
+var resource = {
+  list: function (req, res) {
     var loginName = req.baseUrl.split('/')[1];
-    var dataPage = new DataPage(options);
-    articleDao.pagination(loginName, dataPage, function (err, data) {
+
+    resourceDao.list(loginName, function (err, resources, categories) {
       if (err) {
         res.send({success: false});
       } else {
         res.send({
           success: true,
-          dataPage: data
+          items: resources,
+          categories: categories
         });
       }
     });
@@ -28,14 +24,15 @@ var article = {
     var data = req.body;
     var loginName = req.baseUrl.split('/')[1];
     data.account = loginName;
-    articleDao.save(data, function (err, id) {
+
+    resourceDao.save(data, function (err, doc) {
       if (err) {
         console.error(err);
         res.send({success: false, err: err});
       } else {
         res.send({
           success: true,
-          _id: id
+          item: doc
         });
       }
     });
@@ -43,7 +40,7 @@ var article = {
 
   edit: function (req, res) {
     var id = req.params.id;
-    articleDao.findById(id, function (err, model) {
+    resourceDao.findById(id, function (err, model) {
       if (err) {
         res.send({success: false});
       } else {
@@ -54,34 +51,35 @@ var article = {
       }
     });
   },
+
   delete: function (req, res) {
     var ids = req.query.ids;// ids is Array
-    if (Object.prototype.toString.call(ids) !== '[object Array]') {
+    if (!underscore.isArray(ids)) {
       ids = [ids];
     }
-
-    var loginName = req.baseUrl.split('/')[1];
-    articleDao.delete(loginName, ids, function (err) {
+    var conditions = { _id: { $in: ids } };
+    resourceDao.delete(conditions, function (err) {
       res.send({success: err === null});
     });
   }
+
 };
 
 var express = require('express');
 var router = express.Router();
 
-router.get('/', article.paging);
-router.post('/', article.save);
-router.get('/:id', article.edit);
-router.delete('/', article.delete);
+router.get('/', resource.list);
+router.post('/', resource.save);
+router.get('/:id', resource.edit);
+router.delete('/', resource.delete);
 
 /**
- * 文章管理路由
- * @module article
+ * 资源链接路由
+ * @module comment
  * @since 0.0.2
  * @version @@currentVersion
  * @author Linder linder0209@126.com
- * @createdDate 2014-6-16
+ * @createdDate 2014-7-31
  * */
 
 module.exports = router;

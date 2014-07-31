@@ -111,6 +111,59 @@ var blog = {
         });
       }
     });
+  },
+
+  archive: function (req, res) {
+    var loginName = req.baseUrl.split('/')[1];
+    var month = req.params.month;
+    articleDao.archive(loginName, month, function (err, articles) {
+      if (err) {
+        res.send({
+          success: false
+        });
+      } else {
+        res.send({
+          success: true,
+          articles: articles
+        });
+      }
+    });
+  },
+
+  category: function (req, res) {
+    var loginName = req.baseUrl.split('/')[1];
+    var id = req.params.id;
+    articleDao.category(loginName, id, function (err, articles, category) {
+      if (err) {
+        res.send({
+          success: false
+        });
+      } else {
+        res.send({
+          success: true,
+          articles: articles,
+          category: category
+        });
+      }
+    });
+  },
+
+  label: function (req, res) {
+    var loginName = req.baseUrl.split('/')[1];
+    var id = req.params.id;
+    articleDao.label(loginName, id, function (err, articles, label) {
+      if (err) {
+        res.send({
+          success: false
+        });
+      } else {
+        res.send({
+          success: true,
+          articles: articles,
+          label: label
+        });
+      }
+    });
   }
 };
 
@@ -123,5 +176,8 @@ router.get('/blog', blog.blog);//获取博客相关数据
 router.get('/articles', blog.articles);//文章列表
 router.get('/article/:articleId', blog.article);//文章相关信息
 router.post('/comment', blog.comment);//发表评论
+router.get('/archive/:month', blog.archive);//文章归档
+router.get('/category/:id', blog.category);//分类目录文章列表
+router.get('/label/:id', blog.label);//标签文章列表
 
 module.exports = router;

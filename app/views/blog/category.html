@@ -1,0 +1,44 @@
+<h1 style="margin-bottom: 20px;">分类目录：{{category}}</h1>
+
+<article ng-repeat="article in articles">
+  <header>
+    <h4>
+      <a  ng-href="#/article/{{article._id}}">
+        <span class="glyphicon glyphicon-calendar"></span>
+        {{article.createdDate}}
+      </a>
+    </h4>
+
+    <h2><a ng-href="#/article/{{article._id}}">{{article.title}}</a></h2>
+  </header>
+
+  <section class="margin10-B">
+
+    {{article.content}}
+
+  </section>
+
+  <aside class="article-meta">
+    <ul class="list-unstyled clearfix">
+      <li ng-if="article.categories">
+        <span class="glyphicon glyphicon-folder-close"></span>
+        <a ng-href="#/category/{{category._id}}" ng-repeat="category in article.categories" title="查看{{category.name}}中的全部文章" href="">{{category.name}}</a>
+      </li>
+      <li>
+        <span class="glyphicon glyphicon-heart-empty"></span>
+        <a ng-href="" title="文章《{{article.title}}》的评论数" href="#">{{article.commentCount || 0}} 条评论</a>
+      </li>
+      <li ng-if="article.label">
+        <span class="glyphicon glyphicon-tags"></span>
+        <a ng-href="#/label/{{label._id}}" ng-repeat="label in article.labels" href="">{{label.name}}</a>
+      </li>
+      <li>
+        <span class="glyphicon glyphicon-user"></span>
+        <a ng-href="/{{article.account}}" href="">{{article.account}}</a>
+      </li>
+    </ul>
+
+  </aside>
+  <!-- /.post-meta -->
+  <hr/>
+</article>

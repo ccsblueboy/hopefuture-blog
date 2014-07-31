@@ -22,8 +22,10 @@ var categoryDao = require('./CategoryDao');
 
 var LabelModel = require('../../models/blog/LabelModel');
 var CategoryModel = require('../../models/blog/CategoryModel');
-var accountModel = require('../../models/account/AccountModel');
-var commentModel = require('../../models/blog/CommentModel');
+var AccountModel = require('../../models/account/AccountModel');
+var CommentModel = require('../../models/blog/CommentModel');
+var ArticleMetaModel = require('../../models/blog/ArticleMetaModel');
+
 var commonMethod = require('./../../utils/commonMethod');
 var ObjectId = require('mongoose').Types.ObjectId;
 
@@ -283,12 +285,13 @@ ArticleDao.prototype.findById = function (id, callback) {
  * 删除记录
  * @method
  * @param loginName {String} 账户登录名
- * @param conditions { Object }
+ * @param ids { Array } 文章id
  * 要删除数据的条件，例如：{ field: { $n: [<value1>, <value2>, ... <valueN> ] } }
  * @param callback {function} 回调函数
  */
-ArticleDao.prototype.delete = function (loginName, conditions, callback) {
+ArticleDao.prototype.delete = function (loginName, ids, callback) {
   var model = this.model;
+  var conditions = { _id: { $in: ids } };
 
   model.find(conditions, {categories: 1, labels: 1}, function (err, docs) {
     var _categories = [], _labels = [];
@@ -316,8 +319,18 @@ ArticleDao.prototype.delete = function (loginName, conditions, callback) {
         if (err) {
           return callback(err);
         }
-        model.remove(conditions, function (err) {
-          return callback(err);
+        CommentModel.remove({articleID: {$in: ids}}, function (err) {
+          if (err) {
+            return callback(err);
+          }
+          ArticleMetaModel.remove({articleID: {$in: ids}}, function (err) {
+            if (err) {
+              return callback(err);
+            }
+            model.remove(conditions, function (err) {
+              return callback(err);
+            });
+          });
         });
       });
     });
@@ -330,12 +343,13 @@ ArticleDao.prototype.delete = function (loginName, conditions, callback) {
  * @param callback {function} 回调函数
  */
 ArticleDao.prototype.findBlogData = function (loginName, callback) {
-  //以下代码加载博客数据，包括个人信息，最热文章，近期文章，文章归档（近期五个月文章数），分类目录，近期评论
+  //以下代码加载博客数据，包括个人信息，最热文章，近期文章，文章归档（近期五个月文章），分类目录，标签，近期评论
   var data = {};
   var model = this.model;
   var conditions = {account: loginName, status: 'publish'};
+  var articlesId = [];
 
-  var promise = accountModel.findOne({loginName: loginName}, {_id: 1, name: 1, englishName: 1, residence: 1, position: 1,
+  var promise = AccountModel.findOne({loginName: loginName}, {_id: 1, name: 1, sex: 1, headPortrait: 1, englishName: 1, residence: 1, position: 1,
     email: 1, signature: 1}).exec();
 
   promise.then(function (account) {
@@ -370,7 +384,11 @@ ArticleDao.prototype.findBlogData = function (loginName, callback) {
     return model.aggregate({$match: {account: loginName}}, {$limit: 10}, { $group: { _id: '$createdMonth', articleCount: { $sum: 1 }}},
       { $sort: { createdDate: -1 } }).exec();
   }).then(function (articles) {
-    data.articlesArchive = articles;//文章归档
+    data.articlesArchive = articles.map(function (item) {
+      var month = item._id.split('-');
+      item.month = month[0] + '年' + month[1] + '月';
+      return item;
+    });//文章归档
 
     return CategoryModel.find({account: loginName}, {_id: 1, name: 1, count: 1}).exec();
   }).then(function (categories) {
@@ -379,6 +397,25 @@ ArticleDao.prototype.findBlogData = function (loginName, callback) {
     return LabelModel.find({account: loginName}, {_id: 1, name: 1, count: 1}).exec();
   }).then(function (labels) {
     data.labels = labels;// 标签
+
+    return CommentModel.find({account: loginName}, {_id: 1, articleID: 1, commentator: 1}, {limit: 5, sort: {createdDate: -1}}).exec();
+  }).then(function (comments) {
+    data.comments = [];// 近期评论
+    articlesId = comments.map(function (item) {
+      data.comments.push(item._doc);
+      return item.articleID;
+    });
+
+    return model.find({_id: {$in: articlesId}}, {_id: 1, title: 1}).exec();
+  }).then(function (articles) {
+    var articleMap = {};
+    articles.forEach(function (item) {
+      articleMap[item._id.toString()] = item.title;
+    });
+    //设置文章标题
+    data.comments.forEach(function (item) {
+      item.articleTitle = articleMap[item.articleID];
+    });
 
     return callback(null, data);
   }).then(null, function (err) {
@@ -446,7 +483,7 @@ ArticleDao.prototype.articleInfo = function (loginName, articleId, callback) {
   }).then(function (labels) {
     data.article.labels = labels;//文章标签
 
-    return commentModel.find({articleID: articleId }, {_id: 1, commentator: 1, content: 1, createdDate: 1, commentParent: 1}).sort({_id: 1}).exec();
+    return CommentModel.find({articleID: articleId }, {_id: 1, commentator: 1, content: 1, createdDate: 1, commentParent: 1}).sort({_id: 1}).exec();
   }).then(function (comments) {
     if (comments) {
       var items = comments.map(function (item) {
@@ -487,3 +524,118 @@ ArticleDao.prototype.articleInfo = function (loginName, articleId, callback) {
     return callback(err);
   });
 };
+
+/**
+ * 文章归档列表
+ * @param loginName {String} 账户登录名
+ * @param month {String} 月份
+ * @param callback {function} 回调函数
+ */
+ArticleDao.prototype.archive = function (loginName, month, callback) {
+  var conditions = {account: loginName, status: 'publish', createdMonth: month};
+  getArticleList(this.model, conditions, 'archive', month, callback);
+};
+
+/**
+ * 分类目录文章列表
+ * @param loginName {String} 账户登录名
+ * @param id {String} 分类目录id
+ * @param callback {function} 回调函数
+ */
+ArticleDao.prototype.category = function (loginName, id, callback) {
+  var conditions = {account: loginName, status: 'publish', categories: {$elemMatch: {$eq: id}}};
+  getArticleList(this.model, conditions, 'category', id, callback);
+};
+
+/**
+ * 标签文章列表
+ * @param loginName {String} 账户登录名
+ * @param id {String} 标签id
+ * @param callback {function} 回调函数
+ */
+ArticleDao.prototype.label = function (loginName, id, callback) {
+  var conditions = {account: loginName, status: 'publish', labels: {$elemMatch: {$eq: id}}};
+  //var conditions = {account: loginName, status: 'publish', labels: {$elemMatch: {$in: [id]}}};
+  getArticleList(this.model, conditions, 'label', id, callback);
+};
+
+function getArticleList(model, conditions, type, id, callback) {
+  var articleList = [],
+    categoriesId = [],
+    labelIds = [],
+    articleIds = [],
+    categoryMap = {},
+    labelMap = {},
+    commentMap = {};
+
+  var promise = model.find(conditions, {_id: 1, title: 1, content: 1, categories: 1, labels: 1, articleLink: 1, account: 1, createdDate: 1}).exec();
+
+  promise.then(function (articles) {
+    articleList = articles.map(function (item) {
+      var doc = item._doc;
+      articleIds.push(doc._id.toString());
+      doc.categories.forEach(function (item) {
+        categoriesId.push(item);
+      });
+      doc.labels.forEach(function (item) {
+        labelIds.push(item);
+      });
+      doc.createdDate = moment(doc.createdDate).format('YYYY年MM月DD HH:mm:ss');
+      //FIXME: 这里需要截取文章内容，待实现
+      //doc.content = '';
+      return doc;
+    });
+
+    //查询文章分类
+    return CategoryModel.find({_id: { $in: categoriesId }}, {_id: 1, name: 1}).exec();
+  }).then(function (categories) {
+    categories.forEach(function (item) {
+      categoryMap[item._id] = item.name;
+    });
+
+    //查询文章标签
+    return LabelModel.find({_id: { $in: labelIds }}, {_id: 1, name: 1}).exec();
+  }).then(function (labels) {
+    labels.forEach(function (item) {
+      labelMap[item._id] = item.name;
+    });
+
+    //查询评论个数
+    return CommentModel.aggregate({$match: {articleID: { $in: articleIds }}}, { $group: { _id: '$articleID', commentCount: { $sum: 1 }}}).exec();
+  }).then(function (comments) {
+    comments.forEach(function (item) {
+      commentMap[item._id] = item.commentCount;
+    });
+
+    articleList.forEach(function (item) {
+      item.labels = item.labels.map(function (item) {
+        return {_id: item, name: labelMap[item]};
+      });
+      item.categories = item.categories.map(function (item) {
+        return {_id: item, name: categoryMap[item]};
+      });
+      item.commentCount = commentMap[item._id.toString()];
+    });
+    if (type === 'category') {
+      CategoryModel.findById(id, {_id: 1, name: 1}, function (err, model) {
+        if (err) {
+          throw err;
+        } else {
+          return callback(null, articleList, model.name);
+        }
+      });
+    } else if (type === 'label') {
+      LabelModel.findById(id, {_id: 1, name: 1}, function (err, model) {
+        if (err) {
+          throw err;
+        } else {
+          return callback(null, articleList, model.name);
+        }
+      });
+    } else {
+      return callback(null, articleList);
+    }
+  }).then(null, function (err) {
+    return callback(err);
+  });
+}
