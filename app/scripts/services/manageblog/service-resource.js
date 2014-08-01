@@ -14,6 +14,12 @@ angular.module('hopefutureBlogApp')
       },
       'delete': function (data, success) {
         hfbHttpService.delete('manage/resource', data).then(success);
+      },
+      saveCategory: function (data, success) {
+        hfbHttpService.post('manage/resource/category', data).then(success);
+      },
+      deleteCategory: function (data, success) {
+        hfbHttpService.delete('manage/resource/category', data).then(success);
       }
     };
   }]);

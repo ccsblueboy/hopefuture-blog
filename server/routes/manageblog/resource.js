@@ -61,6 +61,34 @@ var resource = {
     resourceDao.delete(conditions, function (err) {
       res.send({success: err === null});
     });
+  },
+
+  saveCategory: function (req, res) {
+    var data = req.body;
+    var loginName = req.baseUrl.split('/')[1];
+    data.account = loginName;
+
+    resourceDao.saveCategory(data, function (err, doc) {
+      if (err) {
+        console.error(err);
+        res.send({success: false, err: err});
+      } else {
+        res.send({
+          success: true,
+          item: doc
+        });
+      }
+    });
+  },
+
+  deleteCategory: function (req, res) {
+    var ids = req.query.ids;// ids is Array
+    if (!underscore.isArray(ids)) {
+      ids = [ids];
+    }
+    resourceDao.deleteCategory(ids, function (err) {
+      res.send({success: err === null});
+    });
   }
 
 };
@@ -72,6 +100,8 @@ router.get('/', resource.list);
 router.post('/', resource.save);
 router.get('/:id', resource.edit);
 router.delete('/', resource.delete);
+router.post('/category', resource.saveCategory);
+router.delete('/category', resource.deleteCategory);
 
 /**
  * 资源链接路由

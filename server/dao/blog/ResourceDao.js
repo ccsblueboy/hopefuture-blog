@@ -78,8 +78,8 @@ ResourceDao.prototype.list = function (loginName, callback) {
   promise.then(function (resources) {
     resourceList = resources.map(function (item) {
       var doc = item._doc;
-      if (doc.category) {
-        categoriesId.push(doc.category);
+      if (doc.categoryId) {
+        categoriesId.push(doc.categoryId);
       }
       return doc;
     });
@@ -130,5 +130,84 @@ ResourceDao.prototype.findById = function (id, callback) {
 ResourceDao.prototype.delete = function (conditions, callback) {
   this.model.remove(conditions, function (err) {
     return callback(err);
+  });
+};
+
+/**
+ * 保存资源分类
+ * @method
+ * @param data {ResourceCategoryModel} ResourceCategoryModel 实例
+ * @param callback {function}回调函数
+ */
+ResourceDao.prototype.saveCategory = function (data, callback) {
+  if (data._id) {
+    ResourceCategoryModel.update({_id: data._id}, data, function (err, numberAffected, rawResponse) {
+      return callback(err);
+    });
+  } else {
+    var entity = new ResourceCategoryModel(data);
+    entity.save(function (err, product, numberAffected) {
+      if (err) {
+        return callback(err);
+      }
+      var _doc = product._doc;
+      var doc = {
+        _id: _doc._id.toString(),
+        name: _doc.name
+      };
+      return callback(err, doc);
+    });
+  }
+};
+
+
+/**
+ * 资源链接列表（前端页面显示）
+ * @param loginName {String} 账户登录名
+ * @param callback {function} 回调函数
+ */
+ResourceDao.prototype.resourceList = function (loginName, callback) {
+  var resourceList = [];
+  var promise = this.model.find({account: loginName}, {_id: 1, name: 1, link: 1, categoryId: 1}, {$sort: {categoryId: 1}}).exec();
+
+  promise.then(function (resources) {
+    resourceList = resources.map(function (item) {
+      return item._doc;
+    });
+
+    return ResourceCategoryModel.find({account: loginName}, {_id: 1, name: 1}).exec();
+  }).then(function (resourceCategories) {
+    var categoryMap = {};
+    resourceCategories.forEach(function (item) {
+      var doc = item._doc;
+      categoryMap[doc._id.toString()] = doc.name;
+    });
+    resourceList.forEach(function (item) {
+      item.categoryName = item.categoryId ? categoryMap[item.categoryId] : undefined;
+    });
+
+    return callback(null, resourceList);
+  }).then(null, function (err) {
+    return callback(err);
+  });
+};
+
+/**
+ * 删除资源分类记录
+ * 注意：要先修改再删除，如果先删除再修改会报错，不知道为什么？？？
+ * @method
+ * @param ids { Array } id 数组
+ * @param callback {function} 回调函数
+ */
+ResourceDao.prototype.deleteCategory = function (ids, callback) {
+  //先修改属于该分类的资源修改为无分类
+  this.model.update({categoryId: {$in: ids}}, {$set: {categoryId: ''}}, function (err, numberAffected, rawResponse) {
+    if (err) {
+      return callback(err);
+    }
+    var conditions = { _id: { $in: ids } };
+    ResourceCategoryModel.remove(conditions, function (err) {
+      return callback(err);
+    });
   });
 };

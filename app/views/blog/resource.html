@@ -1,0 +1,11 @@
+<h1 style="margin-bottom: 20px;">资源链接</h1>
+
+<div ng-repeat="resource in resources">
+<h2>分类{{$index + 1}}： {{resource.categoryName || '无分类'}}</h2>
+
+  <ul class="list-unstyled">
+    <li ng-repeat="res in resource.categoryResources">
+      <a target="_blank" ng-href="{{res.link}}">{{res.name}}</a>
+    </li>
+  </ul>
+</div>

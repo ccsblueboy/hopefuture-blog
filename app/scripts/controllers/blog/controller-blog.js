@@ -35,7 +35,8 @@ angular.module('hopefutureBlogApp').controller('BlogCtrl', function ($scope, blo
     articlesArchive: undefined,
     categories: undefined,
     labels: undefined,
-    comments: undefined
+    comments: undefined,
+    resources: undefined
   };
   /**
    * 加载博客相关数据

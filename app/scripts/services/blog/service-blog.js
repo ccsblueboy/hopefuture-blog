@@ -30,6 +30,10 @@ angular.module('hopefutureBlogApp')
       //标签文章列表
       label: function (account, id, success) {
         hfbHttpService.get(account + '/label/' + id).then(success);
+      },
+      //资源链接列表
+      resource: function (account, success) {
+        hfbHttpService.get(account + '/resource').then(success);
       }
     };
   }]);

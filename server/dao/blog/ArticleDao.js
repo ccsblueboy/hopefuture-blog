@@ -25,6 +25,8 @@ var CategoryModel = require('../../models/blog/CategoryModel');
 var AccountModel = require('../../models/account/AccountModel');
 var CommentModel = require('../../models/blog/CommentModel');
 var ArticleMetaModel = require('../../models/blog/ArticleMetaModel');
+var ResourceModel = require('../../models/blog/ResourceModel');
+var ResourceCategoryModel = require('../../models/blog/ResourceModel');
 
 var commonMethod = require('./../../utils/commonMethod');
 var ObjectId = require('mongoose').Types.ObjectId;
@@ -343,7 +345,7 @@ ArticleDao.prototype.delete = function (loginName, ids, callback) {
  * @param callback {function} 回调函数
  */
 ArticleDao.prototype.findBlogData = function (loginName, callback) {
-  //以下代码加载博客数据，包括个人信息，最热文章，近期文章，文章归档（近期五个月文章），分类目录，标签，近期评论
+  //以下代码加载博客数据，包括个人信息，最热文章，近期文章，文章归档（近期五个月文章），分类目录，标签，近期评论，资源链接
   var data = {};
   var model = this.model;
   var conditions = {account: loginName, status: 'publish'};
@@ -412,10 +414,14 @@ ArticleDao.prototype.findBlogData = function (loginName, callback) {
     articles.forEach(function (item) {
       articleMap[item._id.toString()] = item.title;
     });
-    //设置文章标题
+    //设置评论文章标题
     data.comments.forEach(function (item) {
       item.articleTitle = articleMap[item.articleID];
     });
+
+    return ResourceModel.find({account: loginName}, {_id: 1, name: 1, link: 1}, {limit: 5, sort: {createdDate: -1}}).exec();
+  }).then(function (resources) {
+    data.resources = resources;//资源链接
 
     return callback(null, data);
   }).then(null, function (err) {

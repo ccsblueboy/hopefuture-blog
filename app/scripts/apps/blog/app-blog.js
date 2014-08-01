@@ -31,6 +31,10 @@ angular.module('hopefutureBlogApp', ['ngRoute', 'ngSanitize', 'ui.bootstrap'])
         templateUrl: '../views/blog/label.html',
         controller: 'LabelCtrl'
       })
+      .when('/resource', {//资源链接
+        templateUrl: '../views/blog/resource.html',
+        controller: 'ResourceCtrl'
+      })
       .otherwise({
         redirectTo: '/articles'
       });

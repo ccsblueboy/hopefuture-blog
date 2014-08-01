@@ -176,58 +176,107 @@ angular.module('hopefutureBlogApp')
       });
       $scope.grid.checked = checked;
     };
+  })
+  .controller('CategoryFormCtrl', function ($scope, $modal, resourceService) {
+    $scope.resourceCategory = {
+      _id: undefined,
+      name: ''
+    };
+    $scope.categoryIndex = undefined;
 
-    $scope.manageCategory = function () {
-      openCategoryFormModal($modal, $scope);
+    $scope.$watch('resourceCategory.name', function (newValue) {
+      if (newValue !== '') {
+        $scope.$parent.alerts = [];
+      }
+    });
+
+    $scope.addCategory = function () {
+      if ($scope.resourceCategory.name === '') {
+        $scope.$parent.alerts = [
+          {type: 'danger', message: '资源分类名称不能为空！'}
+        ];
+        return;
+      }
+      resourceService.saveCategory($scope.resourceCategory, function (data) {
+        if (data.success === true) {
+          $scope.$parent.categories.push(data.item);
+          $scope.resourceCategory = {
+            _id: undefined,
+            name: ''
+          };
+        }
+      });
     };
 
-    function openCategoryFormModal($modal, $scope) {
-      $modal.open({
-        backdrop: 'static',// 设置为 static 表示当鼠标点击页面其他地方，modal不会关闭
-        //keyboard: false,// 设为false，按 esc键不会关闭 modal
-        templateUrl: 'categoryModal.html',
-        controller: 'CategoryFormModalCtrl',
-        windowClass: 'h-grid-modal',
-        resolve: {// 传递数据
-          formData: function () {
-            return  {
-              items: $scope.items
+    $scope.editCategory = {
+      _id: undefined,
+      name: ''
+    };
+
+    $scope.updateCategory = function (category, index, event) {
+      $scope.editCategory._id = category._id;
+      $scope.editCategory.name = category.name;
+      $scope.categoryIndex = index;
+      $scope.editCategoryStatus = true;
+
+      var position = $(event.currentTarget).position();
+      var left = position.left;
+      var containerW = $('#editCategoryPanel').parent().width();
+      if (left + 240 > containerW) {
+        left = containerW - 240;
+      }
+
+      $('#editCategoryPanel').css({
+        top: position.top,
+        left: left
+      });
+    };
+
+    $scope.cancelCategory = function (category) {
+      $scope.editCategory = {
+        _id: undefined,
+        name: ''
+      };
+      $scope.editCategoryStatus = false;
+    };
+
+    $scope.saveCategory = function (category) {
+      if ($scope.editCategory.name === '') {
+        return;
+      }
+      resourceService.saveCategory($scope.editCategory, function (data) {
+        if (data.success === true) {
+          $scope.$parent.categories[$scope.categoryIndex].name = $scope.editCategory.name;
+          $scope.editCategory = {
+            _id: undefined,
+            name: ''
+          };
+          $scope.editCategoryStatus = false;
+        }
+      });
+    };
+
+    $scope.deleteCategory = function (category, index) {
+      var modalInstance = $modal.open({
+        backdrop: 'static',
+        templateUrl: '../views/templates/confirmModal.html',
+        controller: 'ConfirmModalCtrl',
+        resolve: {
+          config: function () {
+            return {
+              modalContent: '删除后，属于该分类的资源会自动修改为无分类，确定要删除吗？'
             };
           }
         }
       });
-    }
-  })
-  .controller('CategoryFormModalCtrl', function ($scope, $modalInstance, demoPaginationService, formData) {
-    $scope.items = formData.items;
-    $scope.loadPageData = formData.loadPageData;
-    $scope.demo = {
-      _id: undefined,
-      title: '',
-      content: ''
-    };
-    var item = formData.item;
-    if (item) {//修改
-      $scope.demo = {
-        _id: item._id,
-        title: item.title,
-        content: item.content
-      };
-    }
-    $scope.save = function () {
-      demoPaginationService.save($scope.demo, function (data) {
-        if (data.success === true) {
-          if (item) {
-            angular.extend($scope.items[formData.index], $scope.demo, data.item);
-          } else {
-            $scope.loadPageData(1);
-          }
-        }
-      });
-      $modalInstance.close();
-    };
 
-    $scope.cancel = function () {
-      $modalInstance.dismiss('cancel');
+      modalInstance.result.then(function () {
+        var json = {params: {ids: category._id}};
+        resourceService.deleteCategory(json, function (data) {
+          if (data.success === true) {
+            $scope.$parent.categories.splice(index, 1);
+          }
+        });
+      });
     };
   });

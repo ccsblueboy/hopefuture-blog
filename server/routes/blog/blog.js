@@ -5,6 +5,7 @@ var DataPage = require('../../utils/DataPage');
 var accountDao = require('./../../dao/account/AccountDao');
 var sessionManage = require('./../../utils/sessionManage');
 var commentDao = require('./../../dao/blog/CommentDao');
+var resourceDao = require('./../../dao/blog/ResourceDao');
 
 /**
  * 个人博客相关route
@@ -164,6 +165,44 @@ var blog = {
         });
       }
     });
+  },
+
+  resource: function (req, res) {
+    var loginName = req.baseUrl.split('/')[1];
+    resourceDao.resourceList(loginName, function (err, resources) {
+      if (err) {
+        res.send({
+          success: false
+        });
+      } else {
+        var _resources = [];
+        if (resources.length > 0) {
+          var categoryId = resources[0].categoryId;
+          var category = {
+            categoryName: resources[0].categoryName,
+            categoryResources: []
+          };
+          _resources.push(category);
+          resources.forEach(function (item) {
+            if (item.categoryId !== categoryId) {
+              category = {
+                categoryName: item.categoryName,
+                categoryResources: []
+              };
+              category.categoryResources.push(item);
+              _resources.push(category);
+              categoryId = item.categoryId;
+            } else {
+              category.categoryResources.push(item);
+            }
+          });
+        }
+        res.send({
+          success: true,
+          resources: _resources
+        });
+      }
+    });
   }
 };
 
@@ -179,5 +218,6 @@ router.post('/comment', blog.comment);//发表评论
 router.get('/archive/:month', blog.archive);//文章归档
 router.get('/category/:id', blog.category);//分类目录文章列表
 router.get('/label/:id', blog.label);//标签文章列表
+router.get('/resource', blog.resource);//标签文章列表
 
 module.exports = router;
