@@ -55,6 +55,16 @@ var sessionManage = {
    */
   isLogined: function (req) {
     return req.session.account ? true : false;
+  },
+
+  /**
+   * 判断用户是否登录
+   * @param req
+   * @returns {boolean}
+   */
+  isAdministrator: function (req) {
+    var account = req.session.account;
+    return account ? account.loginName === 'administrator' : false;
   }
 };
 

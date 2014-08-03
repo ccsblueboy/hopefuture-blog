@@ -43,6 +43,14 @@ angular.module('hopefutureBlogApp', ['ngRoute', 'ngAnimate', 'ngSanitize', 'ui.b
         templateUrl: '../views/manageblog/setting.html',
         controller: 'SettingCtrl'
       })
+      .when('/accountInfo', {//用户信息，用来修改用户信息，密码等
+        templateUrl: '../views/account/account-info.html',
+        controller: 'AccountInfoCtrl'
+      })
+      .when('/account', {//用户管理，只有管理员administrator才能操作
+        templateUrl: '../views/account/account.html',
+        controller: 'AccountCtrl'
+      })
       .otherwise({
         redirectTo: '/article'
       });

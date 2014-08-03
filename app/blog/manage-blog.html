@@ -36,6 +36,10 @@
         <li link-active="active"><a href="" ng-href="#/comment">评论管理</a></li>
         <li link-active="active"><a href="" ng-href="#/resource">资源链接</a></li>
         <li link-active="active"><a href="" ng-href="#/setting">博客设置</a></li>
+        <li link-active="active"><a href="" ng-href="#/accountInfo">用户信息</a></li>
+        <% if (locals.administrator) { %>
+        <li link-active="active"><a href="" ng-href="#/account">用户管理</a></li>
+        <% } %>
       </ul>
     </div>
 
@@ -83,6 +87,10 @@
 <script src="../scripts/services/manageblog/service-publish.js"></script>
 <script src="../scripts/services/manageblog/service-setting.js"></script>
 <script src="../scripts/services/manageblog/service-resource.js"></script>
+<script src="../scripts/services/account/service-account-info.js"></script>
+<% if (locals.administrator) { %>
+<script src="../scripts/services/account/service-account.js"></script>
+<% } %>
 
 <script src="../scripts/controllers/controller-common.js"></script>
 <script src="../scripts/controllers/controller-hopefuture-blog.js"></script>
@@ -94,6 +102,10 @@
 <script src="../scripts/controllers/manageblog/controller-publish.js"></script>
 <script src="../scripts/controllers/manageblog/controller-setting.js"></script>
 <script src="../scripts/controllers/manageblog/controller-resource.js"></script>
+<script src="../scripts/controllers/account/controller-account-info.js"></script>
+<% if (locals.administrator) { %>
+<script src="../scripts/controllers/account/controller-account.js"></script>
+<% } %>
 
 <script src="../scripts/directives/manageblog/directive-link-active.js"></script>
 <script src="../scripts/directives/manageblog/directive-publish.js"></script>

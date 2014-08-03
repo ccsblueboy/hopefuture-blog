@@ -35,7 +35,7 @@ module.exports = function (app) {
   app.use('/examples', examples);
   app.use('/examples/grid', grid);
   app.use('/examples/pagination', pagination);
-  app.use('/account', account);
+
   app.use('/login', login);
   app.use('/logout', function (req, res) {
     sessionManage.clearAccountSession(req);
@@ -62,5 +62,6 @@ module.exports = function (app) {
   app.use('/:account/manage/label', label);// 标签
   app.use('/:account/manage/comment', comment);// 评论
   app.use('/:account/manage/resource', resource);// 资源链接
+  app.use('/:account/manage/account', account);// 用户信息
 
 };

@@ -1,43 +1,30 @@
 'use strict';
 
-var accountDao = require('./../../dao/account/AccountDao.js');
-var grid = {
-  index: function (req, res) {
-    res.render('account-grid', {
-      title: 'This is a Grid Example.',
-      navTitle: '例子 -> Grid List'
-    });
-  },
+var accountDao = require('../../dao/account/AccountDao');
+var DataPage = require('../../utils/DataPage');
 
-  list: function (req, res) {
-    accountDao.list(function (err, docs) {
+var account = {
+  paging: function (req, res) {
+    var options = {
+      itemsPerPage: req.query.itemsPerPage,
+      currentPage: req.query.currentPage
+    };
+    var dataPage = new DataPage(options);
+    var searchContent = req.query.searchContent;
+
+    accountDao.pagination(dataPage, searchContent, function (err, data) {
       if (err) {
         res.send({success: false});
       } else {
         res.send({
           success: true,
-          items: docs
+          dataPage: data
         });
       }
     });
   },
 
-  save: function (req, res) {
-    var data = req.body;
-    accountDao.save(data, function (err, doc) {
-      if (err) {
-        console.error(err);
-        res.send({success: false, err: err});
-      } else {
-        res.send({
-          success: true,
-          item: doc
-        });
-      }
-    });
-  },
-
-  edit: function (req, res) {
+  freeze: function (req, res) {
     var id = req.params.id;
     accountDao.findById(id, function (err, model) {
       if (err) {
@@ -51,13 +38,37 @@ var grid = {
     });
   },
 
-  delete: function (req, res) {
-    var ids = req.query.ids;// ids is Array
-    if(Object.prototype.toString.call(ids) !== '[object Array]'){
-      ids = [ids];
-    }
-    var conditions = { _id: { $in: ids } };
-    accountDao.delete(conditions, function (err) {
+  findAccountByLoginName: function (req, res) {
+    var loginName = req.params.loginName;
+    accountDao.findOne({loginName: loginName}, function (err, model) {
+      if (err) {
+        res.send({success: false});
+      } else {
+        res.send({
+          success: true,
+          item: model
+        });
+      }
+    });
+  },
+
+  update: function (req, res) {
+    var data = req.body;
+    accountDao.update(data, function (err) {
+      if (err) {
+        res.send({success: false, err: err});
+      } else {
+        res.send({
+          success: true
+        });
+      }
+    });
+  },
+
+
+  updatePassword: function (req, res) {
+    var data = req.body;
+    accountDao.updatePassword(data, function (err) {
       res.send({success: err === null});
     });
   }
@@ -66,28 +77,18 @@ var grid = {
 var express = require('express');
 var router = express.Router();
 
-router.get('/', grid.index);
-router.get('/list', grid.list);
-router.post('/', grid.save);
-router.get('/:id', grid.edit);
-router.delete('', grid.delete);
+router.get('/', account.paging);
+router.post('/freeze', account.freeze);
+router.get('/:loginName', account.findAccountByLoginName);
+router.post('/', account.update);
+router.post('/password/:id', account.updatePassword);
 
 /**
- * 基本Grid 列表 路由
- * 该路由中包含了以下 url
-
- > 1. grid.index  app.get('/', grid.index); 显示Grid 首页
- > 2. grid.list app.get('/list', grid.list); 获取Grid list 数据
- > 3. grid.save app.post('/', grid.save); 保存数据
- > 4. grid.edit app.get('/:id', grid.edit); 编辑数据
- > 5. grid.delete app.delete('/', grid.delete); 删除数据（一条或多条）
-
- 注意路由的前缀是由 `app.use('/example-grid', grid);` 定义的，即实际访问 url 时在路由前需加上/example-grid
-
- * @module grid
+ * 用户信息路由
+ * @module account
  * @since 0.0.2
  * @version @@currentVersion
  * @author Linder linder0209@126.com
- * @createdDate 2014-5-9
+ * @createdDate 2014-8-29
  * */
 module.exports = router;

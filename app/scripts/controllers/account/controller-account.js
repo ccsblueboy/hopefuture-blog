@@ -1,0 +1,122 @@
+'use strict';
+
+/**
+ * 用户管理 Controller
+ * @class AccountCtrl
+ * @since 0.2.0
+ * @version @@currentVersion
+ * @author Linder linder0209@126.com
+ * @createdDate 2014-8-02
+ * */
+
+angular.module('hopefutureBlogApp')
+  .controller('AccountCtrl', function ($scope, $modal, accountService) {
+
+    /**
+     * 列表数据
+     * @type {Array}
+     */
+    $scope.items = [];
+    /**
+     * 是否选中全部列表
+     * @type {{checked: boolean}}
+     */
+    $scope.grid = {
+      checked: false
+    };
+
+    $scope.page = {currentPage: 1};
+    $scope.maxSize = 5;
+    $scope.itemsPerPage = 20;
+
+    $scope.loadPageData = function () {
+      var params = {
+        currentPage: $scope.page.currentPage,
+        itemsPerPage: $scope.itemsPerPage
+      };
+      if ($scope.searchContent) {
+        params.searchContent = $scope.searchContent;
+      }
+
+      accountService.paging({params: params}, function (data) {
+        if (data.success === true) {
+          $scope.items = data.dataPage.items;
+          $scope.totalItems = data.dataPage.totalItems;
+        }
+      });
+    };
+    $scope.loadPageData();
+
+    $scope.search = function () {
+      $scope.loadPageData();
+    };
+
+    /**
+     * 冻结用户
+     * @param item
+     */
+    $scope.freeze = function (item) {
+      var json;
+      if (!item) {//没有传参数，表示执行的是删除多条记录
+        if ($scope.grid.checked === false) {
+          $modal.open({
+            templateUrl: '../views/templates/alertModal.html',
+            controller: 'AlertModalCtrl',
+            resolve: {
+              config: function () {
+                return {
+                  modalContent: '请至少选择一条记录！'
+                };
+              }
+            }
+          });
+          return;
+        }
+        var ids = [];
+        angular.forEach($scope.items, function (item, index) {
+          if (item.checked === true) {
+            ids.push(item._id);
+          }
+        });
+        json = {params: {ids: ids}};
+      } else {
+        json = {params: {ids: item._id}};
+      }
+      var modalInstance = $modal.open({
+        backdrop: 'static',
+        templateUrl: '../views/templates/confirmModal.html',
+        controller: 'ConfirmModalCtrl',
+        resolve: {
+          config: function () {
+            return {
+              modalContent: '确定要冻结所选的用户吗？冻结后该用户不能登录，但可以访问其个人博客。'
+            };
+          }
+        }
+      });
+      modalInstance.result.then(function () {
+        accountService.freeze(json, function (data) {
+          if (data.success === true) {
+
+          }
+        });
+      });
+    };
+
+    $scope.selectAll = function () {
+      angular.forEach($scope.items, function (item, index) {
+        item.checked = $scope.grid.checked;
+      });
+    };
+
+    $scope.selectItem = function () {
+      var checked = false;
+      angular.forEach($scope.items, function (item, index) {
+        if (item.checked) {
+          checked = true;
+          return false;
+        }
+      });
+      $scope.grid.checked = checked;
+    };
+  });

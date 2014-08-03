@@ -27,8 +27,7 @@ function AccountDao(Model) {
  * @param callback
  */
 AccountDao.prototype.findByLoginNameAndPassword = function (data, callback) {
-  var loginName = data.loginName,
-    password = data.password;
+  var loginName = data.loginName, password = data.password;
 
   this.model.findOne({loginName: loginName}, function (err, login) {
     if (login) {
@@ -75,13 +74,105 @@ AccountDao.prototype.signup = function (data, callback) {
 };
 
 /**
+ * 分页显示
+ * @method
+ * @param dataPage {DataPage} 分页数据
+ * @param searchContent {String} 搜索内容
+ * @param callback {function} 回调函数
+ */
+AccountDao.prototype.pagination = function (dataPage, searchContent, callback) {
+  var skip = dataPage.itemsPerPage * (dataPage.currentPage - 1);
+  var limit = dataPage.itemsPerPage;
+  var model = this.model;
+  var conditions = {};
+  if (searchContent) {
+    var match = new RegExp(searchContent, 'ig');
+    conditions = { $or: [
+      { name: match } ,
+      { loginName: match } ,
+      { englishName: match } ,
+      { residence: match } ,
+      { position: match } ,
+      { email: match } ,
+      { signature: match}
+    ] };
+  }
+  model.count(conditions, function (err, count) {
+    if (err === null) {
+      dataPage.setTotalItems(count);
+      model.find(conditions, {_id: 1, loginName: 1, name: 1, sex: 1, residence: 1, position: 1, email: 1, site: 1, activated: 1}, {skip: skip, limit: limit, sort: {_id: -1}}, function (err, docs) {
+        dataPage.setItems(docs);
+        return callback(err, dataPage);
+      });
+    }
+  });
+};
+
+/**
  * 根据给定的条件查询记录
  * @param conditions {Object} 条件
  * @param callback {function} 回调函数
  */
 AccountDao.prototype.find = function (conditions, callback) {
-  this.model.find(conditions, function (err, model) {
+  this.model.find(conditions, {_id: 1, loginName: 1, name: 1, englishName: 1, sex: 1, headPortrait: 1, residence: 1,
+    position: 1, email: 1, signature: 1, site: 1}, function (err, model) {
     return callback(err, model);
+  });
+};
+
+/**
+ * 修改用户信息
+ * @method
+ * @param data {LabelModel} LabelModel 实例
+ * @param callback {function}回调函数
+ */
+
+AccountDao.prototype.update = function (data, callback) {
+  var id = data._id;
+  delete data._id;
+  this.model.update({_id: id}, {$set: data}, function (err, numberAffected, rawResponse) {
+    return callback(err);
+  });
+};
+
+/**
+ * 修改用户密码
+ * @method
+ * @param data {LabelModel} LabelModel 实例
+ * @param callback {function}回调函数
+ */
+
+AccountDao.prototype.updatePassword = function (data, callback) {
+  var loginName = data.loginName, oldPassword = data.oldPassword, newPassword = data.newPassword;
+
+  var model = this.model;
+  model.findOne({loginName: loginName}, function (err, account) {
+    if (account) {
+      hash(oldPassword, account.salt, function (err, accountHash) {
+        if (err) {
+          return callback(-2);
+        }
+        if (accountHash === account.hash) {//旧密码输入正确
+          hash(newPassword, function (err, salt, hash) {
+            if (err) {
+              return callback(err);
+            }
+            var fields = {
+              salt: salt,
+              hash: hash
+            };
+            model.update({loginName: loginName}, {$set: fields}, function (err, numberAffected, rawResponse) {
+              return callback(err);
+            });
+          });
+
+        } else {//密码不正确
+          return callback(-2);
+        }
+      });
+    } else {
+      return callback(-1);
+    }
   });
 };
 
