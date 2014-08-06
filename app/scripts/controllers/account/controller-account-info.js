@@ -9,11 +9,10 @@
  * @createdDate 2014-8-2
  * */
 
-angular.module('hopefutureBlogApp').controller('AccountInfoCtrl', function ($scope, $modal, accountInfoService) {
+angular.module('hopefutureBlogApp').controller('AccountInfoCtrl', function ($scope, $modal, accountInfoService, accountInfo) {
 
   $scope.account = {
     loginName: '',
-    password: '',
     email: '',
     name: '',
     englishName: '',
@@ -25,8 +24,30 @@ angular.module('hopefutureBlogApp').controller('AccountInfoCtrl', function ($sco
     signature: ''//我的签名
   };
 
+  $scope.residence = accountInfo.residence;//居住地
+  $scope.headPortrait = accountInfo.headPortrait;//头像
+  $scope.position = accountInfo.position;//职位
 
-  accountInfoService.getInfoByLoginName(function (data) {
+  //改变头像
+  $scope.changeHeadPortrait = function (event, value) {
+    $scope.account.headPortrait = value;
+    $(event.currentTarget).parent().addClass('active').siblings().removeClass('active');
+  };
+
+  //来自于，性别，职位 下拉框处理
+  $scope.selectBox = {
+    residence: false,
+    sex: false,
+    position: false
+  };
+
+  $scope.openDropDown = function ($event, type) {
+    $event.preventDefault();
+    $event.stopPropagation();
+    $scope.selectBox[type] = !$scope.selectBox[type];
+  };
+
+  accountInfoService.findAccount(function (data) {
     if (data.success === true) {
       angular.extend($scope.account, data.account);
     }
@@ -35,7 +56,7 @@ angular.module('hopefutureBlogApp').controller('AccountInfoCtrl', function ($sco
   $scope.update = function () {
     accountInfoService.update($scope.account, function (data) {
       if (data.success === true) {
-        $scope.$parent.alerts = [
+        $scope.$parent.$parent.alerts = [
           {type: 'success', message: '修改用户信息成功！'}
         ];
       }
@@ -49,37 +70,51 @@ angular.module('hopefutureBlogApp').controller('AccountInfoCtrl', function ($sco
       //keyboard: false,// 设为false，按 esc键不会关闭 modal
       templateUrl: 'updatePassword.html',
       controller: 'UpdatePasswordCtrl',
-      size: 'lg',
       resolve: {// 传递数据
         formData: function () {
           return  {
-            loginName: $scope.account.loginName
+            loginName: $scope.account.loginName,
+            accountScope: $scope
           };
         }
       }
     });
   };
 }).controller('UpdatePasswordCtrl', function ($scope, $modalInstance, $timeout, accountInfoService, formData) {
-  $scope.dialogTitle = '修改用户密码';
+  var accountScope = formData.accountScope;
+
   $scope.account = {
     loginName: formData.loginName,
-    password: ''
+    oldPassword: '',
+    password: '',
+    confirmPassword: ''
+  };
+
+  $scope.alerts2 = [];
+  $scope.closeAlert2 = function (index) {
+    $scope.alerts2.splice(index, 1);
   };
 
   $scope.updatePassword = function () {
+    var account = angular.copy($scope.account);
+    delete account.confirmPassword;
     accountInfoService.updatePassword($scope.account, function (data) {
       if (data.success === true) {
-        $scope.$parent.alerts = [
+        accountScope.$parent.$parent.alerts = [
           {type: 'success', message: '密码修改成功！'}
         ];
+        $modalInstance.close();
         $timeout(function () {
-          $modalInstance.close();
-        }, 500);
+          accountScope.$parent.$parent.alerts = [];
+        }, 1000);
       } else {
-        $scope.$parent.alerts = [
-          {type: 'danger', message: data.errorMessage}
+        $scope.alerts2 = [
+          {type: 'danger', message: data.message}
         ];
       }
+      $scope.account.oldPassword = '';
+      $scope.account.password = '';
+      $scope.account.confirmPassword = '';
     });
   };
 

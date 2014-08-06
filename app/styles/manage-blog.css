@@ -79,3 +79,15 @@ div.mce-fullscreen {
   padding: 2px;
   background-color: #F5F5F5;
 }
+
+.account-status {
+  background: url("../images/account_status.png") no-repeat;
+  cursor: pointer;
+  display: inline-block;
+  height: 18px;
+  vertical-align: middle;
+  width: 73px;
+}
+.account-status.off{
+  background-position: 0 -18px;
+}

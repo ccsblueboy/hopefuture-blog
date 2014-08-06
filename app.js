@@ -58,16 +58,16 @@ app.use(function (req, res, next) {
     } else {
       var loginName = req.path.split('/')[1];
       if (account.loginName !== loginName) {//非法操作
-        if(req.headers.xrequestedwith === 'XMLHttpRequest'){
+        if (req.headers.xrequestedwith === 'XMLHttpRequest') {
           res.send({
             success: false,
             errorCode: '9002',
             errorMessage: errorCodes['9002']
           });
-        }else{
+        } else {
           res.render('errors/illegal');
         }
-      }else{
+      } else {
         next();
       }
     }
@@ -76,9 +76,10 @@ app.use(function (req, res, next) {
   }
 });
 app.use(function (req, res, next) {
-  res.locals.logined = sessionManage.isLogined(req);
   var account = sessionManage.getAccountSession(req);
+  res.locals.logined = account ? true : false;
   res.locals.loginName = account ? account.loginName : '';
+  res.locals.administrator = account ? account.loginName === 'administrator' : false;//是否是管理员
   next();
 });
 

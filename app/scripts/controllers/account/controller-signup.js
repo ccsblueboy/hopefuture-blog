@@ -48,7 +48,6 @@ angular.module('hopefutureBlogApp')
       $scope.selectBox[type] = !$scope.selectBox[type];
     };
 
-
     $scope.showForm = true;
     /**
      * 注册
@@ -57,6 +56,8 @@ angular.module('hopefutureBlogApp')
       signupService.signup($scope.account, function (data) {
         if (data.success === true) {
           $scope.showForm = false;
+          $scope.registeredEmail = data.account.email;
+          $scope.accountId = data.account._id;
         } else {
           //注意这里，对于父 Controller中的赋值，需要加上 $parent
           //如果是取值，直接写 $scope.alerts 就可以了
@@ -67,5 +68,27 @@ angular.module('hopefutureBlogApp')
       });
     };
 
+    $scope.generateLink = function () {
+      signupService.generateLink($scope.accountId, function (data) {
+        if (data.success === true) {
+          $scope.$parent.alerts = [
+            {type: 'success', message: '新的激活链接已生成，请查收。'}
+          ];
+        }
+      });
+    };
+  })
+  .controller('GenerateLinkCtrl', function ($scope, signupService) {
+    $scope.showActivatedInfo = true;
+    $scope.generateLink = function () {
+      signupService.generateLink($scope.accountId, function (data) {
+        if (data.success === true) {
+          $scope.$parent.alerts = [
+            {type: 'success', message: '新的激活链接已生成，请查收。'}
+          ];
 
+          $scope.showActivatedInfo = false;
+        }
+      });
+    };
   });

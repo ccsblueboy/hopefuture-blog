@@ -2,6 +2,8 @@
 
 var accountDao = require('../../dao/account/AccountDao');
 var DataPage = require('../../utils/DataPage');
+var sessionManage = require('../../utils/sessionManage');
+var underscore = require('underscore');
 
 var account = {
   paging: function (req, res) {
@@ -24,29 +26,28 @@ var account = {
     });
   },
 
-  freeze: function (req, res) {
-    var id = req.params.id;
-    accountDao.findById(id, function (err, model) {
-      if (err) {
-        res.send({success: false});
-      } else {
-        res.send({
-          success: true,
-          item: model
-        });
-      }
+  changeAccountStatus: function (req, res) {
+    var status = req.body.status;
+    var ids = req.body.ids;// ids is Array
+    if (!underscore.isArray(ids)) {
+      ids = [ids];
+    }
+    var conditions = { _id: { $in: ids } };
+    accountDao.changeAccountStatus(conditions, status, function (err) {
+      res.send({success: err ? false : true});
     });
+
   },
 
-  findAccountByLoginName: function (req, res) {
-    var loginName = req.params.loginName;
-    accountDao.findOne({loginName: loginName}, function (err, model) {
+  findAccount: function (req, res) {
+    var _id = sessionManage.getAccountId(req);
+    accountDao.find({_id: _id}, function (err, models) {
       if (err) {
         res.send({success: false});
       } else {
         res.send({
           success: true,
-          item: model
+          account: models[0]
         });
       }
     });
@@ -69,7 +70,23 @@ var account = {
   updatePassword: function (req, res) {
     var data = req.body;
     accountDao.updatePassword(data, function (err) {
-      res.send({success: err === null});
+      var message = '';
+      var success = false;
+      if (err) {
+        switch (err) {
+          case -1:
+            message = '该用户不存在！请重新输入';
+            break;
+          case -2:
+            message = '你输入的原密码不正确！请重新输入';
+            break;
+          default:
+            message = err.message;
+        }
+      } else {
+        success = true;
+      }
+      res.send({success: success, message: message});
     });
   }
 };
@@ -78,10 +95,10 @@ var express = require('express');
 var router = express.Router();
 
 router.get('/', account.paging);
-router.post('/freeze', account.freeze);
-router.get('/:loginName', account.findAccountByLoginName);
+router.post('/status', account.changeAccountStatus);
+router.get('/info', account.findAccount);
 router.post('/', account.update);
-router.post('/password/:id', account.updatePassword);
+router.post('/password', account.updatePassword);
 
 /**
  * 用户信息路由

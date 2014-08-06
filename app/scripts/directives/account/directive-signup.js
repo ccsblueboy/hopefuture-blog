@@ -17,11 +17,17 @@ angular.module('hopefutureBlogApp')
             loginName: {
               remote: 'signup/validate/duplicate'
             },
+            email: {
+              remote: 'signup/validate/email'
+            },
             confirmPassword: {equalTo: '#password'}
           },
           messages: {
             loginName: {
               remote: '该用户名已被注册，请重新输入！'
+            },
+            email: {
+              remote: '该邮箱已被注册，请重新输入！'
             },
             confirmPassword: {
               equalTo: '两次输入的密码不一致'

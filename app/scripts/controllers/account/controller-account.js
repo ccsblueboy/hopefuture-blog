@@ -52,11 +52,12 @@ angular.module('hopefutureBlogApp')
     };
 
     /**
-     * 冻结用户
+     * 启用或停用所选用户
      * @param item
      */
-    $scope.freeze = function (item) {
-      var json;
+    $scope.changeAccountStatus = function (status, item) {
+      var items = [];
+      var json = {status: status};
       if (!item) {//没有传参数，表示执行的是删除多条记录
         if ($scope.grid.checked === false) {
           $modal.open({
@@ -76,31 +77,46 @@ angular.module('hopefutureBlogApp')
         angular.forEach($scope.items, function (item, index) {
           if (item.checked === true) {
             ids.push(item._id);
+            items.push(item);
           }
         });
-        json = {params: {ids: ids}};
+        json.ids = ids;
       } else {
-        json = {params: {ids: item._id}};
+        items.push(item);
+        json.ids = item._id;
       }
-      var modalInstance = $modal.open({
-        backdrop: 'static',
-        templateUrl: '../views/templates/confirmModal.html',
-        controller: 'ConfirmModalCtrl',
-        resolve: {
-          config: function () {
-            return {
-              modalContent: '确定要冻结所选的用户吗？冻结后该用户不能登录，但可以访问其个人博客。'
-            };
-          }
-        }
-      });
-      modalInstance.result.then(function () {
-        accountService.freeze(json, function (data) {
-          if (data.success === true) {
 
+      if (status === false) {
+        var modalInstance = $modal.open({
+          backdrop: 'static',
+          templateUrl: '../views/templates/confirmModal.html',
+          controller: 'ConfirmModalCtrl',
+          resolve: {
+            config: function () {
+              return {
+                modalContent: '确定要停用所选的用户吗？停用后该用户不能登录，但可以访问其个人博客。'
+              };
+            }
           }
         });
-      });
+        modalInstance.result.then(function () {
+          accountService.changeAccountStatus(json, function (data) {
+            if (data.success === true) {
+              angular.forEach(items, function (item, index) {
+                item.activated = status;
+              });
+            }
+          });
+        });
+      } else {
+        accountService.changeAccountStatus(json, function (data) {
+          if (data.success === true) {
+            angular.forEach($scope.items, function (item, index) {
+              item.activated = status;
+            });
+          }
+        });
+      }
     };
 
     $scope.selectAll = function () {

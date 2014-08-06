@@ -22,7 +22,7 @@
           <!--</ul>-->
         <!--</li>-->
         <% if (locals.logined) { %>
-        <li><a href="">欢迎 <%= locals.loginName %></a></li>
+        <li><a ng-href="/<%= locals.loginName %>/manage#/accountInfo">欢迎 <%= locals.loginName %></a></li>
         <li><a href="" ng-href="/<%= locals.loginName %>">我的博客</a></li>
         <!-- 这里进入后台管理自己的博客-->
         <li><a href="" ng-href="/logout">登出</a></li>

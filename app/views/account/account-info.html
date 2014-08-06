@@ -1,51 +1,31 @@
 <h3>用户信息</h3>
 
 <div class="row">
-  <div class="col-md-offset-1 col-md-10">
-
-    <form class="form-horizontal ng-hide" name="signForm" method="post" signup-validator ng-show="showForm" autocomplete="off">
+  <div class="col-sm-offset-3 col-sm-6">
+    <div alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.message}}</div>
+  </div>
+  <div class="col-md-12">
+    <form class="form-horizontal" name="accountForm" method="post" account-validator>
       <div class="form-group">
-        <label for="loginName" class="control-label col-sm-3"><i class="required">*</i> 用户名</label>
+        <label class="control-label col-sm-3">用户名</label>
 
         <div class="col-sm-6">
-          <input type="text" class="form-control" id="loginName" name="loginName" minlength="4" maxlength="80" required
-                 validateloginname="true" ng-model="account.loginName" placeholder="全站唯一" autocomplete="off"/>
+          <p class="form-control-static">
+            <span ng-bind="account.loginName"></span>
+            <a href="" ng-click="updatePassword();">修改密码</a>
+          </p>
         </div>
       </div>
 
       <div class="form-group">
-        <label for="password" class="control-label col-sm-3"><i class="required">*</i> 密码</label>
+        <label class="control-label col-sm-3">邮箱</label>
 
         <div class="col-sm-6">
-          <input type="password" class="form-control" id="password" name="password" minlength="6" maxlength="30" required
-                 ng-model="account.password" placeholder="请输入密码" autocomplete="off"/>
-
-          <!-- 密码强度由弱到强样式：progress-bar-danger progress-bar-warning progress-bar-info progress-bar-success -->
-          <div class="progress margin10-T" style="display:none;margin-bottom: 0;">
-            <div class="progress-bar progress-bar-danger" style="width: 100%;">弱</div>
-          </div>
+          <p class="form-control-static">
+            <span ng-bind="account.email"></span>
+          </p>
         </div>
       </div>
-
-      <div class="form-group">
-        <label for="confirmPassword" class="control-label col-sm-3"><i class="required">*</i> 确认密码</label>
-
-        <div class="col-sm-6">
-          <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" minlength="6" maxlength="30" required
-                 ng-model="account.confirmPassword" placeholder="请再次输入密码" autocomplete="off"/>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="email" class="control-label col-sm-3"><i class="required">*</i> 注册邮箱</label>
-
-        <div class="col-sm-6">
-          <input type="email" class="form-control" id="email" name="email" minlength="6" maxlength="80" required
-                 ng-model="account.email" placeholder="请填写真实邮箱，用于激活您的帐号"/>
-        </div>
-      </div>
-
-      <hr/>
 
       <div class="form-group">
         <label for="name" class="control-label col-sm-3">昵称</label>
@@ -181,23 +161,54 @@
         </div>
       </div>
 
-
       <div class="form-group">
         <div class="col-sm-offset-3 col-sm-6">
-          <div class="checkbox">
-            <label style="display: block;">
-              <input type="checkbox" id="accept" name="accept" value="true" required/> 我已经阅读并同意
-              <a target="_blank" href="" ng-href="/terms" class="btn-link">注册条款</a>
-            </label>
-          </div>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <div class="col-sm-offset-3 col-sm-6">
-          <button type="submit" class="btn btn-primary">注册</button>
+          <button type="submit" class="btn btn-primary">保存个人信息</button>
         </div>
       </div>
     </form>
   </div>
 </div>
+
+<script type="text/ng-template" id="updatePassword.html">
+  <form class="form-horizontal" name="updatePasswordForm" account-password-validator>
+    <div class="modal-header">
+      <button type="button" class="close" ng-click="cancel()" title="Close">&times;</button>
+      <h4 class="modal-title">修改用户密码</h4>
+    </div>
+    <div class="modal-body">
+      <div alert ng-repeat="alert in alerts2" type="{{alert.type}}" close="closeAlert2($index)">{{alert.message}}</div>
+      <div class="form-group">
+        <label for="oldPassword" class="control-label col-sm-3"><i class="required">*</i> 原密码</label>
+
+        <div class="col-sm-6">
+          <input type="password" class="form-control" id="oldPassword" name="oldPassword" minlength="6" maxlength="30" required
+                 ng-model="account.oldPassword" placeholder="请输入原密码" autocomplete="off"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password" class="control-label col-sm-3"><i class="required">*</i> 新密码</label>
+
+        <div class="col-sm-6">
+          <input type="password" class="form-control" id="password" name="password" minlength="6" maxlength="30" required
+                 ng-model="account.password" placeholder="请输入新密码" autocomplete="off"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword" class="control-label col-sm-3"><i class="required">*</i> 确认密码</label>
+
+        <div class="col-sm-6">
+          <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" minlength="6" maxlength="30" required
+                 ng-model="account.confirmPassword" placeholder="请再次输入新密码" autocomplete="off"/>
+        </div>
+      </div>
+
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-primary" ng-disabled="updatePasswordForm.$pristine">修改</button>
+      <button type="button" class="btn btn-default" ng-click="cancel()">取消</button>
+    </div>
+  </form>
+</script>

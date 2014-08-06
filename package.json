@@ -21,8 +21,10 @@
     "ejs": "~1.0.0",
     "mongoose": "~3.8.13",
     "underscore": "~1.6.0",
-    "crypto":"~0.0.3",
-    "moment":"~2.7.0"
+    "crypto": "~0.0.3",
+    "moment": "~2.7.0",
+    "nodemailer": "~1.1.1",
+    "nodemailer-smtp-transport": "0.1.12"
   },
   "devDependencies": {
     "grunt": "~0.4.5",

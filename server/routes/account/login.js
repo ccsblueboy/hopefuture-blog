@@ -14,16 +14,23 @@ var account = {
     accountDao.findByLoginNameAndPassword(data, function (err, doc) {
       var message = '';
       var success = false;
-      if (err === -1) {// 该用户不存在
-        message = '该用户不存在！请重新输入';
-      } else if (err === -2) {
-        message = '你输入的密码不正确！请重新输入';
-      } else {
-        sessionManage.setAccountSession(req, {
-          _id: doc._id,
-          loginName: doc.loginName
-        });
-        success = true;
+      switch (err) {
+        case -1:
+          message = '该用户不存在！请重新输入';
+          break;
+        case -2:
+          message = '你输入的密码不正确！请重新输入';
+          break;
+        case -3:
+          message = '该用户没有激活！';
+          break;
+        default:
+          sessionManage.setAccountSession(req, {
+            _id: doc._id,
+            loginName: doc.loginName
+          });
+          success = true;
+          break;
       }
       res.send({success: success, message: message});
     });

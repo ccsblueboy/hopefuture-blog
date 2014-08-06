@@ -24,8 +24,7 @@ var schema = new Schema({
   email: { type: String }, //有效地址，需要发送确认邮件激活
   signature: { type: String},// 我的签名
   site: { type: String },//个人站点或个人博客
-  //TODO: 待完成邮件激活，把该默认值改为 false，而点击激活的时候设为 true
-  activated: {type: Boolean, default: true },//是否被激活
+  activated: {type: Boolean, default: false },//是否被激活
   createdDate: { type: Date, default: Date.now },
   updatedDate: { type: Date, default: Date.now }
 });

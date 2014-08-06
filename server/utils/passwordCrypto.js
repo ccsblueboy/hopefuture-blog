@@ -56,3 +56,34 @@ exports.hash = function (password, salt, fn) {
     });
   }
 };
+
+exports.encryption = {
+  /**
+   * 加密
+   * @param key
+   * @param str
+   * @returns {*}
+   */
+  encrypt: function (key, str) {
+    var cipher = crypto.createCipher('aes-256-cbc',key);
+    var enc = cipher.update(str,'utf8','hex');
+    enc += cipher.final('hex');
+    return enc;
+  },
+  /**
+   * 解密
+   * @param key
+   * @param str
+   * @returns {*}
+   */
+  decrypt: function (key, str) {
+    var decipher = crypto.createDecipher('aes-256-cbc', key);
+    var dec = decipher.update(str, 'hex', 'utf8');
+    dec += decipher.final('utf8');
+    return dec;
+  },
+  getKey: function () {
+    var key = crypto.createDiffieHellman(256).getPrime('base64');
+    return key;
+  }
+};

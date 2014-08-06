@@ -31,6 +31,9 @@ AccountDao.prototype.findByLoginNameAndPassword = function (data, callback) {
 
   this.model.findOne({loginName: loginName}, function (err, login) {
     if (login) {
+      if (login.activated === false) {
+        return callback(-3);
+      }
       hash(password, login.salt, function (err, hash) {
         if (err) {
           return callback(-2);
@@ -68,7 +71,7 @@ AccountDao.prototype.signup = function (data, callback) {
     var entity = new model(data);
     //当有错误发生时，返回err；product 是返回生成的实体，numberAffected which will be 1 when the document was found and updated in the database, otherwise 0.
     entity.save(function (err, product, numberAffected) {
-      return callback(err);
+      return callback(err, product._doc);
     });
   });
 };
@@ -109,25 +112,51 @@ AccountDao.prototype.pagination = function (dataPage, searchContent, callback) {
 };
 
 /**
+ * 修改用户状态
+ * @method
+ * @param conditions {Object} 查询条件
+ * @param status {Boolean} 状态
+ * @param callback {function}回调函数
+ */
+
+AccountDao.prototype.changeAccountStatus = function (conditions, status, callback) {
+  this.model.update(conditions, {$set: {activated: status}}, function (err, numberAffected, rawResponse) {
+    return callback(err);
+  });
+};
+
+/**
  * 根据给定的条件查询记录
  * @param conditions {Object} 条件
  * @param callback {function} 回调函数
  */
 AccountDao.prototype.find = function (conditions, callback) {
   this.model.find(conditions, {_id: 1, loginName: 1, name: 1, englishName: 1, sex: 1, headPortrait: 1, residence: 1,
+    position: 1, email: 1, signature: 1, site: 1}, function (err, models) {
+    return callback(err, models);
+  });
+};
+
+/**
+ * 根据给定的条件查询记录，只查询一条
+ * @param conditions {Object} 条件
+ * @param callback {function} 回调函数
+ */
+AccountDao.prototype.findOne = function (conditions, callback) {
+  this.model.findOne(conditions, {_id: 1, loginName: 1, name: 1, englishName: 1, sex: 1, headPortrait: 1, residence: 1,
     position: 1, email: 1, signature: 1, site: 1}, function (err, model) {
     return callback(err, model);
   });
 };
 
 /**
- * 修改用户信息
+ * 根据账户ID修改用户信息
  * @method
- * @param data {LabelModel} LabelModel 实例
+ * @param data {AccountModel} AccountModel 实例
  * @param callback {function}回调函数
  */
 
-AccountDao.prototype.update = function (data, callback) {
+AccountDao.prototype.updateById = function (data, callback) {
   var id = data._id;
   delete data._id;
   this.model.update({_id: id}, {$set: data}, function (err, numberAffected, rawResponse) {
@@ -138,28 +167,30 @@ AccountDao.prototype.update = function (data, callback) {
 /**
  * 修改用户密码
  * @method
- * @param data {LabelModel} LabelModel 实例
+ * @param data {Object} 修改的信息
  * @param callback {function}回调函数
  */
 
 AccountDao.prototype.updatePassword = function (data, callback) {
-  var loginName = data.loginName, oldPassword = data.oldPassword, newPassword = data.newPassword;
+  var loginName = data.loginName,
+    oldPassword = data.oldPassword,
+    password = data.password;
 
   var model = this.model;
   model.findOne({loginName: loginName}, function (err, account) {
     if (account) {
       hash(oldPassword, account.salt, function (err, accountHash) {
         if (err) {
-          return callback(-2);
+          return callback(err);
         }
         if (accountHash === account.hash) {//旧密码输入正确
-          hash(newPassword, function (err, salt, hash) {
+          hash(password, function (err, salt, newHash) {
             if (err) {
               return callback(err);
             }
             var fields = {
               salt: salt,
-              hash: hash
+              hash: newHash
             };
             model.update({loginName: loginName}, {$set: fields}, function (err, numberAffected, rawResponse) {
               return callback(err);
@@ -173,6 +204,30 @@ AccountDao.prototype.updatePassword = function (data, callback) {
     } else {
       return callback(-1);
     }
+  });
+};
+
+/**
+ * 重置密码
+ * @method
+ * @param accountId {String} 账户id
+ * @param password {String} 账户密码
+ * @param callback {function}回调函数
+ */
+
+AccountDao.prototype.resetPassword = function (accountId, password, callback) {
+  var model = this.model;
+  hash(password, function (err, salt, newHash) {
+    if (err) {
+      return callback(err);
+    }
+    var fields = {
+      salt: salt,
+      hash: newHash
+    };
+    model.update({_id: accountId}, {$set: fields}, function (err, numberAffected, rawResponse) {
+      return callback(err);
+    });
   });
 };
 

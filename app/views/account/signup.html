@@ -1,223 +1,232 @@
 <div class="container margin50-T well">
-  <div class="row margin10-B">
-    <div class="col-sm-offset-4 col-sm-4">
-      <div alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.message}}</div>
-      <h2>个人用户注册</h2>
+<div class="row margin10-B">
+  <div class="col-sm-offset-4 col-sm-4">
+    <h2>个人用户注册</h2>
+  </div>
+  <div class="col-sm-offset-1 col-sm-10">
+    <div class="margin10-T" alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.message}}</div>
+  </div>
+</div>
+
+<form class="form-horizontal ng-hide" name="signForm" method="post" signup-validator ng-show="showForm" autocomplete="off">
+  <div class="form-group">
+    <label for="loginName" class="control-label col-sm-3"><i class="required">*</i> 用户名</label>
+
+    <div class="col-sm-6">
+      <input type="text" class="form-control" id="loginName" name="loginName" minlength="4" maxlength="80" required
+             validateloginname="true" ng-model="account.loginName" placeholder="全站唯一" autocomplete="off"/>
     </div>
   </div>
 
-  <form class="form-horizontal ng-hide" name="signForm" method="post" signup-validator ng-show="showForm" autocomplete="off">
-    <div class="form-group">
-      <label for="loginName" class="control-label col-sm-3"><i class="required">*</i> 用户名</label>
+  <div class="form-group">
+    <label for="password" class="control-label col-sm-3"><i class="required">*</i> 密码</label>
 
-      <div class="col-sm-6">
-        <input type="text" class="form-control" id="loginName" name="loginName" minlength="4" maxlength="80" required
-               validateloginname="true" ng-model="account.loginName" placeholder="全站唯一" autocomplete="off"/>
+    <div class="col-sm-6">
+      <input type="password" class="form-control" id="password" name="password" minlength="6" maxlength="30" required
+             ng-model="account.password" placeholder="请输入密码" autocomplete="off"/>
+
+      <!-- 密码强度由弱到强样式：progress-bar-danger progress-bar-warning progress-bar-info progress-bar-success -->
+      <div class="progress margin10-T" style="display:none;margin-bottom: 0;">
+        <div class="progress-bar progress-bar-danger" style="width: 100%;">弱</div>
       </div>
     </div>
+  </div>
 
-    <div class="form-group">
-      <label for="password" class="control-label col-sm-3"><i class="required">*</i> 密码</label>
+  <div class="form-group">
+    <label for="confirmPassword" class="control-label col-sm-3"><i class="required">*</i> 确认密码</label>
 
-      <div class="col-sm-6">
-        <input type="password" class="form-control" id="password" name="password" minlength="6" maxlength="30" required
-               ng-model="account.password" placeholder="请输入密码" autocomplete="off"/>
+    <div class="col-sm-6">
+      <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" minlength="6" maxlength="30" required
+             ng-model="account.confirmPassword" placeholder="请再次输入密码" autocomplete="off"/>
+    </div>
+  </div>
 
-        <!-- 密码强度由弱到强样式：progress-bar-danger progress-bar-warning progress-bar-info progress-bar-success -->
-        <div class="progress margin10-T" style="display:none;margin-bottom: 0;">
-          <div class="progress-bar progress-bar-danger" style="width: 100%;">弱</div>
+  <div class="form-group">
+    <label for="email" class="control-label col-sm-3"><i class="required">*</i> 注册邮箱</label>
+
+    <div class="col-sm-6">
+      <input type="email" class="form-control" id="email" name="email" minlength="6" maxlength="80" required
+             ng-model="account.email" placeholder="请填写真实邮箱，用于激活您的帐号"/>
+    </div>
+  </div>
+
+  <hr/>
+
+  <div class="form-group">
+    <label for="name" class="control-label col-sm-3">昵称</label>
+
+    <div class="col-sm-6">
+      <input type="text" class="form-control" id="name" name="name" maxlength="80"
+             ng-model="account.name"/>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="englishName" class="control-label col-sm-3">英文名</label>
+
+    <div class="col-sm-6">
+      <input type="text" class="form-control" id="englishName" name="englishName" maxlength="80"
+             ng-model="account.englishName"/>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="sex" class="control-label col-sm-3">性别</label>
+
+    <div class="col-sm-6">
+      <div class="input-group" dropdown is-open="selectBox.sex">
+        <input placeholder="" type="text" class="form-control dropdown-input"
+               ng-model="account.sex" ng-click="openDropDown($event,'sex');"
+               id="sex" name="sex" ng-readonly="true">
+
+        <div class="input-group-btn">
+          <button type="button" class="btn btn-default dropdown-toggle"
+                  style="border-bottom-left-radius: 0;border-top-left-radius: 0;margin-left: -1px;">
+            <span class="caret"></span>
+          </button>
         </div>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label for="confirmPassword" class="control-label col-sm-3"><i class="required">*</i> 确认密码</label>
-
-      <div class="col-sm-6">
-        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" minlength="6" maxlength="30" required
-               ng-model="account.confirmPassword" placeholder="请再次输入密码" autocomplete="off"/>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label for="email" class="control-label col-sm-3"><i class="required">*</i> 注册邮箱</label>
-
-      <div class="col-sm-6">
-        <input type="email" class="form-control" id="email" name="email" minlength="6" maxlength="80" required
-               ng-model="account.email" placeholder="请填写真实邮箱，用于激活您的帐号"/>
-      </div>
-    </div>
-
-    <hr/>
-
-    <div class="form-group">
-      <label for="name" class="control-label col-sm-3">昵称</label>
-
-      <div class="col-sm-6">
-        <input type="text" class="form-control" id="name" name="name" maxlength="80"
-               ng-model="account.name"/>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label for="englishName" class="control-label col-sm-3">英文名</label>
-
-      <div class="col-sm-6">
-        <input type="text" class="form-control" id="englishName" name="englishName" maxlength="80"
-               ng-model="account.englishName"/>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label for="sex" class="control-label col-sm-3">性别</label>
-
-      <div class="col-sm-6">
-        <div class="input-group" dropdown is-open="selectBox.sex">
-          <input placeholder="" type="text" class="form-control dropdown-input"
-                 ng-model="account.sex" ng-click="openDropDown($event,'sex');"
-                 id="sex" name="sex" ng-readonly="true">
-
-          <div class="input-group-btn">
-            <button type="button" class="btn btn-default dropdown-toggle"
-                    style="border-bottom-left-radius: 0;border-top-left-radius: 0;margin-left: -1px;">
-              <span class="caret"></span>
-            </button>
-          </div>
-          <ul role="menu" class="dropdown-menu" style="width: 100%;">
-            <li>
-              <a href="" ng-click="account.sex='';selectBox.sex=false;">&nbsp;</a>
-            </li>
-            <li>
-              <a href="" ng-click="account.sex='男';selectBox.sex=false;">男</a>
-            </li>
-            <li>
-              <a href="" ng-click="account.sex='女';selectBox.sex=false;">女</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label class="control-label col-sm-3">头像</label>
-
-      <div class="col-sm-6">
-        <span title="头像" class="{{account.headPortrait}}"></span>
-        <ul class="head-portrait-list list-unstyled clearfix">
+        <ul role="menu" class="dropdown-menu" style="width: 100%;">
           <li>
-            <a href="" ng-click="changeHeadPortrait($event,'head-portrait-default');"><span title="头像" class="head-portrait-default"></span></a>
+            <a href="" ng-click="account.sex='';selectBox.sex=false;">&nbsp;</a>
           </li>
-          <li ng-repeat="value in headPortrait">
-            <a href="" ng-click="changeHeadPortrait($event,value);"><span title="头像" class="{{value}}"></span></a>
+          <li>
+            <a href="" ng-click="account.sex='男';selectBox.sex=false;">男</a>
+          </li>
+          <li>
+            <a href="" ng-click="account.sex='女';selectBox.sex=false;">女</a>
           </li>
         </ul>
       </div>
     </div>
+  </div>
 
+  <div class="form-group">
+    <label class="control-label col-sm-3">头像</label>
 
-    <div class="form-group">
-      <label for="residence" class="control-label col-sm-3">来自</label>
-
-      <div class="col-sm-6">
-        <div class="input-group" dropdown is-open="selectBox.residence">
-          <input placeholder="如果列表中没有您的城市，可直接输入" type="text" class="form-control dropdown-input"
-                 ng-model="account.residence" ng-click="openDropDown($event,'residence');"
-                 id="residence" name="residence" maxlength="80">
-
-          <div class="input-group-btn">
-            <button type="button" class="btn btn-default dropdown-toggle"
-                    style="border-bottom-left-radius: 0;border-top-left-radius: 0;margin-left: -1px;">
-              <span class="caret"></span>
-            </button>
-          </div>
-          <ul role="menu" class="dropdown-menu" style="width: 100%;height: 200px;overflow-y: auto;">
-            <li ng-repeat="value in residence">
-              <a href="" ng-click="account.residence=value;selectBox.residence=false;">{{value}}</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label for="position" class="control-label col-sm-3">职位</label>
-
-      <div class="col-sm-6">
-        <div class="input-group" dropdown is-open="selectBox.position">
-          <input placeholder="" type="text" class="form-control dropdown-input"
-                 ng-model="account.position" ng-click="openDropDown($event,'position');"
-                 id="position" name="position" ng-readonly="true">
-
-          <div class="input-group-btn">
-            <button type="button" class="btn btn-default dropdown-toggle"
-                    style="border-bottom-left-radius: 0;border-top-left-radius: 0;margin-left: -1px;">
-              <span class="caret"></span>
-            </button>
-          </div>
-          <ul role="menu" class="dropdown-menu" style="width: 100%;height: 200px;overflow-y: auto;">
-            <li>
-              <a href="" ng-click="account.position='';selectBox.position=false;">&nbsp;</a>
-            </li>
-            <li ng-repeat="value in position">
-              <a href="" ng-click="account.position=value;selectBox.position=false;">{{value}}</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label for="site" class="control-label col-sm-3">个人主页</label>
-
-      <div class="col-sm-6">
-        <input type="url" class="form-control" id="site" name="site" maxlength="80"
-               ng-model="account.site"/>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label for="signature" class="control-label col-sm-3">我的签名</label>
-
-      <div class="col-sm-6">
-        <textarea ng-model="account.signature" name="signature" id="signature" class="form-control" rows="3" maxlength="500"></textarea>
-      </div>
-    </div>
-
-
-    <div class="form-group">
-      <div class="col-sm-offset-3 col-sm-6">
-        <div class="checkbox">
-          <label style="display: block;">
-            <input type="checkbox" id="accept" name="accept" value="true" required/> 我已经阅读并同意
-            <a target="_blank" href="" ng-href="/terms" class="btn-link">注册条款</a>
-          </label>
-        </div>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <div class="col-sm-offset-3 col-sm-6">
-        <button type="submit" class="btn btn-primary">注册</button>
-      </div>
-    </div>
-  </form>
-
-  <div class="row ng-hide" ng-show="!showForm">
-    <div class="col-sm-offset-1 col-sm-10">
-      <p>注册成功，系统自动给你发送了一份邮件，请查收并激活该账户，如果没有收到邮件，请点击这里重新发送</p>
-
-      <p>已激活，登录</p>
-
-      <p>以上功能待实现</p>
-
-      确认信已经成功发送到你的邮箱bd_wyj@sina.com了
-      查看收件箱...点击确认信中的链接地址，就可以完成注册了！
-      如果你很长时间还没有收到ITeye的确认信，请...
-      确认邮件是否被你提供的邮箱系统自动拦截，或被误认为垃圾邮件放到垃圾箱了
-      如果你确认邮箱地址正确，可以请求再次发送确认信
-      如果还不能解决你的问题，可以发邮件给ITeye管理员寻求帮助：webmasterEmailiteye.com
-
+    <div class="col-sm-6">
+      <span title="头像" class="{{account.headPortrait}}"></span>
+      <ul class="head-portrait-list list-unstyled clearfix">
+        <li>
+          <a href="" ng-click="changeHeadPortrait($event,'head-portrait-default');"><span title="头像"
+                                                                                          class="head-portrait-default"></span></a>
+        </li>
+        <li ng-repeat="value in headPortrait">
+          <a href="" ng-click="changeHeadPortrait($event,value);"><span title="头像" class="{{value}}"></span></a>
+        </li>
+      </ul>
     </div>
   </div>
+
+
+  <div class="form-group">
+    <label for="residence" class="control-label col-sm-3">来自</label>
+
+    <div class="col-sm-6">
+      <div class="input-group" dropdown is-open="selectBox.residence">
+        <input placeholder="如果列表中没有您的城市，可直接输入" type="text" class="form-control dropdown-input"
+               ng-model="account.residence" ng-click="openDropDown($event,'residence');"
+               id="residence" name="residence" maxlength="80">
+
+        <div class="input-group-btn">
+          <button type="button" class="btn btn-default dropdown-toggle"
+                  style="border-bottom-left-radius: 0;border-top-left-radius: 0;margin-left: -1px;">
+            <span class="caret"></span>
+          </button>
+        </div>
+        <ul role="menu" class="dropdown-menu" style="width: 100%;height: 200px;overflow-y: auto;">
+          <li ng-repeat="value in residence">
+            <a href="" ng-click="account.residence=value;selectBox.residence=false;">{{value}}</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="position" class="control-label col-sm-3">职位</label>
+
+    <div class="col-sm-6">
+      <div class="input-group" dropdown is-open="selectBox.position">
+        <input placeholder="" type="text" class="form-control dropdown-input"
+               ng-model="account.position" ng-click="openDropDown($event,'position');"
+               id="position" name="position" ng-readonly="true">
+
+        <div class="input-group-btn">
+          <button type="button" class="btn btn-default dropdown-toggle"
+                  style="border-bottom-left-radius: 0;border-top-left-radius: 0;margin-left: -1px;">
+            <span class="caret"></span>
+          </button>
+        </div>
+        <ul role="menu" class="dropdown-menu" style="width: 100%;height: 200px;overflow-y: auto;">
+          <li>
+            <a href="" ng-click="account.position='';selectBox.position=false;">&nbsp;</a>
+          </li>
+          <li ng-repeat="value in position">
+            <a href="" ng-click="account.position=value;selectBox.position=false;">{{value}}</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="site" class="control-label col-sm-3">个人主页</label>
+
+    <div class="col-sm-6">
+      <input type="url" class="form-control" id="site" name="site" maxlength="80"
+             ng-model="account.site"/>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="signature" class="control-label col-sm-3">我的签名</label>
+
+    <div class="col-sm-6">
+      <textarea ng-model="account.signature" name="signature" id="signature" class="form-control" rows="3" maxlength="500"></textarea>
+    </div>
+  </div>
+
+
+  <div class="form-group">
+    <div class="col-sm-offset-3 col-sm-6">
+      <div class="checkbox">
+        <label style="display: block;">
+          <input type="checkbox" id="accept" name="accept" value="true" required/> 我已经阅读并同意
+          <a target="_blank" href="" ng-href="/terms" class="btn-link">注册条款</a>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-offset-3 col-sm-6">
+      <button type="submit" class="btn btn-primary">注册</button>
+    </div>
+  </div>
+</form>
+
+<div class="row ng-hide" ng-show="!showForm">
+  <div class="col-sm-offset-1 col-sm-10">
+
+    <p>注册成功，系统自动给您的邮箱<span>{{registeredEmail}}</span>发送了一份邮件，请查收并激活账户</p>
+
+
+    <p>如果您很长时间还没有收到邮件，请点击<a href="" ng-click="generateLink()"><strong>这里</strong></a>重新发送</p>
+
+
+    <p>如果您的账户已激活，请<a ng-href="/login"><strong>登录</strong></a></p>
+
+    <p>&nbsp;</p>
+
+    <p>不能收到邮件常见原因:</p>
+    <ul>
+      <li>邮件是否被您提供的邮箱系统自动拦截，或被误认为垃圾邮件放到垃圾箱了</li>
+      <li>注册邮箱地址不正确或不存在</li>
+      <li>以上情况排除后，如果您还是不能收到邮件，您可以发邮件给 Hope Future Blog 系统管理员寻求帮助：
+        <a href="mailto:linder0209@126.com">linder0209@126.com</a></li>
+    </ul>
+
+  </div>
+</div>
 
 </div>

@@ -1,6 +1,40 @@
 'use strict';
 
 var accountDao = require('./../../dao/account/AccountDao.js');
+var moment = require('moment');
+var mailer = require('../../utils/mailer');
+var encryption = require('../../utils/passwordCrypto').encryption;
+
+var secretStr = 'iedjqe';//hfblog 的变体
+var secret = /iedjqe/g;
+
+/**
+ * 生成激活账户链接
+ * @param req
+ * @param model
+ * @param callback
+ */
+function sendEmail(serverUrl, model, callback) {
+  var loginName = model.loginName,
+    accountId = model._id,
+    email = model.email,
+    time = moment().add('days', 1).valueOf(),
+    key = encryption.getKey();
+
+  serverUrl += '/signup/activate/' + encodeURIComponent(encryption.encrypt(key, accountId.toString())) + '?key=' +
+    encodeURIComponent(key) + '&time=' + encodeURIComponent(encryption.encrypt(key, time + ''));
+  serverUrl = serverUrl.replace(/%/g, secretStr);
+
+  var data = {
+    loginName: loginName,
+    serverUrl: serverUrl,
+    currentDate: moment().format('YYYY年MM月DD HH:mm:ss')
+  };
+  mailer.send(email, 'activateAccount', data, function (err) {
+    callback(err);
+  });
+}
+
 var account = {
   index: function (req, res) {
     res.render('account/signup', {
@@ -8,9 +42,26 @@ var account = {
     });
   },
   signup: function (req, res) {
+    //FIXME,待动态取值
+    var serverUrl = 'http://localhost:9000';
     var data = req.body;
-    accountDao.signup(data, function (err) {
-      res.send({success: err === null});
+    accountDao.signup(data, function (err, model) {
+      if (err) {
+        res.send({
+          success: false
+        });
+      } else {
+        sendEmail(serverUrl, model, function (err) {
+          res.send({
+            success: err ? false : true,
+            errorMessage: err ? err.message : undefined,
+            account: {
+              _id: model._id,
+              email: model.email
+            }
+          });
+        });
+      }
     });
   },
 
@@ -29,11 +80,86 @@ var account = {
       return;
     }
     var conditions = {loginName: loginName};
-    accountDao.find(conditions, function (err, model) {
+    accountDao.find(conditions, function (err, models) {
       if (err) {
         res.send(false);
       } else {
-        res.send(model.length === 0);
+        res.send(models.length === 0);
+      }
+    });
+  },
+
+  /**
+   * 校验已经注册的邮箱
+   * @param req
+   * @param res
+   */
+  email: function (req, res) {
+    var email = req.query.email;
+    var conditions = {email: email};
+    accountDao.find(conditions, function (err, models) {
+      if (err) {
+        res.send(false);
+      } else {
+        res.send(models.length === 0);
+      }
+    });
+  },
+
+  /**
+   * 激活账号
+   * @param req
+   * @param res
+   */
+  activate: function (req, res) {
+    var accountId = decodeURIComponent(req.params.accountId.replace(secret, '%'));
+    var key = decodeURIComponent(req.query.key.replace(secret, '%'));
+    var time = decodeURIComponent(req.query.time.replace(secret, '%'));
+
+    accountId = encryption.decrypt(key, accountId);
+    time = encryption.decrypt(key, time);
+    var overdue = false;
+    if (moment().valueOf() >= parseInt(time)) {//重置密码链接过期
+      overdue = true;
+    }
+    var url = 'account/activate/index';
+    if (overdue) {
+      res.render(url, {
+        title: '激活账号',
+        accountId: accountId,
+        overdue: overdue
+      });
+    } else {
+      accountDao.updateById({
+        _id: accountId,
+        activated: true
+      }, function (err) {
+        res.render(url, {
+          title: '激活账号',
+          success: err ? false : true,
+          overdue: overdue,
+          accountId: accountId
+        });
+      });
+    }
+  },
+
+  link: function (req, res) {
+    //FIXME,待动态取值
+    var serverUrl = 'http://localhost:9000';
+    var accountId = req.params.accountId;
+    accountDao.findOne({_id: accountId}, function (err, model) {
+      if (err) {
+        res.send({
+          success: false
+        });
+      } else {
+        sendEmail(serverUrl, model, function (err) {
+          res.send({
+            success: err ? false : true,
+            errorMessage: err ? err.message : undefined
+          });
+        });
       }
     });
   }
@@ -45,5 +171,8 @@ var router = express.Router();
 router.get('/', account.index);
 router.post('/', account.signup);
 router.get('/validate/duplicate', account.duplicate);
+router.get('/validate/email', account.email);
+router.get('/activate/:accountId', account.activate);
+router.get('/link/:accountId', account.link);
 
 module.exports = router;

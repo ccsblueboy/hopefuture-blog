@@ -7,12 +7,14 @@ var pagination = require('./examples/pagination');
 var account = require('./account/account');
 var login = require('./account/login');
 var signup = require('./account/signup');
+var forgot = require('./account/forgot');
+var resetPassword = require('./account/resetPassword');
 var blog = require('./blog/blog');
 var article = require('./manageblog/article');
 var category = require('./manageblog/category');
 var label = require('./manageblog/label');
 var comment = require('./manageblog/comment');
-var resource= require('./manageblog/resource');
+var resource = require('./manageblog/resource');
 
 var sessionManage = require('../utils/sessionManage');
 
@@ -42,6 +44,10 @@ module.exports = function (app) {
     res.redirect(302, '/');
   });
   app.use('/signup', signup);
+
+  app.use('/forgot', forgot);//忘记用户或密码
+
+  app.use('/resetpassword', resetPassword);//重置密码
 
   app.use('/terms', function (req, res) {
     res.render('account/terms', {
