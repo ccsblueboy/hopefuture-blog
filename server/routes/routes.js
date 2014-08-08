@@ -9,12 +9,14 @@ var login = require('./account/login');
 var signup = require('./account/signup');
 var forgot = require('./account/forgot');
 var resetPassword = require('./account/resetPassword');
-var blog = require('./blog/blog');
+var personalBlog = require('./blog/personalBlog');
 var article = require('./manageblog/article');
 var category = require('./manageblog/category');
 var label = require('./manageblog/label');
 var comment = require('./manageblog/comment');
 var resource = require('./manageblog/resource');
+var setting = require('./manageblog/setting');
+var blog = require('./blog/blog');
 
 var sessionManage = require('../utils/sessionManage');
 
@@ -41,6 +43,7 @@ module.exports = function (app) {
   app.use('/login', login);
   app.use('/logout', function (req, res) {
     sessionManage.clearAccountSession(req);
+    sessionManage.clearAccountCookie(res);
     res.redirect(302, '/');
   });
   app.use('/signup', signup);
@@ -60,8 +63,8 @@ module.exports = function (app) {
   });
 
   //用 url 变量来区分每个用户的博客，用户注册时不能用项目中存在的链接名称，注册时需要过滤一下，
-  //有：examples account login logout signup manage admin terms about
-  app.use('/:account', blog);
+  //已在config.js文件中定义 accountFilters
+  app.use('/:account', personalBlog);
 
   app.use('/:account/manage/article', article);// 管理文章
   app.use('/:account/manage/category', category);// 分类目录管理
@@ -69,5 +72,8 @@ module.exports = function (app) {
   app.use('/:account/manage/comment', comment);// 评论
   app.use('/:account/manage/resource', resource);// 资源链接
   app.use('/:account/manage/account', account);// 用户信息
+  app.use('/:account/manage/setting', setting);// 博客设置
+
+  app.use('/blog', blog);// 首页相关URL路径
 
 };

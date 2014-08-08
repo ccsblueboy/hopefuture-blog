@@ -11,6 +11,10 @@ var account = {
   },
   login: function (req, res) {
     var data = req.body;
+    var keepSigned = data.keepSigned;
+    var password = data.password;
+    var loginName = data.loginName;
+
     accountDao.findByLoginNameAndPassword(data, function (err, doc) {
       var message = '';
       var success = false;
@@ -24,12 +28,16 @@ var account = {
         case -3:
           message = '该用户没有激活！';
           break;
-        default:
+        case 1:
           sessionManage.setAccountSession(req, {
             _id: doc._id,
             loginName: doc.loginName
           });
           success = true;
+          //设置cookie
+          if (keepSigned) {
+            sessionManage.setAccountCookie(loginName, password, res);
+          }
           break;
       }
       res.send({success: success, message: message});

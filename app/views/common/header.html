@@ -8,19 +8,9 @@
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand active" href="/">首页</a>
-      <!--<a class="navbar-brand" href="#">文章</a>-->
-      <!--<a class="navbar-brand" href="#">关于</a>-->
     </div>
     <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
-        <!--<li class="dropdown">-->
-          <!--<a data-toggle="dropdown" class="dropdown-toggle" href="#">换肤<b class="caret"></b></a>-->
-          <!--<ul class="dropdown-menu">-->
-            <!--<li><a href="#">蓝色经典</a></li>-->
-            <!--<li><a href="#">温馨浪漫</a></li>-->
-            <!--<li><a href="#">夕阳西下</a></li>-->
-          <!--</ul>-->
-        <!--</li>-->
         <% if (locals.logined) { %>
         <li><a ng-href="/<%= locals.loginName %>/manage#/accountInfo">欢迎 <%= locals.loginName %></a></li>
         <li><a href="" ng-href="/<%= locals.loginName %>">我的博客</a></li>

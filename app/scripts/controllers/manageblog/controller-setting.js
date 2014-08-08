@@ -10,7 +10,23 @@
  * */
 
 angular.module('hopefutureBlogApp')
-  .controller('SettingCtrl', function ($scope, settingService) {
+  .controller('SettingCtrl', function ($scope, settingService, blogThemes) {
+    $scope.themes = blogThemes;
+    var themeMap = {};
+    angular.forEach(blogThemes, function (item) {
+      themeMap[item.code] = item.name;
+    });
+    settingService.findTheme(function (data) {
+      if (data.success) {
+        $scope.currentTheme = themeMap[data.theme];
+      }
+    });
 
-
+    $scope.enableTheme = function (themeCode) {
+      settingService.setTheme(themeCode, function (data) {
+        if (data.success) {
+          window.location.reload();
+        }
+      });
+    };
   });

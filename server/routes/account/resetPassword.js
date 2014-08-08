@@ -34,6 +34,9 @@ var resetPassword = {
   resetPassword: function (req, res) {
     var account = req.body;
     accountDao.resetPassword(account._id, account.password, function (err) {
+      if (!err) {
+        sessionManage.clearAccountCookie(res);
+      }
       res.send({success: err ? false : true});
     });
   }

@@ -3,6 +3,8 @@
  */
 
 'use strict';
+var encryption = require('./passwordCrypto').encryption;
+var secretStr = 'hfblog';
 
 /**
  * 用来动态管理 session 数据
@@ -25,7 +27,7 @@ var sessionManage = {
    * @returns {account|*|$scope.account}
    */
   getAccountSession: function (req) {
-    if(req.session.account === undefined){
+    if (req.session.account === undefined) {
       return null;
     }
     return req.session.account;
@@ -65,7 +67,47 @@ var sessionManage = {
   isAdministrator: function (req) {
     var account = req.session.account;
     return account ? account.loginName === 'administrator' : false;
+  },
+
+  setAccountCookie: function (loginName, password, res) {
+    /**
+     * 不能设置 secure 为 true
+     *  Set-Cookie 的 secure 属性就是处理这方面的情况用的，
+     *  它表示创建的 cookie 只能在 HTTPS 连接中被浏览器传递到服务器端进行会话验证，
+     *  如果是 HTTP 连接则不会传递该信息，所以绝对不会被窃听到
+     * @type {{maxAge: number}}
+     * maxAge 单位是毫秒
+     */
+    var options = {maxAge: 365 * 24 * 60 * 60 * 1000};
+    var key = encryption.getKey();
+
+    res.cookie('loginName', encryption.encrypt(key, loginName), options);
+    res.cookie('password', encryption.encrypt(key, password), options);
+    res.cookie('key', key.replace(/=/g, secretStr), options);
+  },
+  /**
+   * 清空cookie
+   * @param res
+   */
+  clearAccountCookie: function (res) {
+    res.clearCookie('loginName');
+    res.clearCookie('password');
+    res.clearCookie('key');
+  },
+
+  /**
+   * 判断是否为静态资源请求
+   * 这里根据文件后缀来判断，有：html css js eot svg ttf woff png等
+   * @param req
+   */
+  isStaticResource: function (req) {
+    var url = req.url;
+    if (/.+(\.html|\.js|\.css|\.eot|\.svg|\.ttf|\.woff|\.png)$/.test(url)) {
+      return true;
+    }
+    return false;
   }
+
 };
 
 module.exports = sessionManage;

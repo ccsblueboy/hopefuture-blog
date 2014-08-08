@@ -13,8 +13,8 @@ var Schema = mongoose.Schema;
 var schema = new Schema({
   articleID: { type: String },
   readCounts: { type: Number },//浏览总数
-  ip: { type: String },//评论者IP
-  browserAgent: { type: String }//评论者 浏览器 Agent
+  ip: { type: String },//浏览者IP
+  browserAgent: { type: String }//浏览者 浏览器 Agent
 });
 
 /**

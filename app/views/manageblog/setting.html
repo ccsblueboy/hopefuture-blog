@@ -1,0 +1,22 @@
+<h3 class="page-header">主题，当前选择：{{currentTheme}}</h3>
+<ul class="blog-theme clearfix list-unstyled text-center">
+  <li ng-repeat="theme in themes">
+    <img alt="200x200"
+         src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzBEOEZEQiIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjEwMCIgeT0iMTAwIiBzdHlsZT0iZmlsbDojZmZmO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjEzcHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+MjAweDIwMDwvdGV4dD48L3N2Zz4=">
+
+    <div class="clearfix margin10-T" style="margin-left: 10px;margin-right: 10px;">
+      <span class="pull-left" ng-bind="theme.name">蓝色经典</span>
+      <a class="pull-right" href="" ng-click="enableTheme(theme.code)">启用</a>
+    </div>
+  </li>
+</ul>
+
+
+<!--<li class="dropdown">-->
+<!--<a data-toggle="dropdown" class="dropdown-toggle" href="#">换肤<b class="caret"></b></a>-->
+<!--<ul class="dropdown-menu">-->
+<!--<li><a href="#">蓝色经典</a></li>-->
+<!--<li><a href="#">温馨浪漫</a></li>-->
+<!--<li><a href="#">夕阳西下</a></li>-->
+<!--</ul>-->
+<!--</li>-->

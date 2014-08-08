@@ -1,11 +1,44 @@
 .blog-footer {
-  background-color: #F5F5F5;
-  height: 60px;
-  width: 100%;
+  background-color: #273F56;
 }
 
 .blog-footer .text-muted {
   margin: 20px 0;
+}
+
+.footer-links {
+  background-color: #273F56;
+  padding: 20px 0;
+}
+
+.links-item > li {
+  float: left;
+}
+
+.links-item > li:first-child {
+  margin-right: 20px;
+}
+
+.links-item-title {
+  color: #B0B8BD;
+  font-size: 16px;
+}
+
+.links-item-content a {
+  margin-right: 10px;
+}
+
+.links-item-content a,
+.links-item-content a:hover,
+.links-item-content a:focus,
+.links-item-content {
+  color: #3499BE;
+}
+
+.footer-copyright {
+  background-color: #375069;
+  color: #B0B8BD;
+  padding: 20px 0 10px;
 }
 
 /**
@@ -90,4 +123,57 @@
 .article-meta > ul > li > a {
   margin-left: 8px;
   margin-right: 5px;
+}
+
+.article-boutique {
+  background: #FFFFFF;
+  border-radius: 5px;
+  margin-bottom: 30px;
+  opacity: 0.7;
+  padding: 10px 20px;
+}
+
+.article-boutique p {
+  line-height: 2em;
+  text-indent: 2em;
+}
+
+.boutique-pagination {
+  background-color: #C4CDC1;
+}
+
+.boutique-pagination > li > a,
+.boutique-pagination > li > span {
+  background-color: rgba(0, 0, 0, 0);
+  margin-left: 0;
+}
+
+.boutique-pagination > li > a,
+.boutique-pagination > li > span,
+.boutique-pagination > li > a:hover,
+.boutique-pagination > li > a:focus {
+  border: 0 none;
+}
+
+.boutique-pagination > li > span,
+.boutique-pagination > li > span:hover,
+.boutique-pagination > li > span:focus {
+  border-left: 1px solid #658B6F;
+  border-right: 1px solid #658B6F;
+}
+
+.boutique-pagination > li > a > i.fa {
+  font-size: 4em;
+  height: 70px;
+  line-height: 70px;
+}
+
+.boutique-pagination > li > a > i.fa,
+.boutique-pagination > li > span {
+  padding: 0 25px;
+}
+
+.boutique-pagination > li > span.page-number {
+  height: 92px;
+  line-height: 92px;
 }

@@ -4,6 +4,7 @@ var accountDao = require('./../../dao/account/AccountDao.js');
 var moment = require('moment');
 var mailer = require('../../utils/mailer');
 var encryption = require('../../utils/passwordCrypto').encryption;
+var config = require('../../config');
 
 var secretStr = 'iedjqe';//hfblog 的变体
 var secret = /iedjqe/g;
@@ -67,14 +68,13 @@ var account = {
 
   /**
    * 校验重名
-   * 需要过滤掉以下用户
-   * [examples account login logout signup manage admin terms]
    * @param req
    * @param res
    */
   duplicate: function (req, res) {
     var loginName = req.query.loginName;
-    var filters = ['examples', 'account', 'login', 'logout', 'signup', 'manage', 'admin', 'terms', 'about'];
+    //需要过滤掉以下用户
+    var filters = config.accountFilters;
     if (filters.indexOf(loginName) !== -1) {
       res.send(false);
       return;

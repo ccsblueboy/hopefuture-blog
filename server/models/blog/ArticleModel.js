@@ -23,6 +23,7 @@ var schema = new Schema({
   categories: { type: Array },//文章所属分类
   labels: { type: Array },//文章标签
   createdMonth: { type: String },//创建的月份，方便文章归档显示
+  boutique: {type: Boolean},//是否被推荐到首页显示，由管理员操作
   createdDate: { type: Date, default: Date.now },
   updatedDate: { type: Date, default: Date.now }
 });

@@ -29,17 +29,17 @@ function AccountDao(Model) {
 AccountDao.prototype.findByLoginNameAndPassword = function (data, callback) {
   var loginName = data.loginName, password = data.password;
 
-  this.model.findOne({loginName: loginName}, function (err, login) {
-    if (login) {
-      if (login.activated === false) {
+  this.model.findOne({loginName: loginName}, function (err, account) {
+    if (account) {
+      if (account.activated === false) {
         return callback(-3);
       }
-      hash(password, login.salt, function (err, hash) {
+      hash(password, account.salt, function (err, hash) {
         if (err) {
           return callback(-2);
         }
-        if (hash === login.hash) {
-          return callback(1, login);
+        if (hash === account.hash) {
+          return callback(1, account);
         } else {//密码不正确
           return callback(-2);
         }

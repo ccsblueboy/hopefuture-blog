@@ -79,7 +79,8 @@ grunt generatedoc
 ```
 ## 意见和建议以及bug
 
-如果你有好的意见和建议，可以点击[这里](https://github.com/linder0209/hopefuture-blog/issues/new)发表你的看法，当然你也可以在[这里](https://github.com/linder0209/hopefuture-blog/issues/new)提交bug。
+如果你有好的意见和建议，可以点击[这里](https://github.com/linder0209/hopefuture-blog/issues/new)发表你的看法，
+当然你也可以在[这里](https://github.com/linder0209/hopefuture-blog/issues/new)提交bug。
 
 ## License
 

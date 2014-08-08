@@ -26,7 +26,6 @@ var AccountModel = require('../../models/account/AccountModel');
 var CommentModel = require('../../models/blog/CommentModel');
 var ArticleMetaModel = require('../../models/blog/ArticleMetaModel');
 var ResourceModel = require('../../models/blog/ResourceModel');
-var ResourceCategoryModel = require('../../models/blog/ResourceModel');
 
 var commonMethod = require('./../../utils/commonMethod');
 var ObjectId = require('mongoose').Types.ObjectId;
@@ -196,7 +195,7 @@ ArticleDao.prototype.pagination = function (loginName, dataPage, callback) {
       var categoriesId = [], labelIds = [], articlesData, labelMap = {};
 
       var promise = model.find({account: loginName},
-        {_id: 1, title: 1, status: 1, articleLink: 1, categories: 1, labels: 1, readCounts: 1, commentCounts: 1, createdDate: 1},
+        {_id: 1, title: 1, status: 1, articleLink: 1, categories: 1, labels: 1, createdDate: 1},
         {skip: skip, limit: limit}).exec();
 
       promise.then(function (articles) {
@@ -565,6 +564,27 @@ ArticleDao.prototype.label = function (loginName, id, callback) {
   getArticleList(this.model, conditions, 'label', id, callback);
 };
 
+
+ArticleDao.prototype.boutiqueArticle = function (dataPage, callback) {
+  var skip = dataPage.itemsPerPage * (dataPage.currentPage - 1);
+  var limit = dataPage.itemsPerPage;
+  var model = this.model;
+  model.count({boutique: true}, function (err, count) {
+    if (err === null) {
+      dataPage.setTotalItems(count);
+      getBoutiqueArticle(model, {boutique: true}, skip, limit, dataPage, callback);
+    }
+  });
+};
+
+/**
+ * 返回个人文章列表
+ * @param model
+ * @param conditions 查询条件
+ * @param type 标签或分类
+ * @param id 标签或分类ID
+ * @param callback
+ */
 function getArticleList(model, conditions, type, id, callback) {
   var articleList = [],
     categoriesId = [],
@@ -641,6 +661,82 @@ function getArticleList(model, conditions, type, id, callback) {
     } else {
       return callback(null, articleList);
     }
+  }).then(null, function (err) {
+    return callback(err);
+  });
+}
+
+/**
+ * 返回精品文章
+ * @param model
+ * @param conditions
+ * @param skip
+ * @param limit
+ * @param dataPage 分页数据
+ * @param callback
+ */
+function getBoutiqueArticle(model, conditions, skip, limit, dataPage, callback) {
+
+  var articleList = [],
+    categoriesId = [],
+    labelIds = [],
+    articleIds = [],
+    categoryMap = {},
+    labelMap = {},
+    commentMap = {};
+
+  var promise = model.find(conditions, {_id: 1, title: 1, content: 1, categories: 1, labels: 1, articleLink: 1, account: 1, createdDate: 1}).exec();
+
+  promise.then(function (articles) {
+    articleList = articles.map(function (item) {
+      var doc = item._doc;
+      articleIds.push(doc._id.toString());
+      doc.categories.forEach(function (item) {
+        categoriesId.push(item);
+      });
+      doc.labels.forEach(function (item) {
+        labelIds.push(item);
+      });
+      doc.createdDate = moment(doc.createdDate).format('YYYY年MM月DD HH:mm:ss');
+      //FIXME: 这里需要截取文章内容，待实现
+      //doc.content = '';
+      return doc;
+    });
+
+    //查询文章分类
+    return CategoryModel.find({_id: { $in: categoriesId }}, {_id: 1, name: 1}).exec();
+  }).then(function (categories) {
+    categories.forEach(function (item) {
+      categoryMap[item._id] = item.name;
+    });
+
+    //查询文章标签
+    return LabelModel.find({_id: { $in: labelIds }}, {_id: 1, name: 1}).exec();
+  }).then(function (labels) {
+    labels.forEach(function (item) {
+      labelMap[item._id] = item.name;
+    });
+
+    //查询评论个数
+    return CommentModel.aggregate({$match: {articleID: { $in: articleIds }}}, { $group: { _id: '$articleID', commentCount: { $sum: 1 }}}).exec();
+  }).then(function (comments) {
+    comments.forEach(function (item) {
+      commentMap[item._id] = item.commentCount;
+    });
+
+    articleList.forEach(function (item) {
+      item.labels = item.labels.map(function (item) {
+        return {_id: item, name: labelMap[item]};
+      });
+      item.categories = item.categories.map(function (item) {
+        return {_id: item, name: categoryMap[item]};
+      });
+      item.commentCount = commentMap[item._id.toString()];
+    });
+
+    dataPage.setItems(articleList);
+    return callback(null, dataPage);
+
   }).then(null, function (err) {
     return callback(err);
   });

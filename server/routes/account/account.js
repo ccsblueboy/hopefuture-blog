@@ -85,6 +85,7 @@ var account = {
         }
       } else {
         success = true;
+        sessionManage.clearAccountCookie(res);
       }
       res.send({success: success, message: message});
     });
