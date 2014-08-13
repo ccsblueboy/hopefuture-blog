@@ -405,18 +405,22 @@ module.exports = function (grunt) {
 
     // 把less 转换为 css 任务
     less: {
-      development: {
+      springTones: {
         options: {
           paths: ['<%= yeoman.app %>/']
         },
         files: {
-          '<%= yeoman.app %>/styles/base.css': '<%= yeoman.app %>/less/base.less',
-          '<%= yeoman.app %>/styles/blog.css': '<%= yeoman.app %>/less/blog.less',
-          '<%= yeoman.app %>/styles/validate.css': '<%= yeoman.app %>/less/validate.less',
-          '<%= yeoman.app %>/styles/manage-blog.css': '<%= yeoman.app %>/less/manage-blog.less',
-          '<%= yeoman.app %>/styles/ng-animate.css': '<%= yeoman.app %>/less/ng-animate.less',
-          '<%= yeoman.app %>/styles/examples.css': '<%= yeoman.app %>/less/examples.less',
-          '<%= yeoman.app %>/styles/tinymce.css': '<%= yeoman.app %>/less/tinymce.less'
+          '<%= yeoman.app %>/styles/spring-tones/blog.css': '<%= yeoman.app %>/less/blog-spring-tones.less',
+          '<%= yeoman.app %>/styles/spring-tones/blog-manage.css': '<%= yeoman.app %>/less/blog-manage-spring-tones.less'
+        }
+      },
+      publish: {
+        options: {
+          paths: ['<%= yeoman.app %>/']
+        },
+        files: {
+          '<%= yeoman.app %>/styles/spring-tones/blog.css': '<%= yeoman.app %>/less/blog-spring-tones.less',
+          '<%= yeoman.app %>/styles/spring-tones/blog-manage.css': '<%= yeoman.app %>/less/blog-manage-spring-tones.less'
         }
       }
     },
@@ -496,7 +500,7 @@ module.exports = function (grunt) {
           ]
         },
         files: [
-          {expand: true, src: ['<%= yeoman.server %>/**/*.js','<%= yeoman.app %>/scripts/**/*.js'], dest: '.tmp/jsdoc/'}
+          {expand: true, src: ['<%= yeoman.server %>/**/*.js', '<%= yeoman.app %>/scripts/**/*.js'], dest: '.tmp/jsdoc/'}
         ]
       }
     }
@@ -510,7 +514,7 @@ module.exports = function (grunt) {
     grunt.task.run([
       'clean:server', // clean .tmp
       'bowerInstall',
-      'less',//把less转换为css
+      'less:publish',//把less转换为css
       'concurrent:server',// 把样式copy到临时目录中
       'autoprefixer',// 分析css 并给css3加上浏览器前缀
       'express:dev',// 启动 express
@@ -530,7 +534,7 @@ module.exports = function (grunt) {
   grunt.registerTask('build', [
     'clean:dist',// clean dist
     'bowerInstall',
-    'less',//把less转换为css
+    'less:publish',//把less转换为css
     'useminPrepare',//合并压缩文件
     'concurrent:dist',//copy css image 和 svg
     'autoprefixer',// 处理css
@@ -563,7 +567,7 @@ module.exports = function (grunt) {
    * 以下任务为开发过程中测试用
    */
   grunt.registerTask('buildless', [
-    'less'
+    'less:publish'
   ]);
 
   grunt.registerTask('buildjsdoc', [

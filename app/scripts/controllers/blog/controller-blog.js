@@ -9,7 +9,8 @@
  * @createdDate 2014-6-12
  * */
 
-angular.module('hopefutureBlogApp').controller('BlogCtrl', function ($scope, blogService, blogMethod) {
+angular.module('hopefutureBlogApp')
+  .controller('BlogCtrl', function ($scope, blogService, blogMethod) {
 
   /**
    * 创建新的文章

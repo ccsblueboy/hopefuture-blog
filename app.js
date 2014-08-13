@@ -7,7 +7,7 @@
 
 var express = require('express');
 var path = require('path');
-var favicon = require('static-favicon');
+var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
@@ -22,13 +22,15 @@ var config = require('./server/config');
 var accountDao = require('./server/dao/account/AccountDao');
 var accountMetaDao = require('./server/dao/account/AccountMetaDao');
 
+var environment = 'development';
 var app = express();
 
+app.set('env', environment);
 //让ejs模板改为扩展名为html
 app.engine('.html', ejs.__express);
 app.set('view engine', 'html');
 
-app.use(favicon());
+app.use(favicon(__dirname + '/' + ('development' === app.get('env') ? 'app' : 'webapp') + '/favicon.png'));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
@@ -60,7 +62,10 @@ app.use(function (req, res, next) {
         if (err === 1) {
           sessionManage.setAccountSession(req, {
             _id: doc._id,
-            loginName: doc.loginName
+            loginName: doc.loginName,
+            email: doc.email,
+            site: doc.site,
+            headPortrait: doc.headPortrait
           });
         }
         next();
@@ -97,7 +102,7 @@ app.use(function (req, res, next) {
       } else {
         var loginName = req.path.split('/')[1];
         if (account.loginName !== loginName) {//非法操作
-          if (req.headers.xrequestedwith === 'XMLHttpRequest') {
+          if (req.headers['x-requested-with'] === 'XMLHttpRequest') {
             res.send({
               success: false,
               errorCode: '9002',
@@ -153,8 +158,6 @@ app.use(function (req, res, next) {
 //定义路由
 routes(app);
 
-var environment = 'development';
-app.set('env', environment);
 // development only
 if ('development' === app.get('env')) {
   app.set('views', path.join(__dirname, 'app'));

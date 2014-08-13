@@ -10,12 +10,12 @@ var signup = require('./account/signup');
 var forgot = require('./account/forgot');
 var resetPassword = require('./account/resetPassword');
 var personalBlog = require('./blog/personalBlog');
-var article = require('./manageblog/article');
-var category = require('./manageblog/category');
-var label = require('./manageblog/label');
-var comment = require('./manageblog/comment');
-var resource = require('./manageblog/resource');
-var setting = require('./manageblog/setting');
+var article = require('./blogmanage/article');
+var category = require('./blogmanage/category');
+var label = require('./blogmanage/label');
+var comment = require('./blogmanage/comment');
+var resource = require('./blogmanage/resource');
+var setting = require('./blogmanage/setting');
 var blog = require('./blog/blog');
 
 var sessionManage = require('../utils/sessionManage');
@@ -62,6 +62,8 @@ module.exports = function (app) {
     res.render('about');
   });
 
+  app.use('/blog', blog);// 首页相关URL路径
+
   //用 url 变量来区分每个用户的博客，用户注册时不能用项目中存在的链接名称，注册时需要过滤一下，
   //已在config.js文件中定义 accountFilters
   app.use('/:account', personalBlog);
@@ -73,7 +75,5 @@ module.exports = function (app) {
   app.use('/:account/manage/resource', resource);// 资源链接
   app.use('/:account/manage/account', account);// 用户信息
   app.use('/:account/manage/setting', setting);// 博客设置
-
-  app.use('/blog', blog);// 首页相关URL路径
 
 };

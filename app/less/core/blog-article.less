@@ -1,0 +1,85 @@
+//文章信息
+.article-info {
+  > section {
+    margin-top: @margin-vl;
+    margin-bottom: @margin-lg;
+  }
+}
+
+//博客内容
+.article-content {
+  margin-top: @margin-md;
+  p {
+    line-height: 2em;
+    text-indent: 2em;
+  }
+}
+
+.article-reproduced {
+  margin: @margin-lg 0;
+}
+
+//文章分页
+.navigation-post {
+  margin: @margin-hg 0;
+}
+
+//评论面板
+.comment-panel {
+  margin-top: @margin-md;
+  button + button{
+    margin-left: @margin-md;
+  }
+}
+
+//评论者面板
+.commentator-panel {
+  margin-top: @margin-md;
+}
+
+.comment-list > li {
+  margin-top: @margin-vl;
+  padding: @padding-md;
+  border: 1px dashed @gray;
+}
+
+.comment-list > li > ul {
+  margin-left: @margin-hg;
+}
+
+.comment-meta {
+  margin-left: @margin-lg;
+}
+
+.comment-content {
+  border-radius: 5px;
+  margin: @margin-md 0;
+  padding: @padding-lg;
+  position: relative;
+  .box-shadow(inset 0 0 0 2px rgba(0, 0, 0, 0.1));
+}
+
+.comment-content:before,
+.comment-content:after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: -1.6em;
+  left: .844em;
+  border: 0.8em solid rgba(0, 0, 0, 0.1);
+  border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+}
+
+.comment-content:after {
+  margin-top: .201em;
+  border-color: transparent transparent @body-bg transparent;
+}
+
+.comment-reply{
+  margin-bottom: @margin-md;
+}
+
+//文章归档，分类等 title
+.article-type-title{
+  margin-bottom: @margin-vl;
+}

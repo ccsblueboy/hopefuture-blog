@@ -47,7 +47,7 @@ angular.module('hopefutureBlogApp')
     $scope.delete = function (item) {
       var modalInstance = $modal.open({
         backdrop: 'static',
-        templateUrl: '../views/templates/confirmModal.html',
+        templateUrl: '../views/templates/confirm-modal.html',
         controller: 'ConfirmModalCtrl',
         resolve: {
           config: function () {
@@ -67,7 +67,7 @@ angular.module('hopefutureBlogApp')
     $scope.deleteAll = function () {
       if ($scope.grid.checked === false) {
         $modal.open({
-          templateUrl: '../views/templates/alertModal.html',
+          templateUrl: '../views/templates/alert-modal.html',
           controller: 'AlertModalCtrl',
           resolve: {
             config: function () {
@@ -81,7 +81,7 @@ angular.module('hopefutureBlogApp')
       }
       var modalInstance = $modal.open({
         backdrop: 'static',
-        templateUrl: '../views/templates/confirmModal.html',
+        templateUrl: '../views/templates/confirm-modal.html',
         controller: 'ConfirmModalCtrl',
         resolve: {
           config: function () {

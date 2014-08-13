@@ -12,8 +12,6 @@
   ],
   "dependencies": {
     "angular": "~1.2.21",
-    "json3": "~3.3.2",
-    "es5-shim": "~4.0.1",
     "jquery": "~2.1.1",
     "jquery-validation": "~1.13.0",
     "bootstrap": "~3.2.0",

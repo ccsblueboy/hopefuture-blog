@@ -60,8 +60,8 @@ var transporter = nodemailer.createTransport(smtpTransport({
   host: 'smtp.126.com',
   port: 25,
   auth: {
-    user: 'linder0209@126.com',
-    pass: 'linder%*$$52'
+    user: '545454@455454.com',
+    pass: '445545454'
   }
 }));
 

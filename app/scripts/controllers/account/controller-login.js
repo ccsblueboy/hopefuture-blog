@@ -16,7 +16,7 @@ angular.module('hopefutureBlogApp')
     var error = url.match(/errorCode=(\w+)/);
     if (error !== null) {
       var modalInstance = $modal.open({
-        templateUrl: '../views/templates/alertModal.html',
+        templateUrl: '../views/templates/alert-modal.html',
         controller: 'AlertModalCtrl',
         resolve: {
           config: function () {

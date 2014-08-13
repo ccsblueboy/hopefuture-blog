@@ -1,0 +1,41 @@
+/*
+* 页面底部样式
+*/
+.footer-links {
+  background-color: saturate(@navbar-inverse-bg, 20%);
+  padding: 20px 0;
+}
+
+.footer-copyright {
+  background-color: lighten(@gray-dark, 10%);
+  color: @footer-copyright-color;
+  padding: 10px 0 0;
+}
+
+.links-item > li {
+  float: left;
+}
+
+.links-item > li:first-child {
+  margin-right: @margin-lg;
+}
+
+.links-item-title {
+  color: @footer-links-title-color;
+  font-size: @font-size-medium;
+}
+
+.links-item-content > span {
+  margin-right: @margin-md;
+}
+
+.links-item-content a,
+.links-item-content a:hover,
+.links-item-content a:focus,
+.links-item-content {
+  color: @footer-links-content-color;
+}
+
+.blog-footer-logo {
+  //FIXME：待实现 logo
+}

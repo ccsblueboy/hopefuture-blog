@@ -52,6 +52,7 @@ CommentDao.prototype.comment = function (data, callback) {
         return callback(err, {
           _id: doc._id,
           commentator: doc.commentator,
+          headPortrait: doc.headPortrait,
           content: doc.content,
           createdDate: moment(doc.createdDate).format('YYYY年MM月DD HH:mm:ss')
         });

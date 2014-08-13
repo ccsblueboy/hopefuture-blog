@@ -10,5 +10,14 @@ angular.module('hopefutureBlogApp')
         model.assign(scope, validator);
       }
     };
+  })
+  //用来统一显示文章相关数据，评论数 标签，分类等
+  .directive('articleMeta', function () {
+    return {
+      restrict: 'AC',
+      templateUrl: 'views/templates/article-meta.html',
+      link: function(scope, element) {
+      }
+    };
   });
 

@@ -10,7 +10,7 @@
   </div>
   <!--/.jumbotron -->
 
-  <div class="container">
+  <div class="container blog-container">
 
     <div class="row">
 
@@ -44,82 +44,95 @@
             </button>
           </span>
         </div>
+
         <div>
           <h3>关于作者</h3>
 
           <p><span title="头像" class="{{blog.account.headPortrait}}"></span></p>
 
-          <p>昵称: <span ng-bind="blog.account.name"></span></p>
+          <p>昵称：<span ng-bind="blog.account.name"></span></p>
 
-          <p>性别: <span ng-bind="blog.account.sex"></span></p>
+          <p>性别：<span ng-bind="blog.account.sex"></span></p>
 
-          <p>英文名: <span ng-bind="blog.account.englishName"></span></p>
+          <p>英文名：<span ng-bind="blog.account.englishName"></span></p>
 
-          <p>漂泊地: <span ng-bind="blog.account.residence"></span></p>
+          <p>漂泊地：<span ng-bind="blog.account.residence"></span></p>
 
           <p>职位：<span ng-bind="blog.account.position"></span></p>
 
           <p>email：<span ng-bind="blog.account.email"></span></p>
         </div>
 
-        <div>
+        <div class="article-aside">
           <h3>最热文章</h3>
-          <ol class="list-unstyled">
-            <li ng-repeat="article in blog.hotArticles"><a ng-href="#/article/{{article._id}}">{{article.title}}</a>
-              <span> - 539 views</span></li>
+          <ol class="list-unstyled article-list-aside">
+            <li ng-repeat="article in blog.hotArticles">
+              <span class="fa fa-file-o"></span>
+              <a ng-href="#/article/{{article._id}}" ng-bind="article.title"></a>
+              - <span ng-bind="article.readCounts||0"></span> views
+            </li>
           </ol>
         </div>
 
-        <div>
+        <div class="article-aside">
           <h3>近期文章</h3>
-          <ol class="list-unstyled">
-            <li ng-repeat="article in blog.recentArticles"><a ng-href="#/article/{{article._id}}">{{article.title}}</a> <span>{{article.createdDate}}</span>
+          <ol class="list-unstyled article-list-aside">
+            <li ng-repeat="article in blog.recentArticles">
+              <span class="fa fa-file-o"></span>
+              <a ng-href="#/article/{{article._id}}" ng-bind="article.title"></a>
+              - <span ng-bind="article.createdDate"></span>
             </li>
           </ol>
         </div>
 
-        <div>
+        <div class="article-aside">
           <h3>文章归档</h3>
-          <ol class="list-unstyled">
-            <li ng-repeat="archive in blog.articlesArchive"><a ng-href="#/archive/{{archive._id}}">{{archive.month}}</a> <span>（{{archive.articleCount}}）</span>
+          <ol class="list-unstyled article-list-aside">
+            <li ng-repeat="archive in blog.articlesArchive">
+              <span class="fa fa-folder-open-o"></span>
+              <a ng-href="#/archive/{{archive._id}}" ng-bind="archive.month"></a> （<span ng-bind="archive.articleCount"></span>）
             </li>
           </ol>
         </div>
 
-        <div>
+        <div class="article-aside">
           <h3>分类目录</h3>
-          <ol class="list-unstyled">
-            <li ng-repeat="category in blog.categories"><a ng-href="#/category/{{category._id}}">{{category.name}}</a> <span>（{{category.count}}）</span>
+          <ol class="list-unstyled article-list-aside">
+            <li ng-repeat="category in blog.categories">
+              <span class="fa fa-folder-open-o"></span>
+              <a ng-href="#/category/{{category._id}}" ng-bind="category.name"></a>
+              （<span ng-bind="category.count"></span>）
             </li>
           </ol>
         </div>
 
-        <div>
+        <div class="article-aside">
           <h3>标签</h3>
 
-          <div class="well well-sm label-list clearfix" ng-if="blog.labels.length>0">
-            <a ng-href="#/label/{{label._id}}" ng-repeat="label in blog.labels" ng-style="label.style">{{label.name}}</a>
+          <div class="label-list clearfix" ng-if="blog.labels.length>0">
+            <a ng-href="#/label/{{label._id}}" ng-repeat="label in blog.labels" ng-style="label.style" ng-bind="label.name"></a>
           </div>
         </div>
 
-        <div>
+        <div class="article-aside">
           <h3>近期评论</h3>
-          <ol class="list-unstyled">
+          <ol class="list-unstyled article-list-aside">
             <li ng-repeat="comment in blog.comments">
+              <span class="fa fa-comment-o"></span>
               {{comment.commentator}}评论了
-              《<a ng-href="#/article/{{comment.articleID}}">{{comment.articleTitle}}</a>》
+              《<a ng-href="#/article/{{comment.articleID}}" ng-bind="comment.articleTitle"></a>》
             </li>
           </ol>
         </div>
 
-        <div>
+        <div class="article-aside">
           <h3>资源链接</h3>
-          <ol class="list-unstyled">
+          <ol class="list-unstyled article-list-aside">
             <li ng-repeat="resource in blog.resources">
-              <a target="_blank" ng-href="{{resource.link}}">{{resource.name}}</a>
+              <a target="_blank" ng-href="{{resource.link}}" ng-bind="resource.name"></a>
             </li>
           </ol>
-          <div class="text-center"><a ng-href="#/resource">更多...</a></div>
+          <div class="text-center" ng-if="blog.resources.length>0"><a ng-href="#/resource">更多...</a></div>
         </div>
       </aside>
     </div>

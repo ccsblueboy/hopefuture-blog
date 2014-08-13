@@ -26,7 +26,7 @@ var personalBlog = {
   },
 
   manage: function (req, res) {
-    res.render('blog/manage-blog', {
+    res.render('blog/blog-manage', {
       title: '管理我的博客'
     });
   },
@@ -81,7 +81,9 @@ var personalBlog = {
         if (account) {
           data.account = {
             commentator: account.loginName,
-            email: account.email
+            email: account.email,
+            site: account.site,
+            headPortrait: account.headPortrait
           };
         }
         res.send({

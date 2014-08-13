@@ -24,7 +24,6 @@ var LabelModel = require('../../models/blog/LabelModel');
 var CategoryModel = require('../../models/blog/CategoryModel');
 var AccountModel = require('../../models/account/AccountModel');
 var CommentModel = require('../../models/blog/CommentModel');
-var ArticleMetaModel = require('../../models/blog/ArticleMetaModel');
 var ResourceModel = require('../../models/blog/ResourceModel');
 
 var commonMethod = require('./../../utils/commonMethod');
@@ -195,7 +194,7 @@ ArticleDao.prototype.pagination = function (loginName, dataPage, callback) {
       var categoriesId = [], labelIds = [], articlesData, labelMap = {};
 
       var promise = model.find({account: loginName},
-        {_id: 1, title: 1, status: 1, articleLink: 1, categories: 1, labels: 1, createdDate: 1},
+        {_id: 1, title: 1, status: 1, articleLink: 1, categories: 1, labels: 1, boutique: 1, createdDate: 1},
         {skip: skip, limit: limit}).exec();
 
       promise.then(function (articles) {
@@ -324,13 +323,8 @@ ArticleDao.prototype.delete = function (loginName, ids, callback) {
           if (err) {
             return callback(err);
           }
-          ArticleMetaModel.remove({articleID: {$in: ids}}, function (err) {
-            if (err) {
-              return callback(err);
-            }
-            model.remove(conditions, function (err) {
-              return callback(err);
-            });
+          model.remove(conditions, function (err) {
+            return callback(err);
           });
         });
       });
@@ -347,7 +341,7 @@ ArticleDao.prototype.findBlogData = function (loginName, callback) {
   //以下代码加载博客数据，包括个人信息，最热文章，近期文章，文章归档（近期五个月文章），分类目录，标签，近期评论，资源链接
   var data = {};
   var model = this.model;
-  var conditions = {account: loginName, status: 'publish'};
+  var conditions = {account: loginName, status: {$in: ['publish', 'modified']}};
   var articlesId = [];
 
   var promise = AccountModel.findOne({loginName: loginName}, {_id: 1, name: 1, sex: 1, headPortrait: 1, englishName: 1, residence: 1, position: 1,
@@ -364,7 +358,7 @@ ArticleDao.prototype.findBlogData = function (loginName, callback) {
   }).then(function (articles) {
     var docs = articles.map(function (item) {
       var doc = item._doc;
-      doc.createdDate = moment(doc.createdDate).format('YYYY年MM月DD HH:mm:ss');
+      doc.createdDate = moment(doc.createdDate).format('YYYY年MM月DD');
       return doc;
     });
     data.recentArticles = docs;//近期文章
@@ -430,27 +424,25 @@ ArticleDao.prototype.findBlogData = function (loginName, callback) {
 
 
 /**
- * 分页显示 个人博客
+ * 分页显示文章 个人博客
  * @method
- * @param conditions {Object} 查询条件
+ * @param loginName {String} 登录用户名
  * @param dataPage {DataPage} 分页数据
  * @param callback {function} 回调函数
  */
-ArticleDao.prototype.list = function (conditions, dataPage, callback) {
+ArticleDao.prototype.list = function (loginName, dataPage, callback) {
   var skip = dataPage.itemsPerPage * (dataPage.currentPage - 1);
   var limit = dataPage.itemsPerPage;
   var model = this.model;
+  var conditions = {account: loginName, status: {$in: ['publish', 'modified']}};
 
-  model.count({}, function (err, count) {
-    if (err) {
+  model.count(conditions, function (err, count) {
+    if (err === null) {
+      dataPage.setTotalItems(count);
+      getArticlePagination(model, conditions, skip, limit, dataPage, callback);
+    } else {
       return callback(err);
     }
-    dataPage.setTotalItems(count);
-    underscore.extend(conditions, {status: 'publish'});
-    model.find(conditions, {_id: 1, title: 1, content: 1, articleLink: 1, createdDate: 1}, {skip: skip, limit: limit, sort: {_id: -1}}, function (err, docs) {
-      dataPage.setItems(docs);
-      return callback(err, dataPage);
-    });
   });
 };
 
@@ -464,7 +456,7 @@ ArticleDao.prototype.articleInfo = function (loginName, articleId, callback) {
   //以下加载文章内容，相关文章，前后文章，评论列表
   var data = {};
   var model = this.model;
-  var conditions = {account: loginName, status: 'publish'};
+  var conditions = {account: loginName, status: {$in: ['publish', 'modified']}};
   var articleLabels;
   var categories;
 
@@ -488,13 +480,15 @@ ArticleDao.prototype.articleInfo = function (loginName, articleId, callback) {
   }).then(function (labels) {
     data.article.labels = labels;//文章标签
 
-    return CommentModel.find({articleID: articleId }, {_id: 1, commentator: 1, content: 1, createdDate: 1, commentParent: 1}).sort({_id: 1}).exec();
+    //文章评论信息
+    return CommentModel.find({articleID: articleId }, {_id: 1, commentator: 1, headPortrait: 1, content: 1, createdDate: 1, commentParent: 1}).sort({_id: 1}).exec();
   }).then(function (comments) {
     if (comments) {
       var items = comments.map(function (item) {
         return {
           _id: item._id.toString(),
           commentator: item.commentator,
+          headPortrait: item.headPortrait,
           content: item.content,
           createdDate: moment(item.createdDate).format('YYYY年MM月DD HH:mm:ss'),
           commentParent: item.commentParent
@@ -537,7 +531,7 @@ ArticleDao.prototype.articleInfo = function (loginName, articleId, callback) {
  * @param callback {function} 回调函数
  */
 ArticleDao.prototype.archive = function (loginName, month, callback) {
-  var conditions = {account: loginName, status: 'publish', createdMonth: month};
+  var conditions = {account: loginName, status: {$in: ['publish', 'modified']}, createdMonth: month};
   getArticleList(this.model, conditions, 'archive', month, callback);
 };
 
@@ -548,7 +542,7 @@ ArticleDao.prototype.archive = function (loginName, month, callback) {
  * @param callback {function} 回调函数
  */
 ArticleDao.prototype.category = function (loginName, id, callback) {
-  var conditions = {account: loginName, status: 'publish', categories: {$elemMatch: {$eq: id}}};
+  var conditions = {account: loginName, status: {$in: ['publish', 'modified']}, categories: {$elemMatch: {$eq: id}}};
   getArticleList(this.model, conditions, 'category', id, callback);
 };
 
@@ -559,8 +553,9 @@ ArticleDao.prototype.category = function (loginName, id, callback) {
  * @param callback {function} 回调函数
  */
 ArticleDao.prototype.label = function (loginName, id, callback) {
-  var conditions = {account: loginName, status: 'publish', labels: {$elemMatch: {$eq: id}}};
-  //var conditions = {account: loginName, status: 'publish', labels: {$elemMatch: {$in: [id]}}};
+  var conditions = {account: loginName, status: {$in: ['publish', 'modified']}, labels: {$elemMatch: {$eq: id}}};
+  // 或者调用以下语句
+  //var conditions = {account: loginName, status: {$in: ['publish', 'modified']}, labels: {$elemMatch: {$in: [id]}}};
   getArticleList(this.model, conditions, 'label', id, callback);
 };
 
@@ -569,18 +564,31 @@ ArticleDao.prototype.boutiqueArticle = function (dataPage, callback) {
   var skip = dataPage.itemsPerPage * (dataPage.currentPage - 1);
   var limit = dataPage.itemsPerPage;
   var model = this.model;
-  model.count({boutique: true}, function (err, count) {
+  var conditions = {boutique: true, status: {$in: ['publish', 'modified']}};
+  model.count(conditions, function (err, count) {
     if (err === null) {
       dataPage.setTotalItems(count);
-      getBoutiqueArticle(model, {boutique: true}, skip, limit, dataPage, callback);
+      getArticlePagination(model, conditions, skip, limit, dataPage, callback);
     }
   });
 };
 
 /**
- * 返回个人文章列表
+ * 修改数据
+ * @param conditions
+ * @param fields
+ * @param callback
+ */
+ArticleDao.prototype.update = function (conditions, fields, callback) {
+  this.model.update(conditions, fields, function (err, numberAffected, rawResponse) {
+    return callback(err);
+  });
+};
+
+/**
+ * 根据条件返回个人文章列表
  * @param model
- * @param conditions 查询条件
+ * @param conditions 查询条件，条件有标签，目录结构，分档等
  * @param type 标签或分类
  * @param id 标签或分类ID
  * @param callback
@@ -607,8 +615,10 @@ function getArticleList(model, conditions, type, id, callback) {
         labelIds.push(item);
       });
       doc.createdDate = moment(doc.createdDate).format('YYYY年MM月DD HH:mm:ss');
-      //FIXME: 这里需要截取文章内容，待实现
-      //doc.content = '';
+      //这里全显示，不在截取
+//      var content = commonMethod.htmlToText(doc.content);
+//      content = commonMethod.truncate(content, 500, true, '...');
+//      doc.content = content;
       return doc;
     });
 
@@ -667,7 +677,7 @@ function getArticleList(model, conditions, type, id, callback) {
 }
 
 /**
- * 返回精品文章
+ * 根据条件返回分页文章列表
  * @param model
  * @param conditions
  * @param skip
@@ -675,7 +685,7 @@ function getArticleList(model, conditions, type, id, callback) {
  * @param dataPage 分页数据
  * @param callback
  */
-function getBoutiqueArticle(model, conditions, skip, limit, dataPage, callback) {
+function getArticlePagination(model, conditions, skip, limit, dataPage, callback) {
 
   var articleList = [],
     categoriesId = [],
@@ -685,7 +695,9 @@ function getBoutiqueArticle(model, conditions, skip, limit, dataPage, callback) 
     labelMap = {},
     commentMap = {};
 
-  var promise = model.find(conditions, {_id: 1, title: 1, content: 1, categories: 1, labels: 1, articleLink: 1, account: 1, createdDate: 1}).exec();
+  var promise = model.find(conditions,
+    {_id: 1, title: 1, content: 1, categories: 1, labels: 1, account: 1, createdDate: 1},
+    {skip: skip, limit: limit, sort: {_id: -1}}).exec();
 
   promise.then(function (articles) {
     articleList = articles.map(function (item) {
@@ -698,8 +710,9 @@ function getBoutiqueArticle(model, conditions, skip, limit, dataPage, callback) 
         labelIds.push(item);
       });
       doc.createdDate = moment(doc.createdDate).format('YYYY年MM月DD HH:mm:ss');
-      //FIXME: 这里需要截取文章内容，待实现
-      //doc.content = '';
+      var content = commonMethod.htmlToText(doc.content);
+      content = commonMethod.truncate(content, 500, true, '...');
+      doc.content = content;
       return doc;
     });
 

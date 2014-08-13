@@ -61,7 +61,7 @@ angular.module('hopefutureBlogApp')
       if (!item) {//没有传参数，表示执行的是删除多条记录
         if ($scope.grid.checked === false) {
           $modal.open({
-            templateUrl: '../views/templates/alertModal.html',
+            templateUrl: '../views/templates/alert-modal.html',
             controller: 'AlertModalCtrl',
             resolve: {
               config: function () {
@@ -89,7 +89,7 @@ angular.module('hopefutureBlogApp')
       if (status === false) {
         var modalInstance = $modal.open({
           backdrop: 'static',
-          templateUrl: '../views/templates/confirmModal.html',
+          templateUrl: '../views/templates/confirm-modal.html',
           controller: 'ConfirmModalCtrl',
           resolve: {
             config: function () {

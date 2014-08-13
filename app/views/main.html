@@ -4,71 +4,66 @@
 
     <h2>开源、简洁、免费博客系统，让你书写博客更方便，更简单。</h2>
 
-    <p style="margin-top: 30px;">
+    <p class="masthead-button-links">
       <a class="btn btn-lg btn-primary" target="_blank"
          href="https://github.com/linder0209/hopefuture-blog">Hope Future 博客源码下载</a>
       <a class="btn btn-lg btn-primary" target="_blank"
-         href="https://github.com/linder0209/hopefuture-blog/issues/new" style="margin-left:20px;">意见反馈</a>
+         href="https://github.com/linder0209/hopefuture-blog/issues/new">意见反馈</a>
     </p>
 
   </div>
 </div>
 
-<div class="container">
-  <article class="article-boutique">
-    <h2 class="text-center"><a href="">JavaScript中的原型和继承</a></h2>
+<div class="container blog-container">
+  <article class="article-list" ng-repeat="article in articles">
+    <h2>
+      <a ng-href="{{article.account}}#/article/{{article._id}}">{{article.title}}</a>
+    </h2>
 
-    <div>
-      <p>
-        JavaScript中的原型和继承JavaScript中的原型和继承JavaScript中的原型和继承JavaScript中的原型和继承JavaScript中的原型和继承JavaScript中的原型和继承JavaScript中的原型和继承JavaScript中的原型和继承JavaScript中的原型和继承JavaScript中的原型和继承JavaScript中的原型和继承JavaScript中的原型和继承 </p>
+    <section>
 
-      <p><a ng-href="#/article/{{article._id}}">阅读全文 »</a></p>
-    </div>
+      <p>{{article.content}}</p>
+
+      <p><a ng-href="{{article.account}}#/article/{{article._id}}">阅读全文 »</a></p>
+    </section>
+
+    <aside class="article-meta">
+      <ul class="list-unstyled clearfix">
+        <li>
+          <span class="glyphicon glyphicon-calendar"></span>
+          发布时间：{{article.createdDate}}
+        </li>
+        <li>
+          <span class="fa fa-comment" title="评论"></span>
+          <span title="文章《{{article.title}}》的评论数">{{article.commentCount || 0}} 条评论</span>
+        </li>
+        <li ng-if="article.categories">
+          <span class="glyphicon glyphicon-folder-close" title="分类目录"></span>
+          <a ng-href="{{article.account}}#/category/{{category._id}}" ng-repeat="category in article.categories"
+             title="查看分类目录 {{category.name}} 中的全部文章" href="">{{category.name}}</a>
+        </li>
+        <li ng-if="article.labels">
+          <span class="glyphicon glyphicon-tags" title="标签"></span>
+          <a ng-href="{{article.account}}#/label/{{label._id}}" ng-repeat="label in article.labels" title="查看标签 {{label.name}} 中的全部文章"
+             href="">{{label.name}}</a>
+        </li>
+        <li>
+          <span class="glyphicon glyphicon-user" title="作者"></span>
+          <a ng-href="{{article.account}}" href="" title="查看作者的所有博客">{{article.account}}</a>
+        </li>
+      </ul>
+
+    </aside>
+
     <hr/>
-  </article>
-
-  <article class="article-boutique">
-    <h2 class="text-center"><a href="">JavaScript中的原型和继承</a></h2>
-
-    <div>
-      <p>
-        JavaScript中的原型和继承JavaScript中的原型和继承JavaScript中的原型和继承JavaScript中的原型和继承JavaScript中的原型和继承JavaScript中的原型和继承JavaScript中的原型和继承JavaScript中的原型和继承JavaScript中的原型和继承JavaScript中的原型和继承JavaScript中的原型和继承JavaScript中的原型和继承 </p>
-
-      <p><a ng-href="#/article/{{article._id}}">阅读全文 »</a></p>
-    </div>
-    <hr/>
-  </article>
-
-  <article class="article-boutique">
-    <h2 class="text-center"><a href="">JavaScript中的原型和继承</a></h2>
-
-    <div>
-      <p>
-        JavaScript中的原型和继承JavaScript中的原型和继承JavaScript中的原型和继承JavaScript中的原型和继承JavaScript中的原型和继承JavaScript中的原型和继承JavaScript中的原型和继承JavaScript中的原型和继承JavaScript中的原型和继承JavaScript中的原型和继承JavaScript中的原型和继承JavaScript中的原型和继承 </p>
-
-      <p><a ng-href="#/article/{{article._id}}">阅读全文 »</a></p>
-    </div>
-    <hr/>
-  </article>
-
-  <article class="article-boutique">
-    <h2 class="text-center"><a href="">JavaScript中的原型和继承</a></h2>
-
-    <div>
-      <p>
-        JavaScript中的原型和继承JavaScript中的原型和继承JavaScript中的原型和继承JavaScript中的原型和继承JavaScript中的原型和继承JavaScript中的原型和继承JavaScript中的原型和继承JavaScript中的原型和继承JavaScript中的原型和继承JavaScript中的原型和继承JavaScript中的原型和继承JavaScript中的原型和继承 </p>
-
-      <p><a ng-href="#/article/{{article._id}}">阅读全文 »</a></p>
-    </div>
   </article>
 
   <nav class="text-center">
     <ul class="pagination pagination-lg boutique-pagination">
-      <li><a href="#"><i class="fa fa-angle-left"></i></a></li>
-      <li><span class="page-number">2 / 5</span></li>
-      <li><a href="#"><i class="fa fa-angle-right"></i></a></li>
+      <li ng-class="{disabled:currentPage==1}"><a href="" ng-click="prevOrNextPage(-1,$event);"><i class="fa fa-angle-left"></i></a></li>
+      <li><span class="page-number">{{currentPage}} / {{numPages}}</span></li>
+      <li ng-class="{disabled:currentPage==numPages}"><a href="" ng-click="prevOrNextPage(1,$event)"><i class="fa fa-angle-right"></i></a></li>
     </ul>
   </nav>
 
 </div>
-

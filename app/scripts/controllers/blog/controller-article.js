@@ -29,6 +29,7 @@ angular.module('hopefutureBlogApp')
     var comment = {
       articleID: undefined,
       commentator: '',
+      headPortrait: 'head-portrait-default',
       content: '',
       email: '',
       site: '',
@@ -79,9 +80,9 @@ angular.module('hopefutureBlogApp')
 
         comment.articleID = data.articleInfo.article._id;
         $scope.comment.articleID = data.articleInfo.article._id;
-        if (data.account) {
-          angular.extend(comment, data.account);
-          angular.extend($scope.comment, data.account);
+        if (data.articleInfo.account) {
+          angular.extend(comment, data.articleInfo.account);
+          angular.extend($scope.comment, data.articleInfo.account);
         }
 
         //FIXME 这里递归渲染没有使用 angular 指令实现（以后有机会再研究），只是简单的通过模板来渲染html
@@ -124,7 +125,7 @@ angular.module('hopefutureBlogApp')
             var html = blogMethod.renderComment(data.comment, parseInt(itmeEl.attr('comment-level')) + 1);
             var childComment = itmeEl.children('ul.comment');
             if (childComment.length === 0) {
-              childComment = $('<ul class="list-unstyled comment"/>').appendTo(itmeEl);
+              childComment = $('<ul class="list-unstyled comment-list"/>').appendTo(itmeEl);
             }
             childComment.append(html);
           } else {
@@ -135,7 +136,7 @@ angular.module('hopefutureBlogApp')
         } else {
           var errCode = data.errMessage;
           $modal.open({
-            templateUrl: '../views/templates/alertModal.html',
+            templateUrl: '../views/templates/alert-modal.html',
             controller: 'AlertModalCtrl',
             resolve: {
               config: function () {

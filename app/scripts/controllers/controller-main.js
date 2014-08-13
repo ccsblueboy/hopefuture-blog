@@ -11,22 +11,39 @@
 
 angular.module('hopefutureBlogApp')
   .controller('MainCtrl', function ($scope, mainService) {
-    $scope.page = {currentPage: 1};
+    $scope.currentPage = 1;
     $scope.itemsPerPage = 20;
 
     $scope.loadPageData = function () {
       var params = {
-        currentPage: $scope.page.currentPage,
+        currentPage: $scope.currentPage,
         itemsPerPage: $scope.itemsPerPage
       };
-
       mainService.boutiqueArticle({params: params}, function (data) {
         if (data.success === true) {
-          $scope.items = data.dataPage.items;
+          var numPages = parseInt(data.dataPage.totalItems / $scope.itemsPerPage);
+          $scope.articles = data.dataPage.items;
           $scope.totalItems = data.dataPage.totalItems;
+          $scope.numPages = data.dataPage.totalItems % $scope.itemsPerPage === 0 ? numPages : (numPages + 1);
         }
       });
     };
     $scope.loadPageData();
 
+    //前一页或下一页
+    $scope.prevOrNextPage = function (prevOrNext, event) {
+      if (prevOrNext === -1) {
+        if ($scope.currentPage === 1) {
+          return false;
+        }
+        $scope.currentPage--;
+      } else if (prevOrNext === 1) {
+        if ($scope.currentPage === $scope.numPages) {
+          return false;
+        }
+        $scope.currentPage++;
+      }
+
+      $scope.loadPageData();
+    };
   });

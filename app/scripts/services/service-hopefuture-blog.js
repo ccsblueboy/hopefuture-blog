@@ -9,16 +9,17 @@ angular.module('hopefutureBlogApp')
     //渲染评论模板
     var tmpl =
       '   <div class="clearfix">' +
-      '     <span class="pull-left head-portrait" title="头像"></span>' +
-      '     <div class="pull-left margin20-L">' +
-      '       <p><a href="">{{:createdDate}}</a></p>' +
+      '     <span class="pull-left {{:headPortrait}}" title="头像"></span>' +
+      '     <div class="pull-left comment-meta">' +
+      '       <p class="link"><span class="glyphicon glyphicon-calendar"></span> {{:createdDate}}</p>' +
       '       <p>{{:commentator}}</p>' +
       '     </div>' +
       '   </div>' +
       '   <div class="comment-content">{{:content}}</div>' +
       '   {{if showReply}}' +
-      '      <div class="margin10-B">' +
-      '         <a href="" data-reply-comment="{{:_id}}"><span class="glyphicon glyphicon-share-alt"></span> 回复</a>' +
+      '      <div class="comment-reply">' +
+      '        <span class="fa fa-mail-reply"></span> ' +
+      '         <a href="" data-reply-comment="{{:_id}}">回复</a>' +
       '     </div>' +
       '   {{/if}}';
 
@@ -83,8 +84,7 @@ angular.module('hopefutureBlogApp')
           if (!items) {
             return;
           }
-          var comentCls = items.length > 0 && level === 1 ? 'comment-has-content' : '';
-          var html = '<ul class="list-unstyled comment ' + comentCls + '">';
+          var html = '<ul class="list-unstyled comment-list">';
           var item;
           for (var i = 0, len = items.length; i < len; i++) {
             item = items[i];

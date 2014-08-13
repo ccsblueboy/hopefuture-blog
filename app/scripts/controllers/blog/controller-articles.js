@@ -16,11 +16,10 @@ angular.module('hopefutureBlogApp')
     var account = pathname.substring(1);
 
     $scope.page = {currentPage: 1};
-    $scope.maxSize = 5;
     $scope.itemsPerPage = 20;
 
     /**
-     * 加载文章列表
+     * 加载文章分页列表
      */
     $scope.loadArticles = function () {
       var params = {

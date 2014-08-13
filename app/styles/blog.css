@@ -24,7 +24,7 @@
   font-size: 16px;
 }
 
-.links-item-content a {
+.links-item-content > span {
   margin-right: 10px;
 }
 
@@ -109,23 +109,16 @@
   padding: 3px 0;
 }
 
-.article-subtitle {
-  vertical-align: middle;
-  font-size: 18px;
-}
-
 .article-meta > ul > li {
   float: left;
-  margin-right: 10px;
-  color: #0059b3;
+  margin-right: 15px;
 }
 
-.article-meta > ul > li > a {
-  margin-left: 8px;
-  margin-right: 5px;
+.article-meta > ul > li > a + a {
+  margin-left: 10px;
 }
 
-.article-boutique {
+.article-list {
   background: #FFFFFF;
   border-radius: 5px;
   margin-bottom: 30px;
@@ -133,7 +126,7 @@
   padding: 10px 20px;
 }
 
-.article-boutique p {
+.article-list p {
   line-height: 2em;
   text-indent: 2em;
 }
@@ -164,8 +157,8 @@
 
 .boutique-pagination > li > a > i.fa {
   font-size: 4em;
-  height: 70px;
-  line-height: 70px;
+  height: 72px;
+  line-height: 72px;
 }
 
 .boutique-pagination > li > a > i.fa,
@@ -176,4 +169,16 @@
 .boutique-pagination > li > span.page-number {
   height: 92px;
   line-height: 92px;
+}
+
+.article-list-aside > li {
+  margin-bottom: 10px;
+}
+
+.article-list-aside .fa {
+  margin-right: 5px;
+}
+
+.article-aside {
+  margin-top: 50px;
 }

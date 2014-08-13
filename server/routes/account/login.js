@@ -31,7 +31,10 @@ var account = {
         case 1:
           sessionManage.setAccountSession(req, {
             _id: doc._id,
-            loginName: doc.loginName
+            loginName: doc.loginName,
+            email: doc.email,
+            site: doc.site,
+            headPortrait: doc.headPortrait
           });
           success = true;
           //设置cookie

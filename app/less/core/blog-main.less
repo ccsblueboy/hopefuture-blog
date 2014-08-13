@@ -1,0 +1,94 @@
+//博客（个人博客）主页面
+.blog-container {
+  margin-bottom: @margin-hg;
+}
+
+.masthead-button-links {
+  margin-top: @margin-vl;
+  a + a {
+    margin-left: @margin-lg;
+  }
+}
+
+.article-list {
+  background: @default-bg;
+  border-radius: 5px;
+  margin-bottom: @margin-vl;
+  opacity: 0.7;
+  padding: 10px 20px;
+  > p {
+    line-height: 2em;
+    text-indent: 2em;
+  }
+  > section {
+    margin-bottom: @margin-lg;
+  }
+}
+
+//热点文章 pagination
+.boutique-pagination {
+  background-color: @gray-lighter;
+
+  > li > a,
+  > li > span {
+    background-color: rgba(0, 0, 0, 0);
+    margin-left: 0;
+    border: 0 none;
+  }
+
+  > li > a:hover,
+  > li > a:focus {
+    border: 0 none;
+  }
+
+  > li > span,
+  > li > span:hover,
+  > li > span:focus {
+    border-left: 1px solid #658B6F;
+    border-right: 1px solid #658B6F;
+  }
+
+  > li > a > i.fa {
+    font-size: 4em;
+    height: 72px;
+    line-height: 72px;
+    padding: 0 25px;
+  }
+
+  > li > span {
+    padding: 0 25px;
+  }
+
+  > li > span.page-number {
+    height: 92px;
+    line-height: 92px;
+  }
+}
+
+.article-meta > ul > li {
+  float: left;
+  margin-right: @margin-lg;
+  > a + a {
+    margin-left: @margin-md;
+  }
+}
+
+//个人博客首页右侧样式
+.article-aside {
+  margin-top: @margin-hg;
+}
+
+.article-list-aside {
+  > li {
+    margin-bottom: @margin-md;
+  }
+  .fa {
+    margin-right: @margin-sm;
+  }
+}
+
+.label-list > a {
+  display: inline-block;
+  margin-right: @margin-md;
+  padding: 3px 0;
+}

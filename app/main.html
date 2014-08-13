@@ -8,16 +8,15 @@
   <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
+  <link rel="stylesheet" href="styles/<%= theme %>/bootstrap/css/bootstrap.css" />
+  <link rel="stylesheet" href="styles/<%= theme %>/bootstrap/css/bootstrap-theme.css" />
+
   <!-- build:css styles/fontawesome.css -->
   <link rel="stylesheet" href="bower_components/fontawesome/css/font-awesome.css" />
   <!-- endbuild -->
 
-  <link rel="stylesheet" href="styles/theme/<%= theme %>/bootstrap/css/bootstrap.css" />
-  <link rel="stylesheet" href="styles/theme/<%= theme %>/bootstrap/css/bootstrap-theme.css" />
-
   <!-- build:css(.tmp) styles/main.css -->
-  <link rel="stylesheet" href="styles/base.css">
-  <link rel="stylesheet" href="styles/blog.css">
+  <link rel="stylesheet" href="styles/<%= theme %>/blog.css">
   <!-- endbuild -->
 </head>
 <body ng-app="hopefutureBlogApp" ng-controller="HopefutureBlogCtrl">

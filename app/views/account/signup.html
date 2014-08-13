@@ -1,10 +1,10 @@
-<div class="container margin50-T well">
-<div class="row margin10-B">
+<div class="container form-panel well">
+<div class="row form-panel-header">
   <div class="col-sm-offset-4 col-sm-4">
     <h2>个人用户注册</h2>
   </div>
   <div class="col-sm-offset-1 col-sm-10">
-    <div class="margin10-T" alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.message}}</div>
+    <div alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.message}}</div>
   </div>
 </div>
 
@@ -25,8 +25,8 @@
       <input type="password" class="form-control" id="password" name="password" minlength="6" maxlength="30" required
              ng-model="account.password" placeholder="请输入密码" autocomplete="off"/>
 
-      <!-- 密码强度由弱到强样式：progress-bar-danger progress-bar-warning progress-bar-info progress-bar-success -->
-      <div class="progress margin10-T" style="display:none;margin-bottom: 0;">
+      <!-- 密码强度，待用指令实现，由弱到强样式：progress-bar-danger progress-bar-warning progress-bar-info progress-bar-success -->
+      <div class="progress password-strong-weak-bar">
         <div class="progress-bar progress-bar-danger" style="width: 100%;">弱</div>
       </div>
     </div>
@@ -74,18 +74,17 @@
     <label for="sex" class="control-label col-sm-3">性别</label>
 
     <div class="col-sm-6">
-      <div class="input-group" dropdown is-open="selectBox.sex">
+      <div class="input-group select-box" dropdown is-open="selectBox.sex">
         <input placeholder="" type="text" class="form-control dropdown-input"
                ng-model="account.sex" ng-click="openDropDown($event,'sex');"
                id="sex" name="sex" ng-readonly="true">
 
         <div class="input-group-btn">
-          <button type="button" class="btn btn-default dropdown-toggle"
-                  style="border-bottom-left-radius: 0;border-top-left-radius: 0;margin-left: -1px;">
+          <button type="button" class="btn btn-default dropdown-toggle">
             <span class="caret"></span>
           </button>
         </div>
-        <ul role="menu" class="dropdown-menu" style="width: 100%;">
+        <ul role="menu" class="dropdown-menu">
           <li>
             <a href="" ng-click="account.sex='';selectBox.sex=false;">&nbsp;</a>
           </li>
@@ -107,8 +106,9 @@
       <span title="头像" class="{{account.headPortrait}}"></span>
       <ul class="head-portrait-list list-unstyled clearfix">
         <li>
-          <a href="" ng-click="changeHeadPortrait($event,'head-portrait-default');"><span title="头像"
-                                                                                          class="head-portrait-default"></span></a>
+          <a href="" ng-click="changeHeadPortrait($event,'head-portrait-default');">
+            <span title="头像" class="head-portrait-default"></span>
+          </a>
         </li>
         <li ng-repeat="value in headPortrait">
           <a href="" ng-click="changeHeadPortrait($event,value);"><span title="头像" class="{{value}}"></span></a>
@@ -122,18 +122,17 @@
     <label for="residence" class="control-label col-sm-3">来自</label>
 
     <div class="col-sm-6">
-      <div class="input-group" dropdown is-open="selectBox.residence">
+      <div class="input-group select-box" dropdown is-open="selectBox.residence">
         <input placeholder="如果列表中没有您的城市，可直接输入" type="text" class="form-control dropdown-input"
                ng-model="account.residence" ng-click="openDropDown($event,'residence');"
                id="residence" name="residence" maxlength="80">
 
         <div class="input-group-btn">
-          <button type="button" class="btn btn-default dropdown-toggle"
-                  style="border-bottom-left-radius: 0;border-top-left-radius: 0;margin-left: -1px;">
+          <button type="button" class="btn btn-default dropdown-toggle">
             <span class="caret"></span>
           </button>
         </div>
-        <ul role="menu" class="dropdown-menu" style="width: 100%;height: 200px;overflow-y: auto;">
+        <ul role="menu" class="dropdown-menu scroll">
           <li ng-repeat="value in residence">
             <a href="" ng-click="account.residence=value;selectBox.residence=false;">{{value}}</a>
           </li>
@@ -146,18 +145,17 @@
     <label for="position" class="control-label col-sm-3">职位</label>
 
     <div class="col-sm-6">
-      <div class="input-group" dropdown is-open="selectBox.position">
+      <div class="input-group select-box" dropdown is-open="selectBox.position">
         <input placeholder="" type="text" class="form-control dropdown-input"
                ng-model="account.position" ng-click="openDropDown($event,'position');"
                id="position" name="position" ng-readonly="true">
 
         <div class="input-group-btn">
-          <button type="button" class="btn btn-default dropdown-toggle"
-                  style="border-bottom-left-radius: 0;border-top-left-radius: 0;margin-left: -1px;">
+          <button type="button" class="btn btn-default dropdown-toggle">
             <span class="caret"></span>
           </button>
         </div>
-        <ul role="menu" class="dropdown-menu" style="width: 100%;height: 200px;overflow-y: auto;">
+        <ul role="menu" class="dropdown-menu scroll">
           <li>
             <a href="" ng-click="account.position='';selectBox.position=false;">&nbsp;</a>
           </li>

@@ -8,18 +8,17 @@
   <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <link rel="stylesheet" href="../styles/theme/<%= theme %>/bootstrap/css/bootstrap.css" />
-  <link rel="stylesheet" href="../styles/theme/<%= theme %>/bootstrap/css/bootstrap-theme.css" />
+  <link rel="stylesheet" href="../styles/<%= theme %>/bootstrap/css/bootstrap.css" />
+  <link rel="stylesheet" href="../styles/<%= theme %>/bootstrap/css/bootstrap-theme.css" />
 
   <!-- build:css(.tmp) styles/login.css -->
-  <link rel="stylesheet" href="../styles/base.css">
-  <link rel="stylesheet" href="../styles/validate.css">
+  <link rel="stylesheet" href="../styles/<%= theme %>/blog.css">
   <!-- endbuild -->
 </head>
 <body ng-app="hopefutureBlogApp">
 <% include ../views/common/header.html %>
 <div ng-include="'views/account/terms.html'"></div>
-
+<% include ../views/common/footer.html %>
 <!-- build:js scripts/vendor-terms.js -->
 <!-- bower:js -->
 <script src="../bower_components/jquery/dist/jquery.js"></script>

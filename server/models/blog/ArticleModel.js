@@ -25,7 +25,10 @@ var schema = new Schema({
   createdMonth: { type: String },//创建的月份，方便文章归档显示
   boutique: {type: Boolean},//是否被推荐到首页显示，由管理员操作
   createdDate: { type: Date, default: Date.now },
-  updatedDate: { type: Date, default: Date.now }
+  updatedDate: { type: Date, default: Date.now },
+  readCounts: { type: Number },//浏览总数
+  ip: { type: String },//浏览者IP
+  browserAgent: { type: String }//浏览者 浏览器 Agent
 });
 
 /**
