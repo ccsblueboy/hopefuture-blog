@@ -180,20 +180,29 @@ ArticleDao.prototype.save = function (data, callback) {
  * 主要用到了异步 promise 来分别查询关联的字段，最后利用键值处理
  * @method
  * @param loginName {String} 账户登录名
+ * @param searchContent {String} 搜索内容
  * @param dataPage {DataPage} 分页数据
  * @param callback {function} 回调函数
  */
-ArticleDao.prototype.pagination = function (loginName, dataPage, callback) {
+ArticleDao.prototype.pagination = function (loginName, searchContent, dataPage, callback) {
   var skip = dataPage.itemsPerPage * (dataPage.currentPage - 1);
   var limit = dataPage.itemsPerPage;
   var model = this.model;
 
-  model.count({}, function (err, count) {
+  var conditions = {account: loginName};
+  if (searchContent) {
+    var match = new RegExp(searchContent, 'ig');
+    underscore.extend(conditions, { $or: [
+      { title: match } ,
+      { content: match }
+    ] });
+  }
+  model.count(conditions, function (err, count) {
     if (err === null) {
       dataPage.setTotalItems(count);
       var categoriesId = [], labelIds = [], articlesData, labelMap = {};
 
-      var promise = model.find({account: loginName},
+      var promise = model.find(conditions,
         {_id: 1, title: 1, status: 1, articleLink: 1, categories: 1, labels: 1, boutique: 1, createdDate: 1},
         {skip: skip, limit: limit}).exec();
 

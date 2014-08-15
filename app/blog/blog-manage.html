@@ -11,11 +11,17 @@
   <link rel="stylesheet" href="../styles/<%= theme %>/bootstrap/css/bootstrap.css"/>
   <link rel="stylesheet" href="../styles/<%= theme %>/bootstrap/css/bootstrap-theme.css"/>
 
+  <!-- build:css styles/fontawesome.css -->
+  <link rel="stylesheet" href="../bower_components/fontawesome/css/font-awesome.css" />
+  <!-- endbuild -->
+
+  <link rel="stylesheet" href="../bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css"/>
+
   <!-- build:css(.tmp) styles/blog.css -->
   <link rel="stylesheet" href="../styles/<%= theme %>/blog-manage.css">
   <!-- endbuild -->
 </head>
-<body ng-app="hopefutureBlogApp" ng-controller="HopefutureBlogCtrl">
+<body ng-app="hopefutureBlogApp" ng-controller="HopefutureBlogCtrl" start-ajax-loading="true">
 <% include ../views/common/header.html %>
 <div class="container-fluid" ng-controller="BlogManageCtrl" ng-init="administrator=<%= locals.administrator %>;">
 
@@ -24,7 +30,7 @@
     <div class="col-sm-3 col-md-2 sidebar">
       <ul class="nav nav-sidebar">
         <li link-active="active"><a href="" ng-href="#/publish" ng-click="showPublishInfo=false;">写文章</a></li>
-        <li link-active="active"><a href="" ng-href="#/article">文章管理</a></li>
+        <li link-active="active"><a href="" ng-href="#/articles">文章管理</a></li>
         <li link-active="active"><a href="" ng-href="#/category">分类管理</a></li>
         <li link-active="active"><a href="" ng-href="#/label">标签管理</a></li>
         <li link-active="active"><a href="" ng-href="#/comment">评论管理</a></li>
@@ -37,7 +43,7 @@
       </ul>
     </div>
 
-    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" ng-view>
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 blog-manage-main" ng-view>
 
     </div>
   </div>
@@ -56,9 +62,14 @@
 <script src="../bower_components/bootstrap/dist/js/bootstrap.js"></script>
 <script src="../bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
 <!-- TinyMCE -->
-<script src="../bower_components/tinymce/tinymce.jquery.min.js"></script>
+<script src="../bower_components/tinymce/tinymce.jquery.js"></script>
 <script src="../scripts/components/tinymce/langs/zh_CN.js"></script>
 <script src="../bower_components/angular-ui-tinymce/src/tinymce.js"></script>
+
+<!-- datetimepicker -->
+<script src="../bower_components/moment/moment.js"></script>
+<script src="../bower_components/moment/locale/zh-cn.js"></script>
+<script src="../bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
 <!-- endbower -->
 
 <!--校验国际化 -->
@@ -73,6 +84,7 @@
 
 <script src="../scripts/services/httpInterceptor.js"></script>
 <script src="../scripts/services/service-hopefuture-blog.js"></script>
+<script src="../scripts/services/errorCodes.js"></script>
 <script src="../scripts/services/blogmanage/service-blog-manage.js"></script>
 <script src="../scripts/services/blogmanage/service-article.js"></script>
 <script src="../scripts/services/blogmanage/service-category.js"></script>

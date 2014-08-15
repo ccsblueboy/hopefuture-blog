@@ -1,5 +1,6 @@
 'use strict';
 
+var requestsNum = 0;
 /**
  * register the interceptor as a service
  * 给 http 请求注册一个拦截器
@@ -31,28 +32,29 @@ angular.module('hopefutureBlogApp')
         return $q.reject(rejection);
       }
     };
-
   })
   .config(function ($httpProvider) {
     //为 $httpProvider 加入拦击器 hfbHttpInterceptor
     $httpProvider.interceptors.push('hfbHttpInterceptor');
     $httpProvider.defaults.transformRequest.push(function (data, headersGetter) {
       //发送请求的时候执行，在这里可以拦截发送数据，data指发送的数据
-      //      if ($('#sspAjaxLoadingBackdrop').length === 0) {
-      //        $('body').append('<div class="ajax-loading-backdrop" id="sspAjaxLoadingBackdrop"></div>');
-      //      } else {
-      //        $('#sspAjaxLoadingBackdrop').show();
-      //      }
-      //      if ($('#sspAjaxLoading').length === 0) {
-      //        $('body').append('<div class="ajax-loading" id="sspAjaxLoading">working...</div>');
-      //      } else {
-      //        $('#sspAjaxLoading').show();
-      //      }
-      //console.log(headersGetter);
+      if($(document.body).attr('start-ajax-loading')){//目前只针对后台显示加载进度条
+        requestsNum++;//每发一次请求，增加一
+        if (!$.data(document.body, 'initAjaxLoading')) {
+          $('body').append('<div class="ajax-loading-backdrop" id="ajaxLoading"><div class="ajax-loading"></div></div>');
+          $.data(document.body, 'initAjaxLoading', true);
+        }
+        $('#ajaxLoading').show();
+      }
       return data;
     });
     $httpProvider.defaults.transformResponse.push(function (data, headersGetter) {
-      //console.log(headersGetter);
+      if($(document.body).attr('start-ajax-loading')){
+        requestsNum--;//每次相应减一
+        if(requestsNum === 0){
+          $('#ajaxLoading').hide();
+        }
+      }
       //发送请求完响应的时候执行，在这里可以拦截响应数据，data是响应返回的数据
       if (data.success === false) {
         switch (data.errorCode) {

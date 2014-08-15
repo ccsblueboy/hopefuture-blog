@@ -9,7 +9,8 @@
  * @createdDate 2014-8-2
  * */
 
-angular.module('hopefutureBlogApp').controller('AccountInfoCtrl', function ($scope, $modal, accountInfoService, accountInfo) {
+angular.module('hopefutureBlogApp')
+  .controller('AccountInfoCtrl', function ($scope, $modal, accountInfoService, accountInfo) {
 
   $scope.account = {
     loginName: '',

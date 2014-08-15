@@ -1,33 +1,34 @@
-<h3 class="ng-scope">文章管理</h3>
-<div>
+<h3 class="page-header">文章管理</h3>
+<div class="blog-btn-group">
   <div class="btn-group">
     <button type="button" class="btn btn-primary" ng-click="delete();">
       <span class="glyphicon glyphicon-remove"></span> 删除
     </button>
   </div>
 
-  <div class="btn-group margin10-L">
+  <div class="btn-group">
     <button type="button" class="btn btn-primary" ng-click="create();">
       <span class="glyphicon glyphicon-plus"></span> 写文章
     </button>
   </div>
 
-  <div class="btn-group margin10-L">
+  <div class="btn-group">
     <div class="input-group has-success">
-      <input type="text" placeholder="搜索文章" class="form-control">
+      <input type="text" placeholder="搜索文章" class="form-control" ng-model="searchContent">
           <span class="input-group-btn">
-            <button class="btn btn-primary" type="button">
+            <button class="btn btn-primary" type="button" ng-click="search();">
               <span class="glyphicon glyphicon-search"></span>
             </button>
           </span>
     </div>
   </div>
 
-  <div class="btn-group margin10-L">
+  <!--FIXME: 待实现-->
+  <!--<div class="btn-group">
     <button type="button" class="btn btn-primary" ng-click="">
       高级查询
     </button>
-  </div>
+  </div>-->
 </div>
 <hr/>
 
@@ -58,7 +59,7 @@
     <td>{{item.readCounts}}</td>
     <td>{{item.commentCounts}}</td>
     <td>{{item.createdDate | date:'yyyy-MM-dd HH:mm:ss'}}</td>
-    <td ng-if="administrator"><a href="" ng-click="changeBoutique(item);">{{item.boutique?'是':'否'}}</a></td>
+    <td ng-if="administrator"><button class="btn btn-primary btn-xs" ng-click="changeBoutique(item);">{{item.boutique?'是':'否'}}</button></td>
     <td>
       <a class="glyphicon glyphicon-pencil" href="" ng-click="edit(item._id);"></a>
       <a class="glyphicon glyphicon-trash" href="" ng-click="delete(item);"></a>

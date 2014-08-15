@@ -6,7 +6,7 @@ body {
   padding-top: 50px;
 }
 .link {
-  color: #5196a1;
+  color: #666666;
 }
 .blog-container {
   min-height: 450px;
@@ -15,11 +15,11 @@ body {
 * 页面底部样式
 */
 .footer-links {
-  background-color: #1e3947;
+  background-color: #291b1b;
   padding: 20px 0;
 }
 .footer-copyright {
-  background-color: #40777f;
+  background-color: #4d4d4d;
   color: #b0b8bd;
   padding: 10px 0 0;
 }
@@ -78,7 +78,7 @@ body {
  * 头像相关样式
 **/
 .head-portrait-list {
-  border: 1px solid #2f575d;
+  border: 1px solid #333333;
   margin-top: 10px;
   padding: 5px;
   border-radius: 4px;
@@ -94,8 +94,8 @@ body {
   border-radius: 2px;
 }
 .head-portrait-list > li.active > a {
-  border-color: #285c64;
-  background-color: rgba(101, 139, 111, 0.6);
+  border-color: #382e2e;
+  background-color: rgba(66, 139, 202, 0.6);
 }
 .head-portrait-default {
   background: url("../../images/head-portrait-default.png") no-repeat;
@@ -168,7 +168,7 @@ body {
   margin-bottom: 20px;
 }
 .boutique-pagination {
-  background-color: #c4cdc1;
+  background-color: #eeeeee;
 }
 .boutique-pagination > li > a,
 .boutique-pagination > li > span {
@@ -249,7 +249,7 @@ body {
 .comment-list > li {
   margin-top: 30px;
   padding: 10px;
-  border: 1px dashed #6d9197;
+  border: 1px dashed #555555;
 }
 .comment-list > li > ul {
   margin-left: 50px;
@@ -277,7 +277,7 @@ body {
 }
 .comment-content:after {
   margin-top: .201em;
-  border-color: transparent transparent #dee1dd transparent;
+  border-color: transparent transparent #ffffff transparent;
 }
 .comment-reply {
   margin-bottom: 10px;
@@ -286,7 +286,7 @@ body {
   margin-bottom: 30px;
 }
 .hf-callout {
-  border-color: #6d9197;
+  border-color: #555555;
   border-radius: 3px;
   border-style: solid;
   border-width: 1px 1px 1px 5px;

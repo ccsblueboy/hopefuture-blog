@@ -1,40 +1,42 @@
-<h3>{{header}}</h3>
+<h3 class="page-header">{{header}}</h3>
 <div class="animate-show ng-hide hf-callout hf-callout-info" ng-show="$parent.showPublishInfo">
   <span>{{$parent.publishInfo}}</span>
-  <a class="margin10-L" ng-href="article.articleLink">查看文章</a>
+  <a ng-href="{{article.articleLink}}" target="_blank" style="margin-left: 10px;">查看文章</a>
 </div>
 
 <form name="articleForm" method="post" article-validator="validator">
 <div class="row">
 <div class="col-md-9">
   <div class="form-group">
-    <lable for="title">文章标题</lable>
+    <label for="title"><i class="required">*</i> 文章标题</label>
     <input type="text" id="title" name="title" class="form-control" ng-model="article.title"
            placeholder="在此输入标题" autocomplete="off" required maxbyteslength="400" maxlength="400">
   </div>
   <div class="form-group">
-    <lable>文章内容</lable>
-    <textarea id="content" name="content" ui-tinymce="tinymceOptions" ng-model="article.content" class="sr-only"></textarea>
+    <label>文章内容</label>
+    <textarea id="content" name="content" ui-tinymce="tinymceOptions"  ng-model="article.content" class="sr-only"></textarea>
   </div>
 </div>
 <!--.col-md-9-->
 
 <div class="col-md-3">
+  <!--发布 start-->
   <div class="panel panel-default">
     <div class="panel-heading">
       <h3 class="panel-title">发布</h3>
     </div>
     <div class="panel-body">
-      <p>
+      <!-- FIXME 暂且不做 -->
+      <p style="display: none;">
         <button class="btn btn-success" type="button">预览</button>
       </p>
       <!--公开度 start-->
-      <div class="margin10-B" ng-controller="PublicityCtrl">
+      <div class="article-effect" ng-controller="PublicityCtrl">
         <div>
           <span class="glyphicon glyphicon-eye-open"></span>
           <span>公开度：</span>
           <strong>{{publicityStatus}}</strong>
-          <a href="" class="margin10-L" ng-click="publicityPanel=true;" ng-hide="publicityPanel">编辑</a>
+          <a href=""  ng-click="publicityPanel=true;" ng-hide="publicityPanel">编辑</a>
         </div>
 
         <div class="animate-show ng-hide" ng-show="publicityPanel">
@@ -42,7 +44,7 @@
             <li class="radio">
               <label><input type="radio" name="publicityStatus" ng-model="publicity.publicityStatus" value="public"/> 公开 </label>
 
-              <div class="checkbox" ng-show="show.top">
+              <div class="checkbox" ng-show="show.top" style="margin-left: 20px;">
                 <label><input type="checkbox" name="top" ng-model="publicity.top"> 将文章置于首页顶端</label>
               </div>
             </li>
@@ -51,7 +53,7 @@
 
               <div class="form-group margin10-T" ng-show="show.protectedPassword">
                 <lable for="protectedPassword">密码：</lable>
-                <input type="text" class="form-control" id="protectedPassword" name="protectedPassword"
+                <input type="text" class="form-control input-sm" id="protectedPassword" name="protectedPassword"
                        ng-model="publicity.protectedPassword"/>
               </div>
             </li>
@@ -60,20 +62,20 @@
             </li>
           </ul>
           <p>
-            <button class="btn btn-default" type="button" ng-click="setPublicityStatus()">确定</button>
-            <a class="margin10-L" href="" ng-click="publicityPanel=false;">取消</a>
+            <button class="btn btn-info btn-sm" type="button" ng-click="setPublicityStatus()">确定</button>
+            <a href="" ng-click="publicityPanel=false;">取消</a>
           </p>
         </div>
       </div>
       <!--公开度 end-->
 
       <!--发布方式 start-->
-      <div ng-controller="PublishTypeCtrl">
+      <div class="article-effect" ng-controller="PublishTypeCtrl">
         <div>
           <span class="glyphicon glyphicon-calendar"></span>
           <span>发布方式：</span>
           <strong>{{publishTypeStatus}}</strong>
-          <a href="" class="margin10-L" ng-click="publishTypePanel=true;" ng-hide="publishTypePanel">编辑</a>
+          <a href="" ng-click="publishTypePanel=true;" ng-hide="publishTypePanel">编辑</a>
         </div>
         <div class="animate-show ng-hide" ng-show="publishTypePanel">
           <ul class="list-unstyled">
@@ -84,26 +86,22 @@
               <label><input type="radio" name="publishType" ng-model="publishType.publishTypeStatus" value="delay"/> 定时发布 </label>
 
               <div class="animate-show ng-hide" ng-show="showPublishDate">
-                <p class="margin10-T">
-                  <lable for="title">发布时间：</lable>
-                </p>
-                <div class="form-group ">
-                  <div class="input-group">
-                    <input type="text" class="form-control" id="publishDate" name="publishDate" ng-model="publishType.publishDate"
-                           datepicker-popup="{{format}}" is-open="opened" close-text="Close" ng-click="openDatepicker($event)"/>
-                        <span class="input-group-btn">
-                          <button type="button" class="btn btn-info" ng-click="openDatepicker($event)"><span
-                              class="glyphicon glyphicon-calendar"></span>
-                          </button>
-                        </span>
+                <div class="form-group" style="margin-top: 10px;">
+                  <div class='input-group' id="dateTimePicker">
+                    <input type='text' class="form-control input-sm" data-date-format="YYYY-MM-DD HH:mm" id="publishDate" name="publishDate" ng-model="publishType.publishDate"/>
+                    <span class="input-group-btn">
+                      <button type="button" class="btn btn-info btn-sm">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                      </button>
+                    </span>
                   </div>
                 </div>
               </div>
             </li>
           </ul>
           <p>
-            <button class="btn btn-default" type="button" ng-click="setPublishTypeStatus()">确定</button>
-            <a class="margin10-L" href="" ng-click="publishTypePanel=false;">取消</a>
+            <button class="btn btn-info btn-sm" type="button" ng-click="setPublishTypeStatus()">确定</button>
+            <a href="" ng-click="publishTypePanel=false;">取消</a>
           </p>
         </div>
       </div>
@@ -111,13 +109,14 @@
     </div>
 
     <div class="panel-footer">
-      <button class="btn btn-info ng-hide" type="submit" ng-show="article.status === 'draft'">发布</button>
-      <button class="btn btn-info ng-hide" type="button" ng-show="article.status !== 'draft'" ng-click="update('modified');" >更新</button>
+      <button class="btn btn-primary ng-hide" type="submit" ng-show="article.status === 'draft'">发布</button>
+      <button class="btn btn-primary ng-hide" type="button" ng-show="article.status !== 'draft'" ng-click="update('modified');" >更新</button>
       <button class="btn btn-default ng-hide" type="button" ng-click="update('draft');" ng-show="article.status==='draft'">保存草稿</button>
     </div>
   </div>
-  <!--发布-->
+  <!--发布 end-->
 
+  <!-- 文章类型 start -->
   <div class="panel panel-default">
     <div class="panel-heading">
       <h3 class="panel-title">文章类型</h3>
@@ -131,7 +130,7 @@
       </div>
     </div>
   </div>
-  <!--文章类型-->
+  <!--文章类型 end-->
 
   <!-- 文章分类 start -->
   <div class="panel panel-default" ng-controller="ArticleCategoryCtrl">
@@ -158,47 +157,47 @@
         </tab>
       </tabset>
 
-      <div class="margin10-T">
-        <a href="" ng-click="showAddCategory = !showAddCategory;"> + 添加新分类目录</a>
+      <div class="item-spacing-top">
+        <a href="" ng-click="showAddCategory = !showAddCategory;"> <span class="fa fa-plus"></span> 添加新分类目录</a>
       </div>
 
-      <div class="margin10-T animate-show ng-hide" ng-show="showAddCategory">
+      <div class="item-spacing-top animate-show ng-hide" ng-show="showAddCategory">
 
         <div class="well-sm" alert ng-repeat="alert in alerts" type="{{alert.type}}">{{alert.message}}</div>
         <div class="form-group">
           <input type="text" placeholder="分类目录" id="category" name="category" ng-model="category.name"
-                 class="form-control"/>
+                 class="form-control input-sm"/>
         </div>
         <div class="form-group">
-          <select id="categoryParent" name="categoryParent" ng-model="category.parentCategory" class="form-control"
+          <select id="categoryParent" name="categoryParent" ng-model="category.parentCategory" class="form-control input-sm"
                   ng-options="c.alias for c in categories">
             <option value="">&mdash; 父级分类目录 &mdash;</option>
           </select>
         </div>
         <div class="form-group">
-          <button class="btn btn-info" type="button" ng-click="addCategory()">添加</button>
+          <button class="btn btn-info btn-sm" type="button" ng-click="addCategory()">添加</button>
         </div>
       </div>
     </div>
   </div>
   <!-- 文章分类 end -->
 
+  <!--标签 start-->
   <div class="panel panel-default" ng-controller="ArticleLabelCtrl">
     <div class="panel-heading">
       <h3 class="panel-title">标签</h3>
     </div>
     <div class="panel-body form-inline">
       <div class="form-group">
-        <input type="text" class="form-control" name="label" id="label" ng-model="label" maxlength="20"/>
-        <button type="button" class="btn btn-info" ng-click="addLabel()">添加</button>
+        <input type="text" class="form-control input-sm" name="label" id="label" ng-model="label" maxlength="20"/>
+        <button type="button" class="btn btn-info btn-sm" ng-click="addLabel()">添加</button>
       </div>
-      <p></p>
 
-      <p>多个标签请用英文逗号（,）分开</p>
+      <p class="item-spacing-top">多个标签请用英文逗号（,）分开</p>
 
-      <p class="label-list clearfix">
+      <p class="label-list clearfix" ng-if="$parent.labelCollection.items.length>0;">
             <span class="text-info" ng-repeat="label in $parent.labelCollection.items">
-              <a href="" ng-click="removeLabel(label.name)">X</a>
+              <a href="" ng-click="removeLabel(label.name)" class="fa fa-times"></a>
               {{label.name}}
             </span>
       </p>
@@ -213,7 +212,7 @@
 
     </div>
   </div>
-  <!--标签-->
+  <!--标签 end-->
 
 </div>
 </div>

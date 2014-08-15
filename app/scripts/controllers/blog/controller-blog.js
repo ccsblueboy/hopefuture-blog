@@ -23,7 +23,7 @@ angular.module('hopefutureBlogApp')
    * 管理我的博客
    */
   $scope.manageBlog = function () {
-    window.location.href = window.location.origin + window.location.pathname + '/manage#/article';
+    window.location.href = window.location.origin + window.location.pathname + '/manage#/articles';
   };
 
   var pathname = window.location.pathname;

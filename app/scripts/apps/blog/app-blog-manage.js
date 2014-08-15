@@ -19,8 +19,8 @@ angular.module('hopefutureBlogApp', ['ngRoute', 'ngAnimate', 'ngSanitize', 'ui.b
         templateUrl: '../views/blogmanage/publish.html',
         controller: 'PublishCtrl'
       })
-      .when('/article', {//文章管理
-        templateUrl: '../views/blogmanage/article.html',
+      .when('/articles', {//文章管理
+        templateUrl: '../views/blogmanage/articles.html',
         controller: 'ArticleCtrl'
       })
       .when('/category', {//类别管理

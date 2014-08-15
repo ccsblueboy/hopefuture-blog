@@ -8,7 +8,7 @@ angular.module('hopefutureBlogApp')
         scope.location = $location;
         scope.$watch('location.path()', function (pathValue) {
           var currentHash = element.children().attr('ng-href').substring(1);
-          if ((pathValue === '/editarticle' && currentHash === '/article') || pathValue === currentHash) {
+          if ((pathValue.indexOf('/article') !== -1 && currentHash === '/articles') || pathValue === currentHash) {
             element.addClass(attrs.linkActive);
           } else {
             element.removeClass(attrs.linkActive);

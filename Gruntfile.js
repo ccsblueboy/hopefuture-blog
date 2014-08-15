@@ -405,13 +405,36 @@ module.exports = function (grunt) {
 
     // 把less 转换为 css 任务
     less: {
+      options: {
+        paths: ['<%= yeoman.app %>/']
+      },
+      examples: {
+        files: {
+          '<%= yeoman.app %>/styles/examples.css': '<%= yeoman.app %>/less/examples.less'
+        }
+      },
       springTones: {
-        options: {
-          paths: ['<%= yeoman.app %>/']
-        },
         files: {
           '<%= yeoman.app %>/styles/spring-tones/blog.css': '<%= yeoman.app %>/less/blog-spring-tones.less',
           '<%= yeoman.app %>/styles/spring-tones/blog-manage.css': '<%= yeoman.app %>/less/blog-manage-spring-tones.less'
+        }
+      },
+      blueClassic: {
+        files: {
+          '<%= yeoman.app %>/styles/blue-classic/blog.css': '<%= yeoman.app %>/less/blog-blue-classic.less',
+          '<%= yeoman.app %>/styles/blue-classic/blog-manage.css': '<%= yeoman.app %>/less/blog-manage-blue-classic.less'
+        }
+      },
+      grassColor: {
+        files: {
+          '<%= yeoman.app %>/styles/grass-color/blog.css': '<%= yeoman.app %>/less/blog-grass-color.less',
+          '<%= yeoman.app %>/styles/grass-color/blog-manage.css': '<%= yeoman.app %>/less/blog-manage-grass-color.less'
+        }
+      },
+      seaTones: {
+        files: {
+          '<%= yeoman.app %>/styles/sea-tones/blog.css': '<%= yeoman.app %>/less/blog-sea-tones.less',
+          '<%= yeoman.app %>/styles/sea-tones/blog-manage.css': '<%= yeoman.app %>/less/blog-manage-sea-tones.less'
         }
       },
       publish: {
@@ -420,7 +443,14 @@ module.exports = function (grunt) {
         },
         files: {
           '<%= yeoman.app %>/styles/spring-tones/blog.css': '<%= yeoman.app %>/less/blog-spring-tones.less',
-          '<%= yeoman.app %>/styles/spring-tones/blog-manage.css': '<%= yeoman.app %>/less/blog-manage-spring-tones.less'
+          '<%= yeoman.app %>/styles/spring-tones/blog-manage.css': '<%= yeoman.app %>/less/blog-manage-spring-tones.less',
+          '<%= yeoman.app %>/styles/blue-classic/blog.css': '<%= yeoman.app %>/less/blog-blue-classic.less',
+          '<%= yeoman.app %>/styles/blue-classic/blog-manage.css': '<%= yeoman.app %>/less/blog-manage-blue-classic.less',
+          '<%= yeoman.app %>/styles/grass-color/blog.css': '<%= yeoman.app %>/less/blog-grass-color.less',
+          '<%= yeoman.app %>/styles/grass-color/blog-manage.css': '<%= yeoman.app %>/less/blog-manage-grass-color.less',
+          '<%= yeoman.app %>/styles/sea-tones/blog.css': '<%= yeoman.app %>/less/blog-sea-tones.less',
+          '<%= yeoman.app %>/styles/sea-tones/blog-manage.css': '<%= yeoman.app %>/less/blog-manage-sea-tones.less',
+          '<%= yeoman.app %>/styles/tinymce.css': '<%= yeoman.app %>/less/tinymce.less'
         }
       }
     },

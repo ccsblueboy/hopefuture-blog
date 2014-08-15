@@ -21,8 +21,8 @@ angular.module('hopefutureBlogApp')
               '| forecolor backcolor removeformat | bullist numlist outdent indent blockquote | alignleft aligncenter alignright alignjustify | ' +
               'hr image link unlink | charmap table code preview fullscreen',
             init_instance_callback: function (editor) {
-              var content = '设置内容';
-              editor.setContent(content);
+              //var content = '设置内容';
+              //editor.setContent(content);
             }
             //statusbar : false
           }, tinymce.EditorManager);

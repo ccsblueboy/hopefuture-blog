@@ -1,11 +1,11 @@
 'use strict';
 
 angular.module('hopefutureBlogApp')
-  .directive('labelValidator', function () {
+  .directive('labelValidator', function ($parse) {
     return {
       restrict: 'AC',
       link: function postLink(scope, element, attrs) {
-        $(element).validate({
+        var validator = $(element).validate({
           rules: {
             name: {
               remote: {
@@ -34,6 +34,9 @@ angular.module('hopefutureBlogApp')
             });
           }
         });
+
+        var model = $parse(attrs.labelValidator);
+        model.assign(scope, validator);
       }
     };
   })

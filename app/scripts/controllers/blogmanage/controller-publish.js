@@ -18,7 +18,7 @@ angular.module('hopefutureBlogApp').controller('PublishCtrl', function ($scope, 
     _id: undefined,
     title: '',
     content: '',
-    status: 'draft',
+    status: '',
     publicityStatus: 'public',//公开度，默认公开
     protectedPassword: '',//密码保护，需输入密码才能查看
     top: false,//文章置顶
@@ -59,14 +59,18 @@ angular.module('hopefutureBlogApp').controller('PublishCtrl', function ($scope, 
 
     publishService.edit(id, function (data) {
       if (data.success === true) {
-        angular.extend($scope.article, data.item);
+        var item = data.item;
+        //$scope.tinymceContent.setContent(item.content);
+        item.articleLink = '/' + item.account + '#/article/' + item._id;
+        angular.extend($scope.article, item);
         var labels = $scope.article.labels;
         for (var i = 0, len = labels.length; i < len; i++) {
           $scope.labelCollection.add({name: labels[i]});
         }
       }
     });
-
+  }else{
+    $scope.article.status = 'draft';
   }
 
   /**
@@ -203,12 +207,9 @@ angular.module('hopefutureBlogApp').controller('PublishCtrl', function ($scope, 
       $scope.showPublishDate = newValue === 'delay';
     });
 
-    $scope.format = 'yyyy-MM-dd';
-    $scope.openDatepicker = function ($event) {
-      $event.preventDefault();
-      $event.stopPropagation();
-      $scope.opened = true;
-    };
+    $('#dateTimePicker').datetimepicker({
+      minDate: new Date()
+    });
   })
   .controller('ArticleLabelCtrl', function ($scope, publishService,blogMethod) {// 标签
     var labelCollection = $scope.$parent.labelCollection;
@@ -369,7 +370,9 @@ angular.module('hopefutureBlogApp').controller('PublishCtrl', function ($scope, 
     $scope.$watch('category.name', function (newValue, oldValue) {
       if (newValue !== '') {
         $scope.$parent.alerts = [];
-        publishMethod.validCategory($scope);
+        $timeout(function(){
+          publishMethod.validCategory($scope);
+        });
       }
     });
     $scope.$watch('category.parentCategory', function (newValue, oldValue) {

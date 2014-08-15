@@ -211,3 +211,14 @@ ResourceDao.prototype.deleteCategory = function (ids, callback) {
     });
   });
 };
+
+/**
+ * 根据给定的条件查询资源分类记录
+ * @param conditions {Object} 条件
+ * @param callback {function} 回调函数
+ */
+ResourceDao.prototype.findCategory = function (conditions, callback) {
+  ResourceCategoryModel.find(conditions, function (err, docs) {
+    return callback(err, docs);
+  });
+};

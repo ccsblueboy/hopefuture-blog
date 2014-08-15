@@ -66,19 +66,36 @@ var resource = {
   saveCategory: function (req, res) {
     var data = req.body;
     var loginName = req.baseUrl.split('/')[1];
-    data.account = loginName;
 
-    resourceDao.saveCategory(data, function (err, doc) {
-      if (err) {
-        console.error(err);
-        res.send({success: false, err: err});
-      } else {
+    //除了前台校验重名，后台也需要校验，防止恶意操作
+    var name = data.name,
+      id = data._id;
+    var conditions = {name: name, account: loginName};
+    if (id) {
+      conditions._id = { $ne: id };
+    }
+    resourceDao.findCategory(conditions, function (err, models) {
+      if (err || models.length > 0) {//重名
         res.send({
-          success: true,
-          item: doc
+          success: false,
+          errorCode: '8002'
+        });
+      } else {
+        data.account = loginName;
+        resourceDao.saveCategory(data, function (err, doc) {
+          if (err) {
+            console.error(err);
+            res.send({success: false, errorMessage: err.message});
+          } else {
+            res.send({
+              success: true,
+              item: doc
+            });
+          }
         });
       }
     });
+
   },
 
   deleteCategory: function (req, res) {
@@ -89,8 +106,29 @@ var resource = {
     resourceDao.deleteCategory(ids, function (err) {
       res.send({success: err === null});
     });
-  }
+  },
 
+  /**
+   * 校验重名
+   * @param req
+   * @param res
+   */
+  duplicate: function (req, res) {
+    var name = req.query.name,
+      _id = req.query._id;
+    var loginName = req.baseUrl.split('/')[1];
+    var conditions = {name: name, account: loginName};
+    if (_id) {
+      conditions._id = { $ne: _id };
+    }
+    resourceDao.findCategory(conditions, function (err, model) {
+      if (err) {
+        res.send(false);
+      } else {
+        res.send(model.length === 0);
+      }
+    });
+  }
 };
 
 var express = require('express');
@@ -102,6 +140,7 @@ router.get('/:id', resource.edit);
 router.delete('/', resource.delete);
 router.post('/category', resource.saveCategory);
 router.delete('/category', resource.deleteCategory);
+router.get('/validate/duplicate', resource.duplicate);
 
 /**
  * 资源链接路由

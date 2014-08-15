@@ -156,7 +156,8 @@ angular.module('hopefutureBlogApp')
 //      $scope.searchContent = '';
 //    });
   })
-  .controller('CategoryFormCtrl', function ($scope, $modalInstance, categoryService, formData, categoryMethod) {
+  //这里需要注意的是：此处的 controller 不能命名为 form name + Ctrl，即CategoryFormCtrl，因为会与Angular本身生成的form controller 冲突，
+  .controller('CategoryFormModalCtrl', function ($scope, $modalInstance, categoryService, formData, categoryMethod) {
     $scope.items = formData.items;
     $scope.filterObject = formData.filterObject;
     $scope.dialogTitle = '添加分类目录';

@@ -87,7 +87,9 @@
       </div>
       <div class="panel-body">
         <form name="commentForm" comment-validator="validator">
-          <textarea rows="5" class="form-control" ng-model="comment.content" name="content" required=""></textarea>
+          <div class="form-group">
+            <textarea rows="5" class="form-control" ng-model="comment.content" name="content" required></textarea>
+          </div>
 
           <div class="row commentator-panel" ng-if="!logined">
             <div class="col-sm-4">

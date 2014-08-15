@@ -26,7 +26,9 @@ angular.module('hopefutureBlogApp')
         currentPage: $scope.page.currentPage,
         itemsPerPage: $scope.itemsPerPage
       };
-
+      if ($scope.searchContent) {
+        params.searchContent = $scope.searchContent;
+      }
       articleService.paging({params: params}, function (data) {
         if (data.success === true) {
           $scope.items = data.dataPage.items;
@@ -38,6 +40,10 @@ angular.module('hopefutureBlogApp')
       });
     };
     $scope.loadPageData();
+
+    $scope.search = function () {
+      $scope.loadPageData();
+    };
 
     $scope.create = function () {
       $location.path('/publish');

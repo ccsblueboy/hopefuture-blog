@@ -8,22 +8,21 @@
   <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <link type="image/x-icon" href="../images/favicon.png" rel="shortcut icon">
-  <link rel="stylesheet" href="../styles/theme/<%= theme %>/bootstrap/css/bootstrap.css" />
-  <link rel="stylesheet" href="../styles/theme/<%= theme %>/bootstrap/css/bootstrap-theme.css" />
+  <link rel="stylesheet" href="../styles/<%= theme %>/bootstrap/css/bootstrap.css" />
+  <link rel="stylesheet" href="../styles/<%= theme %>/bootstrap/css/bootstrap-theme.css" />
 
   <!-- build:css(.tmp) styles/illegal.css -->
-  <link rel="stylesheet" href="../styles/base.css">
+  <link rel="stylesheet" href="../styles/<%= theme %>/blog.css">
   <!-- endbuild -->
 
 </head>
 <body ng-app="hopefutureBlogApp">
 <% include ../views/common/header.html %>
 
-<div class="container">
+<div class="container blog-container">
 <div class="row">
   <div class="col-sm-offset-1 col-sm-10">
-    <h1 class="h1">该用户不存在或已被冻结</h1>
+    <h1 style="padding-top: 100px;">该用户不存在或已被冻结</h1>
   </div>
 </div>
 </div>

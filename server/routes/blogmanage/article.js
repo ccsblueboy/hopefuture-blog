@@ -12,7 +12,9 @@ var article = {
     };
     var loginName = req.baseUrl.split('/')[1];
     var dataPage = new DataPage(options);
-    articleDao.pagination(loginName, dataPage, function (err, data) {
+    var searchContent = req.query.searchContent;
+    
+    articleDao.pagination(loginName, searchContent, dataPage, function (err, data) {
       if (err) {
         res.send({success: false});
       } else {

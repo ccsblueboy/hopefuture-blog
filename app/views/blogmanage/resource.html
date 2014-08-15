@@ -1,13 +1,13 @@
-<h3>资源链接</h3>
+<h3 class="page-header">资源链接</h3>
 
 <div class="row">
-  <div class="col-md-5">
+  <div class="col-md-5 blog-resource-border">
     <h4>{{resourceFormTitle}}</h4>
 
-    <form class="form-group" name="resourceForm" resource-validator>
+    <form name="resourceForm" resource-validator="validator">
       <div class="form-group">
         <label for="name"><i class="required">*</i> 资源名称</label>
-        <input type="text" class="form-control" id="name" ng-model="resource.name" maxbyteslength="100">
+        <input type="text" class="form-control" id="name" ng-model="resource.name" maxbyteslength="100" required>
       </div>
       <div class="form-group">
         <label for="categoryId">资源分类</label>
@@ -18,16 +18,16 @@
       </div>
       <div class="form-group">
         <label for="link"><i class="required">*</i> 资源 URL</label>
-        <input type="url" class="form-control" id="link" ng-model="resource.link" maxbyteslength="100">
+        <input type="url" class="form-control" id="link" name="link" ng-model="resource.link" maxbyteslength="100">
       </div>
       <div class="form-group">
         <label for="description">描述</label>
-        <textarea class="form-control" id="description" rows="3" ng-model="resource.description" maxbyteslength="1000"></textarea>
+        <textarea class="form-control" id="description" name="description" rows="3" ng-model="resource.description" maxbyteslength="1000"></textarea>
       </div>
 
       <div class="form-group">
         <button type="submit" class="btn btn-primary">{{submitText}}</button>
-        <button type="button" class="btn btn-default ng-hide" ng-click="cancelEdit()" ng-show="editStatus">取消编辑</button>
+        <button type="button" class="btn btn-default ng-hide" ng-click="cancelEdit()" ng-show="editStatus">取消修改</button>
       </div>
 
     </form>
@@ -36,8 +36,10 @@
 
     <h4>资源分类</h4>
 
-    <div ng-controller="CategoryFormCtrl">
-      <div class="well-sm" alert ng-repeat="alert in alerts" type="{{alert.type}}">{{alert.message}}</div>
+    <div ng-controller="ResourceCategoryCtrl">
+      <div alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">
+        {{alert.message}}
+      </div>
       <div class="form-inline">
         <div class="form-group">
           <input type="text" maxbyteslength="100" ng-model="resourceCategory.name" class="form-control">
@@ -52,7 +54,7 @@
               {{category.name}}
             </a>
             <a href="" class="glyphicon glyphicon-trash" ng-click="deleteCategory(category,$index);"></a>
-              {{$last?'':'，'}}
+              {{$last?'':','}}
           </span>
 
           <div ng-show="editCategoryStatus" class="ng-hide animate-show edit-resource-category" id="editCategoryPanel">

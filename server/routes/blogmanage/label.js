@@ -32,15 +32,32 @@ var label = {
       return;
     }
     var loginName = req.baseUrl.split('/')[1];
-    data.account = loginName;
-    labelDao.save(data, function (err, doc) {
-      if (err) {
-        console.error(err);
-        res.send({success: false, err: err});
-      } else {
+
+    //除了前台校验重名，后台也需要校验，防止恶意操作
+    var name = data.name,
+      id = data.id;
+    var conditions = {name: name, account: loginName};
+    if (id) {
+      conditions._id = { $ne: id };
+    }
+    labelDao.find(conditions, function (err, models) {
+      if (err || models.length > 0) {//重名
         res.send({
-          success: true,
-          item: doc
+          success: false,
+          errorCode: '8001'
+        });
+      } else {
+        data.account = loginName;
+        labelDao.save(data, function (err, doc) {
+          if (err) {
+            console.error(err);
+            res.send({success: false, errorMessage: err.message});
+          } else {
+            res.send({
+              success: true,
+              item: doc
+            });
+          }
         });
       }
     });

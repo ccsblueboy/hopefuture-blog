@@ -66,6 +66,7 @@ angular.module('hopefutureBlogApp')
           $scope.resourceFormTitle = '修改资源链接 — ' + item.name;
           $scope.submitText = '修改';
           $scope.editStatus = true;
+          $scope.validator.resetForm();
         }
       });
     };
@@ -76,6 +77,7 @@ angular.module('hopefutureBlogApp')
       $scope.submitText = '添加';
       $scope.editStatus = false;
       $scope.resource = angular.copy(resource);
+      $scope.validator.resetForm();
     };
 
     $scope.save = function () {
@@ -86,9 +88,7 @@ angular.module('hopefutureBlogApp')
           } else {
             $scope.items.unshift(data.item);
           }
-          $scope.editStatus = false;
-          //清空
-          $scope.resource = angular.copy(resource);
+          $scope.cancelEdit();
         }
       });
     };
@@ -177,7 +177,7 @@ angular.module('hopefutureBlogApp')
       $scope.grid.checked = checked;
     };
   })
-  .controller('CategoryFormCtrl', function ($scope, $modal, resourceService) {
+  .controller('ResourceCategoryCtrl', function ($scope, $modal, resourceService, resourceMethod, errorCodes) {
     $scope.resourceCategory = {
       _id: undefined,
       name: ''
@@ -186,17 +186,22 @@ angular.module('hopefutureBlogApp')
 
     $scope.$watch('resourceCategory.name', function (newValue) {
       if (newValue !== '') {
-        $scope.$parent.alerts = [];
+        $scope.$parent.$parent.$parent.alerts = [];
       }
     });
 
     $scope.addCategory = function () {
       if ($scope.resourceCategory.name === '') {
-        $scope.$parent.alerts = [
+        $scope.$parent.$parent.$parent.alerts = [
           {type: 'danger', message: '资源分类名称不能为空！'}
         ];
         return;
+      } else {
+        if (!resourceMethod.validResourceCategory($scope)) {
+          return;
+        }
       }
+
       resourceService.saveCategory($scope.resourceCategory, function (data) {
         if (data.success === true) {
           $scope.$parent.categories.push(data.item);
@@ -204,6 +209,10 @@ angular.module('hopefutureBlogApp')
             _id: undefined,
             name: ''
           };
+        } else {
+          $scope.$parent.$parent.$parent.alerts = [
+            {type: 'danger', message: errorCodes[data.errorCode] || data.errorMessage}
+          ];
         }
       });
     };
@@ -252,6 +261,10 @@ angular.module('hopefutureBlogApp')
             name: ''
           };
           $scope.editCategoryStatus = false;
+        } else {
+          $scope.$parent.$parent.$parent.alerts = [
+            {type: 'danger', message: errorCodes[data.errorCode] || data.errorMessage}
+          ];
         }
       });
     };

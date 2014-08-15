@@ -34,7 +34,7 @@ angular.module('hopefutureBlogApp')
     $scope.account = {
       loginName: '',
       password: '',
-      keepSigned: false
+      keepSigned: true
     };
 
     /**
