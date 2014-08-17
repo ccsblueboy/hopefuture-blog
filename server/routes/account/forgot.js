@@ -74,8 +74,10 @@ var account = {
   sendEmail: function (req, res) {
     var email = req.body.email;
     var conditions = {email: email};
-    //FIXME,待动态取值
-    var serverUrl = 'http://localhost:9000';
+    var referer = req.headers.referer,
+      baseUrl = req.baseUrl;
+    var serverUrl = referer.substring(0,referer.indexOf(baseUrl));
+
     accountDao.findOne(conditions, function (err, model) {
       if (err) {
         res.send({
@@ -108,8 +110,9 @@ var account = {
     var loginName = req.body.loginName;
     var email = req.body.email;
     var conditions = {loginName: loginName, email: email};
-    //FIXME,待动态取值
-    var serverUrl = 'http://localhost:9000';
+    var referer = req.headers.referer,
+      baseUrl = req.baseUrl;
+    var serverUrl = referer.substring(0,referer.indexOf(baseUrl));
 
     accountDao.findOne(conditions, function (err, model) {
       if (err) {

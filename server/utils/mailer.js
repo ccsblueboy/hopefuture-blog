@@ -60,14 +60,14 @@ var transporter = nodemailer.createTransport(smtpTransport({
   host: 'smtp.126.com',
   port: 25,
   auth: {
-    user: '545454@455454.com',
-    pass: '445545454'
+    user: '',
+    pass: ''
   }
 }));
 
 // 邮件默认配置项
 var mailOptions = {
-  from: 'linder0209@126.com', // 发送地址
+  from: '', // 发送地址
   to: '', // 接收地址，多个用逗号隔开，比如：bar@blurdybloop.com, baz@blurdybloop.com
   subject: '', // 主题
   text: '', // 文本内容

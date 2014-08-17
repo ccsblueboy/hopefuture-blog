@@ -32,3 +32,5 @@ errorMessage: err.message
 
 
 18、日志没有记录
+
+19、数据库密码的设置

@@ -62,7 +62,7 @@ angular.module('hopefutureBlogApp')
           //注意这里，对于父 Controller中的赋值，需要加上 $parent
           //如果是取值，直接写 $scope.alerts 就可以了
           $scope.$parent.alerts = [
-            {type: 'danger', message: data.message}
+            {type: 'danger', message: data.errorMessage}
           ];
         }
       });

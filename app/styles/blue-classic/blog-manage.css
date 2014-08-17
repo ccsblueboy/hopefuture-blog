@@ -61,8 +61,8 @@ body {
     overflow-x: hidden;
     overflow-y: auto;
     /* Scrollable contents if viewport is shorter than content. */
-    background-color: #eeeeee;
-    border-right: 1px solid #555555;
+    background-color: #f5f5f5;
+    border-right: 1px solid #eeeeee;
   }
 }
 /* Sidebar navigation */
@@ -75,20 +75,20 @@ body {
 .nav-sidebar > li > a {
   padding-right: 20px;
   padding-left: 20px;
-  color: #4d4d4d;
+  color: #428bca;
   font-weight: bold;
 }
 .nav-sidebar > li.active > a {
-  color: #fff;
-  background-color: #666666;
+  color: #ffffff;
+  background-color: #428bca;
 }
 .nav-sidebar > li.active > a:focus {
-  color: #fff;
-  background-color: #666666;
+  color: #ffffff;
+  background-color: #428bca;
 }
 .nav-sidebar > li > a:hover {
-  color: #fff;
-  background-color: #808080;
+  color: #ffffff;
+  background-color: #368cd6;
 }
 .blog-manage-main .page-header {
   margin-top: 20px;

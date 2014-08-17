@@ -13,21 +13,21 @@ var resourceDao = require('./../../dao/blog/ResourceDao');
  */
 var personalBlog = {
   index: function (req, res) {
+    res.render('blog/blog', {
+      title: '我的博客首页'
+    });
+  },
+
+  manage: function (req, res) {
     var loginName = req.baseUrl.split('/')[1];
     accountDao.find({loginName: loginName, activated: true}, function (err, docs) {
       if (err || docs == null || docs.length === 0) {
         res.render('errors/invalid');
       } else {
-        res.render('blog/blog', {
-          title: '我的博客首页'
+        res.render('blog/blog-manage', {
+          title: '管理我的博客'
         });
       }
-    });
-  },
-
-  manage: function (req, res) {
-    res.render('blog/blog-manage', {
-      title: '管理我的博客'
     });
   },
 

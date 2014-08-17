@@ -5,6 +5,7 @@ var moment = require('moment');
 var mailer = require('../../utils/mailer');
 var encryption = require('../../utils/passwordCrypto').encryption;
 var config = require('../../config');
+var errorCodes = require('../../utils/errorCodes');
 
 var secretStr = 'iedjqe';//hfblog 的变体
 var secret = /iedjqe/g;
@@ -16,14 +17,9 @@ var secret = /iedjqe/g;
  * @param callback
  */
 function sendEmail(serverUrl, model, callback) {
-  var loginName = model.loginName,
-    accountId = model._id,
-    email = model.email,
-    time = moment().add('days', 1).valueOf(),
-    key = encryption.getKey();
+  var loginName = model.loginName, accountId = model._id, email = model.email, time = moment().add('days', 1).valueOf(), key = encryption.getKey();
 
-  serverUrl += '/signup/activate/' + encodeURIComponent(encryption.encrypt(key, accountId.toString())) + '?key=' +
-    encodeURIComponent(key) + '&time=' + encodeURIComponent(encryption.encrypt(key, time + ''));
+  serverUrl += '/signup/activate/' + encodeURIComponent(encryption.encrypt(key, accountId.toString())) + '?key=' + encodeURIComponent(key) + '&time=' + encodeURIComponent(encryption.encrypt(key, time + ''));
   serverUrl = serverUrl.replace(/%/g, secretStr);
 
   var data = {
@@ -43,8 +39,9 @@ var account = {
     });
   },
   signup: function (req, res) {
-    //FIXME,待动态取值
-    var serverUrl = 'http://localhost:9000';
+    var referer = req.headers.referer,
+      baseUrl = req.baseUrl;
+    var serverUrl = referer.substring(0,referer.indexOf(baseUrl));
     var data = req.body;
     accountDao.signup(data, function (err, model) {
       if (err) {
@@ -55,7 +52,7 @@ var account = {
         sendEmail(serverUrl, model, function (err) {
           res.send({
             success: err ? false : true,
-            errorMessage: err ? err.message : undefined,
+            errorMessage: err ? errorCodes['9006'] : undefined,
             account: {
               _id: model._id,
               email: model.email
@@ -145,8 +142,9 @@ var account = {
   },
 
   link: function (req, res) {
-    //FIXME,待动态取值
-    var serverUrl = 'http://localhost:9000';
+    var referer = req.headers.referer,
+      baseUrl = req.baseUrl;
+    var serverUrl = referer.substring(0,referer.indexOf(baseUrl));
     var accountId = req.params.accountId;
     accountDao.findOne({_id: accountId}, function (err, model) {
       if (err) {

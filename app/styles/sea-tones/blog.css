@@ -2,6 +2,10 @@
  * 处理一些样式的前缀
  * see Bootstrap  'less/mixins/vendor-prefixes.less'
 **/
+.alert {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
 body {
   padding-top: 50px;
 }

@@ -37,6 +37,9 @@ var iterations = 12000;
 
 exports.hash = function (password, salt, fn) {
   if (3 === arguments.length) {
+    if(password === undefined || salt === undefined){
+      return fn(new  Error('password or salt is not defined'));
+    }
     crypto.pbkdf2(password, salt, iterations, len, function (err, hash) {
       fn(err, hash.toString('base64'));
     });

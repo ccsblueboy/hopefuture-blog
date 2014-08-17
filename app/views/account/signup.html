@@ -3,7 +3,7 @@
   <div class="col-sm-offset-4 col-sm-4">
     <h2>个人用户注册</h2>
   </div>
-  <div class="col-sm-offset-1 col-sm-10">
+  <div class="col-sm-offset-3 col-sm-6">
     <div alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.message}}</div>
   </div>
 </div>
@@ -189,7 +189,7 @@
     <div class="col-sm-offset-3 col-sm-6">
       <div class="checkbox">
         <label style="display: block;">
-          <input type="checkbox" id="accept" name="accept" value="true" required/> 我已经阅读并同意
+          <input type="checkbox" id="accept" name="accept" value="true" checked="checked" required/> 我已经阅读并同意
           <a target="_blank" href="" ng-href="/terms" class="btn-link">注册条款</a>
         </label>
       </div>
@@ -209,10 +209,10 @@
     <p>注册成功，系统自动给您的邮箱<span>{{registeredEmail}}</span>发送了一份邮件，请查收并激活账户</p>
 
 
-    <p>如果您很长时间还没有收到邮件，请点击<a href="" ng-click="generateLink()"><strong>这里</strong></a>重新发送</p>
+    <p>如果您很长时间还没有收到邮件，请点击 <a href="" ng-click="generateLink()"><strong>这里</strong></a> 重新发送</p>
 
 
-    <p>如果您的账户已激活，请<a ng-href="/login"><strong>登录</strong></a></p>
+    <p>如果您的账户已激活，请 <a ng-href="/login"><strong>登录</strong></a></p>
 
     <p>&nbsp;</p>
 
@@ -221,7 +221,7 @@
       <li>邮件是否被您提供的邮箱系统自动拦截，或被误认为垃圾邮件放到垃圾箱了</li>
       <li>注册邮箱地址不正确或不存在</li>
       <li>以上情况排除后，如果您还是不能收到邮件，您可以发邮件给 Hope Future Blog 系统管理员寻求帮助：
-        <a href="mailto:linder0209@126.com">linder0209@126.com</a></li>
+        <a href="mailto:hopefuture_blog@126.com">hopefuture_blog@126.com</a></li>
     </ul>
 
   </div>
