@@ -68,6 +68,11 @@ module.exports = function (app) {
     res.render('reference');
   });
 
+  app.use('/blogsetting', function (req, res) {
+    res.locals.reference = true;
+    res.render('reference');
+  });
+
   app.use('/blog', blog);// 首页相关URL路径
 
   //用 url 变量来区分每个用户的博客，用户注册时不能用项目中存在的链接名称，注册时需要过滤一下，
