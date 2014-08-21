@@ -15,23 +15,11 @@
     <p><a ng-href="#/article/{{article._id}}">阅读全文 »</a></p>
   </section>
 
-  <aside class="article-meta">
-    <ul class="list-unstyled clearfix">
-      <li>
-        <span class="fa fa-comment" title="评论"></span>
-        <span title="文章《{{article.title}}》的评论数">{{article.commentCount || 0}} 条评论</span>
-      </li>
-      <li ng-if="article.categories">
-        <span class="glyphicon glyphicon-folder-close" title="分类目录"></span>
-        <a ng-href="#/category/{{category._id}}" ng-repeat="category in article.categories" title="查看分类目录 {{category.name}} 中的全部文章" href="">{{category.name}}</a>
-      </li>
-      <li ng-if="article.labels">
-        <span class="glyphicon glyphicon-tags" title="标签"></span>
-        <a ng-href="#/label/{{label._id}}" ng-repeat="label in article.labels" title="查看标签 {{label.name}} 中的全部文章" href="">{{label.name}}</a>
-      </li>
-    </ul>
-  </aside>
+  <aside class="article-meta"></aside>
 </article>
 
 <pager total-items="totalItems" ng-model="page.currentPage" items-per-page="itemsPerPage" num-pages="numPages"
        previous-text="上一页" next-text="下一页" ng-change="loadArticles()"></pager>
+
+<!--页面加载后，滚动条滑到最上面-->
+<div class="sr-only" scroll-top></div>

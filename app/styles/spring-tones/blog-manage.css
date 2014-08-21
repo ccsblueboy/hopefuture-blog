@@ -6,6 +6,10 @@
   padding-top: 10px;
   padding-bottom: 10px;
 }
+/**
+* http://www.lavishbootstrap.com/?image_url=http://design-seeds.com/palettes/12/SpringTones505.jpg
+* 官网提供的默认值为 #28363d   用以下公式计算为 #283637
+**/
 body {
   padding-top: 50px;
 }
@@ -14,6 +18,77 @@ body {
 **/
 .item-spacing-top {
   margin-top: 10px;
+}
+/**
+ * 页面头部样式
+**/
+.blog-header.navbar-inverse {
+  background-color: #28363d;
+  border-color: #141b1e;
+  background-image: -webkit-linear-gradient(top, #32444c 0%, #28363d 100%);
+  background-image: -o-linear-gradient(top, #32444c 0%, #28363d 100%);
+  background-image: linear-gradient(to bottom, #32444c 0%, #28363d 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff32444c', endColorstr='#ff28363d', GradientType=0);
+}
+.blog-header.navbar-inverse .navbar-brand {
+  color: #e0e7ea;
+}
+.blog-header.navbar-inverse .navbar-brand:hover,
+.blog-header.navbar-inverse .navbar-brand:focus {
+  color: #fff;
+}
+.blog-header.navbar-inverse .navbar-brand.active {
+  color: #fff;
+  font-weight: bold;
+  background-color: #141b1e;
+}
+.blog-header.navbar-inverse .navbar-nav > li > a {
+  color: #e0e7ea;
+}
+.blog-header.navbar-inverse .navbar-nav > li > a:hover,
+.blog-header.navbar-inverse .navbar-nav > li > a:focus {
+  color: #fff;
+}
+.blog-header.navbar-inverse .navbar-nav > li > a.active {
+  font-weight: bold;
+}
+/*
+* 页面底部样式
+*/
+.footer-links {
+  background-color: #28363d;
+  border-bottom: 1px solid #141b1e;
+  background-image: -webkit-linear-gradient(top, #32444c 0%, #28363d 100%);
+  background-image: -o-linear-gradient(top, #32444c 0%, #28363d 100%);
+  background-image: linear-gradient(to bottom, #32444c 0%, #28363d 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff32444c', endColorstr='#ff28363d', GradientType=0);
+  padding: 20px 0;
+}
+.footer-copyright {
+  background-color: #dee1dd;
+  color: #6d9197;
+  padding: 10px 0 0;
+}
+.links-item > li {
+  float: left;
+}
+.links-item > li:first-child {
+  margin-right: 20px;
+}
+.links-item-title {
+  color: #658b66;
+  font-size: 17px;
+}
+.links-item-content > span {
+  margin-right: 10px;
+}
+.links-item-content a,
+.links-item-content a:hover,
+.links-item-content a:focus,
+.links-item-content {
+  color: #f6f9f7;
 }
 /**
  * ajax loading
@@ -61,8 +136,8 @@ body {
     overflow-x: hidden;
     overflow-y: auto;
     /* Scrollable contents if viewport is shorter than content. */
-    background-color: #c4cdc1;
-    border-right: 1px solid #6d9197;
+    background-color: #dfe4dd;
+    border-right: 1px solid #99aead;
   }
 }
 /* Sidebar navigation */
@@ -75,20 +150,20 @@ body {
 .nav-sidebar > li > a {
   padding-right: 20px;
   padding-left: 20px;
-  color: #40777f;
+  color: #658b6f;
   font-weight: bold;
 }
 .nav-sidebar > li.active > a {
-  color: #fff;
-  background-color: #5196a1;
+  color: #dee1dd;
+  background-color: #658b6f;
 }
 .nav-sidebar > li.active > a:focus {
-  color: #fff;
-  background-color: #5196a1;
+  color: #dee1dd;
+  background-color: #658b6f;
 }
 .nav-sidebar > li > a:hover {
-  color: #fff;
-  background-color: #6fadb6;
+  color: #dee1dd;
+  background-color: #71987c;
 }
 .blog-manage-main .page-header {
   margin-top: 20px;
@@ -144,7 +219,8 @@ div.mce-fullscreen {
 }
 .form-panel {
   margin-top: 50px;
-  min-height: 450px;
+  margin-bottom: 50px;
+  min-height: 430px;
   padding-top: 20px;
 }
 .form-panel-header {
@@ -152,6 +228,11 @@ div.mce-fullscreen {
 }
 .form-panel-header .alert {
   margin-top: 10px;
+}
+.form-login-panel {
+  border: 1px solid #6d9197;
+  border-radius: 4px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
 }
 .password-strong-weak-bar {
   display: none;
@@ -257,7 +338,6 @@ div.mce-fullscreen {
 }
 .hf-list > li {
   margin: 10px;
-  color: #007399;
   font-weight: bold;
   font-size: 14px;
 }

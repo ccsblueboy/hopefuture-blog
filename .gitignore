@@ -7,3 +7,4 @@ app/bower_components
 npm-debug.log
 jshint.log
 doc
+server/publish-config.js

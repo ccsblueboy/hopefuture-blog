@@ -81,10 +81,14 @@ var commonMethod = {
             hashMap[parentId].children.push(item);
           } else {
             var parentNode = map[parentId];
-            //设置子节点
-            parentNode.children.push(item);
-            array.push(parentNode);//放置父节点
-            hashMap[parentId] = parentNode;//标记为处理过
+            if(parentNode){
+              //设置子节点
+              parentNode.children.push(item);
+              array.push(parentNode);//放置父节点
+              hashMap[parentId] = parentNode;//标记为处理过
+            }else{//虽然parentId 存在，但父节点已被删除，则被归类到没有父节点
+              array.push(item);
+            }
           }
         } else {//没有父节点，直接放入array中
           array.push(item);

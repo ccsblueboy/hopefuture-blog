@@ -5,6 +5,7 @@ var sessionManage = require('../../utils/sessionManage');
 
 var account = {
   index: function (req, res) {
+    res.locals.loginPage = true;
     res.render('login', {
       title: '登录页面'
     });

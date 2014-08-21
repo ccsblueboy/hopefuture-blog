@@ -8,18 +8,13 @@
   <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <link rel="stylesheet" href="../styles/<%= theme %>/bootstrap/css/bootstrap.css"/>
-  <link rel="stylesheet" href="../styles/<%= theme %>/bootstrap/css/bootstrap-theme.css"/>
+  <% include ../themes/themes-manage.html %>
 
-  <!-- build:css styles/fontawesome.css -->
+  <!-- build:css ../styles/blog-manage.css -->
   <link rel="stylesheet" href="../bower_components/fontawesome/css/font-awesome.css" />
-  <!-- endbuild -->
-
   <link rel="stylesheet" href="../bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css"/>
-
-  <!-- build:css(.tmp) styles/blog.css -->
-  <link rel="stylesheet" href="../styles/<%= theme %>/blog-manage.css">
   <!-- endbuild -->
+
 </head>
 <body ng-app="hopefutureBlogApp" ng-controller="HopefutureBlogCtrl" start-ajax-loading="true">
 <% include ../views/common/header.html %>
@@ -51,8 +46,7 @@
 </div>
 <!-- /.container -->
 
-<!-- build:js scripts/vendor-blog.js -->
-<!-- bower:js -->
+<!-- build:js ../scripts/vendor-blog-manage.js -->
 <script src="../bower_components/jquery/dist/jquery.js"></script>
 <script src="../bower_components/angular/angular.js"></script>
 <script src="../bower_components/angular-route/angular-route.js"></script>
@@ -62,7 +56,7 @@
 <script src="../bower_components/bootstrap/dist/js/bootstrap.js"></script>
 <script src="../bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
 <!-- TinyMCE -->
-<script src="../bower_components/tinymce/tinymce.jquery.js"></script>
+<script src="../bower_components/tinymce/tinymce.jquery.min.js"></script>
 <script src="../scripts/components/tinymce/langs/zh_CN.js"></script>
 <script src="../bower_components/angular-ui-tinymce/src/tinymce.js"></script>
 
@@ -70,13 +64,12 @@
 <script src="../bower_components/moment/moment.js"></script>
 <script src="../bower_components/moment/locale/zh-cn.js"></script>
 <script src="../bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
-<!-- endbower -->
 
 <!--校验国际化 -->
 <script src="../bower_components/jquery-validation/src/localization/messages_zh.js"></script>
 <!-- endbuild -->
 
-<!-- build:js({.tmp,app}) scripts/blog.js -->
+<!-- build:js ../scripts/blog-manage.js -->
 <script src="../scripts/hopefuture/hopefuture.js"></script>
 <script src="../scripts/hopefuture/hf_validate.js"></script>
 <script src="../scripts/hopefuture/hf_collection.js"></script>
@@ -95,9 +88,6 @@
 <script src="../scripts/services/blogmanage/service-resource.js"></script>
 <script src="../scripts/services/account/account-constant.js"></script>
 <script src="../scripts/services/account/service-account-info.js"></script>
-<% if (locals.administrator) { %>
-<script src="../scripts/services/account/service-account.js"></script>
-<% } %>
 
 <script src="../scripts/controllers/controller-common.js"></script>
 <script src="../scripts/controllers/controller-hopefuture-blog.js"></script>
@@ -110,9 +100,6 @@
 <script src="../scripts/controllers/blogmanage/controller-setting.js"></script>
 <script src="../scripts/controllers/blogmanage/controller-resource.js"></script>
 <script src="../scripts/controllers/account/controller-account-info.js"></script>
-<% if (locals.administrator) { %>
-<script src="../scripts/controllers/account/controller-account.js"></script>
-<% } %>
 
 <script src="../scripts/directives/blogmanage/directive-link-active.js"></script>
 <script src="../scripts/directives/blogmanage/directive-publish.js"></script>
@@ -123,7 +110,14 @@
 
 <script src="../scripts/filters/filter-truncate.js"></script>
 <script src="../scripts/filters/filter-common.js"></script>
-
 <!-- endbuild -->
+
+<% if (locals.administrator) { %>
+<!-- build:js ../scripts/blog-manage-administrator.js -->
+<script src="../scripts/services/account/service-account.js"></script>
+<script src="../scripts/controllers/account/controller-account.js"></script>
+<!-- endbuild -->
+<% } %>
+
 </body>
 </html>

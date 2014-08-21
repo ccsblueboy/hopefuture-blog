@@ -1,11 +1,14 @@
-<div class="container">
+<div class="container form-panel">
   <div class="row">
     <div class="col-sm-offset-1 col-sm-11">
       <h2>忘记账户</h2>
-
-      <p class="text-muted">如果你忘记账户，你可以输入注册邮箱，系统会把账户发送到你的注册邮箱中。</p>
+      <p>&nbsp;</p>
+      <p class="text-muted">如果您忘记账户，您可以通过注册邮箱找回您的账户。</p>
 
       <form ng-show="formToggle" forgot-loginname-validator class="form-horizontal" style="margin-top: 50px;" >
+        <div class="form-group">
+          <div class="col-sm-offset-1 col-sm-10" alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.message}}</div>
+        </div>
         <div class="form-group">
           <label class="col-sm-3 control-label" for="email"><i class="required">*</i>  注册邮箱</label>
 

@@ -129,7 +129,7 @@ angular.module('hopefutureBlogApp')
             }
             childComment.append(html);
           } else {
-            $('#commentList ul.comment').append(blogMethod.renderComment(data.comment, 1));
+            $('#commentList ul.comment-list').append(blogMethod.renderComment(data.comment, 1));
           }
 
           $scope.resetComment(false);

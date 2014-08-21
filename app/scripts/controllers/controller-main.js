@@ -10,7 +10,7 @@
  * */
 
 angular.module('hopefutureBlogApp')
-  .controller('MainCtrl', function ($scope, mainService) {
+  .controller('MainCtrl', function ($scope, mainService, blogMethod) {
     $scope.currentPage = 1;
     $scope.itemsPerPage = 20;
 
@@ -45,5 +45,6 @@ angular.module('hopefutureBlogApp')
       }
 
       $scope.loadPageData();
+      blogMethod.scrollTop();
     };
   });

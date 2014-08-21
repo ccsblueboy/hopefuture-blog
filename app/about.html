@@ -8,18 +8,13 @@
   <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <link rel="stylesheet" href="styles/<%= theme %>/bootstrap/css/bootstrap.css" />
-  <link rel="stylesheet" href="styles/<%= theme %>/bootstrap/css/bootstrap-theme.css" />
-
-  <!-- build:css(.tmp) styles/about.css -->
-  <link rel="stylesheet" href="styles/<%= theme %>/blog.css">
-  <!-- endbuild -->
+  <% include ./themes.html %>
 
 </head>
 <body ng-app="hopefutureBlogApp">
 <% include ./views/common/header.html %>
 
-<div class="jumbotron ng-scope">
+<div class="jumbotron">
   <div class="container hf-paragraph">
     <h1>Hope Future 博客介绍</h1>
 
@@ -61,13 +56,11 @@
 <% include ./views/common/footer.html %>
 
 <!-- build:js scripts/vendor-about.js -->
-<!-- bower:js -->
 <script src="bower_components/jquery/dist/jquery.js"></script>
 <script src="bower_components/angular/angular.js"></script>
-<!-- endbower -->
 <!-- endbuild -->
 
-<!-- build:js({.tmp,app}) scripts/hopefuture.js -->
+<!-- build:js({.tmp,app}) scripts/about.js -->
 <script src="scripts/apps/app-hopefuture.js"></script>
 <!-- endbuild -->
 </body>

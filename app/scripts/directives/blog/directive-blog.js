@@ -16,7 +16,21 @@ angular.module('hopefutureBlogApp')
     return {
       restrict: 'AC',
       templateUrl: 'views/templates/article-meta.html',
-      link: function(scope, element) {
+      link: function (scope, element) {
+      }
+    };
+  })
+  .directive('scrollTop', function () {
+    return {
+      restrict: 'AC',
+      link: function (scope, element) {
+        //jQuery平滑回到顶端效果
+        $('html, body').animate({
+          scrollTop: 0
+        }, {
+          duration: 200,
+          easing: 'swing'
+        });
       }
     };
   });

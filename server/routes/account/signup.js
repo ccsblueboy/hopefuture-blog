@@ -7,8 +7,7 @@ var encryption = require('../../utils/passwordCrypto').encryption;
 var config = require('../../config');
 var errorCodes = require('../../utils/errorCodes');
 
-var secretStr = 'iedjqe';//hfblog 的变体
-var secret = /iedjqe/g;
+var secret = new RegExp(config.linkSecret, 'g');
 
 /**
  * 生成激活账户链接
@@ -20,7 +19,7 @@ function sendEmail(serverUrl, model, callback) {
   var loginName = model.loginName, accountId = model._id, email = model.email, time = moment().add('days', 1).valueOf(), key = encryption.getKey();
 
   serverUrl += '/signup/activate/' + encodeURIComponent(encryption.encrypt(key, accountId.toString())) + '?key=' + encodeURIComponent(key) + '&time=' + encodeURIComponent(encryption.encrypt(key, time + ''));
-  serverUrl = serverUrl.replace(/%/g, secretStr);
+  serverUrl = serverUrl.replace(/%/g, config.linkSecret);
 
   var data = {
     loginName: loginName,
@@ -34,6 +33,7 @@ function sendEmail(serverUrl, model, callback) {
 
 var account = {
   index: function (req, res) {
+    res.locals.signupPage = true;
     res.render('account/signup', {
       title: '注册页面'
     });
@@ -41,7 +41,7 @@ var account = {
   signup: function (req, res) {
     var referer = req.headers.referer,
       baseUrl = req.baseUrl;
-    var serverUrl = referer.substring(0,referer.indexOf(baseUrl));
+    var serverUrl = referer.substring(0, referer.indexOf(baseUrl));
     var data = req.body;
     accountDao.signup(data, function (err, model) {
       if (err) {
@@ -144,7 +144,7 @@ var account = {
   link: function (req, res) {
     var referer = req.headers.referer,
       baseUrl = req.baseUrl;
-    var serverUrl = referer.substring(0,referer.indexOf(baseUrl));
+    var serverUrl = referer.substring(0, referer.indexOf(baseUrl));
     var accountId = req.params.accountId;
     accountDao.findOne({_id: accountId}, function (err, model) {
       if (err) {

@@ -55,7 +55,9 @@ app.use(function (req, res, next) {
       password = req.cookies.password,
       key = req.cookies.key;
     if (loginName && password && key) {
-      key = key.replace(/hfblog/g, '=');
+      //cookie 密钥
+      var cookieSecret = new RegExp(config.cookieSecret,'g');
+      key = key.replace(cookieSecret, '=');
       loginName = encryption.decrypt(key, loginName);
       password = encryption.decrypt(key, password);
       accountDao.findByLoginNameAndPassword({loginName: loginName, password: password}, function (err, doc) {

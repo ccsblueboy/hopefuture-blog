@@ -1,0 +1,379 @@
+/**
+ * 处理一些样式的前缀
+ * see Bootstrap  'less/mixins/vendor-prefixes.less'
+**/
+.alert {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+body {
+  padding-top: 50px;
+}
+/**
+* 间距
+**/
+.item-spacing-top {
+  margin-top: 10px;
+}
+/**
+ * 页面头部样式
+**/
+.blog-header.navbar-inverse {
+  background-color: #42475f;
+  border-color: #2d3141;
+  background-image: -webkit-linear-gradient(top, #4c526e 0%, #42475f 100%);
+  background-image: -o-linear-gradient(top, #4c526e 0%, #42475f 100%);
+  background-image: linear-gradient(to bottom, #4c526e 0%, #42475f 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff4c526e', endColorstr='#ff42475f', GradientType=0);
+}
+.blog-header.navbar-inverse .navbar-brand {
+  color: #ffffff;
+}
+.blog-header.navbar-inverse .navbar-brand:hover,
+.blog-header.navbar-inverse .navbar-brand:focus {
+  color: #fff;
+}
+.blog-header.navbar-inverse .navbar-brand.active {
+  color: #fff;
+  font-weight: bold;
+  background-color: #2d3141;
+}
+.blog-header.navbar-inverse .navbar-nav > li > a {
+  color: #ffffff;
+}
+.blog-header.navbar-inverse .navbar-nav > li > a:hover,
+.blog-header.navbar-inverse .navbar-nav > li > a:focus {
+  color: #fff;
+}
+.blog-header.navbar-inverse .navbar-nav > li > a.active {
+  font-weight: bold;
+}
+/*
+* 页面底部样式
+*/
+.footer-links {
+  background-color: #42475f;
+  border-bottom: 1px solid #2d3141;
+  background-image: -webkit-linear-gradient(top, #4c526e 0%, #42475f 100%);
+  background-image: -o-linear-gradient(top, #4c526e 0%, #42475f 100%);
+  background-image: linear-gradient(to bottom, #4c526e 0%, #42475f 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff4c526e', endColorstr='#ff42475f', GradientType=0);
+  padding: 20px 0;
+}
+.footer-copyright {
+  background-color: #e3ece9;
+  color: #55a7b6;
+  padding: 10px 0 0;
+}
+.links-item > li {
+  float: left;
+}
+.links-item > li:first-child {
+  margin-right: 20px;
+}
+.links-item-title {
+  color: #d82f4f;
+  font-size: 17px;
+}
+.links-item-content > span {
+  margin-right: 10px;
+}
+.links-item-content a,
+.links-item-content a:hover,
+.links-item-content a:focus,
+.links-item-content {
+  color: #ffffff;
+}
+/**
+ * ajax loading
+**/
+.ajax-loading-backdrop {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 2000;
+  background-color: #ccc;
+  opacity: 0.5;
+  filter: alpha(opacity=50);
+}
+.ajax-loading {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  padding: 18px;
+  background: url("../../images/loading_icon.gif") no-repeat;
+  border: 1px solid #d8392f;
+  -webkit-box-shadow: 0 0 5px 5px #f4bc48;
+  box-shadow: 0 0 5px 5px #f4bc48;
+  border-radius: 5px;
+  opacity: 0.8;
+  filter: alpha(opacity=80);
+}
+/*
+ * Sidebar
+ */
+/* Hide for mobile, show later */
+.sidebar {
+  display: none;
+}
+@media (min-width: 768px) {
+  .sidebar {
+    position: fixed;
+    top: 51px;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    display: block;
+    padding: 20px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    /* Scrollable contents if viewport is shorter than content. */
+    background-color: #d6e8db;
+    border-right: 1px solid #f4bc48;
+  }
+}
+/* Sidebar navigation */
+.nav-sidebar {
+  margin-right: -21px;
+  /* 20px padding + 1px border */
+  margin-bottom: 20px;
+  margin-left: -20px;
+}
+.nav-sidebar > li > a {
+  padding-right: 20px;
+  padding-left: 20px;
+  color: #d8392f;
+  font-weight: bold;
+}
+.nav-sidebar > li.active > a {
+  color: #e3ece9;
+  background-color: #d8392f;
+}
+.nav-sidebar > li.active > a:focus {
+  color: #e3ece9;
+  background-color: #d8392f;
+}
+.nav-sidebar > li > a:hover {
+  color: #e3ece9;
+  background-color: #dc4d44;
+}
+.blog-manage-main .page-header {
+  margin-top: 20px;
+}
+.article-effect {
+  margin-bottom: 10px;
+}
+.article-effect a {
+  margin-left: 10px;
+}
+.category-list {
+  max-height: 300px;
+  overflow: auto;
+  padding: 0 10px;
+  border: 1px solid #ddd;
+  border-top-width: 0;
+}
+.label-list > span,
+.label-list > a {
+  display: inline-block;
+  margin-right: 10px;
+  padding: 3px 0;
+}
+/**
+ * 解决 TinyMCE 冲突
+**/
+div.mce-fullscreen {
+  z-index: 2000;
+}
+.blog-btn-group .btn-group + .btn-group {
+  margin-left: 10px;
+}
+.blog-resource-border {
+  border-right: 1px solid;
+}
+.blog-theme > li {
+  float: left;
+  margin-right: 50px;
+}
+.blog-theme > li .blog-theme-item {
+  margin: 10px;
+}
+.account-status {
+  background: url("../../images/account_status.png") no-repeat;
+  cursor: pointer;
+  display: inline-block;
+  height: 18px;
+  vertical-align: middle;
+  width: 73px;
+}
+.account-status.off {
+  background-position: 0 -18px;
+}
+.form-panel {
+  margin-top: 50px;
+  margin-bottom: 50px;
+  min-height: 430px;
+  padding-top: 20px;
+}
+.form-panel-header {
+  margin-bottom: 10px;
+}
+.form-panel-header .alert {
+  margin-top: 10px;
+}
+.form-login-panel {
+  border: 1px solid #55a7b6;
+  border-radius: 4px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
+}
+.password-strong-weak-bar {
+  display: none;
+  margin-top: 10px;
+  margin-bottom: 0;
+}
+.select-box .btn {
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+  margin-left: -1px;
+}
+.select-box .dropdown-menu {
+  width: 100%;
+}
+.select-box .scroll {
+  height: 200px;
+  overflow-y: auto;
+}
+.select-box .form-control[readonly] {
+  background-color: #fff;
+  cursor: default;
+}
+/**
+ * 头像相关样式
+**/
+.head-portrait-list {
+  border: 1px solid #447c82;
+  margin-top: 10px;
+  padding: 5px;
+  border-radius: 4px;
+}
+.head-portrait-list > li {
+  float: left;
+}
+.head-portrait-list > li > a {
+  padding: 3px;
+  display: inline-block;
+  border: 1px solid transparent;
+  height: 58px;
+  border-radius: 2px;
+}
+.head-portrait-list > li.active > a {
+  border-color: #3a848c;
+  background-color: rgba(216, 57, 47, 0.6);
+}
+.head-portrait-default {
+  background: url("../../images/head-portrait-default.png") no-repeat;
+  width: 48px;
+  height: 48px;
+  display: inline-block;
+}
+.head-portrait1,
+.head-portrait2,
+.head-portrait3,
+.head-portrait4,
+.head-portrait5,
+.head-portrait6,
+.head-portrait7,
+.head-portrait8,
+.head-portrait9 {
+  background: url("../../images/head-portrait.png") no-repeat;
+  width: 48px;
+  height: 48px;
+  display: inline-block;
+}
+.head-portrait1 {
+  background-position: 0 0;
+}
+.head-portrait2 {
+  background-position: -63px 0;
+}
+.head-portrait3 {
+  background-position: -126px 0;
+}
+.head-portrait4 {
+  background-position: -189px 0;
+}
+.head-portrait5 {
+  background-position: -252px 0;
+}
+.head-portrait6 {
+  background-position: -315px 0;
+}
+.head-portrait7 {
+  background-position: -378px 0;
+}
+.head-portrait8 {
+  background-position: -441px 0;
+}
+.head-portrait9 {
+  background-position: -504px 0;
+}
+.hf-callout {
+  border-color: #55a7b6;
+  border-radius: 3px;
+  border-style: solid;
+  border-width: 1px 1px 1px 5px;
+  margin: 20px 0;
+  padding: 10px;
+}
+.hf-callout-info {
+  border-left-color: #5bc0de;
+}
+.hf-list > li {
+  margin: 10px;
+  font-weight: bold;
+  font-size: 14px;
+}
+.hf-paragraph p {
+  line-height: 2em;
+  text-indent: 2em;
+}
+/**
+ * 以下是一些通用的Angular 动画 css
+**/
+.animate-show {
+  -webkit-transition: all linear 0.5s;
+  -o-transition: all linear 0.5s;
+  transition: all linear 0.5s;
+  opacity: 1;
+}
+.animate-show.ng-hide {
+  line-height: 0;
+  opacity: 0;
+}
+/*
+* 表单校验样式
+*/
+label.text-danger {
+  margin-top: 5px;
+}
+input.text-danger,
+textarea.text-danger,
+select.text-danger {
+  border-color: #b94a48;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+input.text-danger:focus,
+textarea.text-danger:focus,
+select.text-danger:focus {
+  border-color: #953b39;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #d59392;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #d59392;
+}
+.required {
+  color: #a74240;
+}

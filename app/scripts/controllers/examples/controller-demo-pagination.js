@@ -147,12 +147,13 @@ angular.module('hopefutureBlogApp')
       });
     }
   })
-  .controller('FormModalCtrl', function ($scope, $modalInstance, demoPaginationService, formData) {
+  .controller('FormModalCtrl', function ($scope, $modalInstance, $timeout, demoPaginationService, formData) {
     $scope.items = formData.items;
     $scope.loadPageData = formData.loadPageData;
     $scope.demo = {
       _id: undefined,
       title: '',
+      publishDate: '',
       content: ''
     };
     var item = formData.item;
@@ -179,4 +180,10 @@ angular.module('hopefutureBlogApp')
     $scope.cancel = function () {
       $modalInstance.dismiss('cancel');
     };
+
+    $timeout(function () {
+      $('#dateTimePicker').datetimepicker({
+        minDate: new Date()
+      });
+    }, 100);
   });

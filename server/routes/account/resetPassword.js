@@ -3,8 +3,9 @@
 var accountDao = require('./../../dao/account/AccountDao.js');
 var moment = require('moment');
 var encryption = require('../../utils/passwordCrypto').encryption;
+var config = require('../../config');
 
-var secret = /iedjqe/g;
+var secret = new RegExp(config.linkSecret, 'g');
 
 var resetPassword = {
   /**

@@ -10,10 +10,11 @@
  * */
 
 angular.module('hopefutureBlogApp')
-  .controller('ArticlesCtrl', function ($scope, blogService) {
+  .controller('ArticlesCtrl', function ($scope, blogService,blogMethod) {
 
     var pathname = window.location.pathname;
     var account = pathname.substring(1);
+    var startScrollTop = false;//页面加载的时候不启动
 
     $scope.page = {currentPage: 1};
     $scope.itemsPerPage = 20;
@@ -33,6 +34,10 @@ angular.module('hopefutureBlogApp')
           $scope.totalItems = data.dataPage.totalItems;
         }
       });
+      if(startScrollTop){
+        blogMethod.scrollTop();
+      }
+      startScrollTop = true;
     };
     $scope.loadArticles();
 

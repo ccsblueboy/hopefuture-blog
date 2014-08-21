@@ -55,7 +55,14 @@ angular.module('hopefutureBlogApp')
           return item.count > next.count;
         });
         if (labels.length > 0) {
-          var minCount = labels[0].count, maxCount = labels[labels.length - 1].count, sub = maxCount - minCount;
+          var minCount = labels[0].count, maxCount = labels[labels.length - 1].count;
+          if (minCount < 0) {
+            minCount = 0;
+          }
+          if (maxCount < 0) {
+            maxCount = 0;
+          }
+          var sub = maxCount - minCount;
           /**
            * 根据 count 大小设置字体大小，最大的为 30px，最小为14px,
            * 最大和最小差值为16
@@ -65,7 +72,11 @@ angular.module('hopefutureBlogApp')
             if (sub === 0) {
               item.style = {fontSize: '14px'};
             } else {
-              item.style = {fontSize: (14 + 16 / sub * (item.count - 1)) + 'px'};
+              var count = item.count || 0;
+              if (count < 0) {
+                count = 0;
+              }
+              item.style = {fontSize: (14 + 16 / sub * (count - 1)) + 'px'};
             }
           });
         }
@@ -117,6 +128,19 @@ angular.module('hopefutureBlogApp')
         html += this.applyTemplate(tmpl, comment);
         html += '</li>';
         return html;
+      },
+
+      /**
+       * 让页面回到顶端
+       */
+      scrollTop: function(){
+        //jQuery平滑回到顶端效果
+        $('html, body').animate({
+          scrollTop: 0
+        }, {
+          duration: 200,
+          easing: 'swing'
+        });
       }
     };
   });

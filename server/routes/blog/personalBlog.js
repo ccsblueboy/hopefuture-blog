@@ -8,25 +8,41 @@ var commentDao = require('./../../dao/blog/CommentDao');
 var resourceDao = require('./../../dao/blog/ResourceDao');
 
 /**
+ * 校验用户是否存在
+ */
+function validate(conditions, callback) {
+  accountDao.find(conditions, function (err, docs) {
+    callback(!(err || docs == null || docs.length === 0));
+  });
+}
+/**
  * 个人博客相关route
  *
  */
 var personalBlog = {
   index: function (req, res) {
-    res.render('blog/blog', {
-      title: '我的博客首页'
+    var loginName = req.baseUrl.split('/')[1];
+    validate({loginName: loginName}, function (valid) {
+      if (valid) {
+        res.locals.personalBlogPage = true;
+        res.render('blog/blog', {
+          title: '我的博客首页'
+        });
+      } else {
+        res.render('errors/invalid');
+      }
     });
   },
 
   manage: function (req, res) {
     var loginName = req.baseUrl.split('/')[1];
-    accountDao.find({loginName: loginName, activated: true}, function (err, docs) {
-      if (err || docs == null || docs.length === 0) {
-        res.render('errors/invalid');
-      } else {
+    validate({loginName: loginName, activated: true}, function (valid) {
+      if (valid) {
         res.render('blog/blog-manage', {
           title: '管理我的博客'
         });
+      } else {
+        res.render('errors/invalid');
       }
     });
   },

@@ -8,26 +8,20 @@
   <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <link rel="stylesheet" href="styles/<%= theme %>/bootstrap/css/bootstrap.css" />
-  <link rel="stylesheet" href="styles/<%= theme %>/bootstrap/css/bootstrap-theme.css" />
+  <% include ./themes.html %>
 
-  <!-- build:css(.tmp) styles/login.css -->
-  <link rel="stylesheet" href="styles/<%= theme %>/blog.css">
-  <!-- endbuild -->
 </head>
 <body ng-app="hopefutureBlogApp" ng-controller="HopefutureBlogCtrl">
-<% include /views/common/header.html %>
+<% include ./views/common/header.html %>
 <div ng-include="'views/account/login.html'" ng-controller="LoginCtrl"></div>
-<% include /views/common/footer.html %>
+<% include ./views/common/footer.html %>
 
 <!-- build:js scripts/vendor-login.js -->
-<!-- bower:js -->
 <script src="bower_components/jquery/dist/jquery.js"></script>
 <script src="bower_components/angular/angular.js"></script>
 <script src="bower_components/jquery-validation/dist/jquery.validate.js"></script>
 <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
 <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-<!-- endbower -->
 
 <!--校验国际化 -->
 <script src="bower_components/jquery-validation/src/localization/messages_zh.js"></script>

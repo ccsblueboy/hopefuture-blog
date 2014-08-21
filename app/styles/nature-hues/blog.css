@@ -1,0 +1,408 @@
+/**
+ * 处理一些样式的前缀
+ * see Bootstrap  'less/mixins/vendor-prefixes.less'
+**/
+.alert {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+body {
+  padding-top: 50px;
+}
+.link {
+  color: #8c959e;
+}
+.blog-container {
+  min-height: 450px;
+}
+/**
+ * 页面头部样式
+**/
+.blog-header.navbar-inverse {
+  background-color: #3c3748;
+  border-color: #24212b;
+  background-image: -webkit-linear-gradient(top, #484256 0%, #3c3748 100%);
+  background-image: -o-linear-gradient(top, #484256 0%, #3c3748 100%);
+  background-image: linear-gradient(to bottom, #484256 0%, #3c3748 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff484256', endColorstr='#ff3c3748', GradientType=0);
+}
+.blog-header.navbar-inverse .navbar-brand {
+  color: #f1f0f4;
+}
+.blog-header.navbar-inverse .navbar-brand:hover,
+.blog-header.navbar-inverse .navbar-brand:focus {
+  color: #fff;
+}
+.blog-header.navbar-inverse .navbar-brand.active {
+  color: #fff;
+  font-weight: bold;
+  background-color: #24212b;
+}
+.blog-header.navbar-inverse .navbar-nav > li > a {
+  color: #f1f0f4;
+}
+.blog-header.navbar-inverse .navbar-nav > li > a:hover,
+.blog-header.navbar-inverse .navbar-nav > li > a:focus {
+  color: #fff;
+}
+.blog-header.navbar-inverse .navbar-nav > li > a.active {
+  font-weight: bold;
+}
+/*
+* 页面底部样式
+*/
+.footer-links {
+  background-color: #3c3748;
+  border-bottom: 1px solid #24212b;
+  background-image: -webkit-linear-gradient(top, #484256 0%, #3c3748 100%);
+  background-image: -o-linear-gradient(top, #484256 0%, #3c3748 100%);
+  background-image: linear-gradient(to bottom, #484256 0%, #3c3748 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff484256', endColorstr='#ff3c3748', GradientType=0);
+  padding: 20px 0;
+}
+.footer-copyright {
+  background-color: #c2bbcb;
+  color: #6d6e8c;
+  padding: 10px 0 0;
+}
+.links-item > li {
+  float: left;
+}
+.links-item > li:first-child {
+  margin-right: 20px;
+}
+.links-item-title {
+  color: #6e8072;
+  font-size: 17px;
+}
+.links-item-content > span {
+  margin-right: 10px;
+}
+.links-item-content a,
+.links-item-content a:hover,
+.links-item-content a:focus,
+.links-item-content {
+  color: #f6f7f6;
+}
+.form-panel {
+  margin-top: 50px;
+  margin-bottom: 50px;
+  min-height: 430px;
+  padding-top: 20px;
+}
+.form-panel-header {
+  margin-bottom: 10px;
+}
+.form-panel-header .alert {
+  margin-top: 10px;
+}
+.form-login-panel {
+  border: 1px solid #6d6e8c;
+  border-radius: 4px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
+}
+.password-strong-weak-bar {
+  display: none;
+  margin-top: 10px;
+  margin-bottom: 0;
+}
+.select-box .btn {
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+  margin-left: -1px;
+}
+.select-box .dropdown-menu {
+  width: 100%;
+}
+.select-box .scroll {
+  height: 200px;
+  overflow-y: auto;
+}
+.select-box .form-control[readonly] {
+  background-color: #fff;
+  cursor: default;
+}
+/**
+ * 头像相关样式
+**/
+.head-portrait-list {
+  border: 1px solid #5a626a;
+  margin-top: 10px;
+  padding: 5px;
+  border-radius: 4px;
+}
+.head-portrait-list > li {
+  float: left;
+}
+.head-portrait-list > li > a {
+  padding: 3px;
+  display: inline-block;
+  border: 1px solid transparent;
+  height: 58px;
+  border-radius: 2px;
+}
+.head-portrait-list > li.active > a {
+  border-color: #506274;
+  background-color: rgba(110, 128, 118, 0.6);
+}
+.head-portrait-default {
+  background: url("../../images/head-portrait-default.png") no-repeat;
+  width: 48px;
+  height: 48px;
+  display: inline-block;
+}
+.head-portrait1,
+.head-portrait2,
+.head-portrait3,
+.head-portrait4,
+.head-portrait5,
+.head-portrait6,
+.head-portrait7,
+.head-portrait8,
+.head-portrait9 {
+  background: url("../../images/head-portrait.png") no-repeat;
+  width: 48px;
+  height: 48px;
+  display: inline-block;
+}
+.head-portrait1 {
+  background-position: 0 0;
+}
+.head-portrait2 {
+  background-position: -63px 0;
+}
+.head-portrait3 {
+  background-position: -126px 0;
+}
+.head-portrait4 {
+  background-position: -189px 0;
+}
+.head-portrait5 {
+  background-position: -252px 0;
+}
+.head-portrait6 {
+  background-position: -315px 0;
+}
+.head-portrait7 {
+  background-position: -378px 0;
+}
+.head-portrait8 {
+  background-position: -441px 0;
+}
+.head-portrait9 {
+  background-position: -504px 0;
+}
+.blog-container {
+  margin-bottom: 50px;
+}
+.masthead-button-links {
+  margin-top: 30px;
+}
+.masthead-button-links a + a {
+  margin-left: 20px;
+}
+.article-list {
+  background: #ffffff;
+  border-radius: 5px;
+  margin-bottom: 30px;
+  opacity: 0.7;
+  padding: 10px 20px;
+}
+.article-list > p {
+  line-height: 2em;
+  text-indent: 2em;
+}
+.article-list > section {
+  margin-bottom: 20px;
+}
+.boutique-pagination {
+  background-color: #986796;
+}
+.boutique-pagination > li > a,
+.boutique-pagination > li > span {
+  background-color: rgba(0, 0, 0, 0);
+  margin-left: 0;
+  border: 0 none;
+}
+.boutique-pagination > li > a:hover,
+.boutique-pagination > li > a:focus {
+  border: 0 none;
+}
+.boutique-pagination > li > span,
+.boutique-pagination > li > span:hover,
+.boutique-pagination > li > span:focus {
+  border-left: 1px solid #6e8076;
+  border-right: 1px solid #6e8076;
+}
+.boutique-pagination > li > a > i.fa {
+  font-size: 4em;
+  height: 72px;
+  line-height: 72px;
+  padding: 0 25px;
+}
+.boutique-pagination > li > span {
+  padding: 0 25px;
+}
+.boutique-pagination > li > span.page-number {
+  height: 92px;
+  line-height: 92px;
+}
+.article-meta > ul > li {
+  float: left;
+  margin-right: 20px;
+}
+.article-meta > ul > li > a + a {
+  margin-left: 10px;
+}
+.article-aside {
+  margin-top: 50px;
+}
+.article-list-aside > li {
+  margin-bottom: 10px;
+}
+.article-list-aside .fa {
+  margin-right: 5px;
+}
+.label-list > a {
+  display: inline-block;
+  margin-right: 10px;
+  padding: 3px 0;
+}
+.resource-list .resource-item .link > a {
+  float: left;
+  padding: 5px 0;
+  margin-right: 20px;
+}
+.article-info > section {
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+.article-content {
+  margin-top: 10px;
+}
+.article-content p {
+  line-height: 2em;
+  text-indent: 2em;
+}
+.article-reproduced {
+  margin: 20px 0;
+}
+.navigation-post {
+  margin: 50px 0;
+}
+.comment-panel {
+  margin-top: 10px;
+}
+.comment-panel button + button {
+  margin-left: 10px;
+}
+.commentator-panel {
+  margin-top: 10px;
+}
+.comment-list > li {
+  margin-top: 30px;
+  padding: 10px;
+  border: 1px dashed #6d6e8c;
+}
+.comment-list > li > ul {
+  margin-left: 50px;
+}
+.comment-meta {
+  margin-left: 20px;
+}
+.comment-content {
+  border-radius: 5px;
+  margin: 10px 0;
+  padding: 20px;
+  position: relative;
+  -webkit-box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.1);
+  box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.1);
+}
+.comment-content:before,
+.comment-content:after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: -1.6em;
+  left: .844em;
+  border: 0.8em solid rgba(0, 0, 0, 0.1);
+  border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+}
+.comment-content:after {
+  margin-top: .201em;
+  border-color: transparent transparent #c2bbcb transparent;
+}
+.comment-reply {
+  margin-bottom: 10px;
+}
+.article-type-title {
+  margin-bottom: 30px;
+}
+.hf-callout {
+  border-color: #6d6e8c;
+  border-radius: 3px;
+  border-style: solid;
+  border-width: 1px 1px 1px 5px;
+  margin: 20px 0;
+  padding: 10px;
+}
+.hf-callout-info {
+  border-left-color: #5bc0de;
+}
+.hf-list > li {
+  margin: 10px;
+  font-weight: bold;
+  font-size: 14px;
+}
+.hf-paragraph p {
+  line-height: 2em;
+  text-indent: 2em;
+}
+/**
+ * 修改分享代码样式与bootstrap的冲突
+ * http://www.bshare.cn
+**/
+.bsBox,
+.bsBox *,
+#bsPanelHolder,
+#bsPanelHolder * {
+  box-sizing: content-box;
+}
+/**
+ * 以下是一些通用的Angular 动画 css
+**/
+.animate-show {
+  -webkit-transition: all linear 0.5s;
+  -o-transition: all linear 0.5s;
+  transition: all linear 0.5s;
+  opacity: 1;
+}
+.animate-show.ng-hide {
+  line-height: 0;
+  opacity: 0;
+}
+/*
+* 表单校验样式
+*/
+label.text-danger {
+  margin-top: 5px;
+}
+input.text-danger,
+textarea.text-danger,
+select.text-danger {
+  border-color: #b94a48;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+input.text-danger:focus,
+textarea.text-danger:focus,
+select.text-danger:focus {
+  border-color: #953b39;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #d59392;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #d59392;
+}
+.required {
+  color: #a74240;
+}

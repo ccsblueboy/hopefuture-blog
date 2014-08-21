@@ -44,8 +44,8 @@
   > li > span,
   > li > span:hover,
   > li > span:focus {
-    border-left: 1px solid #658B6F;
-    border-right: 1px solid #658B6F;
+    border-left: 1px solid @brand-primary;
+    border-right: 1px solid @brand-primary;
   }
 
   > li > a > i.fa {
@@ -91,4 +91,14 @@
   display: inline-block;
   margin-right: @margin-md;
   padding: 3px 0;
+}
+
+.resource-list {
+  .resource-item {
+    .link > a {
+      float: left;
+      padding: @padding-sm 0;
+      margin-right: @margin-lg;
+    }
+  }
 }

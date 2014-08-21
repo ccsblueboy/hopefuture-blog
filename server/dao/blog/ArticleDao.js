@@ -493,6 +493,7 @@ ArticleDao.prototype.articleInfo = function (loginName, articleId, callback) {
     return CommentModel.find({articleID: articleId }, {_id: 1, commentator: 1, headPortrait: 1, content: 1, createdDate: 1, commentParent: 1}).sort({_id: 1}).exec();
   }).then(function (comments) {
     if (comments) {
+      data.article.commentCount = comments.length;
       var items = comments.map(function (item) {
         return {
           _id: item._id.toString(),
@@ -503,15 +504,14 @@ ArticleDao.prototype.articleInfo = function (loginName, articleId, callback) {
           commentParent: item.commentParent
         };
       });
-      // FIXME 这里没有按照评论相关联排序，交由前端实现，也可在后台实现
       // FIXME 文章评论，这里一次性加载，不再分页，后期再考虑分页显示
-      // 转换为树形数据
+      // 转换为树形数据，让评论相关联排序
       items = commonMethod.convertTreeNode(items, 'commentParent');
       data.comments = items;
     }
 
     //前一篇文章
-    return model.findOne({_id: { $lt: ObjectId(articleId)}}, {_id: 1, title: 1, articleLink: 1}).exec();
+    return model.findOne({_id: { $lt: ObjectId(articleId)}}, {_id: 1, title: 1, articleLink: 1}, {sort: {_id: -1}}).exec();
   }).then(function (article) {
     data.prevArticle = article;//前一篇文章
 
@@ -747,11 +747,15 @@ function getArticlePagination(model, conditions, skip, limit, dataPage, callback
     });
 
     articleList.forEach(function (item) {
-      item.labels = item.labels.map(function (item) {
-        return {_id: item, name: labelMap[item]};
+      item.labels = item.labels.filter(function (it) {
+        return !!labelMap[it];
+      }).map(function (it) {
+        return {_id: it, name: labelMap[it]};
       });
-      item.categories = item.categories.map(function (item) {
-        return {_id: item, name: categoryMap[item]};
+      item.categories = item.categories.filter(function (it) {
+        return !!categoryMap[it];
+      }).map(function (it) {
+        return {_id: it, name: categoryMap[it]};
       });
       item.commentCount = commentMap[item._id.toString()];
     });

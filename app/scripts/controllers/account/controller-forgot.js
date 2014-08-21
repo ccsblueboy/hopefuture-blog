@@ -15,7 +15,14 @@ angular.module('hopefutureBlogApp')
     $scope.sendEmail = function () {
       forgotService.sendEmail($scope.account, function (data) {
         if (data.success) {
-
+          $scope.$parent.alerts = [
+            {type: 'success', message: '系统成功给您的注册邮箱发送了一份邮件，请查收并获取您的账户。'}
+          ];
+          $scope.formToggle = false;
+        } else {
+          $scope.$parent.alerts = [
+            {type: 'danger', message: data.errorMessage}
+          ];
         }
       });
     };
@@ -51,7 +58,7 @@ angular.module('hopefutureBlogApp')
           $scope.formToggle = false;
         } else {
           $scope.$parent.alerts = [
-            {type: 'error', message: data.errorMessage}
+            {type: 'danger', message: data.errorMessage}
           ];
         }
       });

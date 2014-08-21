@@ -160,13 +160,26 @@ angular.module('hopefutureBlogApp')
       });
     }
   })
-  .controller('FormModalCtrl', function ($scope, $modalInstance, demoGridService, formData) {
+  .controller('FormModalCtrl', function ($scope, $modalInstance, $timeout, demoGridService, formData) {
     $scope.items = formData.items;
     $scope.demo = {
       _id: undefined,
       title: '',
+      publishDate: '',
       content: ''
     };
+
+    //jshint -W106
+    $scope.tinymceOptions = {
+      height: 250,
+      menubar: false, //Disable all menu
+      content_css: '/styles/tinymce.css',
+      plugins: [
+        "autolink link image preview hr code fullscreen table textcolor charmap"
+      ],
+      toolbar: 'undo redo | bold italic underline strikethrough subscript superscript | styleselect | fontselect fontsizeselect formatselect ' + '| forecolor backcolor removeformat | bullist numlist outdent indent blockquote | alignleft aligncenter alignright alignjustify | ' + 'hr image link unlink | charmap table code preview fullscreen'
+    };
+
     var item = formData.item;
     if (item) {
       $scope.demo = {
@@ -190,5 +203,12 @@ angular.module('hopefutureBlogApp')
 
     $scope.cancel = function () {
       $modalInstance.dismiss('cancel');
+      tinymce.get('content').destroy();
     };
+
+    $timeout(function(){
+      $('#dateTimePicker').datetimepicker({
+        minDate: new Date()
+      });
+    },100);
   });

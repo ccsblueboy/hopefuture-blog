@@ -7,6 +7,7 @@ var Schema = mongoose.Schema;
 var schema = new Schema({
   title: { type: String },
   content: { type: String },
+  publishDate: { type: String },
   createdDate: { type: Date, default: Date.now },
   createdBy: String,
   updatedDate: { type: Date, default: Date.now },

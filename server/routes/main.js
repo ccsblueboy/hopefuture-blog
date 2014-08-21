@@ -4,6 +4,7 @@ var express = require('express');
 var router = express.Router();
 
 router.get('/', function (req, res) {
+  res.locals.mainPage = true;
   res.render('main', { title: 'Hope Future 博客' });
 });
 

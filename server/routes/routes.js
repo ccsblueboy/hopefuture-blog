@@ -59,7 +59,13 @@ module.exports = function (app) {
   });
 
   app.use('/about', function (req, res) {
+    res.locals.aboutPage = true;
     res.render('about');
+  });
+
+  app.use('/reference', function (req, res) {
+    res.locals.reference = true;
+    res.render('reference');
   });
 
   app.use('/blog', blog);// 首页相关URL路径

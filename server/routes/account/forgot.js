@@ -4,8 +4,8 @@ var accountDao = require('./../../dao/account/AccountDao.js');
 var moment = require('moment');
 var mailer = require('../../utils/mailer');
 var encryption = require('../../utils/passwordCrypto').encryption;
-
-var secretStr = 'iedjqe';//hfblog 的变体
+var config = require('../../config');
+var errorCodes = require('../../utils/errorCodes');
 
 var account = {
   index: function (req, res) {
@@ -94,7 +94,7 @@ var account = {
         mailer.send(email, 'forgotLoginName', data, function (err) {
           res.send({
             success: err ? false : true,
-            errorMessage: err ? err.message : undefined
+            errorMessage: err ? errorCodes['9007'] : undefined
           });
         });
       }
@@ -128,7 +128,7 @@ var account = {
 
         serverUrl += '/resetpassword/' + encodeURIComponent(encryption.encrypt(key, accountId.toString())) + '?key=' +
           encodeURIComponent(key) + '&time=' + encodeURIComponent(encryption.encrypt(key, time + ''));
-        serverUrl = serverUrl.replace(/%/g, secretStr);
+        serverUrl = serverUrl.replace(/%/g, config.linkSecret);
 
         var data = {
           loginName: loginName,
@@ -138,7 +138,7 @@ var account = {
         mailer.send(email, 'forgotPassword', data, function (err) {
           res.send({
             success: err ? false : true,
-            errorMessage: err ? err.message : undefined
+            errorMessage: err ? errorCodes['9007'] : undefined
           });
         });
       }

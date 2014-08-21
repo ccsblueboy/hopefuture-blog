@@ -1,0 +1,81 @@
+/**
+ * 页面头部样式
+**/
+
+.blog-header.navbar-inverse {
+  background-color: @navbar-inverse-bg;
+  border-color: darken(@navbar-inverse-bg, 10%);
+  #gradient > .vertical(@start-color: lighten(@navbar-inverse-bg, 5%); @end-color: @navbar-inverse-bg);
+  .navbar-brand {
+    color: lighten(@navbar-inverse-bg, 70%);
+    &:hover,
+    &:focus {
+      color: #fff;
+    }
+  }
+  .navbar-brand.active {
+    color: #fff;
+    font-weight: bold;
+    background-color: darken(@navbar-inverse-bg, 10%);
+  }
+  .navbar-nav > li > a {
+    color: lighten(@navbar-inverse-bg, 70%);
+    &:hover,
+    &:focus {
+      color: #fff;
+    }
+    &.active {
+      font-weight: bold;
+    }
+  }
+}
+
+/*
+* 页面底部样式
+*/
+.footer {
+  //  position: absolute;
+  //  bottom: 0;
+  //  width: 100%;
+}
+
+.footer-links {
+  background-color: @navbar-inverse-bg;
+  border-bottom: 1px solid darken(@navbar-inverse-bg, 10%);
+  #gradient > .vertical(@start-color: lighten(@navbar-inverse-bg, 5%); @end-color: @navbar-inverse-bg);
+  padding: 20px 0;
+}
+
+.footer-copyright {
+  background-color: @footer-copyright-bg;
+  color: @footer-copyright-color;
+  padding: 10px 0 0;
+}
+
+.links-item > li {
+  float: left;
+}
+
+.links-item > li:first-child {
+  margin-right: @margin-lg;
+}
+
+.links-item-title {
+  color: @footer-links-title-color;
+  font-size: @font-size-medium;
+}
+
+.links-item-content > span {
+  margin-right: @margin-md;
+}
+
+.links-item-content a,
+.links-item-content a:hover,
+.links-item-content a:focus,
+.links-item-content {
+  color: @footer-links-content-color;
+}
+
+.blog-footer-logo {
+  //FIXME：待实现 logo
+}

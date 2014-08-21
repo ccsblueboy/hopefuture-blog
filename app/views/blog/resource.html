@@ -1,11 +1,14 @@
-<h1 style="margin-bottom: 20px;">资源链接</h1>
+<h1 class="article-type-title">资源链接</h1>
 
-<div ng-repeat="resource in resources">
-<h2>分类{{$index + 1}}： {{resource.categoryName || '无分类'}}</h2>
+<div class="resource-list">
+  <div class="resource-item" ng-repeat="resource in resources">
+    <h2>分类{{$index + 1}}： {{resource.categoryName || '无分类'}}</h2>
 
-  <ul class="list-unstyled">
-    <li ng-repeat="res in resource.categoryResources">
-      <a target="_blank" ng-href="{{res.link}}">{{res.name}}</a>
-    </li>
-  </ul>
+    <p class="link clearfix">
+      <a ng-repeat="res in resource.categoryResources" target="_blank" ng-href="{{res.link}}">{{res.name}}</a>
+    </p>
+    <hr/>
+  </div>
 </div>
+<!--页面加载后，滚动条滑到最上面-->
+<div class="sr-only" scroll-top></div>

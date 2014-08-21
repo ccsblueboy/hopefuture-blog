@@ -8,14 +8,14 @@
   <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- build:css styles/examples-pagination-bootstrap.css -->
+  <!-- build:css ../styles/vendor-examples-pagination.css -->
   <!-- bower:css -->
   <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css" />
+  <link rel="stylesheet" href="../bower_components/fontawesome/css/font-awesome.css" />
+  <link rel="stylesheet" href="../bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
   <!-- endbower -->
   <!-- endbuild -->
-  <!-- build:css(.tmp) styles/examples-pagination.css -->
-  <link rel="stylesheet" href="../styles/base.css">
-  <link rel="stylesheet" href="../styles/validate.css">
+  <!-- build:css ../styles/examples-pagination.css -->
   <link rel="stylesheet" href="../styles/examples.css">
   <!-- endbuild -->
 </head>
@@ -33,19 +33,21 @@
 </div>
 <div class="container" ng-include="'../views/examples/demo-pagination.html'" ng-controller="DemoPaginationCtrl"></div>
 
-<!-- build:js scripts/vendor-pagination.js -->
+<!-- build:js ../scripts/vendor-examples-pagination.js -->
 <!-- bower:js -->
 <script src="../bower_components/jquery/dist/jquery.js"></script>
 <script src="../bower_components/angular/angular.js"></script>
 <script src="../bower_components/jquery-validation/dist/jquery.validate.js"></script>
 <script src="../bower_components/bootstrap/dist/js/bootstrap.js"></script>
 <script src="../bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-<script src="../bower_components/kindeditor/kindeditor.js"></script>
-<script src="../bower_components/ckeditor/ckeditor.js"></script>
+<script src="../bower_components/tinymce/tinymce.min.js"></script>
+<script src="../bower_components/angular-ui-tinymce/src/tinymce.js"></script>
+<script src="../bower_components/moment/moment.js"></script>
+<script src="../bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
 <!-- endbower -->
 <!-- endbuild -->
 
-<!-- build:js({.tmp,app}) scripts/pagination.js -->
+<!-- build:js ../scripts/examples-pagination.js -->
 <script src="../scripts/hopefuture/hf_validate.js"></script>
 <script src="../scripts/apps/examples/app-demo-pagination.js"></script>
 <script src="../scripts/services/httpInterceptor.js"></script>

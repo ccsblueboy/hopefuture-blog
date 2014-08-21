@@ -1,3 +1,40 @@
-.h-demo-modal .modal-dialog {
-  width: 800px;
+/**
+ * 处理一些样式的前缀
+ * see Bootstrap  'less/mixins/vendor-prefixes.less'
+**/
+.alert {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+/*
+* 表单校验样式
+*/
+label.text-danger {
+  margin-top: 5px;
+}
+input.text-danger,
+textarea.text-danger,
+select.text-danger {
+  border-color: #b94a48;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+input.text-danger:focus,
+textarea.text-danger:focus,
+select.text-danger:focus {
+  border-color: #953b39;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #d59392;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #d59392;
+}
+.required {
+  color: #a74240;
+}
+body {
+  padding-top: 50px;
+}
+.h-grid-modal .modal-dialog {
+  width: 1000px;
+}
+.blog-btn-group .btn-group + .btn-group {
+  margin-left: 10px;
 }

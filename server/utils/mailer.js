@@ -5,6 +5,7 @@
 
 var nodemailer = require('nodemailer');
 var smtpTransport = require('nodemailer-smtp-transport');
+var mailConfig = require('../config').mailConfig;
 
 var templates = {
   forgotLoginName: {
@@ -60,14 +61,14 @@ var transporter = nodemailer.createTransport(smtpTransport({
   host: 'smtp.126.com',
   port: 25,
   auth: {
-    user: '',
-    pass: ''
+    user: mailConfig.user,
+    pass: mailConfig.pass
   }
 }));
 
 // 邮件默认配置项
 var mailOptions = {
-  from: '', // 发送地址
+  from: mailConfig.from, // 发送地址
   to: '', // 接收地址，多个用逗号隔开，比如：bar@blurdybloop.com, baz@blurdybloop.com
   subject: '', // 主题
   text: '', // 文本内容

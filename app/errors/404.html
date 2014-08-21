@@ -8,12 +8,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <link rel="stylesheet" href="../styles/<%= theme %>/bootstrap/css/bootstrap.css" />
-  <link rel="stylesheet" href="../styles/<%= theme %>/bootstrap/css/bootstrap-theme.css" />
-
-  <!-- build:css(.tmp) styles/illegal.css -->
-  <link rel="stylesheet" href="../styles/<%= theme %>/blog.css">
-  <!-- endbuild -->
+  <% include ../themes/themes.html %>
 
 </head>
 <body ng-app="hopefutureBlogApp">
@@ -34,14 +29,12 @@
 </div>
 <% include ../views/common/footer.html %>
 
-<!-- build:js scripts/vendor-illegal.js -->
-<!-- bower:js -->
+<!-- build:js ../scripts/vendor-404.js -->
 <script src="../bower_components/jquery/dist/jquery.js"></script>
 <script src="../bower_components/angular/angular.js"></script>
-<!-- endbower -->
 <!-- endbuild -->
 
-<!-- build:js({.tmp,app}) scripts/hopefuture.js -->
+<!-- build:js ../scripts/404.js -->
 <script src="../scripts/apps/app-hopefuture.js"></script>
 <!-- endbuild -->
 </body>

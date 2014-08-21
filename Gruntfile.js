@@ -49,10 +49,6 @@ module.exports = function (grunt) {
         files: ['test/spec/{,*/}*.js'],
         tasks: ['newer:jshint:test', 'karma']
       },
-      styles: {
-        files: ['<%= yeoman.app %>/styles/{,*/}*.css'],
-        tasks: ['newer:copy:styles', 'autoprefixer']
-      },
       gruntfile: {
         files: ['Gruntfile.js']
       },
@@ -62,7 +58,6 @@ module.exports = function (grunt) {
         },
         files: [
           '<%= yeoman.app %>/{,*/}*.html',
-          '.tmp/styles/{,*/}*.css',
           '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
         ]
       },
@@ -150,36 +145,35 @@ module.exports = function (grunt) {
     },
 
     // Automatically inject Bower components into the app
-    bowerInstall: {
-      target: {
-        // Point to the files that should be updated when
-        // you run `grunt bower-install`
-        src: [
-          '<%= yeoman.app %>/index.html',   // .html support...
-          '<%= yeoman.app %>/demo-grid.html',
-          '<%= yeoman.app %>/demo-pagination.html',
-          '<%= yeoman.app %>/examples.html'
-        ],
-
-        // Optional:
-        // ---------
-        cwd: '',
+    // 由于项目中不同的文件加载的bower 组件不一样，故有些html文件去掉了bower install
+    wiredep: {
+      options: {
+        cwd: '<%= yeoman.app %>',
         dependencies: true,
         devDependencies: false,
         exclude: [],
         fileTypes: {},
-        ignorePath: ''
+        ignorePath:  ''// /\.\.\//
+      },
+      app: {
+        src: [
+          '<%= yeoman.app %>/examples/**/*.html',
+          '<%= yeoman.app %>/*.html',
+          '<%= yeoman.app %>/account/**/*.html',
+          '<%= yeoman.app %>/blog/**/*.html',
+          '<%= yeoman.app %>/errors/**/*.html'
+        ]
       }
     },
 
     // Renames files for browser caching purposes
     // 该任务用来重新命名文件
-    rev: {
+    filerev: {
       dist: {
         files: {
           src: [
             '<%= yeoman.webapp %>/scripts/{,*/}*.js',
-            '<%= yeoman.webapp %>/styles/{,*/}*.css',
+            '<%= yeoman.webapp %>/styles/{,**/}*.css',
             '<%= yeoman.webapp %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
             '<%= yeoman.webapp %>/styles/fonts/*'
           ]
@@ -190,7 +184,8 @@ module.exports = function (grunt) {
     // Reads HTML for usemin blocks to enable smart builds that automatically
     // concat, minify and revision files. Creates configurations in memory so
     // additional tasks can operate on them
-    // 该task 会启用 concat、uglify、cssmin 来处理转换文件，会处理html中类似以下定义的块
+    // 注意不同的文件应该命名不同的编译名称，比如两个html文件中不能出现相同的build:js 名称
+    // 该task 会生成 concat、uglify、cssmin 配置项，随后利用这几个命令来处理转换文件，处理html中类似以下定义的块
     /**
      * <!-- build:js js/app.js -->
      <script src="js/app.js"></script>
@@ -200,25 +195,49 @@ module.exports = function (grunt) {
      <!-- endbuild -->
      **/
     useminPrepare: {
-      options: {
-        dest: '<%= yeoman.webapp %>'//输出路径
-      },
-      app: {
-        src: ['<%= yeoman.app %>/index.html',
-          '<%= yeoman.app %>/demo-grid.html',
-          '<%= yeoman.app %>/demo-pagination.html',
-          '<%= yeoman.app %>/examples.html'
+      app1: {
+        options: {
+          dest: '<%= yeoman.webapp %>'//输出路径
+        },
+        src: [
+          '<%= yeoman.app %>/*.html'
         ]
-        //src: ['<%= yeoman.app %>/grid.html']
+      },
+      app2: {
+        options: {
+          staging: '.tmp/usemin',
+          dest: '<%= yeoman.webapp %>/account'//输出路径
+        },
+        src: [
+          '<%= yeoman.app %>/account/*.html',
+          '<%= yeoman.app %>/blog/*.html',
+          '<%= yeoman.app %>/errors/*.html',
+          '<%= yeoman.app %>/examples/*.html',
+          '<%= yeoman.app %>/themes/*.html'
+        ]
+      },
+      app3: {
+        options: {
+          staging: '.tmp/usemin/usemin',
+          dest: '<%= yeoman.webapp %>/account/*'//输出路径
+        },
+        src: [
+          '<%= yeoman.app %>/account/activate/*.html',
+          '<%= yeoman.app %>/account/reset-password/*.html',
+          '<%= yeoman.app %>/themes/themes/*.html'
+        ]
       }
     },
 
     // Performs rewrites based on rev and the useminPrepare configuration
     usemin: {
-      html: ['<%= yeoman.webapp %>/{,*/}*.html'],
-      css: ['<%= yeoman.webapp %>/styles/{,*/}*.css'],
+      html: [
+        '<%= yeoman.webapp %>/{,**/}*.html',
+        '!<%= yeoman.webapp %>/views/{,*/}*.html'
+      ],
+      css: ['<%= yeoman.webapp %>/styles/{,**/}*.css'],
       options: {
-        assetsDirs: ['<%= yeoman.webapp %>']
+        //assetsDirs: ['<%= yeoman.webapp %>']
       }
     },
 
@@ -259,7 +278,8 @@ module.exports = function (grunt) {
           {
             expand: true,
             cwd: '<%= yeoman.webapp %>',
-            src: ['*.html', 'views/{,*/}*.html'],
+            src: ['*.html', 'views/{,*/}*.html', 'account/{,*/}*.html', 'blog/*.html', 'errors/*.html',
+              'examples/*.html', 'themes/{,*/}*.html'],
             dest: '<%= yeoman.webapp %>'
           }
         ]
@@ -276,6 +296,12 @@ module.exports = function (grunt) {
             cwd: '.tmp/concat/scripts',
             src: '*.js',
             dest: '.tmp/concat/scripts'
+          },
+          {
+            expand: true,
+            cwd: '.tmp/usemin/scripts',
+            src: '*.js',
+            dest: '.tmp/usemin/scripts'
           }
         ]
       }
@@ -284,7 +310,9 @@ module.exports = function (grunt) {
     // Replace Google CDN references
     cdnify: {
       dist: {
-        html: ['<%= yeoman.dist %>/*.html']
+        html: [
+          '<%= yeoman.webapp %>/*.html'
+        ]
       }
     },
 
@@ -302,7 +330,11 @@ module.exports = function (grunt) {
               '.htaccess',
               '*.html',
               'views/{,*/}*.html',
-              'bower_components/**/*',
+              'account/{,*/}*.html',
+              'blog/{,*/}*.html',
+              'errors/{,*/}*.html',
+              'examples/{,*/}*.html',
+              'themes/{,*/}*.html',
               'images/{,*/}*.{webp}',
               'fonts/*'
             ]
@@ -315,9 +347,24 @@ module.exports = function (grunt) {
           },
           {
             expand: true,
+            cwd: '<%= yeoman.app %>/bower_components/bootstrap/dist',
+            src: 'fonts/*',
+            dest: '<%= yeoman.webapp %>/styles'
+          },
+          {
+            expand: true,
+            cwd: '<%= yeoman.app %>/bower_components/fontawesome',
+            src: 'fonts/*',
+            dest: '<%= yeoman.webapp %>'
+          },
+          {
+            expand: true,
             cwd: './',
             dest: '<%= yeoman.dist %>',
-            src: ['<%= yeoman.server %>/**']
+            src: [
+              '<%= yeoman.server %>/**',
+              '!<%= yeoman.server %>/publish-config.js'
+            ]
           },
           {
             expand: true,
@@ -337,7 +384,13 @@ module.exports = function (grunt) {
         expand: true,
         cwd: '<%= yeoman.app %>/styles',
         dest: '.tmp/styles/',
-        src: '{,*/}*.css'
+        src: '{,**/}*.css'
+      },
+      tinymce: {
+        expand: true,
+        cwd: '<%= yeoman.app %>/bower_components/tinymce',
+        src: ['plugins/*/*.min.js', 'themes/*/*.min.js'],
+        dest: '<%= yeoman.webapp %>/scripts'
       }
     },
 
@@ -437,6 +490,86 @@ module.exports = function (grunt) {
           '<%= yeoman.app %>/styles/sea-tones/blog-manage.css': '<%= yeoman.app %>/less/blog-manage-sea-tones.less'
         }
       },
+      natureHues: {
+        files: {
+          '<%= yeoman.app %>/styles/nature-hues/blog.css': '<%= yeoman.app %>/less/blog-nature-hues.less',
+          '<%= yeoman.app %>/styles/nature-hues/blog-manage.css': '<%= yeoman.app %>/less/blog-manage-nature-hues.less'
+        }
+      },
+      polarHues: {
+        files: {
+          '<%= yeoman.app %>/styles/polar-hues/blog.css': '<%= yeoman.app %>/less/blog-polar-hues.less',
+          '<%= yeoman.app %>/styles/polar-hues/blog-manage.css': '<%= yeoman.app %>/less/blog-manage-polar-hues.less'
+        }
+      },
+      globalSpectrum: {
+        files: {
+          '<%= yeoman.app %>/styles/global-spectrum/blog.css': '<%= yeoman.app %>/less/blog-global-spectrum.less',
+          '<%= yeoman.app %>/styles/global-spectrum/blog-manage.css': '<%= yeoman.app %>/less/blog-manage-global-spectrum.less'
+        }
+      },
+      mountainsFog: {
+        files: {
+          '<%= yeoman.app %>/styles/mountains-fog/blog.css': '<%= yeoman.app %>/less/blog-mountains-fog.less',
+          '<%= yeoman.app %>/styles/mountains-fog/blog-manage.css': '<%= yeoman.app %>/less/blog-manage-mountains-fog.less'
+        }
+      },
+      floraBrights: {
+        files: {
+          '<%= yeoman.app %>/styles/flora-brights/blog.css': '<%= yeoman.app %>/less/blog-flora-brights.less',
+          '<%= yeoman.app %>/styles/flora-brights/blog-manage.css': '<%= yeoman.app %>/less/blog-manage-flora-brights.less'
+        }
+      },
+
+      purpleRose: {
+        files: {
+          '<%= yeoman.app %>/styles/purple-rose/blog.css': '<%= yeoman.app %>/less/blog-purple-rose.less',
+          '<%= yeoman.app %>/styles/purple-rose/blog-manage.css': '<%= yeoman.app %>/less/blog-manage-purple-rose.less'
+        }
+      },
+      featheredHues: {
+        files: {
+          '<%= yeoman.app %>/styles/feathered-hues/blog.css': '<%= yeoman.app %>/less/blog-feathered-hues.less',
+          '<%= yeoman.app %>/styles/feathered-hues/blog-manage.css': '<%= yeoman.app %>/less/blog-manage-feathered-hues.less'
+        }
+      },
+      floraTones: {
+        files: {
+          '<%= yeoman.app %>/styles/flora-tones/blog.css': '<%= yeoman.app %>/less/blog-flora-tones.less',
+          '<%= yeoman.app %>/styles/flora-tones/blog-manage.css': '<%= yeoman.app %>/less/blog-manage-flora-tones.less'
+        }
+      },
+      romanticFeelings: {
+        files: {
+          '<%= yeoman.app %>/styles/romantic-feelings/blog.css': '<%= yeoman.app %>/less/blog-romantic-feelings.less',
+          '<%= yeoman.app %>/styles/romantic-feelings/blog-manage.css': '<%= yeoman.app %>/less/blog-manage-romantic-feelings.less'
+        }
+      },
+      blueOcean: {
+        files: {
+          '<%= yeoman.app %>/styles/blue-ocean/blog.css': '<%= yeoman.app %>/less/blog-blue-ocean.less',
+          '<%= yeoman.app %>/styles/blue-ocean/blog-manage.css': '<%= yeoman.app %>/less/blog-manage-blue-ocean.less'
+        }
+      },
+      pinkMood: {
+        files: {
+          '<%= yeoman.app %>/styles/pink-mood/blog.css': '<%= yeoman.app %>/less/blog-pink-mood.less',
+          '<%= yeoman.app %>/styles/pink-mood/blog-manage.css': '<%= yeoman.app %>/less/blog-manage-pink-mood.less'
+        }
+      },
+      purpleRed: {
+        files: {
+          '<%= yeoman.app %>/styles/purple-red/blog.css': '<%= yeoman.app %>/less/blog-purple-red.less',
+          '<%= yeoman.app %>/styles/purple-red/blog-manage.css': '<%= yeoman.app %>/less/blog-manage-purple-red.less'
+        }
+      },
+      elegantStyle: {
+        files: {
+          '<%= yeoman.app %>/styles/elegant-style/blog.css': '<%= yeoman.app %>/less/blog-elegant-style.less',
+          '<%= yeoman.app %>/styles/elegant-style/blog-manage.css': '<%= yeoman.app %>/less/blog-manage-elegant-style.less'
+        }
+      },
+
       publish: {
         options: {
           paths: ['<%= yeoman.app %>/']
@@ -450,7 +583,33 @@ module.exports = function (grunt) {
           '<%= yeoman.app %>/styles/grass-color/blog-manage.css': '<%= yeoman.app %>/less/blog-manage-grass-color.less',
           '<%= yeoman.app %>/styles/sea-tones/blog.css': '<%= yeoman.app %>/less/blog-sea-tones.less',
           '<%= yeoman.app %>/styles/sea-tones/blog-manage.css': '<%= yeoman.app %>/less/blog-manage-sea-tones.less',
-          '<%= yeoman.app %>/styles/tinymce.css': '<%= yeoman.app %>/less/tinymce.less'
+          '<%= yeoman.app %>/styles/nature-hues/blog.css': '<%= yeoman.app %>/less/blog-nature-hues.less',
+          '<%= yeoman.app %>/styles/nature-hues/blog-manage.css': '<%= yeoman.app %>/less/blog-manage-nature-hues.less',
+          '<%= yeoman.app %>/styles/tinymce.css': '<%= yeoman.app %>/less/tinymce.less',
+          '<%= yeoman.app %>/styles/polar-hues/blog.css': '<%= yeoman.app %>/less/blog-polar-hues.less',
+          '<%= yeoman.app %>/styles/polar-hues/blog-manage.css': '<%= yeoman.app %>/less/blog-manage-polar-hues.less',
+          '<%= yeoman.app %>/styles/global-spectrum/blog.css': '<%= yeoman.app %>/less/blog-global-spectrum.less',
+          '<%= yeoman.app %>/styles/global-spectrum/blog-manage.css': '<%= yeoman.app %>/less/blog-manage-global-spectrum.less',
+          '<%= yeoman.app %>/styles/mountains-fog/blog.css': '<%= yeoman.app %>/less/blog-mountains-fog.less',
+          '<%= yeoman.app %>/styles/mountains-fog/blog-manage.css': '<%= yeoman.app %>/less/blog-manage-mountains-fog.less',
+          '<%= yeoman.app %>/styles/flora-brights/blog.css': '<%= yeoman.app %>/less/blog-flora-brights.less',
+          '<%= yeoman.app %>/styles/flora-brights/blog-manage.css': '<%= yeoman.app %>/less/blog-manage-flora-brights.less',
+          '<%= yeoman.app %>/styles/purple-rose/blog.css': '<%= yeoman.app %>/less/blog-purple-rose.less',
+          '<%= yeoman.app %>/styles/purple-rose/blog-manage.css': '<%= yeoman.app %>/less/blog-manage-purple-rose.less',
+          '<%= yeoman.app %>/styles/feathered-hues/blog.css': '<%= yeoman.app %>/less/blog-feathered-hues.less',
+          '<%= yeoman.app %>/styles/feathered-hues/blog-manage.css': '<%= yeoman.app %>/less/blog-manage-feathered-hues.less',
+          '<%= yeoman.app %>/styles/flora-tones/blog.css': '<%= yeoman.app %>/less/blog-flora-tones.less',
+          '<%= yeoman.app %>/styles/flora-tones/blog-manage.css': '<%= yeoman.app %>/less/blog-manage-flora-tones.less',
+          '<%= yeoman.app %>/styles/romantic-feelings/blog.css': '<%= yeoman.app %>/less/blog-romantic-feelings.less',
+          '<%= yeoman.app %>/styles/romantic-feelings/blog-manage.css': '<%= yeoman.app %>/less/blog-manage-romantic-feelings.less',
+          '<%= yeoman.app %>/styles/blue-ocean/blog.css': '<%= yeoman.app %>/less/blog-blue-ocean.less',
+          '<%= yeoman.app %>/styles/blue-ocean/blog-manage.css': '<%= yeoman.app %>/less/blog-manage-blue-ocean.less',
+          '<%= yeoman.app %>/styles/pink-mood/blog.css': '<%= yeoman.app %>/less/blog-pink-mood.less',
+          '<%= yeoman.app %>/styles/pink-mood/blog-manage.css': '<%= yeoman.app %>/less/blog-manage-pink-mood.less',
+          '<%= yeoman.app %>/styles/purple-red/blog.css': '<%= yeoman.app %>/less/blog-purple-red.less',
+          '<%= yeoman.app %>/styles/purple-red/blog-manage.css': '<%= yeoman.app %>/less/blog-manage-purple-red.less',
+          '<%= yeoman.app %>/styles/elegant-style/blog.css': '<%= yeoman.app %>/less/blog-elegant-style.less',
+          '<%= yeoman.app %>/styles/elegant-style/blog-manage.css': '<%= yeoman.app %>/less/blog-manage-elegant-style.less'
         }
       }
     },
@@ -533,6 +692,31 @@ module.exports = function (grunt) {
           {expand: true, src: ['<%= yeoman.server %>/**/*.js', '<%= yeoman.app %>/scripts/**/*.js'], dest: '.tmp/jsdoc/'}
         ]
       }
+    },
+
+    /**
+     * 压缩server js
+     **/
+    uglify: {
+      server: {
+        files: [
+          {
+            expand: true,
+            cwd: '<%= yeoman.dist %>/server',
+            src: '**/*.js',
+            dest: '<%= yeoman.dist %>/server'
+          }
+        ]
+      }
+    }
+  });
+
+  //例子，注册一个 Task
+  grunt.registerTask('foo', 'A sample task that logs stuff.', function (arg1, arg2) {
+    if (arguments.length === 0) {
+      grunt.log.writeln(this.name + ", no args");
+    } else {
+      grunt.log.writeln(this.name + ", " + arg1 + " " + arg2);
     }
   });
 
@@ -543,7 +727,7 @@ module.exports = function (grunt) {
 
     grunt.task.run([
       'clean:server', // clean .tmp
-      'bowerInstall',
+      'wiredep',
       'less:publish',//把less转换为css
       'concurrent:server',// 把样式copy到临时目录中
       'autoprefixer',// 分析css 并给css3加上浏览器前缀
@@ -563,21 +747,23 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'clean:dist',// clean dist
-    'bowerInstall',
+    'wiredep',
     'less:publish',//把less转换为css
     'useminPrepare',//合并压缩文件
     'concurrent:dist',//copy css image 和 svg
-    'autoprefixer',// 处理css
+    'autoprefixer',// 分析css 并给css3加上浏览器前缀
     'concat',// 用 useminPrepare 生成的 concat config 连接文件
     'ngmin',// 处理angular 在 .tmp下
     'copy:dist',// copy 文件
-    'replace:dist',//替换文件
-    'cdnify',// 处理 google cdn
+    //'cdnify',// 处理 google cdn，由于执行该task会报错，故暂先注掉
     'cssmin',// 用 useminPrepare 生成的 cssmin config 压缩 css
-    'uglify',// 用 useminPrepare 生成的 uglify config 压缩 js
-    'rev',// 重新命名文件名，在 webapp下
+    'uglify:generated',// 用 useminPrepare 生成的 uglify config 压缩 js
+    'filerev',// 重新命名文件名，在 webapp下
     'usemin', // 用重新命名的压缩文件替换
-    'htmlmin' // 处理html文件（删除多余的代码，包括空格和换行，注释等）
+    'uglify:server',// 压缩server文件
+    'replace:dist',//替换文件
+    'htmlmin', // 处理html文件（删除多余的代码，包括空格和换行，注释等）
+    'copy:tinymce'//复制 tinymce 插件和主题
   ]);
 
   grunt.registerTask('generatedoc', [
