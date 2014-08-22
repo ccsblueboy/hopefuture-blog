@@ -78,51 +78,6 @@ app.use(function (req, res, next) {
   }
 });
 
-/**
- * 拦截器，当用户没有登录时，访问后台相关链接跳转到登录页面
- * 当路径中包含 manage 时，表示是访问的后台链接
- */
-app.use(function (req, res, next) {
-  if (sessionManage.isStaticResource(req)) {
-    next();
-  } else {
-    var account = sessionManage.getAccountSession(req);
-    var path = req.path;
-    if (/\/\w+\/manage($|\/)/.test(path)) {
-      if (account === null) {
-        if (req.headers['x-requested-with'] === 'XMLHttpRequest') {//Ajax请求
-          res.send({
-            success: false,
-            errorCode: '9001',
-            errorMessage: errorCodes['9001']
-          });
-        } else {
-          //必须显式的设置 301 重定向，如 res.redirect('/login'); 只会把地址输入到页面，还需手工点击，不信你试试？
-          //设置为 301 firefox 有问题，这里设为 302
-          res.redirect(302, '/login');
-        }
-      } else {
-        var loginName = req.path.split('/')[1];
-        if (account.loginName !== loginName) {//非法操作
-          if (req.headers['x-requested-with'] === 'XMLHttpRequest') {
-            res.send({
-              success: false,
-              errorCode: '9002',
-              errorMessage: errorCodes['9002']
-            });
-          } else {
-            res.render('errors/illegal');
-          }
-        } else {
-          next();
-        }
-      }
-    } else {
-      next();
-    }
-  }
-});
-
 // 判断是否登录并设置登录信息
 app.use(function (req, res, next) {
   if (sessionManage.isStaticResource(req)) {
@@ -157,6 +112,57 @@ app.use(function (req, res, next) {
   }
 });
 
+/**
+ * 拦截器，当用户没有登录时，访问后台相关链接跳转到登录页面
+ * 当路径中包含 manage 时，表示是访问的后台链接
+ */
+app.use(function (req, res, next) {
+  if (sessionManage.isStaticResource(req)) {
+    next();
+  } else {
+    var account = sessionManage.getAccountSession(req);
+    var path = req.path;
+    if (/\/\w+\/manage($|\/)/.test(path)) {
+      if (account === null) {
+        if (req.headers['x-requested-with'] === 'XMLHttpRequest') {//Ajax请求
+          res.send({
+            success: false,
+            errorCode: '9001',
+            errorMessage: errorCodes['9001']
+          });
+        } else {
+          //必须显式的设置 301 重定向，如 res.redirect('/login'); 只会把地址输入到页面，还需手工点击，不信你试试？
+          //设置为 301 firefox 有问题，这里设为 302
+          res.redirect(302, '/login');
+        }
+      } else {
+        var loginName = req.path.split('/')[1];
+        if (account.loginName !== loginName) {//非法操作
+          if (req.headers['x-requested-with'] === 'XMLHttpRequest') {
+            res.send({
+              success: false,
+              errorCode: '9002',
+              errorMessage: errorCodes['9002']
+            });
+          } else {
+            //sessionManage.clearAccountSession(req);
+            //sessionManage.clearAccountCookie(res);
+            //设置主题
+            res.locals.theme = req.cookies.theme || config.defaultTheme;
+            res.render('errors/illegal');
+            //res.redirect(302, '/login');
+          }
+        } else {
+          next();
+        }
+      }
+    } else {
+      next();
+    }
+  }
+});
+
+
 //定义路由
 routes(app);
 
@@ -173,7 +179,7 @@ if ('development' === app.get('env')) {
 app.use(function (req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
-  next(err);
+  res.render('errors/404');
 });
 
 // error handler

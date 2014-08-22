@@ -113,5 +113,28 @@
 </div>
 <!--/.blog-comment -->
 
+<script type="text/ng-template" id="protectedPasswordModal.html">
+  <form class="form-horizontal" name="protectedPasswordForm" protected-validator>
+    <div class="modal-header">
+      <button type="button" class="close" ng-click="cancel()" title="Close">&times;</button>
+      <h4 class="modal-title">该文章为密码保护，请输入密码</h4>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label for="protectedPassword" class="col-sm-2 control-label"><i class="required">*</i> 文章密码</label>
+
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="protectedPassword" name="protectedPassword" ng-model="protected.password" required>
+        </div>
+      </div>
+
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-primary">确定</button>
+      <button type="button" class="btn btn-default" ng-click="cancel()">取消</button>
+    </div>
+  </form>
+</script>
+
 <!--页面加载后，滚动条滑到最上面-->
 <div class="sr-only" scroll-top></div>

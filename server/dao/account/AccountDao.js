@@ -5,6 +5,7 @@
  * @type {hash}
  */
 var hash = require('../../utils/passwordCrypto').hash;
+var errorCodes = require('../../utils/errorCodes');
 
 /**
  * 创建 Account Dao 用来操作 AccountModel，实现数据的增删改查等功能
@@ -57,22 +58,30 @@ AccountDao.prototype.findByLoginNameAndPassword = function (data, callback) {
  * @param callback {function}回调函数
  */
 AccountDao.prototype.signup = function (data, callback) {
-  var password = data.password;
-  delete data.password;
+  var loginName = data.loginName;
+  var conditions = {loginName: loginName};
+  accountDao.find(conditions, function (err, models) {
+    if (err || models.length > 0) {
+      return callback(new Error(errorCodes['9008']));
+    } else {
+      var password = data.password;
+      delete data.password;
 
-  var model = this.model;
-  hash(password, function (err, salt, hash) {
-    if (err) {
-      return callback(err);
+      var model = this.model;
+      hash(password, function (err, salt, hash) {
+        if (err) {
+          return callback(err);
+        }
+        data.salt = salt;
+        data.hash = hash;
+
+        var entity = new model(data);
+        //当有错误发生时，返回err；product 是返回生成的实体，numberAffected which will be 1 when the document was found and updated in the database, otherwise 0.
+        entity.save(function (err, product, numberAffected) {
+          return callback(err, product._doc);
+        });
+      });
     }
-    data.salt = salt;
-    data.hash = hash;
-
-    var entity = new model(data);
-    //当有错误发生时，返回err；product 是返回生成的实体，numberAffected which will be 1 when the document was found and updated in the database, otherwise 0.
-    entity.save(function (err, product, numberAffected) {
-      return callback(err, product._doc);
-    });
   });
 };
 

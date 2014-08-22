@@ -8,7 +8,8 @@
   <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <% include ../themes/themes.html %>
+  <link rel="stylesheet" href="../styles/<%= theme %>/bootstrap/css/bootstrap.css" />
+  <link rel="stylesheet" href="../styles/<%= theme %>/blog.css">
 
 </head>
 <body ng-app="hopefutureBlogApp">
@@ -23,12 +24,12 @@
 </div>
 <% include ../views/common/footer.html %>
 
-<!-- build:js ../scripts/vendor-illegal.js -->
+<!-- build:js scripts/vendor-illegal.js -->
 <script src="../bower_components/jquery/dist/jquery.js"></script>
 <script src="../bower_components/angular/angular.js"></script>
 <!-- endbuild -->
 
-<!-- build:js ../scripts/illegal.js -->
+<!-- build:js scripts/illegal.js -->
 <script src="../scripts/apps/app-hopefuture.js"></script>
 <!-- endbuild -->
 </body>

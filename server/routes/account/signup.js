@@ -1,6 +1,6 @@
 'use strict';
 
-var accountDao = require('./../../dao/account/AccountDao.js');
+var accountDao = require('./../../dao/account/AccountDao');
 var moment = require('moment');
 var mailer = require('../../utils/mailer');
 var encryption = require('../../utils/passwordCrypto').encryption;
@@ -43,10 +43,13 @@ var account = {
       baseUrl = req.baseUrl;
     var serverUrl = referer.substring(0, referer.indexOf(baseUrl));
     var data = req.body;
+    //这里需要设置一下激活状态，防止前端恶意发送数据
+    data.activated = false;
     accountDao.signup(data, function (err, model) {
       if (err) {
         res.send({
-          success: false
+          success: false,
+          errorMessage: err.message
         });
       } else {
         sendEmail(serverUrl, model, function (err) {

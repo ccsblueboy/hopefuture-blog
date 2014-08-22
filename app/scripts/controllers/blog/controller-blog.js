@@ -16,14 +16,14 @@ angular.module('hopefutureBlogApp')
    * 创建新的文章
    */
   $scope.createBlog = function () {
-    window.location.href = window.location.origin + window.location.pathname + '/manage#/publish';
+    window.location.href = '/' + $scope.loginName + '/manage#/publish';
   };
 
   /**
    * 管理我的博客
    */
   $scope.manageBlog = function () {
-    window.location.href = window.location.origin + window.location.pathname + '/manage#/articles';
+    window.location.href =  '/' + $scope.loginName + '/manage#/articles';
   };
 
   var pathname = window.location.pathname;

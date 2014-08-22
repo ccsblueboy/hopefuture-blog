@@ -14,7 +14,7 @@ var schema = new Schema({
   account: { type: String },//即作者，这里保存账户登录名，登录名是唯一的
   status: { type: String },//文章状态，如发布，草稿，发布后再修改，延迟发布，回收站等 publish draft modified delay trash
   commentStatus: { type: String },
-  publicityStatus: { type: String },//公开度
+  publicityStatus: { type: String },//公开度  public: '公开', protected: '密码保护', private: '私密'
   protectedPassword: { type: String },//公开度（密码保护），需输入密码才能查看
   publishType: { type: String },// 发布方式，立即和定时
   publishDate: { type: Date},// 定时发布时间
@@ -26,9 +26,7 @@ var schema = new Schema({
   boutique: {type: Boolean},//是否被推荐到首页显示，由管理员操作
   createdDate: { type: Date, default: Date.now },
   updatedDate: { type: Date, default: Date.now },
-  readCounts: { type: Number },//浏览总数
-  ip: { type: String },//浏览者IP
-  browserAgent: { type: String }//浏览者 浏览器 Agent
+  readCounts: { type: Number }//浏览总数
 });
 
 /**

@@ -16,9 +16,6 @@ body {
 .link {
   color: #5196a1;
 }
-.blog-container {
-  min-height: 450px;
-}
 /**
  * 页面头部样式
 **/
@@ -199,7 +196,9 @@ body {
   background-position: -504px 0;
 }
 .blog-container {
+  margin-top: 10px;
   margin-bottom: 50px;
+  min-height: 450px;
 }
 .masthead-button-links {
   margin-top: 30px;

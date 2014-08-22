@@ -51,7 +51,9 @@
   <tr ng-repeat="item in items" id="{{item._id}}">
     <td><input type="checkbox" ng-model="item.checked" ng-change="selectItem()"/></td>
     <td>
-      <div popover="{{item.title}}" popover-trigger="mouseenter" popover-popup-delay="300">{{item.title | truncate:50:true:' ...'}}</div>
+      <div popover="{{item.title}}" popover-trigger="mouseenter" popover-popup-delay="300">
+        <a ng-href="/{{item.account}}#/article/{{item._id}}" target="_blank">{{item.title | truncate:50:true:' ...'}}</a>
+      </div>
     </td>
     <td>{{item.categories | arrayToStr:'、':'未分类' | truncate:20:true:' ...'}}</td>
     <td>{{item.labels | arrayToStr:'、':'—' | truncate:20:true:' ...'}}</td>

@@ -51,6 +51,10 @@
           <span class="glyphicon glyphicon-user" title="作者"></span>
           <a ng-href="{{article.account}}" href="" title="查看作者的所有博客">{{article.account}}</a>
         </li>
+        <li>
+          <span class="fa fa-eye" title="浏览次数"></span>
+          浏览次数 {{article.readCounts || 0}}
+        </li>
       </ul>
 
     </aside>

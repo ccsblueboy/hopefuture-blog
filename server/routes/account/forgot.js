@@ -1,6 +1,6 @@
 'use strict';
 
-var accountDao = require('./../../dao/account/AccountDao.js');
+var accountDao = require('./../../dao/account/AccountDao');
 var moment = require('moment');
 var mailer = require('../../utils/mailer');
 var encryption = require('../../utils/passwordCrypto').encryption;

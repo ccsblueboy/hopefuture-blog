@@ -153,7 +153,7 @@ module.exports = function (grunt) {
         devDependencies: false,
         exclude: [],
         fileTypes: {},
-        ignorePath:  ''// /\.\.\//
+        ignorePath: ''// /\.\.\//
       },
       app: {
         src: [
@@ -170,14 +170,13 @@ module.exports = function (grunt) {
     // 该任务用来重新命名文件
     filerev: {
       dist: {
-        files: {
-          src: [
-            '<%= yeoman.webapp %>/scripts/{,*/}*.js',
-            '<%= yeoman.webapp %>/styles/{,**/}*.css',
-            '<%= yeoman.webapp %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
-            '<%= yeoman.webapp %>/styles/fonts/*'
-          ]
-        }
+        src: [
+          '<%= yeoman.webapp %>/scripts/{,*/}*.js',
+          '<%= yeoman.webapp %>/styles/{,**/}*.css',
+          '<%= yeoman.webapp %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
+          '<%= yeoman.webapp %>/fonts/*',
+          '<%= yeoman.webapp %>/styles/fonts/*'
+        ]
       }
     },
 

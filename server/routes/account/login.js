@@ -1,6 +1,6 @@
 'use strict';
 
-var accountDao = require('./../../dao/account/AccountDao.js');
+var accountDao = require('./../../dao/account/AccountDao');
 var sessionManage = require('../../utils/sessionManage');
 
 var account = {

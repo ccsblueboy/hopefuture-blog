@@ -86,25 +86,36 @@ var personalBlog = {
   article: function (req, res) {
     var loginName = req.baseUrl.split('/')[1];
     var articleId = req.params.articleId;
-    articleDao.articleInfo(loginName, articleId, function (err, data) {
+    var ip = req._remoteAddress;
+    var browserAgent = req.headers['user-agent'];
+    //记录浏览次数
+    articleDao.readCount(articleId, ip, browserAgent, function (err) {
       if (err) {
         res.send({
           success: false
         });
       } else {
-        // 如果登陆，设置用户信息
-        var account = sessionManage.getAccountSession(req);
-        if (account) {
-          data.account = {
-            commentator: account.loginName,
-            email: account.email,
-            site: account.site,
-            headPortrait: account.headPortrait
-          };
-        }
-        res.send({
-          success: true,
-          articleInfo: data
+        articleDao.articleInfo(loginName, articleId, function (err, data) {
+          if (err) {
+            res.send({
+              success: false
+            });
+          } else {
+            // 如果登陆，设置用户信息
+            var account = sessionManage.getAccountSession(req);
+            if (account) {
+              data.account = {
+                commentator: account.loginName,
+                email: account.email,
+                site: account.site,
+                headPortrait: account.headPortrait
+              };
+            }
+            res.send({
+              success: true,
+              articleInfo: data
+            });
+          }
         });
       }
     });

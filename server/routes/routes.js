@@ -17,6 +17,7 @@ var comment = require('./blogmanage/comment');
 var resource = require('./blogmanage/resource');
 var setting = require('./blogmanage/setting');
 var blog = require('./blog/blog');
+var blogSetting = require('./blog/blogSetting');
 
 var sessionManage = require('../utils/sessionManage');
 
@@ -68,10 +69,7 @@ module.exports = function (app) {
     res.render('reference');
   });
 
-  app.use('/blogsetting', function (req, res) {
-    res.locals.reference = true;
-    res.render('reference');
-  });
+  app.use('/blogsetting', blogSetting);
 
   app.use('/blog', blog);// 首页相关URL路径
 
