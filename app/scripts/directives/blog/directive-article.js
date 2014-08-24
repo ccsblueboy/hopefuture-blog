@@ -1,13 +1,32 @@
 'use strict';
 
 angular.module('hopefutureBlogApp')
-  .directive('protectedValidator', function ($parse) {
+  .directive('protectedValidator', function () {
     return {
       restrict: 'AC',
       link: function postLink(scope, element, attrs) {
-        var validator = $(element).validate();
-        var model = $parse(attrs.commentValidator);
-        model.assign(scope, validator);
+        $(element).validate({
+          rules: {
+            name: {
+              remote: {
+                url: scope.account + '/article/' + scope.articleId + '/password',
+                type: 'get',
+                dataType: 'json'
+              }
+            }
+
+      },
+          messages: {
+            name: {
+              remote: '你输入的密码错误！'
+            }
+          },
+          submitHandler: function () {
+            scope.$apply(function () {
+              scope.viewArticle();
+            });
+          }
+        });
       }
     };
   });

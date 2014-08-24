@@ -88,17 +88,20 @@ var personalBlog = {
     var articleId = req.params.articleId;
     var ip = req._remoteAddress;
     var browserAgent = req.headers['user-agent'];
-    //记录浏览次数
-    articleDao.readCount(articleId, ip, browserAgent, function (err) {
+    articleDao.articleInfo(loginName, articleId, function (err, data) {
       if (err) {
         res.send({
-          success: false
+          success: false,
+          errorMessage: err.message
         });
       } else {
-        articleDao.articleInfo(loginName, articleId, function (err, data) {
+
+        //记录浏览次数
+        articleDao.readCount(articleId, ip, browserAgent, function (err) {
           if (err) {
             res.send({
-              success: false
+              success: false,
+              errorMessage: err.message
             });
           } else {
             // 如果登陆，设置用户信息
@@ -117,6 +120,28 @@ var personalBlog = {
             });
           }
         });
+      }
+    });
+  },
+
+  /**
+   * 校验重名
+   * @param req
+   * @param res
+   */
+  validatePassword: function (req, res) {
+    var name = req.query.name,
+      id = req.query.id;
+    var loginName = req.baseUrl.split('/')[1];
+    var conditions = {name: name, account: loginName};
+    if (id) {
+      conditions._id = { $ne: id };
+    }
+    labelDao.find(conditions, function (err, model) {
+      if (err) {
+        res.send(false);
+      } else {
+        res.send(model.length === 0);
       }
     });
   },
@@ -161,8 +186,8 @@ var personalBlog = {
   },
 
   category: function (req, res) {
-    var loginName = req.baseUrl.split('/')[1];
-    var id = req.params.id;
+    var password = req.baseUrl.split('/')[1];
+    var articleId = req.params.articleId;
     articleDao.category(loginName, id, function (err, articles, category) {
       if (err) {
         res.send({
@@ -243,6 +268,7 @@ router.get('/manage', personalBlog.manage);//管理我的博客，需要登录
 router.get('/blog', personalBlog.blog);//获取博客相关数据
 router.get('/articles', personalBlog.articles);//文章列表
 router.get('/article/:articleId', personalBlog.article);//文章相关信息
+router.get('/article/:articleId/password', personalBlog.validatePassword);//校验文章密码是否正确
 router.post('/comment', personalBlog.comment);//发表评论
 router.get('/archive/:month', personalBlog.archive);//文章归档
 router.get('/category/:id', personalBlog.category);//分类目录文章列表

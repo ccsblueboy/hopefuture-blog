@@ -52,6 +52,14 @@ body {
 /*
 * 页面底部样式
 */
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+.footer-assist {
+  padding-top: 204px;
+}
 .footer-links {
   background-color: #193c5a;
   border-bottom: 1px solid #0e2132;
@@ -160,6 +168,9 @@ body {
 .nav-sidebar > li > a:hover {
   color: #ffffff;
   background-color: #5697d0;
+}
+.blog-manage-main {
+  margin-bottom: 20px;
 }
 .blog-manage-main .page-header {
   margin-top: 20px;

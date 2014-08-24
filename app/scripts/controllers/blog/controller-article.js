@@ -56,71 +56,86 @@ angular.module('hopefutureBlogApp')
       }, 100);
     };
 
-    var path = $location.path();
-    var id = path.substring(path.lastIndexOf('/') + 1);
-    blogService.articleInfo(account, id, function (data) {
-      if (data.success === true) {
-        $scope.article = data.articleInfo.article;
+    /**
+     * 获取文章信息
+     * 对于密码保护的文章，如果密码输入正确，需要传递密码
+     * @param passed
+     */
+    $scope.articleInfo = function(password, callback){
+      var path = $location.path();
+      var id = path.substring(path.lastIndexOf('/') + 1);
+      var params = password ? {params: {password: password}} : undefined;
+      blogService.articleInfo(account, id, params, function (data) {
+        if (data.success === true) {
+          $scope.article = data.articleInfo.article;
 
-        $scope.comments = data.articleInfo.comments;
-        if (data.articleInfo.prevArticle) {
-          $scope.prevArticle = data.articleInfo.prevArticle;
-          $scope.prevArticle.articleLink = absUrl.replace(articleIdReg, '/' + $scope.prevArticle._id);
-        }
+          $scope.comments = data.articleInfo.comments;
+          if (data.articleInfo.prevArticle) {
+            $scope.prevArticle = data.articleInfo.prevArticle;
+            $scope.prevArticle.articleLink = absUrl.replace(articleIdReg, '/' + $scope.prevArticle._id);
+          }
 
-        if (data.articleInfo.nextArticle) {
-          $scope.nextArticle = data.articleInfo.nextArticle;
-          $scope.nextArticle.articleLink = absUrl.replace(articleIdReg, '/' + $scope.nextArticle._id);
-        }
+          if (data.articleInfo.nextArticle) {
+            $scope.nextArticle = data.articleInfo.nextArticle;
+            $scope.nextArticle.articleLink = absUrl.replace(articleIdReg, '/' + $scope.nextArticle._id);
+          }
 
-        $scope.relatedArticle = data.articleInfo.relatedArticle;
-        angular.forEach(function (item) {
-          item.articleLink = absUrl.replace(articleIdReg, '/' + item._id);
-        });
-
-        comment.articleID = data.articleInfo.article._id;
-        $scope.comment.articleID = data.articleInfo.article._id;
-        if (data.articleInfo.account) {
-          angular.extend(comment, data.articleInfo.account);
-          angular.extend($scope.comment, data.articleInfo.account);
-        }
-
-        //FIXME 这里递归渲染没有使用 angular 指令实现（以后有机会再研究），只是简单的通过模板来渲染html
-        var html = blogMethod.renderComments($scope.comments);
-        $('#commentList').html(html);
-
-        //初始化事件
-        $('#commentList').on('click', 'a[data-reply-comment]', function (e) {
-          e.preventDefault();
-          var el = $(e.target);
-          var parentEl = el.parent();
-
-          var commentId = el.attr('data-reply-comment');
-          $scope.resetComment(true);
-          $scope.comment.commentParent = commentId;
-
-          var commentFormPanel = $('#commentFormPanel');
-          parentEl.after(commentFormPanel);
-          $scope.$apply();
-        });
-      } else {
-        if(data.publicityStatus === 'protected'){
-          $modal.open({
-            backdrop: 'static',// 设置为 static 表示当鼠标点击页面其他地方，modal不会关闭
-            //keyboard: false,// 设为false，按 esc键不会关闭 modal
-            templateUrl: 'protectedPasswordModal.html',
-            controller: 'ProtectedModalCtrl',
-            resolve: {// 传递数据
-              formData: function () {
-                return  {
-                  articleId: id
-                };
-              }
-            }
+          $scope.relatedArticle = data.articleInfo.relatedArticle;
+          angular.forEach(function (item) {
+            item.articleLink = absUrl.replace(articleIdReg, '/' + item._id);
           });
+
+          comment.articleID = data.articleInfo.article._id;
+          $scope.comment.articleID = data.articleInfo.article._id;
+          if (data.articleInfo.account) {
+            angular.extend(comment, data.articleInfo.account);
+            angular.extend($scope.comment, data.articleInfo.account);
+          }
+
+          //FIXME 这里递归渲染没有使用 angular 指令实现（以后有机会再研究），只是简单的通过模板来渲染html
+          var html = blogMethod.renderComments($scope.comments);
+          $('#commentList').html(html);
+
+          //初始化事件
+          $('#commentList').on('click', 'a[data-reply-comment]', function (e) {
+            e.preventDefault();
+            var el = $(e.target);
+            var parentEl = el.parent();
+
+            var commentId = el.attr('data-reply-comment');
+            $scope.resetComment(true);
+            $scope.comment.commentParent = commentId;
+
+            var commentFormPanel = $('#commentFormPanel');
+            parentEl.after(commentFormPanel);
+            $scope.$apply();
+          });
+          if(callback){
+            callback(true);
+          }
+        } else {
+          if(data.errorMessage === 'protected'){
+            $modal.open({
+              backdrop: 'static',// 设置为 static 表示当鼠标点击页面其他地方，modal不会关闭
+              //keyboard: false,// 设为false，按 esc键不会关闭 modal
+              templateUrl: 'protectedPasswordModal.html',
+              controller: 'ProtectedModalCtrl',
+              resolve: {// 传递数据
+                formData: function () {
+                  return  {
+                    articleInfoFn: $scope.articleInfo,
+                    articleId: id,
+                    account: account
+                  };
+                }
+              }
+            });
+          }
         }
-      }
-    });
+      });
+    };
+
+    $scope.articleInfo();
 
     //发表评论
     $scope.publishComment = function () {
@@ -165,4 +180,22 @@ angular.module('hopefutureBlogApp')
         }
       });
     }
+  })
+  .controller('ProtectedModalCtrl', function ($scope, $modalInstance, blogService, formData) {
+    $scope.articleId = formData.articleId;
+    $scope.account = formData.account;
+    $scope.protected = {
+      password:''
+    };
+    $scope.viewArticle = function(){
+      formData.articleInfoFn($scope.protected.password,function(success){
+        if (success === true) {
+          $modalInstance.close();
+        }
+      });
+    };
+    $scope.cancel = function () {
+      $modalInstance.dismiss('cancel');
+    };
   });
+

@@ -474,9 +474,12 @@ ArticleDao.prototype.articleInfo = function (loginName, articleId, callback) {
   var articleLabels;
   var categories;
 
-  var promise = model.findById(articleId, {_id: 1, title: 1, content: 1, categories: 1, labels: 1, readCounts: 1, articleLink: 1, createdDate: 1}).exec();
+  var promise = model.findById(articleId, {_id: 1, title: 1, content: 1, publicityStatus: 1, categories: 1, labels: 1, readCounts: 1, articleLink: 1, createdDate: 1}).exec();
 
   promise.then(function (article) {
+    if (article.publicityStatus === 'protected') {
+        throw new Error('protected');
+    }
     data.article = article._doc;//文章信息
     data.article.createdDate = moment(data.article.createdDate).format('YYYY年MM月DD HH:mm:ss');
     articleLabels = article.labels.map(function (item) {

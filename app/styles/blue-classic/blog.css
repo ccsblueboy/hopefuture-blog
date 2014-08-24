@@ -6,14 +6,19 @@
   padding-top: 10px;
   padding-bottom: 10px;
 }
+html,
+body {
+  height: auto;
+  min-height: 100%;
+}
+html {
+  position: relative;
+}
 body {
   padding-top: 50px;
 }
 .link {
   color: #666666;
-}
-.blog-container {
-  min-height: 450px;
 }
 /**
  * 页面头部样式
@@ -52,6 +57,14 @@ body {
 /*
 * 页面底部样式
 */
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+.footer-assist {
+  padding-top: 204px;
+}
 .footer-links {
   background-color: #193c5a;
   border-bottom: 1px solid #0e2132;
@@ -195,6 +208,7 @@ body {
   background-position: -504px 0;
 }
 .blog-container {
+  margin-top: 10px;
   margin-bottom: 50px;
 }
 .masthead-button-links {

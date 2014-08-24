@@ -12,8 +12,8 @@ angular.module('hopefutureBlogApp')
         hfbHttpService.get(account + '/articles', data).then(success);
       },
       //文章信息
-      articleInfo: function (account, id, success) {
-        hfbHttpService.get(account + '/article/' + id).then(success);
+      articleInfo: function (account, id, data, success) {
+        hfbHttpService.get(account + '/article/' + id, data).then(success);
       },
       //提交评论
       comment: function (account, data, success) {

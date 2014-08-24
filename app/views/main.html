@@ -62,7 +62,7 @@
     <hr/>
   </article>
 
-  <nav class="text-center">
+  <nav class="text-center ng-hide" ng-show="articles.length>0;">
     <ul class="pagination pagination-lg boutique-pagination">
       <li ng-class="{disabled:currentPage==1}"><a href="" ng-click="prevOrNextPage(-1,$event);"><i class="fa fa-angle-left"></i></a></li>
       <li><span class="page-number">{{currentPage}} / {{numPages}}</span></li>

@@ -201,10 +201,10 @@ angular.module('hopefutureBlogApp')
       $modalInstance.close();
     };
 
-    $scope.cancel = function () {
-      $modalInstance.dismiss('cancel');
-      tinymce.get('content').destroy();
-    };
+  $scope.cancel = function () {
+    $modalInstance.dismiss('cancel');
+    tinymce.get('content').destroy();
+  };
 
     $timeout(function(){
       $('#dateTimePicker').datetimepicker({
