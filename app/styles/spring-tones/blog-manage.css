@@ -6,18 +6,45 @@
   padding-top: 10px;
   padding-bottom: 10px;
 }
+input[type="radio"],
+input[type="checkbox"] {
+  margin-top: 3px;
+}
 /**
 * http://www.lavishbootstrap.com/?image_url=http://design-seeds.com/palettes/12/SpringTones505.jpg
 * 官网提供的默认值为 #28363d   用以下公式计算为 #283637
 **/
+html,
+body {
+  height: auto;
+  min-height: 100%;
+}
+html {
+  position: relative;
+}
 body {
   padding-top: 50px;
 }
+.link {
+  color: #5196a1;
+}
 /**
-* 间距
+* 外边距
 **/
-.item-spacing-top {
+.margin-top-md {
   margin-top: 10px;
+}
+.margin-top-hg {
+  margin-top: 50px;
+}
+.margin-top-vl {
+  margin-top: 30px;
+}
+.margin-left-md {
+  margin-left: 10px;
+}
+.margin-left-lg {
+  margin-left: 20px;
 }
 /**
  * 页面头部样式
@@ -41,7 +68,7 @@ body {
 .blog-header.navbar-inverse .navbar-brand.active {
   color: #fff;
   font-weight: bold;
-  background-color: #141b1e;
+  background-color: #26333a;
 }
 .blog-header.navbar-inverse .navbar-nav > li > a {
   color: #e0e7ea;
@@ -50,12 +77,25 @@ body {
 .blog-header.navbar-inverse .navbar-nav > li > a:focus {
   color: #fff;
 }
-.blog-header.navbar-inverse .navbar-nav > li > a.active {
+.blog-header.navbar-inverse .navbar-nav > li.active {
   font-weight: bold;
+}
+.blog-header.navbar-inverse .navbar-nav > li.active a,
+.blog-header.navbar-inverse .navbar-nav > li.active a:hover,
+.blog-header.navbar-inverse .navbar-nav > li.active a:focus {
+  background-color: #26333a;
 }
 /*
 * 页面底部样式
 */
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+.footer-assist {
+  padding-top: 204px;
+}
 .footer-links {
   background-color: #28363d;
   border-bottom: 1px solid #141b1e;
@@ -89,6 +129,35 @@ body {
 .links-item-content a:focus,
 .links-item-content {
   color: #f6f9f7;
+}
+.manage-footer {
+  position: absolute;
+  bottom: 0;
+  background-color: #3c515c;
+  border-bottom: 1px solid #28363d;
+  background-image: -webkit-linear-gradient(top, #465f6b 0%, #28363d 100%);
+  background-image: -o-linear-gradient(top, #465f6b 0%, #28363d 100%);
+  background-image: linear-gradient(to bottom, #465f6b 0%, #28363d 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff465f6b', endColorstr='#ff28363d', GradientType=0);
+  color: #c1cfd6;
+  padding: 5px 20px;
+  width: 100%;
+}
+@media (min-width: 768px) {
+  .manage-footer {
+    width: 75%;
+    margin-left: 25%;
+  }
+}
+@media (min-width: 992px) {
+  .manage-footer {
+    width: 83.33333333%;
+    margin-left: 16.66666667%;
+  }
+}
+.manage-footer-assist {
+  padding-top: 50px;
 }
 /**
  * ajax loading
@@ -181,11 +250,11 @@ body {
   border: 1px solid #ddd;
   border-top-width: 0;
 }
-.label-list > span,
-.label-list > a {
+.element-list > span,
+.element-list > a {
   display: inline-block;
   margin-right: 10px;
-  padding: 3px 0;
+  padding: 5px 0;
 }
 /**
  * 解决 TinyMCE 冲突
@@ -194,6 +263,9 @@ div.mce-fullscreen {
   z-index: 2000;
 }
 .blog-btn-group .btn-group + .btn-group {
+  margin-left: 10px;
+}
+.blog-btn-group button + button {
   margin-left: 10px;
 }
 .blog-resource-border {
@@ -217,11 +289,19 @@ div.mce-fullscreen {
 .account-status.off {
   background-position: 0 -18px;
 }
+.resource-category {
+  margin-top: 20px;
+  position: relative;
+}
+.resource-category .edit-panel {
+  position: absolute;
+  background-color: #f5f5f5;
+}
 .form-panel {
   margin-top: 50px;
   margin-bottom: 50px;
-  min-height: 430px;
   padding-top: 20px;
+  padding-bottom: 50px;
 }
 .form-panel-header {
   margin-bottom: 10px;

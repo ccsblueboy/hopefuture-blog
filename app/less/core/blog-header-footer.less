@@ -16,7 +16,7 @@
   .navbar-brand.active {
     color: #fff;
     font-weight: bold;
-    background-color: darken(@navbar-inverse-bg, 10%);
+    background-color: darken(@navbar-inverse-bg, 1%);
   }
   .navbar-nav > li > a {
     color: lighten(@navbar-inverse-bg, 70%);
@@ -24,10 +24,16 @@
     &:focus {
       color: #fff;
     }
-    &.active {
-      font-weight: bold;
+  }
+  .navbar-nav > li.active{
+    font-weight: bold;
+    a,
+    a:hover,
+    a:focus{
+      background-color: darken(@navbar-inverse-bg, 1%);
     }
   }
+
 }
 
 /*
@@ -88,10 +94,10 @@
 .manage-footer {
   position: absolute;
   bottom: 0;
-  background-color: @navbar-inverse-bg;
-  border-bottom: 1px solid darken(@navbar-inverse-bg, 10%);
-  #gradient > .vertical(@start-color: lighten(@navbar-inverse-bg, 5%); @end-color: @navbar-inverse-bg);
-  color: lighten(@navbar-inverse-bg, 80%);
+  background-color: lighten(@navbar-inverse-bg, 10%);
+  border-bottom: 1px solid @navbar-inverse-bg;
+  #gradient > .vertical(@start-color: lighten(@navbar-inverse-bg, 15%); @end-color: @navbar-inverse-bg);
+  color: lighten(@navbar-inverse-bg, 60%);
   padding: @padding-sm @padding-lg;
   width: 100%;
 }

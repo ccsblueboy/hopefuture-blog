@@ -165,6 +165,9 @@ angular.module('hopefutureBlogApp').controller('PublishCtrl', function ($scope, 
      */
     $scope.setPublicityStatus = function () {
       var status = $scope.publicity.publicityStatus;
+      if(status === 'protected' && !$('#protectedPassword').valid()){
+        return;
+      }
       switch (status) {
         case 'public':
           $scope.publicity.protectedPassword = '';

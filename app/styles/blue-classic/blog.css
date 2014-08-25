@@ -6,6 +6,10 @@
   padding-top: 10px;
   padding-bottom: 10px;
 }
+input[type="radio"],
+input[type="checkbox"] {
+  margin-top: 3px;
+}
 html,
 body {
   height: auto;
@@ -60,7 +64,7 @@ body {
 .blog-header.navbar-inverse .navbar-brand.active {
   color: #fff;
   font-weight: bold;
-  background-color: #0e2132;
+  background-color: #183956;
 }
 .blog-header.navbar-inverse .navbar-nav > li > a {
   color: #e1edf7;
@@ -69,8 +73,13 @@ body {
 .blog-header.navbar-inverse .navbar-nav > li > a:focus {
   color: #fff;
 }
-.blog-header.navbar-inverse .navbar-nav > li > a.active {
+.blog-header.navbar-inverse .navbar-nav > li.active {
   font-weight: bold;
+}
+.blog-header.navbar-inverse .navbar-nav > li.active a,
+.blog-header.navbar-inverse .navbar-nav > li.active a:hover,
+.blog-header.navbar-inverse .navbar-nav > li.active a:focus {
+  background-color: #183956;
 }
 /*
 * 页面底部样式
@@ -120,14 +129,14 @@ body {
 .manage-footer {
   position: absolute;
   bottom: 0;
-  background-color: #193c5a;
-  border-bottom: 1px solid #0e2132;
-  background-image: -webkit-linear-gradient(top, #1f496e 0%, #193c5a 100%);
-  background-image: -o-linear-gradient(top, #1f496e 0%, #193c5a 100%);
-  background-image: linear-gradient(to bottom, #1f496e 0%, #193c5a 100%);
+  background-color: #245682;
+  border-bottom: 1px solid #193c5a;
+  background-image: -webkit-linear-gradient(top, #2a6496 0%, #193c5a 100%);
+  background-image: -o-linear-gradient(top, #2a6496 0%, #193c5a 100%);
+  background-image: linear-gradient(to bottom, #2a6496 0%, #193c5a 100%);
   background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff1f496e', endColorstr='#ff193c5a', GradientType=0);
-  color: #ffffff;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff2a6496', endColorstr='#ff193c5a', GradientType=0);
+  color: #b9d4ec;
   padding: 5px 20px;
   width: 100%;
 }
@@ -257,16 +266,15 @@ body {
 .blog-container {
   margin-top: 10px;
   margin-bottom: 50px;
-  padding: 0 5px;
 }
 @media (min-width: 768px) {
-  .blog-container {
-    padding: 0 10px;
+  .blog-container .section {
+    padding: 0 20px;
   }
 }
 @media (min-width: 992px) {
-  .blog-container {
-    padding: 0 50px;
+  .blog-container .section {
+    padding: 0 30px;
   }
 }
 .masthead-button-links {
@@ -328,6 +336,11 @@ body {
 .article-meta > ul > li > a + a {
   margin-left: 10px;
 }
+.article-aside-panel {
+  background-color: #eeeeee;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
 .article-aside {
   margin-top: 50px;
 }
@@ -346,6 +359,9 @@ body {
   float: left;
   padding: 5px 0;
   margin-right: 20px;
+}
+.blog-jumbotron {
+  margin-bottom: 0;
 }
 .article-info > section {
   margin-top: 30px;

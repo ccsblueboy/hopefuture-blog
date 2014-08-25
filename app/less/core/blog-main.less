@@ -2,18 +2,21 @@
 .blog-container {
   margin-top: @margin-md;
   margin-bottom: @margin-hg;
-  padding: 0 @padding-sm;
 }
 @media (min-width: 768px) {
   .blog-container{
-    padding: 0 @padding-md;
+    .section{
+      padding: 0 @padding-lg;
+    }
   }
 }
 
 //写在下面当屏幕最小宽度大于等于 992px时会应用该样式
 @media (min-width: 992px) {
   .blog-container{
-    padding: 0 @padding-hg;
+    .section{
+      padding: 0 @padding-vl;
+    }
   }
 }
 
@@ -88,6 +91,12 @@
 }
 
 //个人博客首页右侧样式
+.article-aside-panel{
+  background-color: @gray-lighter;
+  padding-top: @padding-lg;
+  padding-bottom: @padding-lg;
+}
+
 .article-aside {
   margin-top: @margin-hg;
 }
@@ -115,4 +124,8 @@
       margin-right: @margin-lg;
     }
   }
+}
+
+.blog-jumbotron{
+  margin-bottom: 0;
 }
