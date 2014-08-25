@@ -2,6 +2,19 @@
 .blog-container {
   margin-top: @margin-md;
   margin-bottom: @margin-hg;
+  padding: 0 @padding-sm;
+}
+@media (min-width: 768px) {
+  .blog-container{
+    padding: 0 @padding-md;
+  }
+}
+
+//写在下面当屏幕最小宽度大于等于 992px时会应用该样式
+@media (min-width: 992px) {
+  .blog-container{
+    padding: 0 @padding-hg;
+  }
 }
 
 .masthead-button-links {
@@ -88,10 +101,10 @@
   }
 }
 
-.label-list > a {
+.element-list > a {
   display: inline-block;
   margin-right: @margin-md;
-  padding: 3px 0;
+  padding: @padding-sm 0;
 }
 
 .resource-list {

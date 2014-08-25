@@ -236,7 +236,7 @@ angular.module('hopefutureBlogApp')
       }
 
       $('#editCategoryPanel').css({
-        top: position.top,
+        top: position.top - 5,
         left: left
       });
     };

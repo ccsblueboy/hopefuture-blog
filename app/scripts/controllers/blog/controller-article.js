@@ -17,6 +17,8 @@ angular.module('hopefutureBlogApp')
     var absUrl = $location.absUrl();
     var articleIdReg = /\/\w+$/;
 
+    $scope.showArticleInfo = false;//是否显示文章信息
+
     $scope.articleLink = absUrl;
     //文章相关信息
     $scope.article = {};
@@ -61,7 +63,7 @@ angular.module('hopefutureBlogApp')
      * 对于密码保护的文章，如果密码输入正确，需要传递密码
      * @param passed
      */
-    $scope.articleInfo = function(password, callback){
+    $scope.articleInfo = function (password, callback) {
       var path = $location.path();
       var id = path.substring(path.lastIndexOf('/') + 1);
       var params = password ? {params: {password: password}} : undefined;
@@ -110,11 +112,13 @@ angular.module('hopefutureBlogApp')
             parentEl.after(commentFormPanel);
             $scope.$apply();
           });
-          if(callback){
+          if (callback) {
             callback(true);
           }
+          $scope.showArticleInfo = true;
         } else {
-          if(data.errorMessage === 'protected'){
+          $scope.showArticleInfo = false;
+          if (data.errorMessage === 'protected') {
             $modal.open({
               backdrop: 'static',// 设置为 static 表示当鼠标点击页面其他地方，modal不会关闭
               //keyboard: false,// 设为false，按 esc键不会关闭 modal
@@ -130,6 +134,8 @@ angular.module('hopefutureBlogApp')
                 }
               }
             });
+          }else if(data.errorMessage === 'password error'){
+            callback(false);
           }
         }
       });
@@ -185,10 +191,10 @@ angular.module('hopefutureBlogApp')
     $scope.articleId = formData.articleId;
     $scope.account = formData.account;
     $scope.protected = {
-      password:''
+      password: ''
     };
-    $scope.viewArticle = function(){
-      formData.articleInfoFn($scope.protected.password,function(success){
+    $scope.viewArticle = function () {
+      formData.articleInfoFn($scope.protected.password, function (success) {
         if (success === true) {
           $modalInstance.close();
         }

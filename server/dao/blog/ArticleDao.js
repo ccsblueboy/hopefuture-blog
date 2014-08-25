@@ -464,9 +464,10 @@ ArticleDao.prototype.list = function (loginName, dataPage, callback) {
  * 获取文章相关数据
  * @param loginName {String} 账户登录名
  * @param articleId {String} 文章id
+ * @param password {String} 受保护的文章密码
  * @param callback {function} 回调函数
  */
-ArticleDao.prototype.articleInfo = function (loginName, articleId, callback) {
+ArticleDao.prototype.articleInfo = function (loginName, articleId, password, callback) {
   //以下加载文章内容，相关文章，前后文章，评论列表
   var data = {};
   var model = this.model;
@@ -474,11 +475,17 @@ ArticleDao.prototype.articleInfo = function (loginName, articleId, callback) {
   var articleLabels;
   var categories;
 
-  var promise = model.findById(articleId, {_id: 1, title: 1, content: 1, publicityStatus: 1, categories: 1, labels: 1, readCounts: 1, articleLink: 1, createdDate: 1}).exec();
+  var promise = model.findById(articleId, {_id: 1, title: 1, content: 1, publicityStatus: 1, protectedPassword: 1, categories: 1, labels: 1, readCounts: 1, articleLink: 1, createdDate: 1}).exec();
 
   promise.then(function (article) {
-    if (article.publicityStatus === 'protected') {
+    if (password) {//如果传递密码，表示该文章是受保护的，判断输入的密码是否正确
+      if(article.protectedPassword !== password){
+        throw new Error('password error');
+      }
+    }else{
+      if (article.publicityStatus === 'protected') {
         throw new Error('protected');
+      }
     }
     data.article = article._doc;//文章信息
     data.article.createdDate = moment(data.article.createdDate).format('YYYY年MM月DD HH:mm:ss');
@@ -632,6 +639,18 @@ ArticleDao.prototype.readCount = function (articleId, ip, browserAgent, callback
       }
     });
   });
+};
+
+/**
+ * 查询受保护的文章密码
+ * @param articleId
+ * @param callback
+ */
+ArticleDao.prototype.findArticlePassword = function (articleId, callback) {
+  this.model.findById(articleId, {_id: 1, protectedPassword: 1}, function (err, model) {
+    callback(err, model);
+  });
+
 };
 
 /**

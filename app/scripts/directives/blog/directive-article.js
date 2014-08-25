@@ -7,17 +7,16 @@ angular.module('hopefutureBlogApp')
       link: function postLink(scope, element, attrs) {
         $(element).validate({
           rules: {
-            name: {
+            protectedPassword: {
               remote: {
                 url: scope.account + '/article/' + scope.articleId + '/password',
                 type: 'get',
                 dataType: 'json'
               }
             }
-
-      },
+          },
           messages: {
-            name: {
+            protectedPassword: {
               remote: '你输入的密码错误！'
             }
           },

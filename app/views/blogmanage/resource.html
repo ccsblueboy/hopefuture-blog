@@ -46,8 +46,7 @@
           <button ng-click="addCategory()" class="btn btn-info" type="button">添加</button>
         </div>
 
-        <div ng-show="$parent.categories.length>0" class="well well-sm label-list clearfix ng-hide"
-             style="margin-top: 20px;position: relative;">
+        <div ng-show="$parent.categories.length>0" class="well well-sm element-list clearfix ng-hide resource-category">
           <p class="help-block">点击名称可以编辑分类</p>
           <span ng-repeat="category in $parent.categories">
             <a href="" ng-click="updateCategory(category,$index,$event)">
@@ -57,7 +56,7 @@
               {{$last?'':','}}
           </span>
 
-          <div ng-show="editCategoryStatus" class="ng-hide animate-show edit-resource-category" id="editCategoryPanel">
+          <div ng-show="editCategoryStatus" class="ng-hide animate-show edit-panel" id="editCategoryPanel">
             <input class="form-control input-sm" type="text" ng-model="editCategory.name">
             <button type="button" class="btn btn-info btn-sm" ng-click="saveCategory()">修改</button>
             <button type="button" class="btn btn-default btn-sm" ng-click="cancelCategory()">取消</button>

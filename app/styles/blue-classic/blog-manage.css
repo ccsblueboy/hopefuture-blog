@@ -6,14 +6,37 @@
   padding-top: 10px;
   padding-bottom: 10px;
 }
+html,
+body {
+  height: auto;
+  min-height: 100%;
+}
+html {
+  position: relative;
+}
 body {
   padding-top: 50px;
 }
+.link {
+  color: #666666;
+}
 /**
-* 间距
+* 外边距
 **/
-.item-spacing-top {
+.margin-top-md {
   margin-top: 10px;
+}
+.margin-top-hg {
+  margin-top: 50px;
+}
+.margin-top-vl {
+  margin-top: 30px;
+}
+.margin-left-md {
+  margin-left: 10px;
+}
+.margin-left-lg {
+  margin-left: 20px;
 }
 /**
  * 页面头部样式
@@ -94,6 +117,35 @@ body {
 .links-item-content {
   color: #ffffff;
 }
+.manage-footer {
+  position: absolute;
+  bottom: 0;
+  background-color: #193c5a;
+  border-bottom: 1px solid #0e2132;
+  background-image: -webkit-linear-gradient(top, #1f496e 0%, #193c5a 100%);
+  background-image: -o-linear-gradient(top, #1f496e 0%, #193c5a 100%);
+  background-image: linear-gradient(to bottom, #1f496e 0%, #193c5a 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff1f496e', endColorstr='#ff193c5a', GradientType=0);
+  color: #ffffff;
+  padding: 5px 20px;
+  width: 100%;
+}
+@media (min-width: 768px) {
+  .manage-footer {
+    width: 75%;
+    margin-left: 25%;
+  }
+}
+@media (min-width: 992px) {
+  .manage-footer {
+    width: 83.33333333%;
+    margin-left: 16.66666667%;
+  }
+}
+.manage-footer-assist {
+  padding-top: 50px;
+}
 /**
  * ajax loading
 **/
@@ -169,9 +221,6 @@ body {
   color: #ffffff;
   background-color: #5697d0;
 }
-.blog-manage-main {
-  margin-bottom: 20px;
-}
 .blog-manage-main .page-header {
   margin-top: 20px;
 }
@@ -188,11 +237,11 @@ body {
   border: 1px solid #ddd;
   border-top-width: 0;
 }
-.label-list > span,
-.label-list > a {
+.element-list > span,
+.element-list > a {
   display: inline-block;
   margin-right: 10px;
-  padding: 3px 0;
+  padding: 5px 0;
 }
 /**
  * 解决 TinyMCE 冲突
@@ -201,6 +250,9 @@ div.mce-fullscreen {
   z-index: 2000;
 }
 .blog-btn-group .btn-group + .btn-group {
+  margin-left: 10px;
+}
+.blog-btn-group button + button {
   margin-left: 10px;
 }
 .blog-resource-border {
@@ -224,11 +276,19 @@ div.mce-fullscreen {
 .account-status.off {
   background-position: 0 -18px;
 }
+.resource-category {
+  margin-top: 20px;
+  position: relative;
+}
+.resource-category .edit-panel {
+  position: absolute;
+  background-color: #f5f5f5;
+}
 .form-panel {
   margin-top: 50px;
   margin-bottom: 50px;
-  min-height: 430px;
   padding-top: 20px;
+  padding-bottom: 50px;
 }
 .form-panel-header {
   margin-bottom: 10px;

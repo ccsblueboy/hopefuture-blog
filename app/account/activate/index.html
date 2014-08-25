@@ -16,7 +16,7 @@
 
 <% if (overdue) { %>
 <div class="container" ng-controller="GenerateLinkCtrl" ng-init="accountId='<%= accountId %>'">
-  <div class="well" style="margin-top: 50px">
+  <div class="well margin-top-hg">
     <p ng-show="showActivatedInfo" class="ng-hide">您的账号激活链接已过期，点击<a href="" ng-click="generateLink()"><strong>这里</strong></a>重新生成激活链接。</p>
 
     <div alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.message}}</div>
@@ -24,7 +24,7 @@
 </div>
 <% }else { %>
 <div class="container">
-  <p class="well" style="margin-top: 50px">您的账号已激活！ <a ng-href="/login">请登录</a></p>
+  <p class="well margin-top-hg">您的账号已激活！ <a ng-href="/login">请登录</a></p>
 </div>
 <% } %>
 

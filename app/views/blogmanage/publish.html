@@ -1,7 +1,7 @@
 <h3 class="page-header">{{header}}</h3>
 <div class="animate-show ng-hide hf-callout hf-callout-info" ng-show="$parent.showPublishInfo">
   <span>{{$parent.publishInfo}}</span>
-  <a ng-href="{{article.articleLink}}" target="_blank" style="margin-left: 10px;">查看文章</a>
+  <a ng-href="{{article.articleLink}}" target="_blank" class="margin-left-md">查看文章</a>
 </div>
 
 <form name="articleForm" method="post" article-validator="validator">
@@ -44,14 +44,14 @@
             <li class="radio">
               <label><input type="radio" name="publicityStatus" ng-model="publicity.publicityStatus" value="public"/> 公开 </label>
 
-              <div class="checkbox" ng-show="show.top" style="margin-left: 20px;">
+              <div class="checkbox margin-left-lg" ng-show="show.top">
                 <label><input type="checkbox" name="top" ng-model="publicity.top"> 将文章置于首页顶端</label>
               </div>
             </li>
-            <li class="radio form-inline" style="margin-top: 10px;">
+            <li class="radio form-inline margin-top-md">
               <label><input type="radio" name="publicityStatus" ng-model="publicity.publicityStatus" value="protected"/> 密码保护 </label>
 
-              <div class="form-group margin10-T" ng-show="show.protectedPassword">
+              <div class="form-group margin-top-md" ng-show="show.protectedPassword">
                 <lable for="protectedPassword">密码：</lable>
                 <input type="text" class="form-control input-sm" id="protectedPassword" name="protectedPassword"
                        ng-model="publicity.protectedPassword"/>
@@ -86,7 +86,7 @@
               <label><input type="radio" name="publishType" ng-model="publishType.publishTypeStatus" value="delay"/> 定时发布 </label>
 
               <div class="animate-show ng-hide" ng-show="showPublishDate">
-                <div class="form-group" style="margin-top: 10px;">
+                <div class="form-group margin-top-md">
                   <div class='input-group' id="dateTimePicker">
                     <input type='text' class="form-control input-sm" data-date-format="YYYY-MM-DD HH:mm" id="publishDate" name="publishDate" ng-model="publishType.publishDate"/>
                     <span class="input-group-btn">
@@ -157,11 +157,11 @@
         </tab>
       </tabset>
 
-      <div class="item-spacing-top">
+      <div class="margin-top-md">
         <a href="" ng-click="showAddCategory = !showAddCategory;"> <span class="fa fa-plus"></span> 添加新分类目录</a>
       </div>
 
-      <div class="item-spacing-top animate-show ng-hide" ng-show="showAddCategory">
+      <div class="margin-top-md animate-show ng-hide" ng-show="showAddCategory">
 
         <div class="well-sm" alert ng-repeat="alert in alerts" type="{{alert.type}}">{{alert.message}}</div>
         <div class="form-group">
@@ -193,9 +193,9 @@
         <button type="button" class="btn btn-info btn-sm" ng-click="addLabel()">添加</button>
       </div>
 
-      <p class="item-spacing-top">多个标签请用英文逗号（,）分开</p>
+      <p class="margin-top-md">多个标签请用英文逗号（,）分开</p>
 
-      <p class="label-list clearfix" ng-if="$parent.labelCollection.items.length>0;">
+      <p class="element-list clearfix" ng-if="$parent.labelCollection.items.length>0;">
             <span class="text-info" ng-repeat="label in $parent.labelCollection.items">
               <a href="" ng-click="removeLabel(label.name)" class="fa fa-times"></a>
               {{label.name}}
@@ -206,7 +206,7 @@
         <a href="" ng-click="openLabelPanel();">从常用标签中选择</a>
       </p>
 
-      <div class="well well-sm label-list clearfix animate-show ng-hide" ng-show="showLabelPanel">
+      <div class="well well-sm element-list clearfix animate-show ng-hide" ng-show="showLabelPanel">
         <a href="" ng-repeat="label in labels" ng-click="addLabelFromC(label)" ng-style="label.style">{{label.name}}</a>
       </div>
 

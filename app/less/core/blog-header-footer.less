@@ -34,12 +34,13 @@
 * 页面底部样式
 */
 .footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
 }
+
 //FIXME: 根据屏幕大小定义其大小，待完成
-.footer-assist{
+.footer-assist {
   padding-top: 204px;
 }
 
@@ -82,4 +83,34 @@
 
 .blog-footer-logo {
   //FIXME：待实现 logo
+}
+
+.manage-footer {
+  position: absolute;
+  bottom: 0;
+  background-color: @navbar-inverse-bg;
+  border-bottom: 1px solid darken(@navbar-inverse-bg, 10%);
+  #gradient > .vertical(@start-color: lighten(@navbar-inverse-bg, 5%); @end-color: @navbar-inverse-bg);
+  color: lighten(@navbar-inverse-bg, 80%);
+  padding: @padding-sm @padding-lg;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .manage-footer {
+    width: 75%;
+    margin-left: 25%;
+  }
+}
+
+//写在下面当屏幕最小宽度大于等于 992px时会应用该样式
+@media (min-width: 992px) {
+  .manage-footer {
+    width: 83.33333333%;
+    margin-left: 16.66666667%;
+  }
+}
+
+.manage-footer-assist {
+  padding-top: @padding-hg;
 }

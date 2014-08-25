@@ -16,7 +16,7 @@
 
 <% if (overdue) { %>
 <div class="container">
-  <p class="well" style="margin-top: 50px">您的重置密码链接已过期，请重新<a ng-href="/forgot#/password">申请</a>。</p>
+  <p class="well margin-top-hg">您的重置密码链接已过期，请重新<a ng-href="/forgot#/password">申请</a>。</p>
 </div>
 <% }else { %>
 <div ng-include="'../views/account/reset-password.html'" ng-controller="ResetPasswordCtrl" ng-init="accountId='<%= accountId %>'"></div>

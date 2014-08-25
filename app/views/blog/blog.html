@@ -10,11 +10,11 @@
   </div>
   <!--/.jumbotron -->
 
-  <div class="container blog-container">
+  <div class="container-fluid blog-container">
 
     <div class="row">
 
-      <section class="col-sm-8">
+      <section class="col-md-9 col-sm-8">
         <div ng-if="logined">
           <div class="clearfix">
             <button class="btn btn-link btn-lg pull-right" type="button" ng-click="manageBlog();">
@@ -35,7 +35,7 @@
         </div>
       </section>
 
-      <aside class="col-sm-3 col-sm-offset-1">
+      <aside class="col-md-3 col-sm-4">
         <div class="input-group">
           <input type="text" class="form-control" placeholder="Search">
           <span class="input-group-btn">
@@ -109,7 +109,7 @@
         <div class="article-aside">
           <h3>标签</h3>
 
-          <div class="label-list clearfix" ng-if="blog.labels.length>0">
+          <div class="element-list clearfix" ng-if="blog.labels.length>0">
             <a ng-href="#/label/{{label._id}}" ng-repeat="label in blog.labels" ng-style="label.style" ng-bind="label.name"></a>
           </div>
         </div>

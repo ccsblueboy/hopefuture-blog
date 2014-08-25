@@ -88,7 +88,8 @@ var personalBlog = {
     var articleId = req.params.articleId;
     var ip = req._remoteAddress;
     var browserAgent = req.headers['user-agent'];
-    articleDao.articleInfo(loginName, articleId, function (err, data) {
+    var password = req.query.password;
+    articleDao.articleInfo(loginName, articleId, password, function (err, data) {
       if (err) {
         res.send({
           success: false,
@@ -125,23 +126,18 @@ var personalBlog = {
   },
 
   /**
-   * 校验重名
+   * 校验受保护的文章输入的密码是否正确
    * @param req
    * @param res
    */
   validatePassword: function (req, res) {
-    var name = req.query.name,
-      id = req.query.id;
-    var loginName = req.baseUrl.split('/')[1];
-    var conditions = {name: name, account: loginName};
-    if (id) {
-      conditions._id = { $ne: id };
-    }
-    labelDao.find(conditions, function (err, model) {
+    var articleId = req.params.articleId,
+      protectedPassword = req.query.protectedPassword;
+    articleDao.findArticlePassword(articleId, function (err, model) {
       if (err) {
         res.send(false);
       } else {
-        res.send(model.length === 0);
+        res.send(model.protectedPassword === protectedPassword);
       }
     });
   },
@@ -186,8 +182,8 @@ var personalBlog = {
   },
 
   category: function (req, res) {
-    var password = req.baseUrl.split('/')[1];
-    var articleId = req.params.articleId;
+    var loginName = req.baseUrl.split('/')[1];
+    var id = req.params.id;
     articleDao.category(loginName, id, function (err, articles, category) {
       if (err) {
         res.send({
