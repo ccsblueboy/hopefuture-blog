@@ -13,18 +13,19 @@
 <script src="../../app/bower_components/jquery/dist/jquery.js"></script>
 <script src="../../app/bower_components/tinymce/tinymce.jquery.js"></script>
 <script src="../../app/scripts/components/tinymce/langs/zh_CN.js"></script>
+<script src="../../app/scripts/components/tinymce/plugins/syntaxhighlighter/plugin.js"></script>
 <script>
   $(function () {
     var editor = new tinymce.Editor('content', {
       height: 400,
       menubar: false, //Disable all menu
-      content_css: '/styles/tinymce.css',
+      content_css: '../../app/styles/tinymce.css',
       plugins: [
-        'autolink link image preview hr code fullscreen table textcolor charmap syntaxhl'
+        'autolink link image preview hr code fullscreen table textcolor charmap syntaxhighlighter'
       ],
       toolbar: 'undo redo | bold italic underline strikethrough subscript superscript | styleselect | fontselect fontsizeselect formatselect ' +
           '| forecolor backcolor removeformat | bullist numlist outdent indent blockquote | alignleft aligncenter alignright alignjustify | ' +
-          'hr image link unlink | charmap table code preview fullscreen | syntaxhl'
+          'hr image link unlink | charmap table code preview fullscreen | syntaxhighlighter'
     }, tinymce.EditorManager);
     editor.render();
   });
