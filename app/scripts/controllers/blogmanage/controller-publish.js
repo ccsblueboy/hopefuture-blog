@@ -45,9 +45,11 @@ angular.module('hopefutureBlogApp').controller('PublishCtrl', function ($scope, 
     menubar: false, //Disable all menu
     content_css: '/styles/tinymce.css',
     plugins: [
-      "autolink link image preview hr code fullscreen table textcolor charmap"
+      'autolink link image preview hr code fullscreen table textcolor charmap'
     ],
-    toolbar: 'undo redo | bold italic underline strikethrough subscript superscript | styleselect | fontselect fontsizeselect formatselect ' + '| forecolor backcolor removeformat | bullist numlist outdent indent blockquote | alignleft aligncenter alignright alignjustify | ' + 'hr image link unlink | charmap table code preview fullscreen'
+    toolbar: 'undo redo | bold italic underline strikethrough subscript superscript | styleselect | fontselect fontsizeselect formatselect ' +
+      '| forecolor backcolor removeformat | bullist numlist outdent indent blockquote | alignleft aligncenter alignright alignjustify | ' +
+      'hr image link unlink | charmap table code preview fullscreen'
   };
 
   var reg = /article\/\w+/;
