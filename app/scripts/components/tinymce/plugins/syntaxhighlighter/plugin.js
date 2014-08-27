@@ -93,13 +93,12 @@ tinymce.PluginManager.add('syntaxhighlighter', function (editor, url) {
               },
               items: [
                 {text: 'Display line numbers', name: 'gutter', checked: true},
+                {text: 'Automatically make URLs clickable', name: 'autolinks', checked: true},
+                {text: 'Use smart tabs allowing tabs being used for alignment', name: 'smarttabs', checked: true},
                 {text: 'Display the toolbar', name: 'toolbar'},
                 {text: 'Highlight a mixture of HTML/XML code and a script', name: 'htmlscript'},
-                {text: 'Automatically make URLs clickable', name: 'autolinks', checked: true},
                 {text: 'Collapse code boxes', name: 'collapse'},
-                {text: 'Use smart tabs allowing tabs being used for alignment', name: 'smarttabs', checked: true},
                 {text: 'Use the light display mode, best for single lines of code', name: 'light'},
-                {text: 'Wrap Lines', name: 'wraplines'},
                 {label: 'Starting Line Number', name: 'firstline', type: 'textbox', value: '1'},
                 {label: 'Line Number Padding',
                   name: 'padlinenumbers',
@@ -151,47 +150,48 @@ tinymce.PluginManager.add('syntaxhighlighter', function (editor, url) {
         if (win.find('#collapse').checked()) {
           config += 'collapse: true; ';
         }
-        //
+        //只能缩进，默认 true
         if (!win.find('#smarttabs').checked()) {
           config += 'smart-tabs: false; ';
         }
-        //
+        //精简模式，默认false
         if (win.find('#light').checked()) {
           config += 'light: true; ';
         }
-        //
+
+        //开始行值，默认为1
         var firstline = win.find('#firstline').value();
         if (firstline !== '1') {
           firstline = parseInt(firstline);
           config += 'first-line: ' + firstline + '; ';
         }
-        //
+        //行号位数
         var padlinenumbers = win.find('#padlinenumbers').value();
         if (padlinenumbers !== 'false') {
           config += 'pad-line-numbers: ' + padlinenumbers + '; ';
         }
-        //
+        //tab 大小，默认为 4
         var tabsize = win.find('#tabsize').value();
         if (tabsize !== '4') {
           config += 'tab-size: ' + tabsize + '; ';
         }
-        //
+        //字体大小 默认 14
         var fontsize = win.find('#fontsize').value();
         if (fontsize !== '') {
           fontsize = parseInt(fontsize);
           config += 'font-size: ' + fontsize + '; ';
         }
-        //
+        //高亮行
         var highlight = win.find('#highlight').value();
         if (highlight !== '') {
           config += 'highlight: [' + highlight + ']; ';
         }
-        //
+        //标题
         var title = win.find('#title').value();
         if (title !== '') {
           config += 'title: ' + title + '; ';
         }
-        //
+
         var content = '<pre class="' + config + '">';
         content += editor.dom.encode(e.data.code);
         content += '</pre>';
