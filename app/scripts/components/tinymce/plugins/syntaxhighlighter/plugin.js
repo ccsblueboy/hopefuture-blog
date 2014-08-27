@@ -6,100 +6,196 @@
 /*global tinymce:true */
 
 tinymce.PluginManager.add('syntaxhighlighter', function (editor, url) {
-  var languages =[{
+  var brushes = {
     applescript: 'AppleScript',
-    as3:'ActionScript3',
-    bash:'Bash(Shell)',
-    coldfusion:'Cold Fusion',
-    csharp:'C#',
-    cpp:'C++',
-    css:'CSS',
-    delphi:'Delphi',
-    diff:'Diff',
-    erlang:'Erlang',
-    groovy:'Groovy',
-    java:'Java',
-    javafx:'JavaFX',
-    jscript:'Jscript',
-    perl:'Perl',
-    php:'PHP',
-    plain:'Plain(Text)',
-    powershell:'PowerShell',
-    python:'Python',
-    ruby:'Ruby',
-    sass:'SASS',
-    scala:'Scala',
-    sql:'SQL',
-    vb:'VB',
-    xml:'XML/XHTML',
-    php:'PHP',
+    as3: 'ActionScript3',
+    bash: 'Bash(Shell)',
+    coldfusion: 'Cold Fusion',
+    csharp: 'C#',
+    cpp: 'C++',
+    css: 'CSS',
+    delphi: 'Delphi',
+    diff: 'Diff',
+    erlang: 'Erlang',
+    groovy: 'Groovy',
+    java: 'Java',
+    javafx: 'JavaFX',
+    javascript: 'JavaScript',
+    perl: 'Perl',
+    php: 'PHP',
+    plain: 'Plain(Text)',
+    powershell: 'PowerShell',
+    python: 'Python',
+    ruby: 'Ruby',
+    sass: 'SASS',
+    scala: 'Scala',
+    sql: 'SQL',
+    vb: 'VB',
+    xml: 'XML/XHTML'
+  };
 
-
-
-
-  }];
   function showDialog() {
-    var html = '<form>'+
-      '<input type="checkbox" name="syntaxhl_nogutter" id="syntaxhl_nogutter" value="1" /><label for="syntaxhl_nogutter" >{#syntaxhl_dlg.nogutter}</label>
-    '<input type="checkbox" name="syntaxhl_light" id="syntaxhl_light" value="1" /><label for="syntaxhl_light">{#syntaxhl_dlg.light}</label>
-    '<input type="checkbox" name="syntaxhl_collapse" id="syntaxhl_collapse" value="1" /><label for="syntaxhl_collapse">{#syntaxhl_dlg.collapse}</label>
-    '<input type="checkbox" name="syntaxhl_html_script" id="syntaxhl_html_script" value="1" /><label for="syntaxhl_html_script">{#syntaxhl_dlg.html_script}</label>
-    '<input type="checkbox" name="syntaxhl_hide_toolbar" id="syntaxhl_hide_toolbar" value="1" /><label for="syntaxhl_hide_toolbar">{#syntaxhl_dlg.hide_toolbar}</label><br />
-    '<label for="syntaxhl_highlight">{#syntaxhl_dlg.highlight} </label><input type="text" name="syntaxhl_highlight" id="syntaxhl_highlight" style="width:50px;" /><br />
-    '<label for="syntaxhl_language">{#syntaxhl_dlg.choose_lang}:</label>
-    <select name="syntaxhl_language" id="syntaxhl_language">
-      <option value="applescript">AppleScript</option>
-      <option value="as3"></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-    </select>
-    <label for="syntaxhl_firstline" style="margin-left: 15px;">{#syntaxhl_dlg.first_line}:</label><input type="textfield" name="syntaxhl_firstline" id="syntaxhl_firstline" value="1" style="width:20px;" />
-    <label for="syntaxhl_fontsize">{#syntaxhl_dlg.fontsize}</label><input type="text" name="syntaxhl_fontsize" id="syntaxhl_fontsize" value="100" style="width:25px;" />%
-  ';
+
+    var language = [
+      {text: 'None', value: ''}
+    ];
+    //jshint -W089
+    for (var brush in brushes) {
+      language.push({text: brushes[brush], value: brush});
+    }
+    language.push({text: 'Other', value: 'other'});
     editor.windowManager.open({
       title: "Insert Code",
-      body: {
-        type: 'container',
-        html: html,
-        multiline: true,
-        minWidth: editor.getParam("syntaxhl_dialog_width", 700),
-        minHeight: editor.getParam("syntaxhl_dialog_height", Math.min(tinymce.DOM.getViewPort().h - 200, 500)),
-        spellcheck: false,
-        style: 'direction: ltr; text-align: left'
-      },
+      bodyType: 'tabpanel',
+      body: [
+        {
+          type: 'form',
+          layout: 'flex',
+          padding: 10,
+          title: 'Code',
+          items: [
+            {
+              label: 'Code Language',
+              name: 'brush',
+              type: 'listbox',
+              text: 'None',
+              maxWidth: 200,
+              values: language
+            },
+            {
+              type: 'textbox',
+              name: 'code',
+              multiline: true,
+              minWidth: editor.getParam('code_dialog_width', 800),
+              minHeight: editor.getParam('code_dialog_height', Math.min(tinymce.DOM.getViewPort().h - 100, 450)),
+              spellcheck: false,
+              style: 'direction: ltr; text-align: left;'
+            }
+          ]
+        },
+        {
+          type: 'form',
+          title: 'Settings',
+          layout: 'flex',
+          direction: 'column',
+          labelGapCalc: 'children',
+          padding: 20,
+          items: [
+            {
+              type: 'form',
+              labelGapCalc: false,
+              padding: 0,
+              layout: 'grid',
+              columns: 2,
+              defaults: {
+                type: 'checkbox',
+                maxWidth: 200
+              },
+              items: [
+                {text: 'Display line numbers', name: 'gutter', checked: true},
+                {text: 'Display the toolbar', name: 'toolbar'},
+                {text: 'Highlight a mixture of HTML/XML code and a script', name: 'htmlscript'},
+                {text: 'Automatically make URLs clickable', name: 'autolinks', checked: true},
+                {text: 'Collapse code boxes', name: 'collapse'},
+                {text: 'Use smart tabs allowing tabs being used for alignment', name: 'smarttabs', checked: true},
+                {text: 'Use the light display mode, best for single lines of code', name: 'light'},
+                {text: 'Wrap Lines', name: 'wraplines'},
+                {label: 'Starting Line Number', name: 'firstline', type: 'textbox', value: '1'},
+                {label: 'Line Number Padding',
+                  name: 'padlinenumbers',
+                  type: 'listbox',
+                  text: 'False',
+                  values: [
+                    {text: 'False', value: 'false'},
+                    {text: 'True', value: 'true'},
+                    {text: '3', value: '3'},
+                    {text: '4', value: '4'},
+                    {text: '5', value: '5'},
+                    {text: '6', value: '6'}
+                  ]},
+                {label: 'Tab Size', name: 'tabsize', type: 'textbox', value: '4'},
+                {label: 'Font Size', name: 'fontsize', type: 'textbox', value: '14'},
+                {label: 'Highlight Line(s)', name: 'highlight', type: 'textbox'},
+                {label: 'Title', name: 'title', type: 'textbox'}
+              ]
+            }
+          ]
+        }
+      ],
       onSubmit: function (e) {
-        // We get a lovely "Wrong document" error in IE 11 if we
-        // don't move the focus to the editor before creating an undo
-        // transation since it tries to make a bookmark for the current selection
-        editor.focus();
-
-        editor.undoManager.transact(function () {
-          editor.setContent(e.data.code);
-        });
-
-        editor.selection.setCursorLocation();
-        editor.nodeChanged();
+        var win = this;
+        if(e.data.code === ''){
+          win.close();
+          return;
+        }
+        //语言
+        var brush = win.find('#brush').value() || 'plain';
+        var config = 'brush: ' + brush + '; ';
+        //显示行号，默认 true
+        if (!win.find('#gutter').checked()) {
+          config += 'gutter: false; ';
+        }
+        //显示工具栏，默认true
+        if (!win.find('#toolbar').checked()) {
+          config += 'toolbar: false; ';
+        }
+        //默认 false
+        if (win.find('#htmlscript').checked()) {
+          config += 'html-script: true; ';
+        }
+        //加链接，默认true
+        if (!win.find('#autolinks').checked()) {
+          config += 'auto-links: false; ';
+        }
+        //折叠代码，默认 false
+        if (win.find('#collapse').checked()) {
+          config += 'collapse: true; ';
+        }
+        //
+        if (!win.find('#smarttabs').checked()) {
+          config += 'smart-tabs: false; ';
+        }
+        //
+        if (win.find('#light').checked()) {
+          config += 'light: true; ';
+        }
+        //
+        var firstline = win.find('#firstline').value();
+        if (firstline !== '1') {
+          firstline = parseInt(firstline);
+          config += 'first-line: ' + firstline + '; ';
+        }
+        //
+        var padlinenumbers = win.find('#padlinenumbers').value();
+        if (padlinenumbers !== 'false') {
+          config += 'pad-line-numbers: ' + padlinenumbers + '; ';
+        }
+        //
+        var tabsize = win.find('#tabsize').value();
+        if (tabsize !== '4') {
+          config += 'tab-size: ' + tabsize + '; ';
+        }
+        //
+        var fontsize = win.find('#fontsize').value();
+        if (fontsize !== '') {
+          fontsize = parseInt(fontsize);
+          config += 'font-size: ' + fontsize + '; ';
+        }
+        //
+        var highlight = win.find('#highlight').value();
+        if (highlight !== '') {
+          config += 'highlight: [' + highlight + ']; ';
+        }
+        //
+        var title = win.find('#title').value();
+        if (title !== '') {
+          config += 'title: ' + title + '; ';
+        }
+        //
+        var content = '<pre class="' + config + '">';
+        content += editor.dom.encode(e.data.code);
+        content += '</pre>';
+        editor.execCommand('mceInsertContent', false, content);
       }
     });
   }
