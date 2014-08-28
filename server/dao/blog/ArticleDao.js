@@ -201,11 +201,9 @@ ArticleDao.prototype.pagination = function (loginName, searchContent, dataPage, 
   model.count(conditions, function (err, count) {
     if (err === null) {
       dataPage.setTotalItems(count);
-      var categoryIds = [], labelIds = [], articlesData, categoryMap = {}, labelMap = {}, articleIds = [];
+      var categoryIds = [], labelIds = [], articlesData, categoryMap = {}, labelMap = {}, articleIds = [], readMap = {}, commentMap = {};
 
-      var promise = model.find(conditions,
-        {_id: 1, title: 1, account: 1, status: 1, articleLink: 1, categories: 1, labels: 1, boutique: 1, createdDate: 1},
-        {skip: skip, limit: limit}).exec();
+      var promise = model.find(conditions, {_id: 1, title: 1, account: 1, status: 1, articleLink: 1, categories: 1, labels: 1, top: 1, boutique: 1, createdDate: 1}, {skip: skip, limit: limit}).exec();
 
       promise.then(function (articles) {
         articlesData = articles;
@@ -240,9 +238,15 @@ ArticleDao.prototype.pagination = function (loginName, searchContent, dataPage, 
         //浏览次数
         return ArticleReadCountModel.aggregate({$match: {articleID: {$in: articleIds}}}, { $group: { _id: '$articleID', readCounts: { $sum: 1 }}}).exec();
       }).then(function (readCounts) {
-        var readMap = {};
         readCounts.forEach(function (item) {
           readMap[item._id] = item.readCounts;
+        });
+
+        //查询评论个数
+        return CommentModel.aggregate({$match: {articleID: { $in: articleIds }}}, { $group: { _id: '$articleID', commentCount: { $sum: 1 }}}).exec();
+      }).then(function (commentCounts) {
+        commentCounts.forEach(function (item) {
+          commentMap[item._id] = item.commentCount;
         });
 
         articlesData.forEach(function (item, index) {
@@ -253,6 +257,7 @@ ArticleDao.prototype.pagination = function (loginName, searchContent, dataPage, 
             return categoryMap[item];
           });
           item.readCounts = readMap[item._id.toString()] || 0;
+          item.commentCounts = commentMap[item._id.toString()] || 0;
         });
 
         dataPage.setItems(articlesData);
@@ -390,8 +395,7 @@ ArticleDao.prototype.findBlogData = function (loginName, callback) {
      $group：按照给定表达式组合结果
      $unwind：分割嵌入数组到自己顶层文件
      */
-    return model.aggregate({$match: {account: loginName}}, {$limit: 10}, { $group: { _id: '$createdMonth', articleCount: { $sum: 1 }}},
-      { $sort: { createdDate: -1 } }).exec();
+    return model.aggregate({$match: {account: loginName}}, {$limit: 10}, { $group: { _id: '$createdMonth', articleCount: { $sum: 1 }}}, { $sort: { createdDate: -1 } }).exec();
   }).then(function (articles) {
     data.articlesArchive = articles.map(function (item) {
       var month = item._id.split('-');
@@ -453,7 +457,8 @@ ArticleDao.prototype.list = function (loginName, dataPage, callback) {
   model.count(conditions, function (err, count) {
     if (err === null) {
       dataPage.setTotalItems(count);
-      getArticlePagination(model, conditions, skip, limit, dataPage, callback);
+      var sort = {sort: {top: -1, _id: -1}};
+      getArticlePagination(model, conditions, skip, limit, sort, dataPage, callback);
     } else {
       return callback(err);
     }
@@ -479,10 +484,10 @@ ArticleDao.prototype.articleInfo = function (loginName, articleId, password, cal
 
   promise.then(function (article) {
     if (password) {//如果传递密码，表示该文章是受保护的，判断输入的密码是否正确
-      if(article.protectedPassword !== password){
+      if (article.protectedPassword !== password) {
         throw new Error('password error');
       }
-    }else{
+    } else {
       if (article.publicityStatus === 'protected') {
         throw new Error('protected');
       }
@@ -596,7 +601,7 @@ ArticleDao.prototype.boutiqueArticle = function (dataPage, callback) {
   model.count(conditions, function (err, count) {
     if (err === null) {
       dataPage.setTotalItems(count);
-      getArticlePagination(model, conditions, skip, limit, dataPage, callback);
+      getArticlePagination(model, conditions, skip, limit, {sort: {_id: -1}}, dataPage, callback);
     }
   });
 };
@@ -662,13 +667,7 @@ ArticleDao.prototype.findArticlePassword = function (articleId, callback) {
  * @param callback
  */
 function getArticleList(model, conditions, type, id, callback) {
-  var articleList = [],
-    categoriesId = [],
-    labelIds = [],
-    articleIds = [],
-    categoryMap = {},
-    labelMap = {},
-    commentMap = {};
+  var articleList = [], categoriesId = [], labelIds = [], articleIds = [], categoryMap = {}, labelMap = {}, commentMap = {};
 
   var promise = model.find(conditions, {_id: 1, title: 1, content: 1, categories: 1, labels: 1, articleLink: 1, account: 1, readCounts: 1, createdDate: 1}).exec();
 
@@ -684,9 +683,9 @@ function getArticleList(model, conditions, type, id, callback) {
       });
       doc.createdDate = moment(doc.createdDate).format('YYYY年MM月DD HH:mm:ss');
       //这里全显示，不再截取
-//      var content = commonMethod.htmlToText(doc.content);
-//      content = commonMethod.truncate(content, 500, true, '...');
-//      doc.content = content;
+      //      var content = commonMethod.htmlToText(doc.content);
+      //      content = commonMethod.truncate(content, 500, true, '...');
+      //      doc.content = content;
       return doc;
     });
 
@@ -750,22 +749,15 @@ function getArticleList(model, conditions, type, id, callback) {
  * @param conditions
  * @param skip
  * @param limit
+ * @param sort 排序规则
  * @param dataPage 分页数据
  * @param callback
  */
-function getArticlePagination(model, conditions, skip, limit, dataPage, callback) {
+function getArticlePagination(model, conditions, skip, limit, sort, dataPage, callback) {
 
-  var articleList = [],
-    categoriesId = [],
-    labelIds = [],
-    articleIds = [],
-    categoryMap = {},
-    labelMap = {},
-    commentMap = {};
+  var articleList = [], categoriesId = [], labelIds = [], articleIds = [], categoryMap = {}, labelMap = {}, commentMap = {};
 
-  var promise = model.find(conditions,
-    {_id: 1, title: 1, content: 1, categories: 1, labels: 1, account: 1, readCounts: 1, createdDate: 1},
-    {skip: skip, limit: limit, sort: {_id: -1}}).exec();
+  var promise = model.find(conditions, {_id: 1, title: 1, content: 1, categories: 1, labels: 1, account: 1, readCounts: 1, createdDate: 1}, underscore.extend({skip: skip, limit: limit}, sort)).exec();
 
   promise.then(function (articles) {
     articleList = articles.map(function (item) {

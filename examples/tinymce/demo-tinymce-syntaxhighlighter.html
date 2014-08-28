@@ -12,14 +12,16 @@
 <!-- TinyMCE -->
 <script src="../../app/bower_components/jquery/dist/jquery.js"></script>
 <script src="../../app/bower_components/tinymce/tinymce.jquery.js"></script>
-<!--<script src="../../app/scripts/components/tinymce/langs/zh_CN.js"></script>-->
-<script src="../../app/scripts/components/tinymce/plugins/syntaxhighlighter/plugin.js"></script>
+<script src="../../app/scripts/components/tinymce/langs/zh_CN.js"></script>
+<script src="../../app/bower_components/tinymce-syntaxhighlighter/plugin.js"></script>
+<script src="../../app/bower_components/tinymce-syntaxhighlighter/langs/zh_CN.js"></script>
 <script>
   $(function () {
     var editor = new tinymce.Editor('content', {
       height: 400,
       menubar: false, //Disable all menu
       content_css: '../../app/styles/tinymce.css',
+      syntaxhighlighter_image_url: '../../app/bower_components/tinymce-syntaxhighlighter/',
       plugins: [
         'autolink link image preview hr code fullscreen table textcolor charmap syntaxhighlighter'
       ],

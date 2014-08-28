@@ -16,6 +16,7 @@ var schema = new Schema({
   commentStatus: { type: String },
   publicityStatus: { type: String },//公开度  public: '公开', protected: '密码保护', private: '私密'
   protectedPassword: { type: String },//公开度（密码保护），需输入密码才能查看
+  top: {type: Boolean},//文章置顶
   publishType: { type: String },// 发布方式，立即和定时
   publishDate: { type: Date},// 定时发布时间
   articleLink: { type: String },//文章永久链接，取相对地址

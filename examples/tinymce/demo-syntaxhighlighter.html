@@ -9,13 +9,14 @@
 </head>
 <body>
 <div>
-<pre class="brush: javascript; toolbar: false; font-size: 14; highlight: [7]; title: 67676767; ">
+
+<pre class="brush: javascript; first-line: 10; pad-line-numbers: 3; tab-size: 20; font-size: '30px'; highlight: [4,5,54]; title: Title; ">
 /**
  * Created by linder on 2014/7/7.
  */
-
+// https://github.com/linder0209
 (function ($, undefined) {
-  'use strict';
+      'use strict';
 
   var re = /\{\{:([\w-]+)\}\}/g;
   // 该方法支持键值即json格式的数据
@@ -432,7 +433,7 @@
         result.push(args[i].replace('@', '../../app/bower_components/SyntaxHighlighter/scripts/'));
       }
       return result;
-    };
+    }
     SyntaxHighlighter.autoloader.apply(null, path(
         'applescript @shBrushAppleScript.js',
         'actionscript3 as3 @shBrushAS3.js',

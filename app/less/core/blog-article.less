@@ -83,3 +83,36 @@
 .article-type-title{
   margin-bottom: @margin-vl;
 }
+
+// 返回顶部
+a.back-to-top {
+  text-indent: -999em;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  overflow: hidden;
+  font-size: 18px;
+  padding: 10px 18px;
+  &:after,
+  &:before{
+    font-family: "FontAwesome";
+    content: "\f062";
+    text-indent: 0;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    line-height: 2.5;
+    .transition(all ease 0.238s);
+  }
+}
+
+a.back-to-top:before {
+  .transform(translateY(3em));
+}
+a.back-to-top:hover:after {
+  .transform(translateY(-3em));
+}
+a.back-to-top:hover:before {
+  .transform(translateY(0));
+}

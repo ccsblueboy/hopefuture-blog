@@ -10,7 +10,7 @@
  * */
 
 angular.module('hopefutureBlogApp')
-  .controller('ArticleCtrl', function ($scope, $location, $modal, $timeout, blogService, errorCodes, blogMethod) {
+  .controller('ArticleCtrl', function ($scope, $location, $modal, $timeout, blogService, errorCodes, blogMethod, syntaxHighlighter) {
 
     var pathname = window.location.pathname;
     var account = pathname.substring(1);
@@ -115,7 +115,10 @@ angular.module('hopefutureBlogApp')
           if (callback) {
             callback(true);
           }
-          $scope.showArticleInfo = true;
+          $timeout(function(){
+            syntaxHighlighter.format('/bower_components/SyntaxHighlighter/scripts/');
+            $scope.showArticleInfo = true;
+          },100);
         } else {
           $scope.showArticleInfo = false;
           if (data.errorMessage === 'protected') {
