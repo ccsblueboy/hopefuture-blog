@@ -10,6 +10,9 @@ input[type="radio"],
 input[type="checkbox"] {
   margin-top: 3px;
 }
+.has-success .form-control {
+  border-color: #428bca;
+}
 html,
 body {
   height: auto;
@@ -22,7 +25,7 @@ body {
   padding-top: 50px;
 }
 .link {
-  color: #666666;
+  color: #5697d0;
 }
 /**
 * 外边距
@@ -35,6 +38,9 @@ body {
 }
 .margin-top-vl {
   margin-top: 30px;
+}
+.margin-top-hg {
+  margin-top: 50px;
 }
 .margin-left-md {
   margin-left: 10px;
@@ -202,7 +208,7 @@ body {
     overflow-y: auto;
     /* Scrollable contents if viewport is shorter than content. */
     background-color: #ffffff;
-    border-right: 1px solid #777777;
+    border-right: 1px solid #92bce0;
   }
 }
 /* Sidebar navigation */
@@ -265,14 +271,7 @@ div.mce-fullscreen {
   margin-left: 10px;
 }
 .blog-resource-border {
-  border-right: 1px solid;
-}
-.blog-theme > li {
-  float: left;
-  margin-right: 50px;
-}
-.blog-theme > li .blog-theme-item {
-  margin: 10px;
+  border-right: 1px solid #92bce0;
 }
 .account-status {
   background: url("../../images/account_status.png") no-repeat;
@@ -335,7 +334,7 @@ div.mce-fullscreen {
  * 头像相关样式
 **/
 .head-portrait-list {
-  border: 1px solid #333333;
+  border: 1px solid #245682;
   margin-top: 10px;
   padding: 5px;
   border-radius: 4px;
@@ -401,8 +400,36 @@ div.mce-fullscreen {
 .head-portrait9 {
   background-position: -504px 0;
 }
+.blog-theme-container > li {
+  float: left;
+  margin-right: 50px;
+}
+.blog-theme-container > li .blog-theme-item {
+  margin: 10px;
+}
+/**
+* 这里利用css实现图片等比例缩放
+**/
+.blog-theme {
+  display: inline-block;
+  width: 200px;
+  height: 200px;
+  background-origin: content;
+  /*从content区域开始显示背景*/
+  background-position: 50% 50%;
+  /*图片上下左右居中*/
+  background-size: contain;
+  /*保持图像本身的宽高比例，将图片缩放到宽度或高度正好适应定义背景的区域*/
+  background-repeat: no-repeat;
+}
+.blog-theme-blue-classic {
+  background-color: #428bca;
+}
+.blog-theme-spring-tones {
+  background-image: url("../../images/theme/springTones.jpg");
+}
 .hf-callout {
-  border-color: #555555;
+  border-color: #92bce0;
   border-radius: 3px;
   border-style: solid;
   border-width: 1px 1px 1px 5px;

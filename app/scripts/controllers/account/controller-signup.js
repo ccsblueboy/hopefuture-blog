@@ -72,12 +72,13 @@ angular.module('hopefutureBlogApp')
       signupService.generateLink($scope.accountId, function (data) {
         if (data.success === true) {
           $scope.$parent.alerts = [
-            {type: 'success', message: '新的激活链接已生成，请查收。'}
+            {type: 'success', message: '邮件发送成功！请查收获取用户激活链接。'}
           ];
         }
       });
     };
   })
+  //账号激活链接已过期Ctrl
   .controller('GenerateLinkCtrl', function ($scope, signupService) {
     $scope.showActivatedInfo = true;
     $scope.generateLink = function () {

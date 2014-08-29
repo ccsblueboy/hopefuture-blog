@@ -10,6 +10,9 @@ input[type="radio"],
 input[type="checkbox"] {
   margin-top: 3px;
 }
+.has-success .form-control {
+  border-color: #6e8076;
+}
 html,
 body {
   height: auto;
@@ -22,7 +25,7 @@ body {
   padding-top: 50px;
 }
 .link {
-  color: #8c959e;
+  color: #7a8d83;
 }
 /**
 * 外边距
@@ -35,6 +38,9 @@ body {
 }
 .margin-top-vl {
   margin-top: 30px;
+}
+.margin-top-hg {
+  margin-top: 50px;
 }
 .margin-left-md {
   margin-left: 10px;
@@ -265,14 +271,7 @@ div.mce-fullscreen {
   margin-left: 10px;
 }
 .blog-resource-border {
-  border-right: 1px solid;
-}
-.blog-theme > li {
-  float: left;
-  margin-right: 50px;
-}
-.blog-theme > li .blog-theme-item {
-  margin: 10px;
+  border-right: 1px solid #a4b0a9;
 }
 .account-status {
   background: url("../../images/account_status.png") no-repeat;
@@ -335,7 +334,7 @@ div.mce-fullscreen {
  * 头像相关样式
 **/
 .head-portrait-list {
-  border: 1px solid #5a626a;
+  border: 1px solid #3f4943;
   margin-top: 10px;
   padding: 5px;
   border-radius: 4px;
@@ -402,7 +401,7 @@ div.mce-fullscreen {
   background-position: -504px 0;
 }
 .hf-callout {
-  border-color: #6d6e8c;
+  border-color: #a4b0a9;
   border-radius: 3px;
   border-style: solid;
   border-width: 1px 1px 1px 5px;

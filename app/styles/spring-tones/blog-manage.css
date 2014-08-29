@@ -10,6 +10,9 @@ input[type="radio"],
 input[type="checkbox"] {
   margin-top: 3px;
 }
+.has-success .form-control {
+  border-color: #658b6f;
+}
 /**
 * http://www.lavishbootstrap.com/?image_url=http://design-seeds.com/palettes/12/SpringTones505.jpg
 * 官网提供的默认值为 #28363d   用以下公式计算为 #283637
@@ -26,7 +29,7 @@ body {
   padding-top: 50px;
 }
 .link {
-  color: #5196a1;
+  color: #71987c;
 }
 /**
 * 外边距
@@ -39,6 +42,9 @@ body {
 }
 .margin-top-vl {
   margin-top: 30px;
+}
+.margin-top-hg {
+  margin-top: 50px;
 }
 .margin-left-md {
   margin-left: 10px;
@@ -269,14 +275,7 @@ div.mce-fullscreen {
   margin-left: 10px;
 }
 .blog-resource-border {
-  border-right: 1px solid;
-}
-.blog-theme > li {
-  float: left;
-  margin-right: 50px;
-}
-.blog-theme > li .blog-theme-item {
-  margin: 10px;
+  border-right: 1px solid #9eb8a5;
 }
 .account-status {
   background: url("../../images/account_status.png") no-repeat;
@@ -339,7 +338,7 @@ div.mce-fullscreen {
  * 头像相关样式
 **/
 .head-portrait-list {
-  border: 1px solid #2f575d;
+  border: 1px solid #3a5040;
   margin-top: 10px;
   padding: 5px;
   border-radius: 4px;
@@ -406,7 +405,7 @@ div.mce-fullscreen {
   background-position: -504px 0;
 }
 .hf-callout {
-  border-color: #6d9197;
+  border-color: #9eb8a5;
   border-radius: 3px;
   border-style: solid;
   border-width: 1px 1px 1px 5px;

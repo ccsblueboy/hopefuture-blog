@@ -59,15 +59,19 @@ AccountDao.prototype.findByLoginNameAndPassword = function (data, callback) {
  */
 AccountDao.prototype.signup = function (data, callback) {
   var loginName = data.loginName;
+  var password = data.password;
+  if(!loginName || !password){//前端已校验，如果传过来的值为空，则是非法操作
+    return callback(new Error(errorCodes['9002']));
+  }
+  delete data.password;
   var conditions = {loginName: loginName};
+  var model = this.model;
+
   accountDao.find(conditions, function (err, models) {
     if (err || models.length > 0) {
       return callback(new Error(errorCodes['9008']));
     } else {
-      var password = data.password;
-      delete data.password;
 
-      var model = this.model;
       hash(password, function (err, salt, hash) {
         if (err) {
           return callback(err);

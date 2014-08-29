@@ -64,6 +64,12 @@ module.exports = function (app) {
     res.render('about');
   });
 
+  //爱心捐助
+  app.use('/donate', function (req, res) {
+    res.locals.donatePage = true;
+    res.render('donate');
+  });
+
   app.use('/reference', function (req, res) {
     res.locals.reference = true;
     res.render('reference');

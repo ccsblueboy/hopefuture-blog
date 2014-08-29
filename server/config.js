@@ -35,7 +35,7 @@ module.exports = {
    * 另一种由于采用url来区分不同的用户名，所以系统已有的url名称，需要过滤掉，
    * 比如： http://localhost:9000/login 是一个有效的地址，这时我们就需要过滤掉login，否则注册的用户就会与系统本身的url冲突
    * 目前系统中用到的url有
-   * 'examples', 'login', 'logout', 'signup', 'forgot', 'resetpassword', 'terms', 'about', 'manage', 'blog', 'reference', 'blogsetting'
+   * 'examples', 'login', 'logout', 'signup', 'forgot', 'resetpassword', 'terms', 'about', 'manage', 'blog', 'reference', 'blogsetting', 'donate'
    * 保留的将来使用的有（FIXME ：后续会补充的）
    * 'setting', 'technology', 'column', 'forum', 'hotspot', 'information', 'essence', 'discussion', 'group', 'code', 'project', 'recruitment', 'opensource',
    * 对应的中文为，设置、技术、栏目、论坛、热点、咨询、精华、讨论、群组、代码、项目、招聘、开源
@@ -43,6 +43,7 @@ module.exports = {
    *
    */
   accountFilters: ['examples', 'login', 'logout', 'signup', 'forgot', 'resetpassword', 'terms', 'about', 'manage', 'blog', 'reference',
+    'blogsetting', 'donate',
     'setting', 'technology', 'column', 'forum', 'hotspot', 'information', 'essence', 'discussion', 'group', 'code', 'project',
     'recruitment', 'opensource',
     'admin', 'administrator'],
@@ -56,9 +57,9 @@ module.exports = {
    * 邮箱配置项
    */
   mailConfig: {
-    user: '',
-    pass: '',
-    from: ''
+    user: 'hopefuture_blog@126.com',
+    pass: 'linder!(*))@09',
+    from: 'hopefuture_blog@126.com'
   }
 
 };

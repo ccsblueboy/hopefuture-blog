@@ -22,6 +22,7 @@ function BlogOptionDao(Model) {
 BlogOptionDao.prototype.initData = function (callback) {
   var account = {
     loginName: 'administrator',
+    password: '12qw!@QW',
     name: '管理员',
     email: 'hopefuture_blog@126.com',
     activated: true

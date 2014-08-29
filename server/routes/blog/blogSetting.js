@@ -19,6 +19,6 @@ var blogSetting = {
 var express = require('express');
 var router = express.Router();
 
-router.get('/', blogSetting.init);
+router.get('/init', blogSetting.init);
 
 module.exports = router;

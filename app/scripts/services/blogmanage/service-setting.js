@@ -78,7 +78,7 @@ angular.module('hopefutureBlogApp')
     },
     {
       code: 'purple-red',// 自定义主题地址：http://getbootstrap.com/customize/?id=3b0a57e8c94403eb9e09
-      name: '大紫大红'
+      name: '大红大紫'
     }
   ]);
 

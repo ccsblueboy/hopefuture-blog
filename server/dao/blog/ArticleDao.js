@@ -206,7 +206,9 @@ ArticleDao.prototype.pagination = function (loginName, searchContent, dataPage, 
       var promise = model.find(conditions, {_id: 1, title: 1, account: 1, status: 1, articleLink: 1, categories: 1, labels: 1, top: 1, boutique: 1, createdDate: 1}, {skip: skip, limit: limit}).exec();
 
       promise.then(function (articles) {
-        articlesData = articles;
+        articlesData = articles.map(function(item){
+          return item._doc;
+        });
         articles.forEach(function (item) {
           item.labels.forEach(function (it) {
             if (labelIds.indexOf(it) === -1) {
@@ -545,6 +547,9 @@ ArticleDao.prototype.articleInfo = function (loginName, articleId, password, cal
     underscore.extend(_conditions, {_id: {$ne: ObjectId(articleId)}, labels: { $in: articleLabels }});
     return model.find(_conditions, {_id: 1, title: 1, articleLink: 1, createdDate: 1}, {limit: 5}).sort({_id: -1}).exec();
   }).then(function (articles) {
+    articles.forEach(function(item){
+      item._doc.createdDate = moment(item._doc.createdDate).format('YYYY年MM月DD HH:mm:ss');
+    });
     data.relatedArticle = articles;//相关文章
 
     return callback(null, data);

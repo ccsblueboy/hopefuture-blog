@@ -41,3 +41,5 @@ errorMessage: err.message
 
 22、eonasdan-bootstrap-datetimepicker 回头换成指令
 https://github.com/andrej-zirko/angular-eonasdan-bootstrap-datetimepicker
+
+23、个人博客首页搜索功能，利用google 或百度

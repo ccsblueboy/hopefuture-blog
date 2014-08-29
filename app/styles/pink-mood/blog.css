@@ -10,6 +10,9 @@ input[type="radio"],
 input[type="checkbox"] {
   margin-top: 3px;
 }
+.has-success .form-control {
+  border-color: #e25a69;
+}
 html,
 body {
   height: auto;
@@ -22,7 +25,7 @@ body {
   padding-top: 50px;
 }
 .link {
-  color: #c5a8ac;
+  color: #e6707d;
 }
 /**
 * 外边距
@@ -35,6 +38,9 @@ body {
 }
 .margin-top-vl {
   margin-top: 30px;
+}
+.margin-top-hg {
+  margin-top: 50px;
 }
 .margin-left-md {
   margin-left: 10px;
@@ -197,7 +203,7 @@ body {
  * 头像相关样式
 **/
 .head-portrait-list {
-  border: 1px solid #9d6a71;
+  border: 1px solid #b62031;
   margin-top: 10px;
   padding: 5px;
   border-radius: 4px;
@@ -267,15 +273,45 @@ body {
   margin-top: 10px;
   margin-bottom: 50px;
 }
+.blog-container .section {
+  padding: 0 10px;
+}
+.article-aside-panel {
+  background-color: #f5979d;
+  padding: 20px 10px;
+}
 @media (min-width: 768px) {
   .blog-container .section {
     padding: 0 20px;
+  }
+  .article-aside-panel {
+    padding: 20px 20px;
   }
 }
 @media (min-width: 992px) {
   .blog-container .section {
     padding: 0 30px;
   }
+  .article-aside-panel {
+    padding: 20px 30px;
+  }
+}
+@media (min-width: 1200px) {
+  .blog-container .section {
+    padding: 0 50px;
+  }
+  .article-aside-panel {
+    padding: 20px 50px;
+  }
+}
+.article-aside {
+  margin-top: 50px;
+}
+.article-list-aside > li {
+  margin-bottom: 10px;
+}
+.article-list-aside .fa {
+  margin-right: 5px;
 }
 .masthead-button-links {
   margin-top: 30px;
@@ -288,7 +324,7 @@ body {
   border-radius: 5px;
   margin-bottom: 30px;
   opacity: 0.7;
-  padding: 10px 20px;
+  padding: 10px;
 }
 .article-list > p {
   line-height: 2em;
@@ -336,20 +372,6 @@ body {
 .article-meta > ul > li > a + a {
   margin-left: 10px;
 }
-.article-aside-panel {
-  background-color: #f5979d;
-  padding-top: 20px;
-  padding-bottom: 20px;
-}
-.article-aside {
-  margin-top: 50px;
-}
-.article-list-aside > li {
-  margin-bottom: 10px;
-}
-.article-list-aside .fa {
-  margin-right: 5px;
-}
 .element-list > a {
   display: inline-block;
   margin-right: 10px;
@@ -392,7 +414,7 @@ body {
 .comment-list > li {
   margin-top: 30px;
   padding: 10px;
-  border: 1px dashed #df7888;
+  border: 1px dashed #ea8590;
 }
 .comment-list > li > ul {
   margin-left: 50px;
@@ -428,8 +450,51 @@ body {
 .article-type-title {
   margin-bottom: 30px;
 }
+a.back-to-top {
+  text-indent: -999em;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  overflow: hidden;
+  font-size: 18px;
+  padding: 10px 18px;
+  display: none;
+}
+a.back-to-top:after,
+a.back-to-top:before {
+  font-family: "FontAwesome";
+  content: "\f062";
+  text-indent: 0;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  line-height: 2.5;
+  -webkit-transition: all ease 0.238s;
+  -o-transition: all ease 0.238s;
+  transition: all ease 0.238s;
+}
+a.back-to-top:before {
+  -webkit-transform: translateY(3em);
+  -moz-transform: translateY(3em);
+  -o-transform: translateY(3em);
+  transform: translateY(3em);
+}
+a.back-to-top:hover:after {
+  -webkit-transform: translateY(-3em);
+  -moz-transform: translateY(-3em);
+  -o-transform: translateY(-3em);
+  transform: translateY(-3em);
+}
+a.back-to-top:hover:before {
+  -webkit-transform: translateY(0);
+  -moz-transform: translateY(0);
+  -o-transform: translateY(0);
+  transform: translateY(0);
+}
 .hf-callout {
-  border-color: #df7888;
+  border-color: #f1b1b8;
   border-radius: 3px;
   border-style: solid;
   border-width: 1px 1px 1px 5px;
@@ -448,6 +513,7 @@ body {
   line-height: 2em;
   text-indent: 2em;
 }
+/** 第三方组件 样式**/
 /**
  * 修改分享代码样式与bootstrap的冲突
  * http://www.bshare.cn
@@ -456,7 +522,13 @@ body {
 .bsBox *,
 #bsPanelHolder,
 #bsPanelHolder * {
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
   box-sizing: content-box;
+}
+/** 解决与Bootstrap冲突**/
+.syntaxhighlighter table td.code .container:before {
+  display: none;
 }
 /**
  * 以下是一些通用的Angular 动画 css

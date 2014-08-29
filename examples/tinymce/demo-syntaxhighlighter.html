@@ -3,9 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <title></title>
-  <!--<link href="../../app/bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">-->
+  <link href="../../app/bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
   <link href="../../app/bower_components/SyntaxHighlighter/styles/shCore.css" rel="stylesheet">
-  <link href="../../app/bower_components/SyntaxHighlighter/styles/shCoreDefault.css" rel="stylesheet">
+  <link href="../../app/bower_components/SyntaxHighlighter/styles/shThemeMidnight.css" rel="stylesheet">
+
+  <style>
+    /** 解决与Bootstrap冲突**/
+    .syntaxhighlighter table td.code .container:before{
+      display: none;
+    }
+  </style>
 </head>
 <body>
 <div>

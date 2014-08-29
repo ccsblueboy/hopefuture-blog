@@ -1,8 +1,7 @@
 <h3 class="page-header">主题，当前选择：{{currentTheme}}</h3>
-<ul class="blog-theme clearfix list-unstyled text-center">
+<ul class="blog-theme-container clearfix list-unstyled text-center">
   <li ng-repeat="theme in themes">
-    <img alt="200x200"
-         src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzBEOEZEQiIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjEwMCIgeT0iMTAwIiBzdHlsZT0iZmlsbDojZmZmO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjEzcHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+MjAweDIwMDwvdGV4dD48L3N2Zz4=">
+    <img class="blog-theme blog-theme-{{theme.code}}"/>
 
     <div class="clearfix blog-theme-item">
       <span class="pull-left" ng-bind="theme.name" title="{{theme.code}}"></span>
@@ -11,12 +10,3 @@
   </li>
 </ul>
 
-
-<!--<li class="dropdown">-->
-<!--<a data-toggle="dropdown" class="dropdown-toggle" href="#">换肤<b class="caret"></b></a>-->
-<!--<ul class="dropdown-menu">-->
-<!--<li><a href="#">蓝色经典</a></li>-->
-<!--<li><a href="#">温馨浪漫</a></li>-->
-<!--<li><a href="#">夕阳西下</a></li>-->
-<!--</ul>-->
-<!--</li>-->

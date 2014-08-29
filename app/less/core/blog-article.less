@@ -27,7 +27,7 @@
 //评论面板
 .comment-panel {
   margin-top: @margin-md;
-  button + button{
+  button + button {
     margin-left: @margin-md;
   }
 }
@@ -40,7 +40,7 @@
 .comment-list > li {
   margin-top: @margin-vl;
   padding: @padding-md;
-  border: 1px dashed @gray;
+  border: 1px dashed lighten(@brand-primary, 10);
 }
 
 .comment-list > li > ul {
@@ -75,12 +75,12 @@
   border-color: transparent transparent @body-bg transparent;
 }
 
-.comment-reply{
+.comment-reply {
   margin-bottom: @margin-md;
 }
 
 //文章归档，分类等 title
-.article-type-title{
+.article-type-title {
   margin-bottom: @margin-vl;
 }
 
@@ -90,11 +90,13 @@ a.back-to-top {
   position: fixed;
   bottom: 20px;
   right: 20px;
+  z-index: 1000;
   overflow: hidden;
   font-size: 18px;
   padding: 10px 18px;
+  display: none;
   &:after,
-  &:before{
+  &:before {
     font-family: "FontAwesome";
     content: "\f062";
     text-indent: 0;
@@ -110,9 +112,11 @@ a.back-to-top {
 a.back-to-top:before {
   .transform(translateY(3em));
 }
+
 a.back-to-top:hover:after {
   .transform(translateY(-3em));
 }
+
 a.back-to-top:hover:before {
   .transform(translateY(0));
 }
