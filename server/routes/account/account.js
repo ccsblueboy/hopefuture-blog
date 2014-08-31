@@ -55,7 +55,10 @@ var account = {
 
   update: function (req, res) {
     var data = req.body;
-    accountDao.update(data, function (err) {
+    //不能修改登录名和注册邮箱，防止非法操作
+    delete data.loginName;
+    delete data.email;
+    accountDao.updateById(data, function (err) {
       if (err) {
         res.send({success: false, err: err});
       } else {

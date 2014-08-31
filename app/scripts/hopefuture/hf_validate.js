@@ -26,6 +26,13 @@
       fn: function (value, element, param) {
         return !value || /^[a-zA-Z\d_.@-]*$/.test(value);
       }
+    },
+    passwordStrategy: {
+      message: '密码必须是字母、数字以及符号（! @ # $ % ^ & * ( ) .）组合',
+      fn: function(value, element, param) {
+        var publicPattern = /(^[a-zA-Z!@#$%^&*]+[0-9]+|[0-9]+[a-zA-Z!@#$%^&*]+[0-9]*$)/;
+        return !value || publicPattern.test(value);
+      }
     }
   };
 

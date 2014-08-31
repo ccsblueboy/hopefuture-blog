@@ -2,7 +2,6 @@
 
 <div class="row">
   <div class="col-sm-offset-3 col-sm-6">
-    <div alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.message}}</div>
   </div>
   <div class="col-md-12">
     <form class="form-horizontal" name="accountForm" method="post" account-validator>
@@ -168,13 +167,13 @@
 </div>
 
 <script type="text/ng-template" id="updatePassword.html">
-  <form class="form-horizontal" name="updatePasswordForm" account-password-validator>
+  <form class="form-horizontal" name="updatePasswordForm" autocomplete="off" account-password-validator>
     <div class="modal-header">
       <button type="button" class="close" ng-click="cancel()" title="Close">&times;</button>
       <h4 class="modal-title">修改用户密码</h4>
     </div>
     <div class="modal-body">
-      <div alert ng-repeat="alert in alerts2" type="{{alert.type}}" close="closeAlert2($index)">{{alert.message}}</div>
+      <div alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.message}}</div>
       <div class="form-group">
         <label for="oldPassword" class="control-label col-sm-3"><i class="required">*</i> 原密码</label>
 
@@ -189,7 +188,7 @@
 
         <div class="col-sm-6">
           <input type="password" class="form-control" id="password" name="password" minlength="6" maxlength="30" required
-                 ng-model="account.password" placeholder="请输入新密码" autocomplete="off"/>
+                 passwordStrategy ng-model="account.password" placeholder="请输入新密码" autocomplete="off"/>
         </div>
       </div>
 

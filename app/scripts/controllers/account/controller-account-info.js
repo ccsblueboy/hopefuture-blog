@@ -55,12 +55,22 @@ angular.module('hopefutureBlogApp')
   });
 
   $scope.update = function () {
-    accountInfoService.update($scope.account, function (data) {
-      if (data.success === true) {
-        $scope.$parent.$parent.alerts = [
-          {type: 'success', message: '修改用户信息成功！'}
-        ];
-      }
+    var account = angular.copy($scope.account);
+    delete account.loginName;
+    delete account.email;
+    accountInfoService.update(account, function (data) {
+      $modal.open({
+        templateUrl: '../views/templates/alert-modal.html',
+        controller: 'AlertModalCtrl',
+        resolve: {
+          config: function () {
+            return {
+              modalTitle: '提示信息',
+              modalContent: data.success === true?'修改用户信息成功！':'修改用户信息失败！'
+            };
+          }
+        }
+      });
     });
   };
 
@@ -91,9 +101,9 @@ angular.module('hopefutureBlogApp')
     confirmPassword: ''
   };
 
-  $scope.alerts2 = [];
-  $scope.closeAlert2 = function (index) {
-    $scope.alerts2.splice(index, 1);
+  $scope.alerts = [];
+  $scope.closeAlert = function (index) {
+    $scope.alerts.splice(index, 1);
   };
 
   $scope.updatePassword = function () {
@@ -109,7 +119,7 @@ angular.module('hopefutureBlogApp')
           accountScope.$parent.$parent.alerts = [];
         }, 1000);
       } else {
-        $scope.alerts2 = [
+        $scope.alerts = [
           {type: 'danger', message: data.message}
         ];
       }
