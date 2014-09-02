@@ -39,6 +39,7 @@
     <th>email</th>
     <th>个人主页</th>
     <th>用户状态</th>
+    <th>管理员</th>
   </tr>
   </thead>
   <tbody>
@@ -55,6 +56,7 @@
       <i title="{{item.activated?'启用':'停用'}}" class="account-status" ng-click="changeAccountStatus(!item.activated,item);"
          ng-class="{off:!item.activated}"></i>
     </td>
+    <td><button class="btn btn-primary btn-xs" ng-click="changeManager(item);">{{item.manager?'是':'否'}}</button></td>
   </tr>
   </tbody>
 </table>

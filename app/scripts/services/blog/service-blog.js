@@ -48,7 +48,7 @@ angular.module('hopefutureBlogApp').factory('blogService', ['hfbHttpService', fu
     }
 
     return {
-      format: function (ctx) {
+      autoLoader: function (ctx) {
         pathCtx = ctx;
         SyntaxHighlighter.autoloader.apply(null, path(
           'applescript @shBrushAppleScript.js',

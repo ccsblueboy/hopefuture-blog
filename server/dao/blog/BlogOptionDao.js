@@ -1,6 +1,7 @@
 'use strict';
 
 var accountDao = require('../account/AccountDao');
+var config = require('../../config');
 
 /**
  * 创建 BlogOption Dao 用来操作 BlogOptionModel，实现数据的增删改查等功能
@@ -22,10 +23,11 @@ function BlogOptionDao(Model) {
 BlogOptionDao.prototype.initData = function (callback) {
   var account = {
     loginName: 'administrator',
-    password: '12qw!@QW',
+    password: config.administratorPassword,
     name: '管理员',
     email: 'hopefuture_blog@126.com',
-    activated: true
+    activated: true,
+    manager: true
   };
 
   var model = this.model;

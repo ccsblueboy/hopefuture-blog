@@ -25,6 +25,7 @@ var schema = new Schema({
   signature: { type: String},// 我的签名
   site: { type: String },//个人站点或个人博客
   activated: {type: Boolean, default: false },//是否被激活
+  manager: {type: Boolean, default: false },//是否是管理员
   createdDate: { type: Date, default: Date.now },
   updatedDate: { type: Date, default: Date.now }
 });

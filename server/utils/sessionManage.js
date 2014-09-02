@@ -4,7 +4,7 @@
 
 'use strict';
 var encryption = require('./passwordCrypto').encryption;
-var secretStr = 'hfblog';
+var config = require('../config');
 
 /**
  * 用来动态管理 session 数据
@@ -60,13 +60,23 @@ var sessionManage = {
   },
 
   /**
-   * 判断用户是否登录
+   * 判断用户是否为超级管理员
    * @param req
    * @returns {boolean}
    */
   isAdministrator: function (req) {
     var account = req.session.account;
     return account ? account.loginName === 'administrator' : false;
+  },
+
+  /**
+   * 判断用户是否为管理员
+   * @param req
+   * @returns {boolean}
+   */
+  isManager: function (req) {
+    var account = req.session.account;
+    return account ? account.manager === true : false;
   },
 
   setAccountCookie: function (loginName, password, res) {
@@ -83,7 +93,7 @@ var sessionManage = {
 
     res.cookie('loginName', encryption.encrypt(key, loginName), options);
     res.cookie('password', encryption.encrypt(key, password), options);
-    res.cookie('key', key.replace(/=/g, secretStr), options);
+    res.cookie('key', key.replace(/=/g, config.cookieSecret), options);
   },
   /**
    * 清空cookie

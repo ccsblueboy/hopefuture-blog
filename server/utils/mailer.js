@@ -15,6 +15,7 @@ var templates = {
       '<p>亲爱的{{:loginName}}：</p>' +
       '<p>您好！您的登录账户是：<strong>{{:loginName}}</strong>。请点击以下链接登录 Hope Future Blog，如果没响应，请复制该链接在你的浏览器中打开。</p>' +
       '<p><a target="_blank" href="{{:serverUrl}}">{{:serverUrl}}</a></p>' +
+      '<p>注意：该链接有效期为24小时，过期需重新申请</p>' +
       '<p>Hope Future Blog 帐号中心 </p><p>{{:currentDate}}</p>' +
       '</body></html>'
   },
@@ -25,6 +26,7 @@ var templates = {
       '<p>亲爱的{{:loginName}}：</p>' +
       '<p>您好！请点击以下链接重置您的密码，如果没响应，请复制该链接在你的浏览器中打开。</p>' +
       '<p><a target="_blank" href="{{:serverUrl}}">{{:serverUrl}}</a></p>' +
+      '<p>注意：该链接有效期为24小时，过期需重新申请</p>' +
       '<p>Hope Future Blog 帐号中心 </p><p>{{:currentDate}}</p>' +
       '</body></html>'
   },
@@ -35,6 +37,7 @@ var templates = {
       '<p>亲爱的{{:loginName}}：</p>' +
       '<p>您好！请点击以下链接激活你的账号，如果没响应，请复制该链接在你的浏览器中打开。</p>' +
       '<p><a target="_blank" href="{{:serverUrl}}">{{:serverUrl}}</a></p>' +
+      '<p>注意：该链接有效期为24小时，过期需重新申请</p>' +
       '<p>Hope Future Blog 帐号中心 </p><p>{{:currentDate}}</p>' +
       '</body></html>'
   }
@@ -58,8 +61,8 @@ var applyTemplate = function (template, values) {
  * 基于 smtpTransport 创建邮件服务器
  */
 var transporter = nodemailer.createTransport(smtpTransport({
-  host: 'smtp.126.com',
-  port: 25,
+  host: mailConfig.host,
+  port: mailConfig.port,
   auth: {
     user: mailConfig.user,
     pass: mailConfig.pass

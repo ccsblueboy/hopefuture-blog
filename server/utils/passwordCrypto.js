@@ -80,9 +80,15 @@ exports.encryption = {
    * @returns {*}
    */
   decrypt: function (key, str) {
-    var decipher = crypto.createDecipher('aes-256-cbc', key);
-    var dec = decipher.update(str, 'hex', 'utf8');
-    dec += decipher.final('utf8');
+    var dec = '';
+    try{
+      var decipher = crypto.createDecipher('aes-256-cbc', key);
+      dec = decipher.update(str, 'hex', 'utf8');
+      dec += decipher.final('utf8');
+    }catch(e){
+      console.error('解密出错：' + e.message);
+      throw new Error('解密出错');
+    }
     return dec;
   },
   getKey: function () {

@@ -8,6 +8,9 @@ angular.module('hopefutureBlogApp')
       },
       changeAccountStatus: function (data, success) {
         hfbHttpService.post('manage/account/status', data).then(success);
+      },
+      changeManager:function(data, success){
+        hfbHttpService.post('manage/account/manager', data).then(success);
       }
     };
   }]);

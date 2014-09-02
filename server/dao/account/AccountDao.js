@@ -60,11 +60,20 @@ AccountDao.prototype.findByLoginNameAndPassword = function (data, callback) {
 AccountDao.prototype.signup = function (data, callback) {
   var loginName = data.loginName;
   var password = data.password;
-  if(!loginName || !password){//前端已校验，如果传过来的值为空，则是非法操作
+  var email = data.email;
+  delete data.password;
+  if (!loginName || !password) {//前端已校验，如果传过来的值为空，则是非法操作
     return callback(new Error(errorCodes['9002']));
   }
-  delete data.password;
-  var conditions = {loginName: loginName};
+  //校验密码规则
+  if (!/(^[a-zA-Z!@#$%^&*().]+[0-9]+|[0-9]+[a-zA-Z!@#$%^&*().]+[0-9]*$)/.test(password)) {
+    return callback(new Error(errorCodes['9002']));
+  }
+
+  var conditions = { $or: [
+    { loginName: loginName } ,
+    { email: email }
+  ] };
   var model = this.model;
 
   accountDao.find(conditions, function (err, models) {
@@ -116,7 +125,7 @@ AccountDao.prototype.pagination = function (dataPage, searchContent, callback) {
   model.count(conditions, function (err, count) {
     if (err === null) {
       dataPage.setTotalItems(count);
-      model.find(conditions, {_id: 1, loginName: 1, name: 1, sex: 1, residence: 1, position: 1, email: 1, site: 1, activated: 1}, {skip: skip, limit: limit, sort: {_id: -1}}, function (err, docs) {
+      model.find(conditions, {_id: 1, loginName: 1, name: 1, sex: 1, residence: 1, position: 1, email: 1, site: 1, activated: 1, manager: 1}, {skip: skip, limit: limit, sort: {_id: -1}}, function (err, docs) {
         dataPage.setItems(docs);
         return callback(err, dataPage);
       });
@@ -185,9 +194,14 @@ AccountDao.prototype.updateById = function (data, callback) {
  */
 
 AccountDao.prototype.updatePassword = function (data, callback) {
-  var loginName = data.loginName,
-    oldPassword = data.oldPassword,
-    password = data.password;
+  var loginName = data.loginName, oldPassword = data.oldPassword, password = data.password;
+  if (!loginName || !password) {//前端已校验，如果传过来的值为空，则是非法操作
+    return callback(new Error(errorCodes['9002']));
+  }
+  //校验密码规则
+  if (!/(^[a-zA-Z!@#$%^&*().]+[0-9]+|[0-9]+[a-zA-Z!@#$%^&*().]+[0-9]*$)/.test(password)) {
+    return callback(new Error(errorCodes['9002']));
+  }
 
   var model = this.model;
   model.findOne({loginName: loginName}, function (err, account) {

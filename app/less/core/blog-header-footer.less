@@ -45,9 +45,26 @@
   width: 100%;
 }
 
-//FIXME: 根据屏幕大小定义其大小，待完成
 .footer-assist {
-  padding-top: 204px;
+  padding-top: 350px;
+}
+
+@media (min-width: 768px) {
+  .footer-assist {
+    padding-top: 301px;
+  }
+}
+
+@media (min-width: 992px) {
+  .footer-assist {
+    padding-top: 256px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .footer-assist {
+    padding-top: 206px;
+  }
 }
 
 .footer-links {
@@ -77,7 +94,9 @@
 }
 
 .links-item-content > span {
+  display: inline-block;
   margin-right: @margin-md;
+  margin-top: @margin-sm;
 }
 
 .links-item-content a,

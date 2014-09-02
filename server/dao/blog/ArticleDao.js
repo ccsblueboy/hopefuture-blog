@@ -203,7 +203,9 @@ ArticleDao.prototype.pagination = function (loginName, searchContent, dataPage, 
       dataPage.setTotalItems(count);
       var categoryIds = [], labelIds = [], articlesData, categoryMap = {}, labelMap = {}, articleIds = [], readMap = {}, commentMap = {};
 
-      var promise = model.find(conditions, {_id: 1, title: 1, account: 1, status: 1, articleLink: 1, categories: 1, labels: 1, top: 1, boutique: 1, createdDate: 1}, {skip: skip, limit: limit}).exec();
+      var promise = model.find(conditions,
+        {_id: 1, title: 1, account: 1, status: 1, articleLink: 1, categories: 1, labels: 1, top: 1, homeTop: 1,  boutique: 1, createdDate: 1},
+        {skip: skip, limit: limit}).exec();
 
       promise.then(function (articles) {
         articlesData = articles.map(function(item){
@@ -606,7 +608,7 @@ ArticleDao.prototype.boutiqueArticle = function (dataPage, callback) {
   model.count(conditions, function (err, count) {
     if (err === null) {
       dataPage.setTotalItems(count);
-      getArticlePagination(model, conditions, skip, limit, {sort: {_id: -1}}, dataPage, callback);
+      getArticlePagination(model, conditions, skip, limit, {sort: {homeTop: -1, _id: -1}}, dataPage, callback);
     }
   });
 };

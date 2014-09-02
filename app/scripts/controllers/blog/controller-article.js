@@ -116,7 +116,7 @@ angular.module('hopefutureBlogApp')
             callback(true);
           }
           $timeout(function(){
-            syntaxHighlighter.format('/bower_components/SyntaxHighlighter/scripts/');
+            syntaxHighlighter.autoLoader($scope.development === true ? '/bower_components/SyntaxHighlighter/scripts/' : '/scripts/syntaxHighlighter/');
             $scope.showArticleInfo = true;
           },100);
         } else {

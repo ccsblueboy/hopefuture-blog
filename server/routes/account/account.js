@@ -3,6 +3,7 @@
 var accountDao = require('../../dao/account/AccountDao');
 var DataPage = require('../../utils/DataPage');
 var sessionManage = require('../../utils/sessionManage');
+var errorCodes = require('../../utils/errorCodes');
 var underscore = require('underscore');
 
 var account = {
@@ -27,6 +28,14 @@ var account = {
   },
 
   changeAccountStatus: function (req, res) {
+    var isAdministrator = sessionManage.isAdministrator(req);
+    if(!isAdministrator){
+      res.send({
+        success: false,
+        errorMessage: errorCodes['9002']
+      });
+      return;
+    }
     var status = req.body.status;
     var ids = req.body.ids;// ids is Array
     if (!underscore.isArray(ids)) {
@@ -73,24 +82,39 @@ var account = {
   updatePassword: function (req, res) {
     var data = req.body;
     accountDao.updatePassword(data, function (err) {
-      var message = '';
+      var errorMessage = '';
       var success = false;
       if (err) {
         switch (err) {
           case -1:
-            message = '该用户不存在！请重新输入';
+            errorMessage = '该用户不存在！请重新输入';
             break;
           case -2:
-            message = '你输入的原密码不正确！请重新输入';
+            errorMessage = '你输入的原密码不正确！请重新输入';
             break;
           default:
-            message = err.message;
+            errorMessage = err.message;
         }
       } else {
         success = true;
         sessionManage.clearAccountCookie(res);
       }
-      res.send({success: success, message: message});
+      res.send({success: success, errorMessage: errorMessage});
+    });
+  },
+
+  changeManager: function (req, res) {
+    var isAdministrator = sessionManage.isAdministrator(req);
+    if(!isAdministrator){
+      res.send({
+        success: false,
+        errorMessage: errorCodes['9002']
+      });
+      return;
+    }
+    var data = req.body;
+    accountDao.updateById({_id: data._id}, {manager: data.manager}, function (err) {
+      res.send({success: err === null});
     });
   }
 };
@@ -103,6 +127,7 @@ router.post('/status', account.changeAccountStatus);
 router.get('/info', account.findAccount);
 router.post('/', account.update);
 router.post('/password', account.updatePassword);
+router.post('/manager', account.changeManager);
 
 /**
  * 用户信息路由

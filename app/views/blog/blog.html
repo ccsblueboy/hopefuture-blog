@@ -1,4 +1,4 @@
-<div ng-controller="BlogCtrl" ng-init="logined = <%= locals.logined %>;loginName = '<%= locals.loginName %>';">
+<div ng-controller="BlogCtrl" ng-init="logined = <%= locals.logined %>;loginName = '<%= locals.loginName %>';development = <%= locals.development %>;">
   <div class="jumbotron">
     <div class="container">
       <h1>我的博客</h1>
@@ -14,7 +14,7 @@
 
     <div class="row">
 
-      <section class="col-md-8 col-sm-7 section">
+      <section class="col-lg-9 col-md-8 col-sm-7 section">
         <div ng-if="logined">
           <div class="clearfix">
             <button class="btn btn-link btn-lg pull-right" type="button" ng-click="manageBlog();">
@@ -35,7 +35,7 @@
         </div>
       </section>
 
-      <aside class="col-md-4 col-sm-5 article-aside-panel">
+      <aside class="col-lg-3 col-md-4 col-sm-5 article-aside-panel">
         <div class="input-group has-success">
           <input type="text" class="form-control" placeholder="Search">
           <span class="input-group-btn">

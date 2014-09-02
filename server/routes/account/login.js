@@ -35,7 +35,8 @@ var account = {
             loginName: doc.loginName,
             email: doc.email,
             site: doc.site,
-            headPortrait: doc.headPortrait
+            headPortrait: doc.headPortrait,
+            manager: doc.manager
           });
           success = true;
           //设置cookie

@@ -152,4 +152,30 @@ angular.module('hopefutureBlogApp')
       });
     };
 
+    /**
+     * 是否首页置顶
+     * @param item
+     */
+    $scope.changeHomeTop = function (item) {
+      var modalInstance = $modal.open({
+        backdrop: 'static',
+        templateUrl: '../views/templates/confirm-modal.html',
+        controller: 'ConfirmModalCtrl',
+        resolve: {
+          config: function () {
+            return {
+              modalContent: item.homeTop ? '确定要取消首页置顶吗？' : '确定要首页置顶吗？'
+            };
+          }
+        }
+      });
+      modalInstance.result.then(function () {
+        articleService.changeHomeTop({_id: item._id, homeTop: !item.homeTop}, function (data) {
+          if (data.success === true) {
+            item.homeTop = !item.homeTop;
+          }
+        });
+      });
+    };
+
   });

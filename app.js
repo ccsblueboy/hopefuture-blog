@@ -48,32 +48,43 @@ app.use(session({
  * 如果自动登录，先从cookie中取信息，再设置session
  */
 app.use(function (req, res, next) {
-  if (sessionManage.isStaticResource(req)) {
+  if (sessionManage.isLogined(req)) {
     next();
   } else {
-    var loginName = req.cookies.loginName,
-      password = req.cookies.password,
-      key = req.cookies.key;
-    if (loginName && password && key) {
-      //cookie 密钥
-      var cookieSecret = new RegExp(config.cookieSecret,'g');
-      key = key.replace(cookieSecret, '=');
-      loginName = encryption.decrypt(key, loginName);
-      password = encryption.decrypt(key, password);
-      accountDao.findByLoginNameAndPassword({loginName: loginName, password: password}, function (err, doc) {
-        if (err === 1) {
-          sessionManage.setAccountSession(req, {
-            _id: doc._id,
-            loginName: doc.loginName,
-            email: doc.email,
-            site: doc.site,
-            headPortrait: doc.headPortrait
-          });
-        }
-        next();
-      });
-    } else {
+    if (sessionManage.isStaticResource(req)) {
       next();
+    } else {
+      var loginName = req.cookies.loginName, password = req.cookies.password, key = req.cookies.key;
+      if (loginName && password && key) {
+        //cookie 密钥
+        var cookieSecret = new RegExp(config.cookieSecret, 'g');
+        key = key.replace(cookieSecret, '=');
+        try {
+          loginName = encryption.decrypt(key, loginName);
+          password = encryption.decrypt(key, password);
+        } catch (e) {
+          console.error('解密出错：' + e.message);
+          //清空Cookie，跳到登录页面重新登录
+          sessionManage.clearAccountCookie(res);
+          res.redirect(302, '/login');
+        }
+
+        accountDao.findByLoginNameAndPassword({loginName: loginName, password: password}, function (err, doc) {
+          if (err === 1) {
+            sessionManage.setAccountSession(req, {
+              _id: doc._id,
+              loginName: doc.loginName,
+              email: doc.email,
+              site: doc.site,
+              headPortrait: doc.headPortrait,
+              manager: doc.manager
+            });
+          }
+          next();
+        });
+      } else {
+        next();
+      }
     }
   }
 });
@@ -86,7 +97,8 @@ app.use(function (req, res, next) {
     var account = sessionManage.getAccountSession(req);
     res.locals.logined = account ? true : false;
     res.locals.loginName = account ? account.loginName : '';
-    res.locals.administrator = account ? account.loginName === 'administrator' : false;//是否是管理员
+    res.locals.administrator = account ? account.loginName === 'administrator' : false;//是否是超级管理员
+    res.locals.manager = account ? account.manager === true : false;//是否是管理员
 
     //设置用户主题
     var theme = req.cookies.theme;
@@ -162,6 +174,11 @@ app.use(function (req, res, next) {
   }
 });
 
+//设置是否为开发环境
+app.use(function (req, res, next) {
+  res.locals.development = 'development' === app.get('env');
+  next();
+});
 
 //定义路由
 routes(app);
@@ -184,6 +201,7 @@ app.use(function (req, res, next) {
 
 // error handler
 app.use(function (err, req, res, next) {
+  console.error(err.message);
   res.status(err.status || 500);
   res.render('errors/error', {
     message: err.message,

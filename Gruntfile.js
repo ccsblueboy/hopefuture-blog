@@ -358,11 +358,16 @@ module.exports = function (grunt) {
           },
           {
             expand: true,
+            cwd: '<%= yeoman.app %>/bower_components/tinymce-syntaxhighlighter',
+            src: 'images/*',
+            dest: '<%= yeoman.webapp %>'
+          },
+          {
+            expand: true,
             cwd: './',
             dest: '<%= yeoman.dist %>',
             src: [
-              '<%= yeoman.server %>/**',
-              '!<%= yeoman.server %>/publish-config.js'
+              '<%= yeoman.server %>/**'
             ]
           },
           {
@@ -388,8 +393,14 @@ module.exports = function (grunt) {
       tinymce: {
         expand: true,
         cwd: '<%= yeoman.app %>/bower_components/tinymce',
-        src: ['plugins/*/*.min.js', 'themes/*/*.min.js'],
+        src: ['plugins/*/*.js', 'themes/*/*.js', 'skins/**', '!plugins/*/*.min.js', '!themes/*/*.min.js'],
         dest: '<%= yeoman.webapp %>/scripts'
+      },
+      syntaxHighlighter: {
+        expand: true,
+        cwd: '<%= yeoman.app %>/bower_components/SyntaxHighlighter/scripts',
+        src: ['**', '!XRegExp.js', '!shCore.js', '!shAutoloader.js', '!shBrushXml.js'],
+        dest: '<%= yeoman.webapp %>/scripts/syntaxHighlighter'
       }
     },
 
@@ -663,7 +674,7 @@ module.exports = function (grunt) {
      * expand 表示展开，flatten设为false表示按照源文件的目录结构copy，设为true会把所有文件copy到一个文件夹下
      */
     replace: {
-      dist: {
+      app: {
         options: {
           usePrefix: false,// Default: true And  prefix Default: @@
           patterns: [
@@ -697,13 +708,25 @@ module.exports = function (grunt) {
      * 压缩server js
      **/
     uglify: {
-      server: {
+      app: {
         files: [
           {
             expand: true,
             cwd: '<%= yeoman.dist %>/server',
             src: '**/*.js',
             dest: '<%= yeoman.dist %>/server'
+          },
+          {
+            expand: true,
+            cwd: '<%= yeoman.webapp %>/scripts',
+            src: ['plugins/*/*.js', 'themes/*/*.js'],
+            dest: '<%= yeoman.webapp %>/scripts'
+          },
+          {
+            expand: true,
+            cwd: '<%= yeoman.webapp %>/scripts/syntaxHighlighter',
+            src: ['*.js'],
+            dest: '<%= yeoman.webapp %>/scripts/syntaxHighlighter'
           }
         ]
       }
@@ -759,10 +782,11 @@ module.exports = function (grunt) {
     'uglify:generated',// 用 useminPrepare 生成的 uglify config 压缩 js
     'filerev',// 重新命名文件名，在 webapp下
     'usemin', // 用重新命名的压缩文件替换
-    'uglify:server',// 压缩server文件
-    'replace:dist',//替换文件
+    'replace:app',//替换文件
     'htmlmin', // 处理html文件（删除多余的代码，包括空格和换行，注释等）
-    'copy:tinymce'//复制 tinymce 插件和主题
+    'copy:tinymce',//复制 tinymce 插件、主题和皮肤
+    'copy:syntaxHighlighter',//复制 SyntaxHighlighter Brush
+    'uglify:app'// 压缩 tinymce 插件和主题、server文件、SyntaxHighlighter Brush
   ]);
 
   grunt.registerTask('generatedoc', [

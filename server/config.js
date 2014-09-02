@@ -1,6 +1,9 @@
 'use strict';
 
 /**
+ * 该文件为项目发布配置文件
+ * 等正式环境中，用该文件替换config.js
+ * 该文件不会上传到github上
  * 配置mongodb 相关参数
  * @module config
  * @since 0.0.2
@@ -57,9 +60,16 @@ module.exports = {
    * 邮箱配置项
    */
   mailConfig: {
-    user: 'hopefuture_blog@126.com',
-    pass: 'linder!(*))@09',
-    from: 'hopefuture_blog@126.com'
-  }
+    host: '',
+    port: 25,
+    user: '',
+    pass: '',
+    from: ''
+  },
+
+  /**
+   * 超级用户名密码
+   */
+  administratorPassword: '11111A'
 
 };

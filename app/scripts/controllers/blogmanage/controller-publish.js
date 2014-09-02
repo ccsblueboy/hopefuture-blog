@@ -44,7 +44,6 @@ angular.module('hopefutureBlogApp').controller('PublishCtrl', function ($scope, 
     height: 400,
     menubar: false, //Disable all menu
     content_css: '/styles/tinymce.css',
-    syntaxhighlighter_image_url: '../bower_components/tinymce-syntaxhighlighter/',
     plugins: [
       'autolink link image preview hr code fullscreen table textcolor charmap syntaxhighlighter'
     ],

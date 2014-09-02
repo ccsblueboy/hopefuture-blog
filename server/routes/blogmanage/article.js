@@ -2,6 +2,8 @@
 
 var articleDao = require('./../../dao/blog/ArticleDao.js');
 var DataPage = require('../../utils/DataPage');
+var sessionManage = require('../../utils/sessionManage');
+var errorCodes = require('../../utils/errorCodes');
 
 var article = {
 
@@ -69,8 +71,31 @@ var article = {
   },
 
   changeBoutique: function (req, res) {
+    var isManager = sessionManage.isManager(req);
+    if(!isManager){
+      res.send({
+        success: false,
+        errorMessage: errorCodes['9002']
+      });
+      return;
+    }
     var data = req.body;
     articleDao.update({_id: data._id}, {$set: {boutique: data.boutique}}, function (err) {
+      res.send({success: err === null});
+    });
+  },
+
+  changeHomeTop: function (req, res) {
+    var isManager = sessionManage.isManager(req);
+    if(!isManager){
+      res.send({
+        success: false,
+        errorMessage: errorCodes['9002']
+      });
+      return;
+    }
+    var data = req.body;
+    articleDao.update({_id: data._id}, {$set: {homeTop: data.homeTop}}, function (err) {
       res.send({success: err === null});
     });
   }
@@ -84,6 +109,7 @@ router.post('/', article.save);
 router.get('/:id', article.edit);
 router.delete('/', article.delete);
 router.post('/boutique', article.changeBoutique);
+router.post('/homeTop', article.changeHomeTop);
 
 /**
  * 文章管理路由

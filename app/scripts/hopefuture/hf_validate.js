@@ -1,12 +1,23 @@
 'use strict';
 
 (function () {
+  var onkeyup = $.validator.defaults.onkeyup;
   $.validator.setDefaults({
     //延迟校验
     onfocusout: function (e) {
       setTimeout(function () {
         $(e).valid();
       }, 150);
+    },
+    //重新实现onkeyup事件，当远程校验时，按下按键不触发该事件
+    onkeyup: function (element, event) {
+      var rules = $(element).rules();
+      for (var rule in rules) {
+        if (rule === 'remote') {
+          return;
+        }
+      }
+      onkeyup.call(this, element, event);
     },
     // For the invisible tags, we need to validate too.
     ignore: 'input[type="hidden"], :button, :hidden',
@@ -27,11 +38,11 @@
         return !value || /^[a-zA-Z\d_.@-]*$/.test(value);
       }
     },
-    passwordStrategy: {
-      message: '密码必须是字母、数字以及符号（! @ # $ % ^ & * ( ) .）组合',
+    passwordstrategy: {
+      message: '密码至少是字母、数字或者符号（! @ # $ % ^ & * ( ) .）中的两种组合',
       fn: function(value, element, param) {
-        var publicPattern = /(^[a-zA-Z!@#$%^&*]+[0-9]+|[0-9]+[a-zA-Z!@#$%^&*]+[0-9]*$)/;
-        return !value || publicPattern.test(value);
+        var pattern = /(^[a-zA-Z!@#$%^&*().]+[0-9]+|[0-9]+[a-zA-Z!@#$%^&*().]+[0-9]*$)/;
+        return !value || pattern.test(value);
       }
     }
   };

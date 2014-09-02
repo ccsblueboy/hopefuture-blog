@@ -119,6 +119,32 @@ angular.module('hopefutureBlogApp')
       }
     };
 
+    /**
+     * 设置，取消用户为管理员
+     * @param item
+     */
+    $scope.changeManager = function(item){
+      var modalInstance = $modal.open({
+        backdrop: 'static',
+        templateUrl: '../views/templates/confirm-modal.html',
+        controller: 'ConfirmModalCtrl',
+        resolve: {
+          config: function () {
+            return {
+              modalContent: item.manager ? '确定要取消管理员吗？' : '确定要设置为管理员吗？'
+            };
+          }
+        }
+      });
+      modalInstance.result.then(function () {
+        accountService.changeManager({_id: item._id, manager: !item.manager}, function (data) {
+          if (data.success === true) {
+            item.manager = !item.manager;
+          }
+        });
+      });
+    };
+
     $scope.selectAll = function () {
       angular.forEach($scope.items, function (item, index) {
         item.checked = $scope.grid.checked;

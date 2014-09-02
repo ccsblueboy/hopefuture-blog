@@ -44,7 +44,8 @@
     <th>浏览次数</th>
     <th>评论</th>
     <th>创建日期</th>
-    <th ng-if="administrator">首页显示</th>
+    <th ng-if="manager">首页显示</th>
+    <th ng-if="manager">首页置顶</th>
     <th>&nbsp;</th>
   </tr>
   </thead>
@@ -63,7 +64,8 @@
     <td>{{item.readCounts}}</td>
     <td>{{item.commentCounts}}</td>
     <td>{{item.createdDate | date:'yyyy-MM-dd HH:mm:ss'}}</td>
-    <td ng-if="administrator"><button class="btn btn-primary btn-xs" ng-click="changeBoutique(item);">{{item.boutique?'是':'否'}}</button></td>
+    <td ng-if="manager"><button class="btn btn-primary btn-xs" ng-click="changeBoutique(item);">{{item.boutique?'是':'否'}}</button></td>
+    <td ng-if="manager"><button class="btn btn-primary btn-xs" ng-click="changeHomeTop(item);">{{item.homeTop?'是':'否'}}</button></td>
     <td>
       <a class="glyphicon glyphicon-pencil" href="" ng-click="edit(item._id);"></a>
       <a class="glyphicon glyphicon-trash" href="" ng-click="delete(item);"></a>

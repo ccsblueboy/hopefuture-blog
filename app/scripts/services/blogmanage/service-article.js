@@ -11,6 +11,9 @@ angular.module('hopefutureBlogApp')
       },
       changeBoutique: function (data, success) {
         hfbHttpService.post('manage/article/boutique', data).then(success);
+      },
+      changeHomeTop: function (data, success) {
+        hfbHttpService.post('manage/article/homeTop', data).then(success);
       }
     };
   }])

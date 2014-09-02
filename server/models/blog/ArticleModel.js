@@ -25,6 +25,7 @@ var schema = new Schema({
   labels: { type: Array },//文章标签
   createdMonth: { type: String },//创建的月份，方便文章归档显示
   boutique: {type: Boolean},//是否被推荐到首页显示，由管理员操作
+  homeTop: {type: Boolean, default: false },//文章首页置顶，即博客首页，只有管理员才有权限设置
   createdDate: { type: Date, default: Date.now },
   updatedDate: { type: Date, default: Date.now },
   readCounts: { type: Number }//浏览总数

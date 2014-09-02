@@ -64,6 +64,7 @@ angular.module('hopefutureBlogApp')
           $scope.$parent.alerts = [
             {type: 'danger', message: data.errorMessage}
           ];
+          $('#loginName')[0].focus();
         }
       });
     };
