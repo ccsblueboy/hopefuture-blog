@@ -391,10 +391,20 @@ module.exports = function (grunt) {
         src: '{,**/}*.css'
       },
       tinymce: {
-        expand: true,
-        cwd: '<%= yeoman.app %>/bower_components/tinymce',
-        src: ['plugins/*/*.js', 'themes/*/*.js', 'skins/**', '!plugins/*/*.min.js', '!themes/*/*.min.js'],
-        dest: '<%= yeoman.webapp %>/scripts'
+        files: [
+          {
+            expand: true,
+            cwd: '<%= yeoman.app %>/bower_components/tinymce',
+            dest: '<%= yeoman.webapp %>/scripts',
+            src: ['plugins/*/*.js', 'themes/*/*.js', 'skins/**', '!plugins/*/*.min.js', '!themes/*/*.min.js']
+          },
+          {
+            expand: true,
+            cwd: '<%= yeoman.app %>/styles',
+            dest: '<%= yeoman.webapp %>/styles',
+            src: ['tinymce.css']
+          }
+        ]
       },
       syntaxHighlighter: {
         expand: true,
