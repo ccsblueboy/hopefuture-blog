@@ -1,6 +1,6 @@
 'use strict';
 
-var demoDao = require('./../../dao/examples/DemoDao.js');
+var demoDao = require('./../../dao/examples/DemoDao');
 var grid = {
   index: function (req, res) {
     res.render('examples/demo-grid', {

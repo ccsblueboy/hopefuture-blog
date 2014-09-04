@@ -33,7 +33,7 @@ app.set('view engine', 'html');
 app.use(favicon(__dirname + '/' + ('development' === app.get('env') ? 'app' : 'webapp') + '/favicon.png'));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded());
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser(config.cookieSecret));
 
 // Populates req.session
@@ -187,9 +187,11 @@ routes(app);
 if ('development' === app.get('env')) {
   app.set('views', path.join(__dirname, 'app'));
   app.use(express.static(path.join(__dirname, 'app')));
+  process.env.PORT = 9000;
 } else {
   app.set('views', path.join(__dirname, 'webapp'));
   app.use(express.static(path.join(__dirname, 'webapp')));
+  process.env.PORT = 18080;//基于Baidu BEA3.0
 }
 
 /// catch 404 and forwarding to error handler

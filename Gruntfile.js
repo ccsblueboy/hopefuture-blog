@@ -335,7 +335,8 @@ module.exports = function (grunt) {
               'examples/{,*/}*.html',
               'themes/{,*/}*.html',
               'images/{,*/}*.{webp}',
-              'fonts/*'
+              'fonts/*',
+              'app.conf'
             ]
           },
           {

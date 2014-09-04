@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 var debug = require('debug')('hopefuture-blog');
 var app = require('../app');
 

@@ -1,6 +1,6 @@
 'use strict';
 
-var demoDao = require('./../../dao/examples/DemoDao.js');
+var demoDao = require('./../../dao/examples/DemoDao');
 var DataPage = require('../../utils/DataPage');
 
 var pagination = {

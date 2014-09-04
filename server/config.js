@@ -27,10 +27,17 @@ module.exports = {
    * session 密钥
    */
   sessionSecret: 'hope future blog, very secret',
+
   /**
-   * 连接mongodb url
+   * 连接mongodb 相关配置
    */
-  connectionUrl: 'mongodb://localhost/hfblog',
+  mongodb: {
+    host: 'localhost',
+    port: '27017',
+    database: 'hfblog',
+    user: '',
+    pass: ''
+  },
 
   /**
    * 注册用户时，保留的注册名称
