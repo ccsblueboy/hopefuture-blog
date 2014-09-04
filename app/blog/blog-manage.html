@@ -19,7 +19,7 @@
 </head>
 <body ng-app="hopefutureBlogApp" ng-controller="HopefutureBlogCtrl" start-ajax-loading="true">
 <% include ../views/common/header.html %>
-<div class="container-fluid" ng-controller="BlogManageCtrl" ng-init="manager=<%= locals.manager %>;">
+<div class="container-fluid" ng-controller="BlogManageCtrl">
 
   <div class="row">
 
@@ -36,6 +36,11 @@
         <% if (locals.administrator) { %>
         <li link-active="active"><a href="" ng-href="#/account">用户管理</a></li>
         <% } %>
+
+        <% if (locals.manager) { %>
+        <li link-active="active"><a href="" ng-href="#/audit">文章审核</a></li>
+        <% } %>
+
       </ul>
     </div>
 
@@ -121,6 +126,13 @@
 <!-- build:js ../scripts/blog-manage-administrator.js -->
 <script src="../scripts/services/account/service-account.js"></script>
 <script src="../scripts/controllers/account/controller-account.js"></script>
+<!-- endbuild -->
+<% } %>
+
+<% if (locals.manager) { %>
+<!-- build:js ../scripts/blog-manage-manager.js -->
+<script src="../scripts/services/blogmanage/service-audit.js"></script>
+<script src="../scripts/controllers/blogmanage/controller-audit.js"></script>
 <!-- endbuild -->
 <% } %>
 

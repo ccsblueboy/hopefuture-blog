@@ -1,4 +1,4 @@
-<h3 class="page-header">文章管理</h3>
+<h3 class="page-header">文章审核</h3>
 <div class="blog-btn-group">
   <div class="btn-group">
     <button type="button" class="btn btn-primary" ng-click="delete();">
@@ -6,11 +6,6 @@
     </button>
   </div>
 
-  <div class="btn-group">
-    <button type="button" class="btn btn-primary" ng-click="create();">
-      <span class="glyphicon glyphicon-plus"></span> 写文章
-    </button>
-  </div>
 
   <div class="btn-group">
     <div class="input-group has-success">
@@ -23,12 +18,6 @@
     </div>
   </div>
 
-  <!--FIXME: 待实现-->
-  <!--<div class="btn-group">
-    <button type="button" class="btn btn-primary" ng-click="">
-      高级查询
-    </button>
-  </div>-->
 </div>
 <hr/>
 
@@ -37,13 +26,15 @@
   <tr>
     <th><input type="checkbox" ng-model="grid.checked" ng-change="selectAll()"/></th>
     <th>标题</th>
+    <th>作者</th>
     <th>分类</th>
     <th>标签</th>
-    <th>状态</th>
     <th>置顶</th>
     <th>浏览次数</th>
     <th>评论</th>
     <th>创建日期</th>
+    <th>首页显示</th>
+    <th>首页置顶</th>
     <th>&nbsp;</th>
   </tr>
   </thead>
@@ -55,15 +46,16 @@
         <a ng-href="/{{item.account}}#/article/{{item._id}}" target="_blank">{{item.title | truncate:50:true:' ...'}}</a>
       </div>
     </td>
+    <td>{{item.account}}</td>
     <td>{{item.categories | arrayToStr:'、':'未分类' | truncate:20:true:' ...'}}</td>
     <td>{{item.labels | arrayToStr:'、':'—' | truncate:20:true:' ...'}}</td>
-    <td>{{item.status}}</td>
     <td>{{item.top?'是':'否'}}</td>
     <td>{{item.readCounts}}</td>
     <td>{{item.commentCounts}}</td>
     <td>{{item.createdDate | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+    <td><button class="btn btn-primary btn-xs" ng-click="changeBoutique(item);">{{item.boutique?'是':'否'}}</button></td>
+    <td><button class="btn btn-primary btn-xs" ng-click="changeHomeTop(item);">{{item.homeTop?'是':'否'}}</button></td>
     <td>
-      <a class="glyphicon glyphicon-pencil" href="" ng-click="edit(item._id);"></a>
       <a class="glyphicon glyphicon-trash" href="" ng-click="delete(item);"></a>
     </td>
   </tr>

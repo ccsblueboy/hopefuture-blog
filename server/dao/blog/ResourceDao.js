@@ -26,7 +26,9 @@ module.exports = resourceDao;
  * @param callback {function}回调函数
  */
 ResourceDao.prototype.save = function (data, callback) {
-  if (data._id) {
+  var id = data._id;
+  if (id) {
+    delete data._id;
     data.updatedDate = new Date();
     this.model.update({_id: data._id}, data, function (err, numberAffected, rawResponse) {
       return callback(err);

@@ -15,8 +15,8 @@ var article = {
     var loginName = req.baseUrl.split('/')[1];
     var dataPage = new DataPage(options);
     var searchContent = req.query.searchContent;
-    
-    articleDao.pagination(loginName, searchContent, dataPage, function (err, data) {
+
+    articleDao.pagination(null, searchContent, dataPage, function (err, data) {
       if (err) {
         res.send({success: false});
       } else {
@@ -28,37 +28,16 @@ var article = {
     });
   },
 
-  save: function (req, res) {
-    var data = req.body;
-    var loginName = req.baseUrl.split('/')[1];
-    data.account = loginName;
-    articleDao.save(data, function (err, id) {
-      if (err) {
-        console.error(err);
-        res.send({success: false, err: err});
-      } else {
-        res.send({
-          success: true,
-          _id: id
-        });
-      }
-    });
-  },
 
-  edit: function (req, res) {
-    var id = req.params.id;
-    articleDao.findById(id, function (err, model) {
-      if (err) {
-        res.send({success: false});
-      } else {
-        res.send({
-          success: true,
-          item: model
-        });
-      }
-    });
-  },
   delete: function (req, res) {
+    var isManager = sessionManage.isManager(req);
+    if(!isManager){
+      res.send({
+        success: false,
+        errorMessage: errorCodes['9002']
+      });
+      return;
+    }
     var ids = req.query.ids;// ids is Array
     if (Object.prototype.toString.call(ids) !== '[object Array]') {
       ids = [ids];
@@ -68,6 +47,36 @@ var article = {
     articleDao.delete(loginName, ids, function (err) {
       res.send({success: err === null});
     });
+  },
+
+  changeBoutique: function (req, res) {
+    var isManager = sessionManage.isManager(req);
+    if(!isManager){
+      res.send({
+        success: false,
+        errorMessage: errorCodes['9002']
+      });
+      return;
+    }
+    var data = req.body;
+    articleDao.update({_id: data._id}, {$set: {boutique: data.boutique}}, function (err) {
+      res.send({success: err === null});
+    });
+  },
+
+  changeHomeTop: function (req, res) {
+    var isManager = sessionManage.isManager(req);
+    if(!isManager){
+      res.send({
+        success: false,
+        errorMessage: errorCodes['9002']
+      });
+      return;
+    }
+    var data = req.body;
+    articleDao.update({_id: data._id}, {$set: {homeTop: data.homeTop}}, function (err) {
+      res.send({success: err === null});
+    });
   }
 };
 
@@ -75,17 +84,17 @@ var express = require('express');
 var router = express.Router();
 
 router.get('/', article.paging);
-router.post('/', article.save);
-router.get('/:id', article.edit);
 router.delete('/', article.delete);
+router.post('/boutique', article.changeBoutique);
+router.post('/homeTop', article.changeHomeTop);
 
 /**
- * 文章管理路由
+ * 文章审核路由
  * @module article
- * @since 0.0.2
+ * @since 0.2.1
  * @version @@currentVersion
  * @author Linder linder0209@126.com
- * @createdDate 2014-6-16
+ * @createdDate 2014-9-4
  * */
 
 module.exports = router;

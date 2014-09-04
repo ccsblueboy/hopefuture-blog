@@ -16,6 +16,7 @@ var label = require('./blogmanage/label');
 var comment = require('./blogmanage/comment');
 var resource = require('./blogmanage/resource');
 var setting = require('./blogmanage/setting');
+var auditArticle = require('./blogmanage/auditArticle');
 var blog = require('./blog/blog');
 var blogSetting = require('./blog/blogSetting');
 
@@ -90,5 +91,6 @@ module.exports = function (app) {
   app.use('/:account/manage/resource', resource);// 资源链接
   app.use('/:account/manage/account', account);// 用户信息
   app.use('/:account/manage/setting', setting);// 博客设置
+  app.use('/:account/manage/auditarticle', auditArticle);// 审核文章
 
 };

@@ -51,6 +51,10 @@ angular.module('hopefutureBlogApp', ['ngRoute', 'ngAnimate', 'ngSanitize', 'ui.b
         templateUrl: '../views/account/account.html',
         controller: 'AccountCtrl'
       })
+      .when('/audit', {//文章审核，只有管理员administrator才能操作
+        templateUrl: '../views/blogmanage/audit.html',
+        controller: 'AuditCtrl'
+      })
       .otherwise({
         redirectTo: '/article'
       });

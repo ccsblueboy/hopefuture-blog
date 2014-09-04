@@ -10,6 +10,10 @@
  * */
 
 angular.module('hopefutureBlogApp').controller('PublishCtrl', function ($scope, $filter, $location, publishService) {
+  //先销毁tinyMCE实例
+  if(tinymce && tinymce.get('content')){
+    tinymce.get('content').destroy();
+  }
 
   $scope.header = '撰写新文章';
   $scope.editStatus = false;

@@ -126,6 +126,7 @@ ArticleDao.prototype.save = function (data, callback) {
               });
 
               data.updatedDate = new Date();
+              delete data._id;
               model.update({_id: data._id}, data, function (err, numberAffected, rawResponse) {
                 return callback(err);
               });
@@ -190,7 +191,10 @@ ArticleDao.prototype.pagination = function (loginName, searchContent, dataPage, 
   var limit = dataPage.itemsPerPage;
   var model = this.model;
 
-  var conditions = {account: loginName};
+  var conditions = {};
+  if(loginName){
+    conditions = {account: loginName};
+  }
   if (searchContent) {
     var match = new RegExp(searchContent, 'ig');
     underscore.extend(conditions, { $or: [
@@ -205,7 +209,7 @@ ArticleDao.prototype.pagination = function (loginName, searchContent, dataPage, 
 
       var promise = model.find(conditions,
         {_id: 1, title: 1, account: 1, status: 1, articleLink: 1, categories: 1, labels: 1, top: 1, homeTop: 1,  boutique: 1, createdDate: 1},
-        {skip: skip, limit: limit}).exec();
+        {skip: skip, limit: limit, sort: {createdDate: -1}}).exec();
 
       promise.then(function (articles) {
         articlesData = articles.map(function(item){

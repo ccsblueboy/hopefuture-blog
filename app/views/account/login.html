@@ -10,26 +10,26 @@
         <label for="loginName" class="control-label">账号</label>
         <a ng-href="/forgot#/loginname" class="pull-right">忘记账户</a>
         <input type="text" class="form-control" id="loginName" name="loginName" minlength="4" maxlength="80" required
-               ng-model="account.loginName" placeholder="请输入账号"/>
+               ng-model="account.loginName" placeholder="请输入账号" tabindex="1"/>
       </div>
 
       <div class="form-group">
         <label for="password" class="control-label">密码</label>
         <a ng-href="/forgot#/password" class="pull-right">忘记密码</a>
         <input type="password" class="form-control" id="password" name="password" minlength="6" maxlength="80" required
-               ng-model="account.password" placeholder="请输入密码"/>
+               ng-model="account.password" placeholder="请输入密码" tabindex="2"/>
       </div>
 
       <div class="form-group">
         <div class="checkbox">
           <label>
-            <input type="checkbox" name="keepSigned" id="keepSigned" ng-model="account.keepSigned"> 下次自动登录
+            <input type="checkbox" name="keepSigned" id="keepSigned" ng-model="account.keepSigned" tabindex="3"> 下次自动登录
           </label>
         </div>
       </div>
 
       <div class="form-group">
-        <button type="submit" class="btn btn-primary">登录</button>
+        <button type="submit" class="btn btn-primary" tabindex="4">登录</button>
       </div>
 
       <div class="form-group">

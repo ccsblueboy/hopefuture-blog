@@ -1,16 +1,16 @@
 'use strict';
 
 /**
- * 文章管理 Controller
- * @class ArticleCtrl
- * @since 0.2.0
+ * 文章审核 Controller
+ * @class AuditCtrl
+ * @since 0.2.1
  * @version @@currentVersion
  * @author Linder linder0209@126.com
- * @createdDate 2014-6-16
+ * @createdDate 2014-9-4
  * */
 
 angular.module('hopefutureBlogApp')
-  .controller('ArticleCtrl', function ($scope, $location, $modal, articleService, articleStatus) {
+  .controller('AuditCtrl', function ($scope, $location, $modal, auditService) {
     //初始化记录
     $scope.items = [];
     $scope.grid = {
@@ -29,12 +29,9 @@ angular.module('hopefutureBlogApp')
       if ($scope.searchContent) {
         params.searchContent = $scope.searchContent;
       }
-      articleService.paging({params: params}, function (data) {
+      auditService.paging({params: params}, function (data) {
         if (data.success === true) {
           $scope.items = data.dataPage.items;
-          angular.forEach($scope.items, function (item, index) {
-            item.status = articleStatus[item.status];
-          });
           $scope.totalItems = data.dataPage.totalItems;
         }
       });
@@ -45,14 +42,6 @@ angular.module('hopefutureBlogApp')
       $scope.loadPageData();
     };
 
-    $scope.create = function () {
-      $location.path('/publish');
-    };
-
-    $scope.edit = function (id) {
-      $scope.$parent.showPublishInfo = false;
-      $location.path('/article/' + id);
-    };
 
     /**
      * 包括删除一条或多条记录
@@ -98,7 +87,7 @@ angular.module('hopefutureBlogApp')
         }
       });
       modalInstance.result.then(function () {
-        articleService.delete(json, function (data) {
+        auditService.delete(json, function (data) {
           if (data.success === true) {
             $scope.loadPageData();
             if (!item) {
@@ -124,6 +113,58 @@ angular.module('hopefutureBlogApp')
         }
       });
       $scope.grid.checked = checked;
+    };
+
+    /**
+     * 改变状态，是否首页显示
+     * @param item
+     */
+    $scope.changeBoutique = function (item) {
+      var modalInstance = $modal.open({
+        backdrop: 'static',
+        templateUrl: '../views/templates/confirm-modal.html',
+        controller: 'ConfirmModalCtrl',
+        resolve: {
+          config: function () {
+            return {
+              modalContent: item.boutique ? '确定要取消首页显示吗？' : '确定要首页显示吗？'
+            };
+          }
+        }
+      });
+      modalInstance.result.then(function () {
+        auditService.changeBoutique({_id: item._id, boutique: !item.boutique}, function (data) {
+          if (data.success === true) {
+            item.boutique = !item.boutique;
+          }
+        });
+      });
+    };
+
+    /**
+     * 是否首页置顶
+     * @param item
+     */
+    $scope.changeHomeTop = function (item) {
+      var modalInstance = $modal.open({
+        backdrop: 'static',
+        templateUrl: '../views/templates/confirm-modal.html',
+        controller: 'ConfirmModalCtrl',
+        resolve: {
+          config: function () {
+            return {
+              modalContent: item.homeTop ? '确定要取消首页置顶吗？' : '确定要首页置顶吗？'
+            };
+          }
+        }
+      });
+      modalInstance.result.then(function () {
+        auditService.changeHomeTop({_id: item._id, homeTop: !item.homeTop}, function (data) {
+          if (data.success === true) {
+            item.homeTop = !item.homeTop;
+          }
+        });
+      });
     };
 
   });
