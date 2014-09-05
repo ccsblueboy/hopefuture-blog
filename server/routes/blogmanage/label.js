@@ -82,8 +82,7 @@ var label = {
     if (!underscore.isArray(ids)) {
       ids = [ids];
     }
-    var conditions = { _id: { $in: ids } };
-    labelDao.delete(conditions, function (err) {
+    labelDao.delete(ids, function (err) {
       res.send({success: err === null});
     });
   },

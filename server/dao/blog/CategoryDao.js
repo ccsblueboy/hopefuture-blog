@@ -116,19 +116,19 @@ CategoryDao.prototype.delete = function (items, callback) {
     if (err) {
       return callback(err);
     }
-    //var promise = new mongoose.Promise();
+    /*jshint -W083*/
     for (i = 0; i < len; i++) {
       item = JSON.parse(items[i]);
       model.update({parent: item._id}, { parent: item.parent || null }, function (err) {
-        //promise.resolve(err);
+        if(err){
+          return callback(err);
+        }
       });
     }
-    //promise.then(function(){
     model.find({}, {_id: 1, name: 1, parent: 1}).sort({_id: 1})
       .exec(function (err, docs) {
         return callback(err, docs);
       });
-    //});
   });
 };
 

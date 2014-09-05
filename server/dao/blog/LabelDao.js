@@ -15,6 +15,7 @@ function LabelDao(Model) {
 
 var LabelModel = require('../../models/blog/LabelModel');
 var labelDao = new LabelDao(LabelModel);
+var ArticleModel = require('../../models/blog/ArticleModel');
 
 module.exports = labelDao;
 
@@ -121,13 +122,21 @@ LabelDao.prototype.frequentList = function (num, loginName, callback) {
 /**
  * 删除记录
  * @method
- * @param conditions { Object }
- * 要删除数据的条件，例如：{ field: { $n: [<value1>, <value2>, ... <valueN> ] } }
+ * @param ids { Array }
  * @param callback {function} 回调函数
  */
-LabelDao.prototype.delete = function (conditions, callback) {
+LabelDao.prototype.delete = function (ids, callback) {
+  //要删除数据的条件，例如：{ field: { $n: [<value1>, <value2>, ... <valueN> ] } }
+  var conditions = { _id: { $in: ids } };
   this.model.remove(conditions, function (err) {
-    return callback(err);
+    if (err) {
+      return callback(err);
+    }
+    // 在文章中删除该引用的标签
+    var conditions = {labels: {$elemMatch: {$in: ids}}};
+    ArticleModel.find(conditions, function (err, docs) {
+      return callback(err, docs);
+    });
   });
 };
 

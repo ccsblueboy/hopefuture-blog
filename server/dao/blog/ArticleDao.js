@@ -139,7 +139,7 @@ ArticleDao.prototype.save = function (data, callback) {
       return callback(err);
     });
   } else {
-    //这里应该用异步添加的方式实现
+    //FIXME: 这里应该用异步添加的方式实现
     //先保存添加的标签
     labelDao.update(data.account, data.labels, function (err) {
       if (err) {
@@ -207,7 +207,8 @@ ArticleDao.prototype.pagination = function (loginName, searchContent, dataPage, 
       dataPage.setTotalItems(count);
       var categoryIds = [], labelIds = [], articlesData, categoryMap = {}, labelMap = {}, articleIds = [], readMap = {}, commentMap = {};
 
-      var promise = model.find(conditions, {_id: 1, title: 1, account: 1, status: 1, articleLink: 1, categories: 1, labels: 1, top: 1, homeTop: 1, boutique: 1, createdDate: 1}, {skip: skip, limit: limit, sort: {createdDate: -1}}).exec();
+      var promise = model.find(conditions, {_id: 1, title: 1, account: 1, status: 1, articleLink: 1, categories: 1, labels: 1, top: 1, homeTop: 1, boutique: 1, createdDate: 1},
+        {skip: skip, limit: limit, sort: {createdDate: -1}}).exec();
 
       promise.then(function (articles) {
         articlesData = articles.map(function (item) {
@@ -402,7 +403,8 @@ ArticleDao.prototype.findBlogData = function (loginName, callback) {
      $group：按照给定表达式组合结果
      $unwind：分割嵌入数组到自己顶层文件
      */
-    return model.aggregate({$match: {account: loginName}}, {$limit: 10}, { $group: { _id: '$createdMonth', articleCount: { $sum: 1 }}}, { $sort: { createdDate: -1 } }).exec();
+    return model.aggregate({$match: {account: loginName}}, {$limit: 10}, { $group: { _id: '$createdMonth', articleCount: { $sum: 1 }}},
+      { $sort: { createdDate: -1 } }).exec();
   }).then(function (articles) {
     data.articlesArchive = articles.map(function (item) {
       var month = item._id.split('-');
@@ -487,7 +489,8 @@ ArticleDao.prototype.articleInfo = function (loginName, articleId, password, cal
   var articleLabels;
   var categories;
 
-  var promise = model.findById(articleId, {_id: 1, title: 1, content: 1, publicityStatus: 1, protectedPassword: 1, categories: 1, labels: 1, readCounts: 1, articleLink: 1, createdDate: 1}).exec();
+  var promise = model.findById(articleId, {_id: 1, title: 1, content: 1, publicityStatus: 1, protectedPassword: 1,
+    categories: 1, labels: 1, readCounts: 1, articleLink: 1, createdDate: 1}).exec();
 
   promise.then(function (article) {
     if (password) {//如果传递密码，表示该文章是受保护的，判断输入的密码是否正确
