@@ -113,8 +113,7 @@ LabelDao.prototype.find = function (conditions, callback, fields) {
  */
 LabelDao.prototype.frequentList = function (num, loginName, callback) {
   num = num || 10;//默认为10
-  this.model.find({account: loginName, count: { $gt: 0 }}, {_id: 1, name: 1, count: 1}).sort({count: -1}).limit(num)
-    .exec(function (err, docs) {
+  this.model.find({account: loginName, count: { $gt: 0 }}, {_id: 1, name: 1, count: 1}).sort({count: -1}).limit(num).exec(function (err, docs) {
       return callback(err, docs);
     });
 };
@@ -145,6 +144,7 @@ LabelDao.prototype.update = function (loginName, labels, callback) {
     return callback(null);
   }
   var label;
+  /*jshint -W083*/
   for (var i = 0, len = labels.length; i < len; i++) {
     label = labels[i];
     var conditions = {name: label};
@@ -153,10 +153,31 @@ LabelDao.prototype.update = function (loginName, labels, callback) {
       conditions = {name: label.name };
       update = {$inc: {count: label.increase ? 1 : -1}, $setOnInsert: { name: label.name, createdDate: new Date(), account: loginName}};
     }
-    this.model.update(conditions, update, {upsert: true},
-      function (err, numberAffected, rawResponse) {
+    this.model.update(conditions, update, {upsert: true}, function (err, numberAffected, rawResponse) {
+      if(err){
+        return callback(err);
+      }
+     });
+  }
+  return callback();
+};
 
+/**
+ * 当删除文章时，修改引用label的count值
+ * @param labels{ Array } 要修改的 label 数组
+ * @param callback
+ */
+LabelDao.prototype.reduceCount = function (labels, callback) {
+  var label;
+  /*jshint -W083*/
+  for(label in labels){
+    if(labels.hasOwnProperty(label)){
+      this.model.update({_id: label}, {$inc: {count: -labels[label]}}, function (err, numberAffected, rawResponse) {
+        if(err){
+          return callback(err);
+        }
       });
+    }
   }
   return callback();
 };

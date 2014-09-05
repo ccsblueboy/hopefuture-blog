@@ -192,7 +192,7 @@ ArticleDao.prototype.pagination = function (loginName, searchContent, dataPage, 
   var model = this.model;
 
   var conditions = {};
-  if(loginName){
+  if (loginName) {
     conditions = {account: loginName};
   }
   if (searchContent) {
@@ -207,12 +207,10 @@ ArticleDao.prototype.pagination = function (loginName, searchContent, dataPage, 
       dataPage.setTotalItems(count);
       var categoryIds = [], labelIds = [], articlesData, categoryMap = {}, labelMap = {}, articleIds = [], readMap = {}, commentMap = {};
 
-      var promise = model.find(conditions,
-        {_id: 1, title: 1, account: 1, status: 1, articleLink: 1, categories: 1, labels: 1, top: 1, homeTop: 1,  boutique: 1, createdDate: 1},
-        {skip: skip, limit: limit, sort: {createdDate: -1}}).exec();
+      var promise = model.find(conditions, {_id: 1, title: 1, account: 1, status: 1, articleLink: 1, categories: 1, labels: 1, top: 1, homeTop: 1, boutique: 1, createdDate: 1}, {skip: skip, limit: limit, sort: {createdDate: -1}}).exec();
 
       promise.then(function (articles) {
-        articlesData = articles.map(function(item){
+        articlesData = articles.map(function (item) {
           return item._doc;
         });
         articles.forEach(function (item) {
@@ -316,28 +314,29 @@ ArticleDao.prototype.delete = function (loginName, ids, callback) {
   var conditions = { _id: { $in: ids } };
 
   model.find(conditions, {categories: 1, labels: 1}, function (err, docs) {
-    var _categories = [], _labels = [];
-    var i, j, lenI, lenJ;
-    for (i = 0, lenI = docs.length; i < lenI; i++) {
-      for (j = 0, lenJ = docs[i].categories.length; j < lenJ; j++) {
-        _categories.push({
-          _id: docs[i].categories[j],
-          increase: false
-        });
-      }
-      for (j = 0, lenJ = docs[i].labels.length; j < lenJ; j++) {
-        _labels.push({
-          name: docs[i].labels[j],
-          increase: false
-        });
-      }
-    }
+    var _categories = {}, _labels = {};
+    docs.forEach(function (item) {
+      item.labels.forEach(function (label) {
+        if (_labels[label]) {
+          _labels[label]++;
+        } else {
+          _labels[label] = 1;
+        }
+      });
+      item.categories.forEach(function (category) {
+        if (_categories[category]) {
+          _categories[category]++;
+        } else {
+          _categories[category] = 1;
+        }
+      });
+    });
 
-    categoryDao.updateCount(_categories, function (err) {
+    categoryDao.reduceCount(_categories, function (err) {
       if (err) {
         return callback(err);
       }
-      labelDao.update(loginName, _labels, function (err) {
+      labelDao.reduceCount( _labels, function (err) {
         if (err) {
           return callback(err);
         }
@@ -553,7 +552,7 @@ ArticleDao.prototype.articleInfo = function (loginName, articleId, password, cal
     underscore.extend(_conditions, {_id: {$ne: ObjectId(articleId)}, labels: { $in: articleLabels }});
     return model.find(_conditions, {_id: 1, title: 1, articleLink: 1, createdDate: 1}, {limit: 5}).sort({_id: -1}).exec();
   }).then(function (articles) {
-    articles.forEach(function(item){
+    articles.forEach(function (item) {
       item._doc.createdDate = moment(item._doc.createdDate).format('YYYY年MM月DD HH:mm:ss');
     });
     data.relatedArticle = articles;//相关文章

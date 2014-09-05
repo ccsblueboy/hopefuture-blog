@@ -176,6 +176,7 @@ CategoryDao.prototype.updateCount = function (categories, callback) {
     return callback(null);
   }
   var category;
+  /*jshint -W083*/
   for (var i = 0, len = categories.length; i < len; i++) {
     category = categories[i];
     var conditions = {_id: category };
@@ -186,9 +187,31 @@ CategoryDao.prototype.updateCount = function (categories, callback) {
     }
     this.model.update(conditions, update,
       function (err, numberAffected, rawResponse) {
-
+        if(err){
+          return callback(err);
+        }
       });
   }
 
+  return callback();
+};
+
+/**
+ * 当删除文章时，修改引用 category 的count值
+ * @param labels{ Array } 要修改的 category 数组
+ * @param callback
+ */
+CategoryDao.prototype.reduceCount = function (categories, callback) {
+  var category;
+  /*jshint -W083*/
+  for(category in categories){
+    if(categories.hasOwnProperty(category)){
+      this.model.update({_id: category}, {$inc: {count: -categories[category]}}, function (err, numberAffected, rawResponse) {
+         if(err){
+           return callback(err);
+         }
+      });
+    }
+  }
   return callback();
 };

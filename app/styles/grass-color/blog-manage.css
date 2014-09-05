@@ -321,10 +321,11 @@ div.mce-fullscreen {
 .form-panel-header .alert {
   margin-top: 10px;
 }
-.form-login-panel {
+.form-panel-genre {
   border: 1px solid #608d4e;
   border-radius: 4px;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
+  background-color: #bcce6d;
 }
 .password-strong-weak-bar {
   display: none;

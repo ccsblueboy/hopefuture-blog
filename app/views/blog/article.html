@@ -11,20 +11,26 @@
 
     <section>
 
-      <div class="article-reproduced clearfix">
-      <span class="pull-right">
-        <strong>转载请标注出处： </strong> <a ng-href="{{articleLink}}">{{articleLink}}</a>
-      </span>
+      <!--<div class="article-reproduced">-->
+        <!--转载请标注出处：  <a ng-href="{{articleLink}}">{{articleLink}}</a>-->
+      <!--</div>-->
+
+      <div class="clearfix">
+        <div class="pull-left">分享到：</div>
+        <div class="pull-left">
+          <div class="bshare-custom"><a title="分享到QQ空间" class="bshare-qzone"></a><a title="分享到新浪微博" class="bshare-sinaminiblog"></a>
+            <a title="分享到人人网" class="bshare-renren"></a><a title="分享到腾讯微博" class="bshare-qqmb"></a>
+            <a title="分享到网易微博" class="bshare-neteasemb"></a>
+            <a title="更多平台" class="bshare-more bshare-more-icon more-style-addthis"></a>
+            <span class="BSHARE_COUNT bshare-share-count">0</span>
+          </div>
+        </div>
       </div>
+
       <div class="article-content" ng-bind-html="article.content">
 
       </div>
       <!--/.blog-content -->
-      <div class="article-reproduced clearfix">
-      <span class="pull-right">
-        <strong>转载请标注出处： </strong> <a ng-href="{{articleLink}}">{{articleLink}}</a>
-      </span>
-      </div>
     </section>
 
     <aside class="article-meta"></aside>

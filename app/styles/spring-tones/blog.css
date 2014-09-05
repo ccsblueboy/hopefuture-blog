@@ -194,10 +194,11 @@ body {
 .form-panel-header .alert {
   margin-top: 10px;
 }
-.form-login-panel {
+.form-panel-genre {
   border: 1px solid #6d9197;
   border-radius: 4px;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
+  background-color: #dfe4dd;
 }
 .password-strong-weak-bar {
   display: none;
@@ -341,7 +342,7 @@ body {
   margin-left: 20px;
 }
 .article-list {
-  background: #c4cdc1;
+  background: #d1d8cf;
   border-radius: 5px;
   margin-bottom: 30px;
   opacity: 0.7;
@@ -411,10 +412,13 @@ body {
   margin-bottom: 20px;
 }
 .article-content {
-  margin-top: 10px;
+  margin-top: 30px;
+}
+.article-content * {
+  font-size: 17px;
+  line-height: 1.5em;
 }
 .article-content p {
-  line-height: 2em;
   text-indent: 2em;
 }
 .article-reproduced {
