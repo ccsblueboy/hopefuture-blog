@@ -30,7 +30,7 @@ ResourceDao.prototype.save = function (data, callback) {
   if (id) {
     delete data._id;
     data.updatedDate = new Date();
-    this.model.update({_id: data._id}, data, function (err, numberAffected, rawResponse) {
+    this.model.update({_id: id}, data, function (err, numberAffected, rawResponse) {
       return callback(err);
     });
   } else {

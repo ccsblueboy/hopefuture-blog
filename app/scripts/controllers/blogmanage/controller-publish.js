@@ -97,7 +97,13 @@ angular.module('hopefutureBlogApp').controller('PublishCtrl', function ($scope, 
     $scope.article.status = status;
     //$scope.article.content = $scope.tinymceContent.getContent();
     $scope.article.publishDate = $scope.article.publishType === 'immediate' ? '' : $filter('date')($scope.article.publishDate, 'yyyy-MM-dd');
-    publishService.save($scope.article, function (data) {
+    var article = angular.copy($scope.article);
+    delete article.account;
+    delete article.articleLink;
+    delete article.createdMonth;
+    delete article.createdDate;
+    delete article.readCounts;
+    publishService.save(article, function (data) {
       if (data.success === true) {
         $scope.$parent.showPublishInfo = true;
         switch (status) {
@@ -347,41 +353,39 @@ angular.module('hopefutureBlogApp').controller('PublishCtrl', function ($scope, 
         ];
         return;
       } else {
-        var valid = publishMethod.validCategory($scope);
-        if (!valid) {
-          return;
-        }
-      }
-      var parentCategory = $scope.category.parentCategory;
-      var category = angular.copy($scope.category);
-      delete category.parentCategory;
-      if (parentCategory) {
-        category.parent = parentCategory._id;
-      }
-      publishService.addCategory(category, function (data) {
-        if (data.success === true) {
-          var categories = $scope.$parent.article.categories;
-          var collection = categoryMethod.sortItems(data.items);
-          var items = collection.getItems();
-          angular.forEach(items, function (item, index) {
-            item.style = {marginLeft: item.level * 20 + 'px'};
-            if (categories.indexOf(item._id) !== -1) {
-              item.checked = true;
+        publishMethod.validCategory($scope, function(valid){
+          if (valid) {
+            var parentCategory = $scope.category.parentCategory;
+            var category = angular.copy($scope.category);
+            delete category.parentCategory;
+            if (parentCategory) {
+              category.parent = parentCategory._id;
             }
-          });
-          $scope.categories = items;
+            publishService.addCategory(category, function (data) {
+              if (data.success === true) {
+                var categories = $scope.$parent.article.categories;
+                var collection = categoryMethod.sortItems(data.items);
+                var items = collection.getItems();
+                angular.forEach(items, function (item, index) {
+                  item.style = {marginLeft: item.level * 20 + 'px'};
+                  if (categories.indexOf(item._id) !== -1) {
+                    item.checked = true;
+                  }
+                });
+                $scope.categories = items;
 
-          $scope.category.name = '';
-          $scope.category.parentCategory = '';
-        }
-      });
+                $scope.category.name = '';
+                $scope.category.parentCategory = '';
+              }
+            });
+          }
+        });
+      }
     };
     $scope.$watch('category.name', function (newValue, oldValue) {
       if (newValue !== '') {
         $scope.$parent.alerts = [];
-        $timeout(function(){
-          publishMethod.validCategory($scope);
-        });
+        publishMethod.validCategory($scope);
       }
     });
     $scope.$watch('category.parentCategory', function (newValue, oldValue) {
@@ -389,5 +393,4 @@ angular.module('hopefutureBlogApp').controller('PublishCtrl', function ($scope, 
         publishMethod.validCategory($scope);
       }
     });
-
   });

@@ -48,64 +48,69 @@ ArticleDao.prototype.save = function (data, callback) {
     promise.then(function (doc) {
       if (doc) {
         article = doc;
-        var labelIds = [];
-        for (var i = 0, len = doc.labels.length; i < len; i++) {
-          labelIds.push(doc.labels[i]);
-        }
+        var labelIds = doc.labels.map(function (item) {
+          return item;
+        });
+
         return LabelModel.find({ _id: { $in: labelIds }}, {name: 1}).exec();
       } else {
-        return callback('operate error！');
+        throw new Error('operate error！');
       }
 
-    }).then(function (docs) {
-      var i, len, index;
+    }).then(function (labels) {
 
-      //标签
-      var labels = [];
-      docs.forEach(function (item) {
-        labels.push(item.name);
+      //文章中原先的标签
+      var existsLabels = [];
+      labels.forEach(function (item) {
+        existsLabels.push(item.name);
       });
-      var copyLabels = underscore.clone(data.labels);
+      //新添加的标签
+      var newLabels = underscore.clone(data.labels);
       var _labels = [];
-      for (i = 0, len = labels.length; i < len; i++) {
-        index = copyLabels.indexOf(labels[i]);
+      existsLabels.forEach(function(item){
+        var index = newLabels.indexOf(item);
+        //已存在的标签不在新添加中，则 标签count减一
         if (index === -1) {
           _labels.push({
-            name: labels[i],
+            name: item,
             increase: false
           });
         } else {
-          copyLabels.splice(index, 1);
+          //存在的话从新标签中删除掉
+          newLabels.splice(index, 1);
         }
-      }
-      for (i = 0, len = copyLabels.length; i < len; i++) {
+      });
+      newLabels.forEach(function(item){
         _labels.push({
-          name: copyLabels[i],
+          name: item,
           increase: true
         });
-      }
+      });
 
       //分类
-      var categories = article.categories;
-      var copyCat = underscore.clone(data.categories);
+      var existsCategories = article.categories;
+      var newCategories = underscore.clone(data.categories);
       var _categories = [];
-      for (i = 0, len = categories.length; i < len; i++) {
-        index = copyCat.indexOf(categories[i]);
+      existsCategories.forEach(function(item){
+        var index = newCategories.indexOf(item);
+        //已存在的分类不在新添加中，则 分类count减一
         if (index === -1) {
           _categories.push({
-            _id: categories[i],
+            _id: item,
             increase: false
           });
         } else {
-          copyCat.splice(index, 1);
+          //存在的话从新标签中删除掉
+          newCategories.splice(index, 1);
         }
-      }
-      for (i = 0, len = copyCat.length; i < len; i++) {
+      });
+
+      newCategories.forEach(function(item){
         _categories.push({
-          _id: copyCat[i],
+          _id: item,
           increase: true
         });
-      }
+      });
 
       categoryDao.updateCount(_categories, function (err) {
         if (err) {
@@ -126,8 +131,14 @@ ArticleDao.prototype.save = function (data, callback) {
               });
 
               data.updatedDate = new Date();
+              var _id = data._id;
               delete data._id;
-              model.update({_id: data._id}, data, function (err, numberAffected, rawResponse) {
+              delete data.account;
+              delete data.articleLink;
+              delete data.createdMonth;
+              delete data.createdDate;
+              delete data.readCounts;
+              model.update({_id: _id}, data, function (err, numberAffected, rawResponse) {
                 return callback(err);
               });
 
@@ -260,8 +271,14 @@ ArticleDao.prototype.pagination = function (loginName, searchContent, dataPage, 
           item.labels = item.labels.map(function (item) {
             return labelMap[item];
           });
+          item.labels =  item.labels.filter(function(item){
+            return item != null;
+          });
           item.categories = item.categories.map(function (item) {
             return categoryMap[item];
+          });
+          item.categories =  item.categories.filter(function(item){
+            return item != null;
           });
           item.readCounts = readMap[item._id.toString()] || 0;
           item.commentCounts = commentMap[item._id.toString()] || 0;

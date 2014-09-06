@@ -99,6 +99,9 @@ CategoryDao.prototype.findById = function (id, callback) {
 /**
  * 删除记录
  * 该 方法有问题，主要处理 循环回调的问题，待解决
+ * 这里不再删除在文章中引用的该分类
+ * 文章中引用的该分类在显示的时候会屏蔽掉
+ * 同时如果修改该文章的时候会删掉不存在的标签的
  * @method
  * @param items { Array } 要删除记录数组，包括主键 _id 和 parent
  * @param callback {function} 回调函数

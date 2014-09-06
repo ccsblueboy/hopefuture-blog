@@ -55,8 +55,8 @@
         <a ng-href="/{{item.account}}#/article/{{item._id}}" target="_blank">{{item.title | truncate:50:true:' ...'}}</a>
       </div>
     </td>
-    <td>{{item.categories | arrayToStr:'、':'未分类' | truncate:20:true:' ...'}}</td>
-    <td>{{item.labels | arrayToStr:'、':'—' | truncate:20:true:' ...'}}</td>
+    <td>{{item.categories | arrayToStr:'、':'未分类' | truncate:40:true:' ...'}}</td>
+    <td>{{item.labels | arrayToStr:'、':'—' | truncate:40:true:' ...'}}</td>
     <td>{{item.status}}</td>
     <td>{{item.top?'是':'否'}}</td>
     <td>{{item.readCounts}}</td>

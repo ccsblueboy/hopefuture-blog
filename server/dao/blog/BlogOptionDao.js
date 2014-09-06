@@ -21,6 +21,7 @@ function BlogOptionDao(Model) {
  * @param callback
  */
 BlogOptionDao.prototype.initData = function (callback) {
+  var model = this.model;
   var account = {
     loginName: 'administrator',
     password: config.administratorPassword,
@@ -30,20 +31,33 @@ BlogOptionDao.prototype.initData = function (callback) {
     manager: true
   };
 
-  var model = this.model;
   accountDao.signup(account, function (err) {
     if (err) {
       return callback(err);
-    } else {
-      var entity = new model({
-        optionCode: 'init_data',
-        optionValue: 'yes',
-        description: '初始化数据'
-      });
-      entity.save(function (err, product, numberAffected) {
-        return callback(err);
-      });
     }
+  });
+
+  account = {
+    loginName: 'admin',
+    password: config.administratorPassword,
+    name: '管理员',
+    email: 'hopefuture_blog@126.com',
+    activated: true,
+    manager: true
+  };
+  accountDao.signup(account, function (err) {
+    if (err) {
+      return callback(err);
+    }
+  });
+
+  var entity = new model({
+    optionCode: 'init_data',
+    optionValue: 'yes',
+    description: '初始化数据'
+  });
+  entity.save(function (err, product, numberAffected) {
+    return callback(err);
   });
 };
 
@@ -63,6 +77,17 @@ BlogOptionDao.prototype.findByCode = function (code, callback) {
   });
 };
 
+
+/**
+ * 删除记录
+ * @param conditions
+ * @param callback
+ */
+BlogOptionDao.prototype.delete = function (conditions, callback) {
+  this.model.remove(conditions, function (err) {
+    return callback(err);
+  });
+};
 
 var BlogOptionModel = require('../../models/blog/BlogOptionModel');
 var blogOptionDao = new BlogOptionDao(BlogOptionModel);

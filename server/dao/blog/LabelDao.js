@@ -15,7 +15,6 @@ function LabelDao(Model) {
 
 var LabelModel = require('../../models/blog/LabelModel');
 var labelDao = new LabelDao(LabelModel);
-var ArticleModel = require('../../models/blog/ArticleModel');
 
 module.exports = labelDao;
 
@@ -121,6 +120,9 @@ LabelDao.prototype.frequentList = function (num, loginName, callback) {
 
 /**
  * 删除记录
+ * 这里不再删除在文章中引用的该标签
+ * 文章中引用的该标签在显示的时候会屏蔽掉
+ * 同时如果修改该文章的时候会删掉不存在的标签的
  * @method
  * @param ids { Array }
  * @param callback {function} 回调函数
@@ -129,14 +131,7 @@ LabelDao.prototype.delete = function (ids, callback) {
   //要删除数据的条件，例如：{ field: { $n: [<value1>, <value2>, ... <valueN> ] } }
   var conditions = { _id: { $in: ids } };
   this.model.remove(conditions, function (err) {
-    if (err) {
-      return callback(err);
-    }
-    // 在文章中删除该引用的标签
-    var conditions = {labels: {$elemMatch: {$in: ids}}};
-    ArticleModel.find(conditions, function (err, docs) {
-      return callback(err, docs);
-    });
+    return callback(err);
   });
 };
 

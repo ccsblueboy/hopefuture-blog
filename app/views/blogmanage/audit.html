@@ -47,8 +47,8 @@
       </div>
     </td>
     <td>{{item.account}}</td>
-    <td>{{item.categories | arrayToStr:'、':'未分类' | truncate:20:true:' ...'}}</td>
-    <td>{{item.labels | arrayToStr:'、':'—' | truncate:20:true:' ...'}}</td>
+    <td>{{item.categories | arrayToStr:'、':'未分类' | truncate:40:true:' ...'}}</td>
+    <td>{{item.labels | arrayToStr:'、':'—' | truncate:40:true:' ...'}}</td>
     <td>{{item.top?'是':'否'}}</td>
     <td>{{item.readCounts}}</td>
     <td>{{item.commentCounts}}</td>

@@ -24,32 +24,43 @@ angular.module('hopefutureBlogApp')
       }
     };
   }])
-  .factory('publishMethod', function () {
+  .factory('publishMethod', function ($timeout) {
+    var process, request;
     return {
-      validCategory: function ($scope) {
-        var valid = false;
-        $.ajax({
-          url: 'manage/category/validate/duplicate',
-          mode: 'abort',
-          dataType: 'json',
-          async: false,
-          data: {
-            name: $scope.category.name,
-            parent: $scope.category.parentCategory ? $scope.category.parentCategory._id : ''
-          },
-          success: function (response) {
-            valid = response === true || response === 'true';
-          }
-        });
-        if (!valid) {
-          $scope.$parent.alerts = [
-            {type: 'danger', message: '一个拥有相同名字的父级项目已存在。'}
-          ];
-          return false;
-        }else{
-          $scope.$parent.alerts = [];
-          return true;
+      validCategory: function ($scope, callback) {
+        // Here we use the jQuery Ajax, because it can abort an ajax request.
+        // I will find how to abort an ajax request in Angular at later.
+        if (process) {
+          $timeout.cancel(process);
         }
+        process = $timeout(function() {
+          if (request) {
+            request.abort();
+          }
+          request = $.ajax({
+            url: 'manage/category/validate/duplicate',
+            mode: 'abort',
+            dataType: 'json',
+            async: false,
+            data: {
+              name: $scope.category.name,
+              parent: $scope.category.parentCategory ? $scope.category.parentCategory._id : ''
+            },
+            success: function (response) {
+              var valid = response === true || response === 'true';
+              if (!valid) {
+                $scope.$parent.alerts = [
+                  {type: 'danger', message: '一个拥有相同名字的父级项目已存在。'}
+                ];
+              }else{
+                $scope.$parent.alerts = [];
+              }
+              if(callback && angular.isFunction(callback)){
+                callback(valid);
+              }
+            }
+          });
+        },200);
       }
     };
   })
