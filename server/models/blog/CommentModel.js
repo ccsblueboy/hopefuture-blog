@@ -10,9 +10,10 @@ var Schema = mongoose.Schema;
  */
 var schema = new Schema({
   articleID: { type: String },
-  account: { type: String },//文章作者，这里保存账户登录名，
+  account: { type: String },//文章作者
   commentator: { type: String },//评论者，如果用户已登录，取其登录名
-  headPortrait: {type: String},//评论者头像
+  accountID: { type: String },//评论者Id，如果用户已登录，取其Id，否则为空
+  headPortrait: {type: String},//评论者头像，可动态的从评论者中取，如果动态取影响性能，则直接从该字段中取，这样评论者修改了头像，不能确保其头像正确性
   email: { type: String },//评论者邮箱，同样用户已登录，取其邮箱
   ip: { type: String },//评论者IP
   site: { type: String },//评论者个人站点或个人博客

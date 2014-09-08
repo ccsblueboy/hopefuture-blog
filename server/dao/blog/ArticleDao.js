@@ -537,14 +537,19 @@ ArticleDao.prototype.articleInfo = function (loginName, articleId, password, cal
     data.article.labels = labels;//文章标签
 
     //文章评论信息
-    return CommentModel.find({articleID: articleId }, {_id: 1, commentator: 1, headPortrait: 1, content: 1, createdDate: 1, commentParent: 1}).sort({_id: 1}).exec();
+    return CommentModel.find({articleID: articleId }, {_id: 1, commentator: 1, accountID:1, headPortrait: 1, content: 1, createdDate: 1, commentParent: 1}).sort({_id: 1}).exec();
   }).then(function (comments) {
+    var accountIds = [];
     if (comments) {
       data.article.commentCount = comments.length;
       var items = comments.map(function (item) {
+        if(item.accountID){
+          accountIds.push(item.accountID);
+        }
         return {
           _id: item._id.toString(),
           commentator: item.commentator,
+          accountID: item.accountID,
           headPortrait: item.headPortrait,
           content: item.content,
           createdDate: moment(item.createdDate).format('YYYY年MM月DD HH:mm:ss'),
@@ -556,6 +561,19 @@ ArticleDao.prototype.articleInfo = function (loginName, articleId, password, cal
       items = commonMethod.convertTreeNode(items, 'commentParent');
       data.comments = items;
     }
+
+    //评论者头像
+    return AccountModel.find({_id: { $in: accountIds}}, {_id: 1, headPortrait: 1, email: 1, site: 1}).exec();
+  }).then(function (accounts) {
+    var accountMap = {};
+    accounts.forEach(function(item){
+      accountMap[item._id.toString()] = item.headPortrait;
+    });
+    data.comments.forEach(function(item){
+      if(accountMap[item.accountID]){
+        item.headPortrait = accountMap[item.accountID];
+      }
+    });
 
     //前一篇文章
     return model.findOne({_id: { $lt: ObjectId(articleId)}}, {_id: 1, title: 1, articleLink: 1}, {sort: {_id: -1}}).exec();

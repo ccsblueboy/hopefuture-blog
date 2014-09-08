@@ -456,7 +456,7 @@ body {
   content: "";
   display: block;
   position: absolute;
-  top: -1.6em;
+  top: -1.55em;
   left: .844em;
   border: 0.8em solid rgba(0, 0, 0, 0.1);
   border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;

@@ -113,7 +113,12 @@ LabelDao.prototype.find = function (conditions, callback, fields) {
  */
 LabelDao.prototype.frequentList = function (num, loginName, callback) {
   num = num || 10;//默认为10
-  this.model.find({account: loginName, count: { $gt: 0 }}, {_id: 1, name: 1, count: 1}).sort({count: -1}).limit(num).exec(function (err, docs) {
+
+  //var conditions = {account: loginName, count: { $gt: 0 }};
+  // 这里修改为取所有的
+  var conditions = {account: loginName};
+
+  this.model.find(conditions, {_id: 1, name: 1, count: 1}).sort({count: -1}).limit(num).exec(function (err, docs) {
       return callback(err, docs);
     });
 };

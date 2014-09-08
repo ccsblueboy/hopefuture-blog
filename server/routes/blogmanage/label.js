@@ -139,7 +139,7 @@ router.post('/', label.save);
 router.get('/:id', label.edit);
 router.delete('/', label.delete);
 router.get('/validate/duplicate', label.duplicate);
-router.get('/records/frequent', label.frequentList);//常用的分类
+router.get('/records/frequent', label.frequentList);//常用的标签
 
 /**
  * 标签路由

@@ -31,6 +31,7 @@ angular.module('hopefutureBlogApp')
     var comment = {
       articleID: undefined,
       commentator: '',
+      accountID: '',
       headPortrait: 'head-portrait-default',
       content: '',
       email: '',
@@ -169,7 +170,7 @@ angular.module('hopefutureBlogApp')
             }
             childComment.append(html);
           } else {
-            $('#commentList ul.comment-list').append(blogMethod.renderComment(data.comment, 1));
+            $('#commentList > ul.comment-list').append(blogMethod.renderComment(data.comment, 1));
           }
 
           $scope.resetComment(false);

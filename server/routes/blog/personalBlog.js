@@ -109,6 +109,7 @@ var personalBlog = {
             var account = sessionManage.getAccountSession(req);
             if (account) {
               data.account = {
+                accountID: account._id,
                 commentator: account.loginName,
                 email: account.email,
                 site: account.site,
