@@ -148,7 +148,6 @@ module.exports = function (grunt) {
     // 由于项目中不同的文件加载的bower 组件不一样，故有些html文件去掉了bower install
     wiredep: {
       options: {
-        cwd: '<%= yeoman.app %>',
         dependencies: true,
         devDependencies: false,
         exclude: [],
