@@ -22,34 +22,23 @@ function BlogOptionDao(Model) {
  */
 BlogOptionDao.prototype.initData = function (callback) {
   var model = this.model;
-  var account = {
-    loginName: 'administrator',
-    password: config.administratorPassword,
-    name: '管理员',
-    email: 'hopefuture_blog@126.com',
-    activated: true,
-    manager: true
-  };
-
-  accountDao.signup(account, function (err) {
-    if (err) {
-      return callback(err);
-    }
-  });
-
-  account = {
-    loginName: 'admin',
-    password: config.administratorPassword,
-    name: '管理员',
-    email: 'hopefuture_blog@126.com',
-    activated: true,
-    manager: true
-  };
-  accountDao.signup(account, function (err) {
-    if (err) {
-      return callback(err);
-    }
-  });
+  var accounts = ['administrator', 'admin'];
+  /*jshint -W083 */
+  for (var i = 0, len = accounts.length; i < len; i++) {
+    var account = {
+      loginName: accounts[i],
+      password: config.administratorPassword,
+      name: '管理员',
+      email: 'hopefuture_blog@126.com',
+      activated: true,
+      manager: true
+    };
+    accountDao.init(account, function (err) {
+      if (err) {
+        return callback(err);
+      }
+    });
+  }
 
   var entity = new model({
     optionCode: 'init_data',
