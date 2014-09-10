@@ -56,4 +56,4 @@
     var method = customMethod[c];
     $.validator.addMethod(c, method.fn, method.message);
   }
-})();
+}());

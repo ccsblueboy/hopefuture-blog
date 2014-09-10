@@ -24,7 +24,7 @@ angular.module('hopefutureBlogApp')
       }
     };
   }])
-  .factory('publishMethod', function ($timeout) {
+  .factory('publishMethod', ['$timeout', function ($timeout) {
     var process, request;
     return {
       validCategory: function ($scope, callback) {
@@ -63,7 +63,7 @@ angular.module('hopefutureBlogApp')
         },200);
       }
     };
-  })
+  }])
   .constant('publicityStatus', {//公开度
     public: '公开',
     protected: '密码保护',

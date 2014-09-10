@@ -81,3 +81,11 @@
 * 修改评论者头像显示不正确的bug
 * 升级相关依赖包
 
+##version 0.2.2  完善Blog，修复Blog bug()
+
+* 删除多余文件
+* 调整styles themes
+* 解决 ngmin 对部分文件不能自动转换为安全的压缩前js代码的bug，比如：`service-publish.js 中的 publishMethod`
+* 修复 不能修改用户信息bug
+* 调整部分显示样式
+

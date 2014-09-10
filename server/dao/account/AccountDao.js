@@ -169,7 +169,7 @@ AccountDao.prototype.pagination = function (dataPage, searchContent, callback) {
  */
 
 AccountDao.prototype.changeAccountStatus = function (conditions, status, callback) {
-  this.model.update(conditions, {$set: {activated: status}}, function (err, numberAffected, rawResponse) {
+  this.model.update(conditions, {$set: {activated: status}}, { multi: true }, function (err, numberAffected, rawResponse) {
     return callback(err);
   });
 };
@@ -201,13 +201,12 @@ AccountDao.prototype.findOne = function (conditions, callback) {
 /**
  * 根据账户ID修改用户信息
  * @method
- * @param data {AccountModel} AccountModel 实例
+ * @param id {String} 主键
+ * @param data {Object} 修改的数据
  * @param callback {function}回调函数
  */
 
-AccountDao.prototype.updateById = function (data, callback) {
-  var id = data._id;
-  delete data._id;
+AccountDao.prototype.updateById = function (id, data, callback) {
   this.model.update({_id: id}, {$set: data}, function (err, numberAffected, rawResponse) {
     return callback(err);
   });

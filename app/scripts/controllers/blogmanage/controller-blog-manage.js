@@ -10,7 +10,7 @@
  * */
 
 angular.module('hopefutureBlogApp')
-  .controller('BlogManageCtrl', function ($scope, blogManageService) {
+  .controller('BlogManageCtrl', function ($scope) {
     $scope.showPublishInfo = false;//是否显示发布成功信息
 
   });

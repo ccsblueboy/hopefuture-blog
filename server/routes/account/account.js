@@ -41,7 +41,8 @@ var account = {
     if (!underscore.isArray(ids)) {
       ids = [ids];
     }
-    var conditions = { _id: { $in: ids } };
+    // 过滤掉administrator 和 admin
+    var conditions = { _id: { $in: ids }, loginName: { $nin: [ 'administrator', 'admin' ] } };
     accountDao.changeAccountStatus(conditions, status, function (err) {
       res.send({success: err ? false : true});
     });
@@ -64,10 +65,12 @@ var account = {
 
   update: function (req, res) {
     var data = req.body;
+    var id = data._id;
     //不能修改登录名和注册邮箱，防止非法操作
     delete data.loginName;
     delete data.email;
-    accountDao.updateById(data, function (err) {
+    delete data._id;
+    accountDao.updateById(id, data, function (err) {
       if (err) {
         res.send({success: false, err: err});
       } else {
@@ -113,7 +116,7 @@ var account = {
       return;
     }
     var data = req.body;
-    accountDao.updateById({_id: data._id}, {manager: data.manager}, function (err) {
+    accountDao.updateById(data._id, {manager: data.manager}, function (err) {
       res.send({success: err === null});
     });
   }

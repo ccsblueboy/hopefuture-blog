@@ -286,6 +286,7 @@ module.exports = function (grunt) {
 
     // Allow the use of non-minsafe AngularJS files. Automatically makes it
     // minsafe compatible so Uglify does not destroy the ng references
+    // FIXME 该grunt 任务有 bug，对 service-publish.js 中的publishMethod没有自动加入
     ngmin: {
       dist: {
         files: [
@@ -410,6 +411,12 @@ module.exports = function (grunt) {
         cwd: '<%= yeoman.app %>/bower_components/SyntaxHighlighter/scripts',
         src: ['**', '!XRegExp.js', '!shCore.js', '!shAutoloader.js', '!shBrushXml.js'],
         dest: '<%= yeoman.webapp %>/scripts/syntaxHighlighter'
+      },
+      stylesThemes: {
+        expand: true,
+        cwd: '<%= yeoman.app %>/styles-themes',
+        src: ['**'],
+        dest: '<%= yeoman.app %>/styles'
       }
     },
 
@@ -759,6 +766,7 @@ module.exports = function (grunt) {
     grunt.task.run([
       'clean:server', // clean .tmp
       'wiredep',
+      'copy:stylesThemes',// copy 主题样式
       'less:publish',//把less转换为css
       'concurrent:server',// 把样式copy到临时目录中
       'autoprefixer',// 分析css 并给css3加上浏览器前缀
@@ -779,6 +787,7 @@ module.exports = function (grunt) {
   grunt.registerTask('build', [
     'clean:dist',// clean dist
     'wiredep',
+    'copy:stylesThemes',// copy 主题样式
     'less:publish',//把less转换为css
     'useminPrepare',//合并压缩文件
     'concurrent:dist',//copy css image 和 svg

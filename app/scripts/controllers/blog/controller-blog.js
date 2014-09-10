@@ -45,6 +45,8 @@ angular.module('hopefutureBlogApp')
   blogService.blog(account, function (data) {
     if (data.success === true) {
       data.blogData.labels = blogMethod.parseArticleLabel(data.blogData.labels);
+      //个人签名
+      data.blogData.account.signature = data.blogData.account.signature || '这家伙很懒，没有留下任何个人签名';
       $scope.blog = data.blogData;
     }
   });

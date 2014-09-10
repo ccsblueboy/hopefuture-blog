@@ -8,3 +8,4 @@ npm-debug.log
 jshint.log
 doc
 server/publish-config.js
+app/styles

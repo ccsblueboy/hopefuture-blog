@@ -1,4 +1,6 @@
 //定义全局变量
+/*jshint -W098*/
+/*jshint -W079*/
 var HopeFuture = {
   /**
    * The version of the framework
@@ -11,8 +13,3 @@ var HopeFuture = {
     patch: 0
   }
 };
-
-(function () {
-
-
-})();

@@ -6,7 +6,7 @@ var requestsNum = 0;
  * 给 http 请求注册一个拦截器
  */
 angular.module('hopefutureBlogApp')
-  .factory('hfbHttpInterceptor', function ($q) {
+  .factory('hfbHttpInterceptor', ['$q', function ($q) {
     return {
       // optional method
       'request': function (config) {
@@ -32,8 +32,8 @@ angular.module('hopefutureBlogApp')
         return $q.reject(rejection);
       }
     };
-  })
-  .config(function ($httpProvider) {
+  }])
+  .config(['$httpProvider', function ($httpProvider) {
     //为 $httpProvider 加入拦击器 hfbHttpInterceptor
     $httpProvider.interceptors.push('hfbHttpInterceptor');
     $httpProvider.defaults.transformRequest.push(function (data, headersGetter) {
@@ -72,7 +72,7 @@ angular.module('hopefutureBlogApp')
      * Ajax请求，标准用法 x-requested-with = XMLHttpRequest
      */
     $httpProvider.defaults.headers.common['x-requested-with'] = 'XMLHttpRequest';
-  })
+  }])
   .factory('hfbHttpService', ['$http', '$q', function ($http, $q) {// 创建 custom Http Service
     return {
       get: function (url, config) {
