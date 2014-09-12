@@ -48,6 +48,7 @@ module.exports = {
    * 'examples', 'login', 'logout', 'signup', 'forgot', 'resetpassword', 'terms', 'about', 'manage', 'blog', 'reference', 'blogsetting', 'donate'
    * 保留的将来使用的有（FIXME ：后续会补充的）
    * 'setting', 'technology', 'column', 'forum', 'hotspot', 'information', 'essence', 'discussion', 'group', 'code', 'project', 'recruitment', 'opensource',
+   * 'hope', 'future', 'hope_future', 'hope-future', 'hope_future_blog', 'hope-future-blog',
    * 对应的中文为，设置、技术、栏目、论坛、热点、咨询、精华、讨论、群组、代码、项目、招聘、开源
    * 系统用户有：'admin', 'administrator'
    *
@@ -55,7 +56,7 @@ module.exports = {
   accountFilters: ['examples', 'login', 'logout', 'signup', 'forgot', 'resetpassword', 'terms', 'about', 'manage', 'blog', 'reference',
     'blogsetting', 'donate',
     'setting', 'technology', 'column', 'forum', 'hotspot', 'information', 'essence', 'discussion', 'group', 'code', 'project',
-    'recruitment', 'opensource',
+    'recruitment', 'opensource', 'hope', 'future', 'hope_future', 'hope-future', 'hope_future_blog', 'hope-future-blog',
     'admin', 'administrator'],
 
   /**

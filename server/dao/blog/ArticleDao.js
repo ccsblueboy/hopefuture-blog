@@ -420,7 +420,8 @@ ArticleDao.prototype.findBlogData = function (loginName, callback) {
      $group：按照给定表达式组合结果
      $unwind：分割嵌入数组到自己顶层文件
      */
-    return model.aggregate({$match: {account: loginName}}, {$limit: 10}, { $group: { _id: '$createdMonth', articleCount: { $sum: 1 }}},
+    return model.aggregate({$match: {account: loginName, status: {$in: ['publish', 'modified']}, publicityStatus: { $ne: 'private' }}},
+      {$limit: 10}, { $group: { _id: '$createdMonth', articleCount: { $sum: 1 }}},
       { $sort: { createdDate: -1 } }).exec();
   }).then(function (articles) {
     data.articlesArchive = articles.map(function (item) {
@@ -502,7 +503,7 @@ ArticleDao.prototype.articleInfo = function (loginName, articleId, password, cal
   //以下加载文章内容，相关文章，前后文章，评论列表
   var data = {};
   var model = this.model;
-  var conditions = {account: loginName, status: {$in: ['publish', 'modified']}};
+  var conditions = {account: loginName, status: {$in: ['publish', 'modified']}, publicityStatus: { $ne: 'private' }};
   var articleLabels;
   var categories;
 
@@ -576,12 +577,16 @@ ArticleDao.prototype.articleInfo = function (loginName, articleId, password, cal
     });
 
     //前一篇文章
-    return model.findOne({_id: { $lt: ObjectId(articleId)}}, {_id: 1, title: 1, articleLink: 1}, {sort: {_id: -1}}).exec();
+    var _conditions = conditions;
+    underscore.extend(_conditions, {_id: { $lt: ObjectId(articleId)}});
+    return model.findOne(_conditions, {_id: 1, title: 1, articleLink: 1}, {sort: {_id: -1}}).exec();
   }).then(function (article) {
     data.prevArticle = article;//前一篇文章
 
     //后一篇文章
-    return model.findOne({_id: { $gt: ObjectId(articleId)}}, {_id: 1, title: 1, articleLink: 1}).exec();
+    var _conditions = conditions;
+    underscore.extend(_conditions, {_id: { $gt: ObjectId(articleId)}});
+    return model.findOne(_conditions, {_id: 1, title: 1, articleLink: 1}).exec();
   }).then(function (article) {
     data.nextArticle = article;//后一篇文章
 
@@ -619,7 +624,7 @@ ArticleDao.prototype.archive = function (loginName, month, callback) {
  * @param callback {function} 回调函数
  */
 ArticleDao.prototype.category = function (loginName, id, callback) {
-  var conditions = {account: loginName, status: {$in: ['publish', 'modified']}, categories: {$elemMatch: {$eq: id}}, publicityStatus: { $ne: 'private' }};
+  var conditions = {account: loginName, status: {$in: ['publish', 'modified']}, categories: {$elemMatch: {$in: [id]}}, publicityStatus: { $ne: 'private' }};
   getArticleList(this.model, conditions, 'category', id, callback);
 };
 
@@ -630,9 +635,9 @@ ArticleDao.prototype.category = function (loginName, id, callback) {
  * @param callback {function} 回调函数
  */
 ArticleDao.prototype.label = function (loginName, id, callback) {
-  var conditions = {account: loginName, status: {$in: ['publish', 'modified']}, labels: {$elemMatch: {$eq: id}}, publicityStatus: { $ne: 'private' }};
-  // 或者调用以下语句
-  //var conditions = {account: loginName, status: {$in: ['publish', 'modified']}, labels: {$elemMatch: {$in: [id]}}, publicityStatus: { $ne: 'private' }};
+  var conditions = {account: loginName, status: {$in: ['publish', 'modified']}, labels: {$elemMatch: {$in: [id]}}, publicityStatus: { $ne: 'private' }};
+  // 或者调用以下语句，本地测试成功，但百度开放云有问题，不能正确读出数据
+  //var conditions = {account: loginName, status: {$in: ['publish', 'modified']}, labels: {$elemMatch: {$eq: id}}, publicityStatus: { $ne: 'private' }};
   getArticleList(this.model, conditions, 'label', id, callback);
 };
 
@@ -731,9 +736,9 @@ function getArticleList(model, conditions, type, id, callback) {
       });
       doc.createdDate = moment(doc.createdDate).format('YYYY年MM月DD HH:mm:ss');
       //这里全显示，不再截取
-      //      var content = commonMethod.htmlToText(doc.content);
-      //      content = commonMethod.truncate(content, 500, true, '...');
-      //      doc.content = content;
+//      var content = commonMethod.htmlToText(doc.content);
+//      content = commonMethod.truncate(content, 500, true, ' <strong>. . .</strong>');
+//      doc.content = content;
       return doc;
     });
 
@@ -819,7 +824,7 @@ function getArticlePagination(model, conditions, skip, limit, sort, dataPage, ca
       });
       doc.createdDate = moment(doc.createdDate).format('YYYY年MM月DD HH:mm:ss');
       var content = commonMethod.htmlToText(doc.content);
-      content = commonMethod.truncate(content, 500, true, '...');
+      content = commonMethod.truncate(content, 500, true, ' <strong>. . .</strong>');
       doc.content = content;
       return doc;
     });

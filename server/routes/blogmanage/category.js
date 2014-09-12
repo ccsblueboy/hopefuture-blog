@@ -102,7 +102,8 @@ var category = {
     if (!underscore.isArray(items)) {
       items = [items];
     }
-    categoryDao.delete(items, function (err, docs) {
+    var loginName = req.baseUrl.split('/')[1];
+    categoryDao.delete(loginName, items, function (err, docs) {
       if (err) {
         console.error(err);
         res.send({success: false, err: err});

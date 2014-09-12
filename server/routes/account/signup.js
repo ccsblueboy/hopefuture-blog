@@ -39,8 +39,7 @@ var account = {
     });
   },
   signup: function (req, res) {
-    var referer = req.headers.referer,
-      baseUrl = req.baseUrl;
+    var referer = req.headers.referer, baseUrl = req.baseUrl;
     var serverUrl = referer.substring(0, referer.indexOf(baseUrl));
     var data = req.body;
     //这里需要设置一下激活状态，防止前端恶意发送数据
@@ -130,10 +129,7 @@ var account = {
         overdue: overdue
       });
     } else {
-      accountDao.updateById({
-        _id: accountId,
-        activated: true
-      }, function (err) {
+      accountDao.updateById(accountId, {activated: true }, function (err) {
         res.render(url, {
           title: '激活账号',
           success: err ? false : true,
@@ -145,8 +141,7 @@ var account = {
   },
 
   link: function (req, res) {
-    var referer = req.headers.referer,
-      baseUrl = req.baseUrl;
+    var referer = req.headers.referer, baseUrl = req.baseUrl;
     var serverUrl = referer.substring(0, referer.indexOf(baseUrl));
     var accountId = req.params.accountId;
     accountDao.findOne({_id: accountId}, function (err, model) {

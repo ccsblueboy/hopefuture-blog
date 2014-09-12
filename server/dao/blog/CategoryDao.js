@@ -28,6 +28,7 @@ module.exports = categoryDao;
  */
 CategoryDao.prototype.save = function (data, callback) {
   var self = this;
+  var loginName = data.account;
   if (data._id) {
     var update = {
       name: data.name,
@@ -38,7 +39,7 @@ CategoryDao.prototype.save = function (data, callback) {
       if (err) {
         return callback(err);
       } else {
-        self.model.find({}, {_id: 1, name: 1, parent: 1}).sort({_id: 1})
+        self.model.find({account: loginName}, {_id: 1, name: 1, parent: 1}).sort({_id: 1})
           .exec(function (err, docs) {
             return callback(err, docs);
           });
@@ -51,7 +52,7 @@ CategoryDao.prototype.save = function (data, callback) {
       if (err) {
         return callback(err);
       } else {
-        self.model.find({}, {_id: 1, name: 1, parent: 1}).sort({_id: 1})
+        self.model.find({account: loginName}, {_id: 1, name: 1, parent: 1}).sort({_id: 1})
           .exec(function (err, docs) {
             return callback(err, docs);
           });
@@ -103,10 +104,11 @@ CategoryDao.prototype.findById = function (id, callback) {
  * 文章中引用的该分类在显示的时候会屏蔽掉
  * 同时如果修改该文章的时候会删掉不存在的标签的
  * @method
+ * @param loginName {String} 用户名
  * @param items { Array } 要删除记录数组，包括主键 _id 和 parent
  * @param callback {function} 回调函数
  */
-CategoryDao.prototype.delete = function (items, callback) {
+CategoryDao.prototype.delete = function (loginName, items, callback) {
   //要删除数据的条件，例如：{ field: { $n: [<value1>, <value2>, ... <valueN> ] } }
   var ids = [], i, len = items.length, item;
   for (i = 0; i < len; i++) {
@@ -128,7 +130,7 @@ CategoryDao.prototype.delete = function (items, callback) {
         }
       });
     }
-    model.find({}, {_id: 1, name: 1, parent: 1}).sort({_id: 1})
+    model.find({account: loginName}, {_id: 1, name: 1, parent: 1}).sort({_id: 1})
       .exec(function (err, docs) {
         return callback(err, docs);
       });

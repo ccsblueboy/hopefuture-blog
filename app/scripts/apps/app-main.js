@@ -8,4 +8,4 @@
  * @author Linder linder0209@126.com
  * @createdDate 2014-6-12
  * */
-angular.module('hopefutureBlogApp', ['ui.bootstrap']);
+angular.module('hopefutureBlogApp', ['ngSanitize','ui.bootstrap']);

@@ -156,10 +156,10 @@ LabelDao.prototype.update = function (loginName, labels, callback) {
   /*jshint -W083*/
   for (var i = 0, len = labels.length; i < len; i++) {
     label = labels[i];
-    var conditions = {name: label};
+    var conditions = {name: label, account: loginName};
     var update = {$inc: {count: 1}, $setOnInsert: { name: label, createdDate: new Date(), account: loginName}};
     if (underscore.isObject(label)) {
-      conditions = {name: label.name };
+      conditions = {name: label.name, account: loginName};
       update = {$inc: {count: label.increase ? 1 : -1}, $setOnInsert: { name: label.name, createdDate: new Date(), account: loginName}};
     }
     this.model.update(conditions, update, {upsert: true}, function (err, numberAffected, rawResponse) {

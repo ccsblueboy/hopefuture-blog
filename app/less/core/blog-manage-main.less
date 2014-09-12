@@ -78,19 +78,38 @@
   padding: @padding-sm 0;
 }
 
-/**
- * 解决 TinyMCE 冲突
-**/
-div.mce-fullscreen {
-  z-index: 2000
-}
-
 .blog-btn-group {
   .btn-group + .btn-group {
     margin-left: @margin-md;
   }
   button + button {
     margin-left: @margin-md;
+  }
+}
+
+.blog-search-text {
+  margin-left: 0 !important;
+  margin-top: 5px;
+  width: 90%;
+}
+
+@media (min-width: 420px) {
+  .blog-search-text {
+    margin-left: 10px !important;
+    margin-top: 0;
+    width: 50%;
+  }
+}
+
+@media (min-width: 992px) {
+  .blog-search-text {
+    width: 40%;
+  }
+}
+
+@media (min-width: 1200px) {
+  .blog-search-text {
+    width: 30%;
   }
 }
 

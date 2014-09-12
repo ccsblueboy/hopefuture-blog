@@ -53,6 +53,8 @@ angular.module('hopefutureBlogApp')
      * 注册
      */
     $scope.signup = function () {
+      $scope.account.loginName = $('#loginName').val();
+      $scope.account.password = $('#password').val();
       signupService.signup($scope.account, function (data) {
         if (data.success === true) {
           $scope.showForm = false;
