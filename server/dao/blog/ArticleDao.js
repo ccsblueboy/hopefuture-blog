@@ -673,6 +673,7 @@ ArticleDao.prototype.update = function (conditions, fields, callback) {
 
 /**
  * 浏览次数
+ * 这里不再判断同一ip访问多次的情况
  * @param articleId
  * @param ip
  * @param browserAgent
@@ -680,22 +681,15 @@ ArticleDao.prototype.update = function (conditions, fields, callback) {
  */
 ArticleDao.prototype.readCount = function (articleId, ip, browserAgent, callback) {
   var model = this.model;
-  ArticleReadCountModel.findOne({articleID: articleId, ip: ip}, function (err, doc) {
+  var entity = new ArticleReadCountModel({articleID: articleId, ip: ip, browserAgent: browserAgent});
+  entity.save(function (err, product, numberAffected) {
     if (err) {
       return callback(err);
-    } else if (doc) {
-      return callback(null);
-    }
-    var entity = new ArticleReadCountModel({articleID: articleId, ip: ip, browserAgent: browserAgent});
-    entity.save(function (err, product, numberAffected) {
-      if (err) {
+    } else {
+      model.update({_id: articleId}, {$inc: {readCounts: 1}}, function (err, numberAffected, rawResponse) {
         return callback(err);
-      } else {
-        model.update({_id: articleId}, {$inc: {readCounts: 1}}, function (err, numberAffected, rawResponse) {
-          return callback(err);
-        });
-      }
-    });
+      });
+    }
   });
 };
 

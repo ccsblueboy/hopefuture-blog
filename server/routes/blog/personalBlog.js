@@ -86,7 +86,10 @@ var personalBlog = {
   article: function (req, res) {
     var loginName = req.baseUrl.split('/')[1];
     var articleId = req.params.articleId;
-    var ip = req._remoteAddress;
+    var ip = req.headers['x-forwarded-for'] ||
+      req.connection.remoteAddress ||
+      req.socket.remoteAddress ||
+      req.connection.socket.remoteAddress;
     var browserAgent = req.headers['user-agent'];
     var password = req.query.password;
     articleDao.articleInfo(loginName, articleId, password, function (err, data) {
