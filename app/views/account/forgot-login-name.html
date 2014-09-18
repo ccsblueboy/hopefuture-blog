@@ -5,10 +5,10 @@
       <p>&nbsp;</p>
       <p class="text-muted">如果您忘记账户，您可以通过注册邮箱找回您的账户。</p>
 
+      <div class="row">
+        <div class="col-sm-offset-1 col-sm-10 margin-top-hg" alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.message}}</div>
+      </div>
       <form ng-show="formToggle" forgot-loginname-validator class="form-horizontal margin-top-hg">
-        <div class="form-group">
-          <div class="col-sm-offset-1 col-sm-10" alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.message}}</div>
-        </div>
         <div class="form-group">
           <label class="col-sm-3 control-label" for="email"><i class="required">*</i>  注册邮箱</label>
 

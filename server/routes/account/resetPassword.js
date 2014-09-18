@@ -4,6 +4,7 @@ var accountDao = require('./../../dao/account/AccountDao');
 var moment = require('moment');
 var encryption = require('../../utils/passwordCrypto').encryption;
 var config = require('../../config');
+var sessionManage = require('../../utils/sessionManage');
 
 var secret = new RegExp(config.linkSecret, 'g');
 
