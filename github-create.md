@@ -28,3 +28,16 @@
    git merge -m "Merge from master" master 合并分支（需要的话）
    git push --set-upstream origin v0.0.1 提交到服务器端
    ```
+   
+5. 创建tag（所创建的tag指向所在的分支，这里创建轻量级的tag）
+
+   http://blog.csdn.net/wh_19910525/article/details/7470850
+   
+   只有创建了tag后，在Bower中注册的包才会指向当前version
+   
+   ```
+   git tag 0.0.1   创建tag
+   git push origin --tags    提交的服务器端（github）上
+   git tag -d 0.0.1     删除本地tag
+   git push origin :refs/tags/0.0.1     删除远程tag
+   ```

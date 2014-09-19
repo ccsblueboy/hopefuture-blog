@@ -409,7 +409,7 @@ module.exports = function (grunt) {
       syntaxHighlighter: {
         expand: true,
         cwd: '<%= yeoman.app %>/bower_components/SyntaxHighlighter/scripts',
-        src: ['**', '!XRegExp.js', '!shCore.js', '!shAutoloader.js', '!shBrushXml.js'],
+        src: ['**', '!XRegExp.js', '!shCore.js', '!shAutoloader.js'],
         dest: '<%= yeoman.webapp %>/scripts/syntaxHighlighter'
       },
       stylesThemes: {

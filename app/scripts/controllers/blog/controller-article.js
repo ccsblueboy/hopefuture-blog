@@ -10,7 +10,7 @@
  * */
 
 angular.module('hopefutureBlogApp')
-  .controller('ArticleCtrl', function ($scope, $location, $modal, $timeout, blogService, errorCodes, blogMethod, syntaxHighlighter) {
+  .controller('ArticleCtrl', function ($scope, $location, $modal, $timeout, $sce, blogService, errorCodes, blogMethod, syntaxHighlighter) {
 
     var pathname = window.location.pathname;
     var account = pathname.substring(1);
@@ -71,6 +71,8 @@ angular.module('hopefutureBlogApp')
       blogService.articleInfo(account, id, params, function (data) {
         if (data.success === true) {
           $scope.article = data.articleInfo.article;
+          //可以解析style样式，但不能执行javascript代码
+          $scope.article.content = $sce.trustAsHtml($scope.article.content);
 
           $scope.comments = data.articleInfo.comments;
           if (data.articleInfo.prevArticle) {

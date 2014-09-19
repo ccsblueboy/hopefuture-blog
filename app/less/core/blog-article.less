@@ -9,12 +9,25 @@
 //博客内容
 .article-content {
   margin-top: @margin-vl;
-  * {
+  p, li, table {
     font-size: @font-size-medium;
-    line-height: 1.5em;
+    line-height: 2em;
   }
-  p {
+  > p {
     text-indent: 2em;
+  }
+  table {
+    th, td {
+      padding: 5px;
+      border-bottom: 1px solid @brand-primary;
+      border-right: 1px solid @brand-primary;
+    }
+    tr:first-child th, tr:first-child td{
+      border-top: 1px solid @brand-primary;
+    }
+    th:last-child, td:last-child {
+      border-right: 0 none;
+    }
   }
 }
 
