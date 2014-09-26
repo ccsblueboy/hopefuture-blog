@@ -90,7 +90,7 @@
       <tbody>
       <tr ng-repeat="item in items" id="{{item._id}}">
         <td><input type="checkbox" ng-model="item.checked" ng-change="selectItem()"/></td>
-        <td>{{item.name | truncate:40:true}}</td>
+        <td><a href="item.link">{{item.name | truncate:40:true}}</a></td>
         <td>{{item.categoryName || '无分类'}}</td>
         <td>{{item.link | truncate:40:true}}</td>
         <td>

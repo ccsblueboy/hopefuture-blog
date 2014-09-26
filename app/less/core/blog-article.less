@@ -17,17 +17,24 @@
     text-indent: 2em;
   }
   table {
+    margin-bottom: 1em;
+    th{
+      text-align: center;
+    }
     th, td {
-      padding: 5px;
+      padding: 5px 10px;
       border-bottom: 1px solid @brand-primary;
       border-right: 1px solid @brand-primary;
     }
-    tr:first-child th, tr:first-child td{
+    tr:first-child th, tr:first-child td {
       border-top: 1px solid @brand-primary;
     }
-    th:last-child, td:last-child {
-      border-right: 0 none;
+    th:first-child, td:first-child {
+      border-left: 1px solid @brand-primary;
     }
+  }
+  h1, h2, h3, h4 {
+    margin-bottom: 1em;
   }
 }
 

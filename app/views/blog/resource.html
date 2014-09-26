@@ -5,7 +5,8 @@
     <h3>分类{{$index + 1}}： {{resource.categoryName || '无分类'}}</h3>
 
     <p class="link clearfix">
-      <a ng-repeat="res in resource.categoryResources" target="_blank" ng-href="{{res.link}}">{{res.name}}</a>
+      <a ng-repeat="res in resource.categoryResources" target="_blank" ng-href="{{res.link}}"
+         popover="{{res.description}}" popover-trigger="mouseenter" popover-popup-delay="300">{{res.name}}</a>
     </p>
     <hr/>
   </div>

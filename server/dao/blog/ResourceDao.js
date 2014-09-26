@@ -170,7 +170,7 @@ ResourceDao.prototype.saveCategory = function (data, callback) {
  */
 ResourceDao.prototype.resourceList = function (loginName, callback) {
   var resourceList = [];
-  var promise = this.model.find({account: loginName}, {_id: 1, name: 1, link: 1, categoryId: 1}, {$sort: {categoryId: 1}}).exec();
+  var promise = this.model.find({account: loginName}, {_id: 1, name: 1, link: 1, categoryId: 1, description: 1}, {$sort: {categoryId: 1}}).exec();
 
   promise.then(function (resources) {
     resourceList = resources.map(function (item) {
