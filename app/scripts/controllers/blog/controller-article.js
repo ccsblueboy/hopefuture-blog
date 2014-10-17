@@ -10,7 +10,7 @@
  * */
 
 angular.module('hopefutureBlogApp')
-  .controller('ArticleCtrl', function ($scope, $location, $modal, $timeout, $sce, blogService, errorCodes, blogMethod, syntaxHighlighter) {
+  .controller('ArticleCtrl', function ($scope, $location, $modal, $timeout, $sce, blogService, errorCodes, blogMethod) {
 
     var pathname = window.location.pathname;
     var account = pathname.substring(1);
@@ -119,7 +119,8 @@ angular.module('hopefutureBlogApp')
             callback(true);
           }
           $timeout(function(){
-            syntaxHighlighter.autoLoader($scope.development === true ? '/bower_components/SyntaxHighlighter/scripts/' : '/scripts/syntaxHighlighter/');
+            //此处不再调用SyntaxHighlighter.autoloader来动态加载brush，因为SyntaxHighlighter.autoloader的实现是在页面加载完后处理自动加载
+            SyntaxHighlighter.highlight();
             $scope.showArticleInfo = true;
           },100);
         } else {

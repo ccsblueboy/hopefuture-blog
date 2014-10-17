@@ -10,7 +10,7 @@
  * */
 
 angular.module('hopefutureBlogApp')
-  .controller('ArchiveCtrl', function ($scope, $location, $timeout, blogService, syntaxHighlighter) {
+  .controller('ArchiveCtrl', function ($scope, $location, $timeout, blogService) {
 
     var pathname = window.location.pathname;
     var account = pathname.substring(1);
@@ -27,7 +27,7 @@ angular.module('hopefutureBlogApp')
       if (data.success === true) {
         $scope.articles = data.articles;
         $timeout(function(){
-          syntaxHighlighter.autoLoader($scope.development === true ? '/bower_components/SyntaxHighlighter/scripts/' : '/scripts/syntaxHighlighter/');
+          SyntaxHighlighter.highlight();
           $scope.showArticleInfo = true;
         },100);
       }

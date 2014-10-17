@@ -35,30 +35,30 @@
         <div>
           <span class="glyphicon glyphicon-eye-open"></span>
           <span>公开度：</span>
-          <strong>{{publicityStatus}}</strong>
+          <strong>{{$parent.article.publicityStatusName}}</strong>
           <a href=""  ng-click="publicityPanel=true;" ng-hide="publicityPanel">编辑</a>
         </div>
 
         <div class="animate-show ng-hide" ng-show="publicityPanel">
           <ul class="list-unstyled">
             <li class="radio">
-              <label><input type="radio" name="publicityStatus" ng-model="publicity.publicityStatus" value="public"/> 公开 </label>
+              <label><input type="radio" name="publicityStatus" ng-model="$parent.article.publicityStatus" value="public"/> 公开 </label>
 
               <div class="checkbox margin-left-lg" ng-show="show.top">
-                <label><input type="checkbox" name="top" ng-model="publicity.top"> 将文章置于首页顶端</label>
+                <label><input type="checkbox" name="top" ng-model="$parent.article.top"> 将文章置于首页顶端</label>
               </div>
             </li>
             <li class="radio form-inline margin-top-md">
-              <label><input type="radio" name="publicityStatus" ng-model="publicity.publicityStatus" value="protected"/> 密码保护 </label>
+              <label><input type="radio" name="publicityStatus" ng-model="$parent.article.publicityStatus" value="protected"/> 密码保护 </label>
 
               <div class="form-group margin-top-md" ng-show="show.protectedPassword">
                 <lable for="protectedPassword">密码：</lable>
                 <input type="text" class="form-control input-sm" id="protectedPassword" name="protectedPassword"
-                       ng-model="publicity.protectedPassword"/>
+                       ng-model="$parent.article.protectedPassword"/>
               </div>
             </li>
             <li class="radio">
-              <label><input type="radio" name="publicityStatus" ng-model="publicity.publicityStatus" value="private"> 私密 </label>
+              <label><input type="radio" name="publicityStatus" ng-model="$parent.article.publicityStatus" value="private"> 私密 </label>
             </li>
           </ul>
           <p>
@@ -74,21 +74,22 @@
         <div>
           <span class="glyphicon glyphicon-calendar"></span>
           <span>发布方式：</span>
-          <strong>{{publishTypeStatus}}</strong>
+          <strong>{{$parent.article.publishTypeName}}</strong>
           <a href="" ng-click="publishTypePanel=true;" ng-hide="publishTypePanel">编辑</a>
         </div>
         <div class="animate-show ng-hide" ng-show="publishTypePanel">
           <ul class="list-unstyled">
             <li class="radio">
-              <label><input type="radio" name="publishType" ng-model="publishType.publishTypeStatus" value="immediate"/> 立即发布 </label>
+              <label><input type="radio" name="publishType" ng-model="$parent.article.publishType" value="immediate"/> 立即发布 </label>
             </li>
             <li class="radio">
-              <label><input type="radio" name="publishType" ng-model="publishType.publishTypeStatus" value="delay"/> 定时发布 </label>
+              <label><input type="radio" name="publishType" ng-model="$parent.article.publishType" value="delay"/> 定时发布 </label>
 
               <div class="animate-show ng-hide" ng-show="showPublishDate">
                 <div class="form-group margin-top-md">
                   <div class='input-group' id="dateTimePicker">
-                    <input type='text' class="form-control input-sm" data-date-format="YYYY-MM-DD HH:mm" id="publishDate" name="publishDate" ng-model="publishType.publishDate"/>
+                    <input type='text' class="form-control input-sm" data-date-format="YYYY-MM-DD HH:mm"
+                           id="publishDate" name="publishDate" ng-model="$parent.article.publishDate"/>
                     <span class="input-group-btn">
                       <button type="button" class="btn btn-info btn-sm">
                         <span class="glyphicon glyphicon-calendar"></span>
@@ -106,6 +107,22 @@
         </div>
       </div>
       <!--发布方式 end-->
+
+      <!--是否生成目录 start-->
+      <div class="article-effect" >
+        <div>
+          <span class="glyphicon glyphicon-folder-close"></span>
+          <span>生成目录：</span>
+          <label class="radio-inline">
+            <input type="radio" value="1"  ng-model="article.catalogue" name="catalogue"> 是
+          </label>
+          <label class="radio-inline">
+            <input type="radio" value="0"  ng-model="article.catalogue" name="catalogue"> 否
+          </label>
+        </div>
+      </div>
+      <!--是否生成目录 end-->
+
     </div>
 
     <div class="panel-footer">

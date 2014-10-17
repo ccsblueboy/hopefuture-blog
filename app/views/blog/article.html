@@ -27,8 +27,9 @@
         </div>
       </div>
 
-      <div class="article-content" ng-bind-html="article.content">
-
+      <div ng-switch="article.catalogue">
+          <div ng-switch-when="true" generate-catalogue></div>
+          <div ng-switch-when="false" class="article-content" ng-bind-html="article.content"></div>
       </div>
       <!--/.blog-content -->
     </section>

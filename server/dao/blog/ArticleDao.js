@@ -132,6 +132,7 @@ ArticleDao.prototype.save = function (data, callback) {
 
               data.updatedDate = new Date();
               var _id = data._id;
+              // 删除多余的属性，防止前端非法操作
               delete data._id;
               delete data.account;
               delete data.articleLink;
@@ -301,7 +302,8 @@ ArticleDao.prototype.pagination = function (loginName, searchContent, dataPage, 
  * @param callback {function} 回调函数
  */
 ArticleDao.prototype.findById = function (id, callback) {
-  this.model.findById(id, function (err, model) {
+  this.model.findById(id, {_id: 1, title: 1, content: 1, account: 1, status: 1, publicityStatus: 1, protectedPassword: 1, top: 1,
+    publishType: 1, publishDate: 1, type: 1, categories: 1, labels: 1, catalogue: 1}, function(err, model) {
     if (err) {
       return callback(err);
     }
@@ -508,7 +510,7 @@ ArticleDao.prototype.articleInfo = function (loginName, articleId, password, cal
   var categories;
 
   var promise = model.findById(articleId, {_id: 1, title: 1, content: 1, publicityStatus: 1, protectedPassword: 1,
-    categories: 1, labels: 1, readCounts: 1, articleLink: 1, createdDate: 1}).exec();
+    categories: 1, labels: 1, catalogue: 1, catalogueHtml: 1, catalogueContent:1, readCounts: 1, articleLink: 1, createdDate: 1}).exec();
 
   promise.then(function (article) {
     if (password) {//如果传递密码，表示该文章是受保护的，判断输入的密码是否正确
@@ -522,6 +524,12 @@ ArticleDao.prototype.articleInfo = function (loginName, articleId, password, cal
     }
     data.article = article._doc;//文章信息
     data.article.createdDate = moment(data.article.createdDate).format('YYYY年MM月DD HH:mm:ss');
+    //处理文章是否已经生成目录
+    if(data.article.catalogue && data.article.catalogueHtml){
+      delete data.article.content;
+    }else{
+      data.article.catalogue = false;
+    }
     articleLabels = article.labels.map(function (item) {
       return item;
     });

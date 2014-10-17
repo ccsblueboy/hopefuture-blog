@@ -38,6 +38,134 @@
   }
 }
 
+//博客目录 start
+.article-catalogue{
+  display: none;
+}
+@media (min-width: 768px) {
+  .article-catalogue{
+    display: block;
+    width: 41.6667%;
+  }
+}
+@media (min-width: 992px) {
+  .article-catalogue{
+    width: 33.3333%;
+  }
+}
+@media (min-width: 1200px) {
+  .article-catalogue{
+    width: 25%;
+  }
+}
+
+.article-catalogue {
+  opacity: 0.7;
+  position: fixed;
+  right: 0;
+  top: 70px;
+  z-index: 10;
+  .article-catalogue-header {
+    padding: 5px 25px;
+
+    .glyphicon{
+      font-size: 30px;
+      cursor: pointer;
+      &:hover{
+        color: darken(@gray-dark, 10%);
+      }
+    }
+  }
+
+  .nav {
+    > li > a {
+      display: block;
+      padding: 4px 20px;
+      color: @gray-dark;
+      font-weight: bold;
+      &:hover,
+      &:focus {
+        padding-left: 19px;
+        color: darken(@gray-dark, 10%);
+        background-color: transparent;
+        border-left: 1px solid darken(@gray-dark, 10%);
+      }
+    }
+    .active > a,
+    .active:hover > a,
+    .active:focus > a {
+      padding-left: 18px;
+      font-weight: 700;
+      color: darken(@gray-dark, 10%);
+      background-color: transparent;
+      border-left: 2px solid darken(@gray-dark, 10%);
+    }
+    .nav {
+      display: none;
+      padding-left: 1.5em;
+      padding-bottom: 10px;
+      > li > a {
+        padding-top: 2px;
+        padding-bottom: 2px;
+      }
+    }
+    > .active > ul {
+      display: block;
+    }
+  }
+}
+
+/*目录号*/
+.article-catalogue .nav {
+  counter-reset: catalogue1;
+  > li > a:before {
+    content: counter(catalogue1, decimal) ". ";
+    counter-increment: catalogue1;
+    font-weight: bold;
+  }
+
+  .nav {
+    counter-reset: catalogue2;
+    > li > a:before {
+      content: counter(catalogue1, decimal) "." counter(catalogue2, decimal) ". ";
+      counter-increment: catalogue2;
+    }
+  }
+
+  .nav .nav {
+    counter-reset: catalogue3;
+    > li > a:before {
+      content: counter(catalogue1, decimal) "." counter(catalogue2, decimal) "." counter(catalogue3, decimal) ". ";
+      counter-increment: catalogue3;
+    }
+  }
+
+  .nav .nav .nav {
+    counter-reset: catalogue4;
+    > li > a:before {
+      content: counter(catalogue1, decimal) "." counter(catalogue2, decimal) "." counter(catalogue3, decimal) "." counter(catalogue4, decimal) ". ";
+      counter-increment: catalogue4;
+    }
+  }
+
+  .nav .nav .nav .nav {
+    counter-reset: catalogue5;
+    > li > a:before {
+      content: counter(catalogue1, decimal) "." counter(catalogue2, decimal) "." counter(catalogue3, decimal) "." counter(catalogue4, decimal) "." counter(catalogue5, decimal) ". ";
+      counter-increment: catalogue5;
+    }
+  }
+
+  .nav .nav .nav .nav .nav {
+    counter-reset: catalogue6;
+    > li > a:before {
+      content: counter(catalogue1, decimal) "." counter(catalogue2, decimal) "." counter(catalogue3, decimal) "." counter(catalogue4, decimal) "." counter(catalogue5, decimal) "." counter(catalogue6, decimal) ". ";
+      counter-increment: catalogue6;
+    }
+  }
+}
+//博客目录 end
+
 .article-reproduced {
   margin: @margin-lg 0;
 }

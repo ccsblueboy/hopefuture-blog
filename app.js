@@ -174,12 +174,6 @@ app.use(function (req, res, next) {
   }
 });
 
-//设置是否为开发环境
-app.use(function (req, res, next) {
-  res.locals.development = 'development' === app.get('env');
-  next();
-});
-
 //定义路由
 routes(app);
 

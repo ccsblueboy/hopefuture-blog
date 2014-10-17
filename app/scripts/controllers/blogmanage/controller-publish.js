@@ -9,7 +9,7 @@
  * @createdDate 2014-6-13
  * */
 
-angular.module('hopefutureBlogApp').controller('PublishCtrl', function ($scope, $filter, $location, publishService) {
+angular.module('hopefutureBlogApp').controller('PublishCtrl', function ($scope, $filter, $location, publishService, publishMethod, publicityStatus, publishTypeStatus) {
   //先销毁tinyMCE实例
   if(tinymce && tinymce.get('content')){
     tinymce.get('content').destroy();
@@ -22,11 +22,14 @@ angular.module('hopefutureBlogApp').controller('PublishCtrl', function ($scope, 
     _id: undefined,
     title: '',
     content: '',
+    account: '',
     status: '',
     publicityStatus: 'public',//公开度，默认公开
+    publicityStatusName: publicityStatus.public,//默认取 public
     protectedPassword: '',//密码保护，需输入密码才能查看
     top: false,//文章置顶
     publishType: 'immediate',
+    publishTypeName: publishTypeStatus.immediate,
     publishDate: '',
     articleLink: '',//文章永久链接，取相对地址
     type: 'richText',//文章类型
@@ -68,7 +71,11 @@ angular.module('hopefutureBlogApp').controller('PublishCtrl', function ($scope, 
         var item = data.item;
         //$scope.tinymceContent.setContent(item.content);
         item.articleLink = '/' + item.account + '#/article/' + item._id;
+        item.catalogue = !!item.catalogue;
         angular.extend($scope.article, item);
+        $scope.article.publicityStatusName = publicityStatus[item.publicityStatus];
+        $scope.article.publishTypeName = publishTypeStatus[item.publishType];
+        $scope.article.publishDate = $filter('date')($scope.article.publishDate, 'yyyy-MM-dd  HH:mm');
         var labels = $scope.article.labels;
         for (var i = 0, len = labels.length; i < len; i++) {
           $scope.labelCollection.add({name: labels[i]});
@@ -96,13 +103,21 @@ angular.module('hopefutureBlogApp').controller('PublishCtrl', function ($scope, 
     status = status || 'publish';
     $scope.article.status = status;
     //$scope.article.content = $scope.tinymceContent.getContent();
-    $scope.article.publishDate = $scope.article.publishType === 'immediate' ? '' : $filter('date')($scope.article.publishDate, 'yyyy-MM-dd');
+    $scope.article.publishDate = $('#publishDate').val();
     var article = angular.copy($scope.article);
     delete article.account;
     delete article.articleLink;
     delete article.createdMonth;
     delete article.createdDate;
     delete article.readCounts;
+    delete article.publicityStatusName;
+    delete article.publishTypeName;
+    //生成文章栏目
+    if(article.catalogue){
+      var html = publishMethod.generateHtml(article.content);
+      article.catalogueHtml = html.catalogue;
+      article.catalogueContent = html.content;
+    }
     publishService.save(article, function (data) {
       if (data.success === true) {
         $scope.$parent.showPublishInfo = true;
@@ -125,24 +140,17 @@ angular.module('hopefutureBlogApp').controller('PublishCtrl', function ($scope, 
     });
   };
 })
+  //公开度
   .controller('PublicityCtrl', function ($scope, publicityStatus) {
 
-    $scope.publicityStatus = publicityStatus.public;
     $scope.publicityPanel = false;
-
-    //文章公开度
-    $scope.publicity = {
-      publicityStatus: 'public',//公开度，默认公开
-      protectedPassword: '',//密码保护，需输入密码才能查看
-      top: false//文章置顶
-    };
 
     $scope.show = {
       top: true,
       protectedPassword: false
     };
 
-    $scope.$watch('publicity.publicityStatus', function (newValue, oldValue) {
+    $scope.$watch('$parent.article.publicityStatus', function (newValue, oldValue) {
       switch (newValue) {
         case 'public':
           $scope.show.top = true;
@@ -163,62 +171,52 @@ angular.module('hopefutureBlogApp').controller('PublishCtrl', function ($scope, 
           break;
       }
     });
-    $scope.$watch('article.publishType', function (newValue, oldValue) {
+
+    /**
+     * 设置文章公开度
+     */
+    $scope.setPublicityStatus = function () {
+      var status = $scope.$parent.article.publicityStatus;
+      if(status === 'protected' && !$('#protectedPassword').valid()){
+        return;
+      }
+      switch (status) {
+        case 'public':
+          $scope.$parent.article.protectedPassword = '';
+          break;
+        case 'protected':
+          $scope.$parent.article.top = false;
+          break;
+        case 'private':
+          $scope.$parent.article.top = false;
+          $scope.$parent.article.protectedPassword = '';
+          break;
+      }
+      $scope.$parent.article.publicityStatusName = publicityStatus[status];
+      $scope.publicityPanel = false;
+    };
+
+  })
+  .controller('PublishTypeCtrl', function ($scope, publishTypeStatus) {//发布方式
+    $scope.publishTypePanel = false;
+
+    $scope.setPublishTypeStatus = function () {
+      var status = $scope.$parent.article.publishType;
+      if (status === 'immediate') {
+        //$scope.$parent.article.publishDate = '';
+        $('#publishDate').val('');
+      }
+      $scope.$parent.article.publishTypeName = publishTypeStatus[status];
+      $scope.publishTypePanel = false;
+    };
+
+    $scope.$watch('$parent.article.publishType', function (newValue, oldValue) {
       if (newValue === 'delay') {
         $('#publishDate').rules('add', 'required');
       } else {
         $('#publishDate').rules('remove', 'required');
         $('#publishDate').valid();
       }
-    });
-
-    /**
-     * 设置文章公开度
-     */
-    $scope.setPublicityStatus = function () {
-      var status = $scope.publicity.publicityStatus;
-      if(status === 'protected' && !$('#protectedPassword').valid()){
-        return;
-      }
-      switch (status) {
-        case 'public':
-          $scope.publicity.protectedPassword = '';
-          break;
-        case 'protected':
-          $scope.publicity.top = false;
-          break;
-        case 'private':
-          $scope.publicity.top = false;
-          $scope.publicity.protectedPassword = '';
-          break;
-      }
-      angular.extend($scope.$parent.article, $scope.publicity);
-      $scope.publicityStatus = publicityStatus[status];
-      $scope.publicityPanel = false;
-    };
-
-  })
-  .controller('PublishTypeCtrl', function ($scope, publishTypeStatus) {//发布方式
-    $scope.publishTypeStatus = publishTypeStatus.immediate;
-    $scope.publishTypePanel = false;
-
-    //文章发布方式
-    $scope.publishType = {
-      publishTypeStatus: 'immediate',
-      publishDate: ''
-    };
-
-    $scope.setPublishTypeStatus = function () {
-      var status = $scope.publishType.publishTypeStatus;
-      if (status === 'immediate') {
-        $scope.publishType.publishDate = '';
-      }
-      angular.extend($scope.$parent.article, $scope.publishType);
-      $scope.publishTypeStatus = publishTypeStatus[status];
-      $scope.publishTypePanel = false;
-    };
-
-    $scope.$watch('publishType.publishTypeStatus', function (newValue, oldValue) {
       $scope.showPublishDate = newValue === 'delay';
     });
 
