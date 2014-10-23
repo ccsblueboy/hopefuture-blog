@@ -57,7 +57,8 @@ angular.module('hopefutureBlogApp').factory('blogService', ['hfbHttpService', fu
   function ScrollSpy() {
     var instance = {
       options: {
-        offset: 10
+        offset: 10,
+        immedLoad: true
       },
 
       init: function () {
@@ -105,9 +106,10 @@ angular.module('hopefutureBlogApp').factory('blogService', ['hfbHttpService', fu
           $el[0].blur();
           process();
         });
-
-        this.refresh();
-        this.process();
+        if(this.options.immedLoad){
+          this.refresh();
+          this.process();
+        }
       },
 
       /**

@@ -117,6 +117,9 @@ angular.module('hopefutureBlogApp').controller('PublishCtrl', function ($scope, 
       var html = publishMethod.generateHtml(article.content);
       article.catalogueHtml = html.catalogue;
       article.catalogueContent = html.content;
+    }else{
+      article.catalogueHtml = undefined;
+      article.catalogueContent = undefined;
     }
     publishService.save(article, function (data) {
       if (data.success === true) {

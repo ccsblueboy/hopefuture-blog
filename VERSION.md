@@ -103,7 +103,8 @@
 * 为资源链接添加tooltip提示信息
 * 支持文章目录生成
 * 修复bug：文章修改时公开度和发布方式显示不正确
-* 格式化文章代码，一次性加载 branches
+* 格式化文章代码，一次性加载 brushes
+* 解决文章内容太长时，报 "Request Entity Too Large" 错误，设置以下代码：app.use(bodyParser({limit: '10mb'}));
 * 加入markdown支持（未完成）
 * 后台启动定时发布新闻功能（未完成）
 * 自动保存功能（未完成）

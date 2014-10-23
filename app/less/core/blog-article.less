@@ -39,35 +39,16 @@
 }
 
 //博客目录 start
-.article-catalogue{
-  display: none;
-}
-@media (min-width: 768px) {
-  .article-catalogue{
-    display: block;
-    width: 41.6667%;
-  }
-}
-@media (min-width: 992px) {
-  .article-catalogue{
-    width: 33.3333%;
-  }
-}
-@media (min-width: 1200px) {
-  .article-catalogue{
-    width: 25%;
-  }
-}
-
-.article-catalogue {
-  opacity: 0.7;
+.article-catalogue-panel{
   position: fixed;
   right: 0;
   top: 70px;
   z-index: 10;
+  padding-right: @padding-md;
+  display: none;
+
   .article-catalogue-header {
     padding: 5px 25px;
-
     .glyphicon{
       font-size: 30px;
       cursor: pointer;
@@ -76,11 +57,64 @@
       }
     }
   }
+}
 
+@media (min-width: 768px) {
+  .article-catalogue-panel{
+    display: block;
+    width: 41.6667%;
+  }
+}
+@media (min-width: 992px) {
+  .article-catalogue-panel{
+    width: 33.3333%;
+  }
+}
+@media (min-width: 1200px) {
+  .article-catalogue-panel{
+    width: 25%;
+  }
+}
+
+.article-catalogue {
+  height: 422px;
+  overflow: hidden;
+  position: relative;
+
+  //箭头
+  .article-catalogue-arrow{
+    position: absolute;
+    top: 40%;
+    right: 10px;
+    border: 1px solid;
+    border-radius: 8px;
+    .disabled{
+      cursor: default;
+      span {
+        color: #aaa;
+      }
+    }
+    .up{
+      border-bottom: 1px solid;
+      padding: 5px 5px 2px 6px;
+      cursor: pointer;
+    }
+    .down{
+      padding: 5px 5px 2px;
+      cursor: pointer;
+    }
+  }
+
+  //目录导航
   .nav {
+    margin: 0 30px 0 0;
+    position: relative;
+    > li{
+      line-height: 30px;
+    }
     > li > a {
       display: block;
-      padding: 4px 20px;
+      padding: 0 20px;
       color: @gray-dark;
       font-weight: bold;
       &:hover,
@@ -103,11 +137,6 @@
     .nav {
       display: none;
       padding-left: 1.5em;
-      padding-bottom: 10px;
-      > li > a {
-        padding-top: 2px;
-        padding-bottom: 2px;
-      }
     }
     > .active > ul {
       display: block;

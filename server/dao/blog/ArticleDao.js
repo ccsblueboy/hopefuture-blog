@@ -737,10 +737,11 @@ function getArticleList(model, conditions, type, id, callback) {
         labelIds.push(item);
       });
       doc.createdDate = moment(doc.createdDate).format('YYYY年MM月DD HH:mm:ss');
-      //这里全显示，不再截取
-//      var content = commonMethod.htmlToText(doc.content);
-//      content = commonMethod.truncate(content, 500, true, ' <strong>. . .</strong>');
-//      doc.content = content;
+      //截取内容
+      //var content = commonMethod.htmlToText(doc.content);
+      var content = doc.content;
+      content = commonMethod.truncate(content, 2000, true, ' <strong>. . .</strong>');
+      doc.content = content;
       return doc;
     });
 
