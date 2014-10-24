@@ -826,8 +826,9 @@ function getArticlePagination(model, conditions, skip, limit, sort, dataPage, ca
         labelIds.push(item);
       });
       doc.createdDate = moment(doc.createdDate).format('YYYY年MM月DD HH:mm:ss');
-      var content = commonMethod.htmlToText(doc.content);
-      content = commonMethod.truncate(content, 500, true, ' <strong>. . .</strong>');
+      //var content = commonMethod.htmlToText(doc.content);
+      var content = doc.content;
+      content = commonMethod.truncate(content, 1000, true, ' <strong>. . .</strong>');
       doc.content = content;
       return doc;
     });

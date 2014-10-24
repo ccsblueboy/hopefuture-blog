@@ -87,19 +87,20 @@ angular.module('hopefutureBlogApp').directive('protectedValidator', function () 
         // Each of row default height
         var rowHeight = 30;
 
-        function fadeInOutUp() {
+        function fadeInOutUp(step) {
           $downElement.removeClass('disabled');
           if (rowIndex <= 0) {
             $upElement.addClass('disabled');
             return;
           }
-          var _index = --rowIndex;
+          step = step || 1;
+          rowIndex = rowIndex - step;
           $navElement.css({
-            top: -30 * _index
+            top: -30 * rowIndex
           });
         }
 
-        function fadeInOutDown() {
+        function fadeInOutDown(step) {
           if(rowIndex === undefined || visibleRowSize === undefined || rowSize === undefined){
             rowIndex = 0;
             visibleRowSize = 0;
@@ -125,9 +126,10 @@ angular.module('hopefutureBlogApp').directive('protectedValidator', function () 
             $downElement.addClass('disabled');
             return;
           }
-          var _index = rowIndex++;
+          step = step || 1;
+          rowIndex = rowIndex + step;
           $navElement.css({
-            top: -30 * (_index + 1)
+            top: -30 * rowIndex
           });
         }
 
@@ -193,7 +195,22 @@ angular.module('hopefutureBlogApp').directive('protectedValidator', function () 
           scrollSpy.loadScroll($('body'), {
             offset: 70,
             target: '.article-catalogue',
-            immedLoad: false
+            immedLoad: false,
+          });
+
+          //注册监听事件，当鼠标滑轮移动到活动的target时，触发该事件
+          element.on('activate.hf.scrollspy', '.article-catalogue > .nav li', function(e){
+            if(!$('.article-catalogue-panel').hasClass('sr-only')){
+              var $activeEl = $(e.currentTarget);
+              var $nav = $('.article-catalogue', element);
+              var sub = $activeEl.offset().top - $nav.offset().top;
+              // 在 $nav 高度范围内可见 0 - 420（也就是说 sub 值为 0 - 390 可见），否则隐藏，需要处理显示
+              if(sub > 390){
+                fadeInOutDown((sub - 390) / 30);
+              }else if(sub < 0){
+                fadeInOutUp((- sub)/ 30);
+              }
+            }
           });
         });
       }
