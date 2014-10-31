@@ -48,7 +48,7 @@ angular.module('hopefutureBlogApp').directive('protectedValidator', function () 
         html += '<div class="article-catalogue-header"><span class="glyphicon glyphicon-list"></span></div>';
         html += '<div class="article-catalogue">';
         html += catalogueHtml;
-        html += '<div class="article-catalogue-arrow"><div class="up disabled"><span class="glyphicon glyphicon-chevron-up"></span></div>' +
+        html += '<div class="article-catalogue-arrow" style="display: none;"><div class="up disabled"><span class="glyphicon glyphicon-chevron-up"></span></div>' +
           '<div class="down"><span class="glyphicon glyphicon-chevron-down"></span></div></div>';
         html += '</div>';
         element.append(html);
@@ -89,8 +89,7 @@ angular.module('hopefutureBlogApp').directive('protectedValidator', function () 
 
         function fadeInOutUp(step) {
           $downElement.removeClass('disabled');
-          if (rowIndex <= 0) {
-            $upElement.addClass('disabled');
+          if ($upElement.hasClass('disabled')) {
             return;
           }
           step = step || 1;
@@ -98,6 +97,9 @@ angular.module('hopefutureBlogApp').directive('protectedValidator', function () 
           $navElement.css({
             top: -30 * rowIndex
           });
+          if (rowIndex <= 0) {
+            $upElement.addClass('disabled');
+          }
         }
 
         function fadeInOutDown(step) {
@@ -122,8 +124,7 @@ angular.module('hopefutureBlogApp').directive('protectedValidator', function () 
             }
           }
           $upElement.removeClass('disabled');
-          if (rowIndex + visibleRowSize >= rowSize) {
-            $downElement.addClass('disabled');
+          if ($downElement.hasClass('disabled')) {
             return;
           }
           step = step || 1;
@@ -131,6 +132,9 @@ angular.module('hopefutureBlogApp').directive('protectedValidator', function () 
           $navElement.css({
             top: -30 * rowIndex
           });
+          if (rowIndex + visibleRowSize >= rowSize) {
+            $downElement.addClass('disabled');
+          }
         }
 
         function wheelFn(e) {
@@ -177,8 +181,20 @@ angular.module('hopefutureBlogApp').directive('protectedValidator', function () 
           $(document).off('mousewheel.catalogue').on('mousewheel.catalogue', '.article-catalogue .nav', wheelFn);
         }
 
-        // 上线翻滚栏目事件
-        element.on('click','.article-catalogue-arrow', function (e) {
+        //显示隐藏上下翻滚箭头事件
+        element.find('.article-catalogue > ul').mouseenter(function (e) {
+          if (visibleRowSize !== rowSize) {
+            element.find('.article-catalogue-arrow').show();
+          }
+        }).mouseleave(function (e) {
+          element.find('.article-catalogue-arrow').hide();
+        });
+        element.find('.article-catalogue-arrow').mouseenter(function(e){
+          $(e.currentTarget).show();
+        });
+
+        // 上下翻滚栏目事件
+        element.on('click','.article-catalogue-arrow > div', function (e) {
           var el = $(e.currentTarget);
           if (el.hasClass('disabled')) {
             return;
@@ -195,7 +211,7 @@ angular.module('hopefutureBlogApp').directive('protectedValidator', function () 
           scrollSpy.loadScroll($('body'), {
             offset: 70,
             target: '.article-catalogue',
-            immedLoad: false,
+            immedLoad: false
           });
 
           //注册监听事件，当鼠标滑轮移动到活动的target时，触发该事件

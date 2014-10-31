@@ -509,7 +509,7 @@ ArticleDao.prototype.articleInfo = function (loginName, articleId, password, cal
   var articleLabels;
   var categories;
 
-  var promise = model.findById(articleId, {_id: 1, title: 1, content: 1, publicityStatus: 1, protectedPassword: 1,
+  var promise = model.findById(articleId, {_id: 1, title: 1, content: 1, status:1, publicityStatus: 1, protectedPassword: 1,
     categories: 1, labels: 1, catalogue: 1, catalogueHtml: 1, catalogueContent:1, readCounts: 1, articleLink: 1, createdDate: 1}).exec();
 
   promise.then(function (article) {
@@ -685,9 +685,13 @@ ArticleDao.prototype.update = function (conditions, fields, callback) {
  * @param articleId
  * @param ip
  * @param browserAgent
+ * @param status 文章状态
  * @param callback
  */
-ArticleDao.prototype.readCount = function (articleId, ip, browserAgent, callback) {
+ArticleDao.prototype.readCount = function (articleId, ip, browserAgent, status, callback) {
+  if(status === 'draft'){
+    return callback();
+  }
   var model = this.model;
   var entity = new ArticleReadCountModel({articleID: articleId, ip: ip, browserAgent: browserAgent});
   entity.save(function (err, product, numberAffected) {

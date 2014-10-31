@@ -86,8 +86,8 @@ angular.module('hopefutureBlogApp')
           }
 
           $scope.relatedArticle = data.articleInfo.relatedArticle;
-          angular.forEach(function (item) {
-            item.articleLink = absUrl.replace(articleIdReg, '/' + item._id);
+          angular.forEach($scope.relatedArticle, function (item) {
+            item.articleLink = item.articleLink || absUrl.replace(articleIdReg, '/' + item._id);
           });
 
           comment.articleID = data.articleInfo.article._id;

@@ -101,7 +101,7 @@ var personalBlog = {
       } else {
 
         //记录浏览次数
-        articleDao.readCount(articleId, ip, browserAgent, function (err) {
+        articleDao.readCount(articleId, ip, browserAgent, data.article.status, function (err) {
           if (err) {
             res.send({
               success: false,
