@@ -38,6 +38,7 @@
     <th style="width: 3%;">
       <input type="checkbox" class="ng-pristine ng-valid" ng-model="grid.checked" ng-change="selectAll()">
     </th>
+    <th style="width: 5%;">&nbsp;</th>
     <th style="width: 24%;">标题</th>
     <th style="width: 15%;">分类</th>
     <th style="width: 15%;">标签</th>
@@ -46,12 +47,15 @@
     <th style="width: 7%;">浏览次数</th>
     <th style="width: 5%;">评论</th>
     <th style="width: 15%;">创建日期</th>
-    <th style="width: 5%;">&nbsp;</th>
   </tr>
   </thead>
   <tbody>
   <tr ng-repeat="item in items" id="{{item._id}}">
     <td><input type="checkbox" ng-model="item.checked" ng-change="selectItem()"/></td>
+    <td>
+      <a class="glyphicon glyphicon-pencil" href="" ng-click="edit(item._id);"></a>
+      <a class="glyphicon glyphicon-trash" href="" ng-click="delete(item);"></a>
+    </td>
     <td>
       <div popover="{{item.title}}" popover-trigger="mouseenter" popover-popup-delay="300">
         <a ng-href="/{{item.account}}#/article/{{item._id}}" target="_blank">{{item.title | truncate:50:true:' ...'}}</a>
@@ -64,10 +68,6 @@
     <td>{{item.readCounts}}</td>
     <td>{{item.commentCounts}}</td>
     <td>{{item.createdDate | date:'yyyy-MM-dd HH:mm:ss'}}</td>
-    <td>
-      <a class="glyphicon glyphicon-pencil" href="" ng-click="edit(item._id);"></a>
-      <a class="glyphicon glyphicon-trash" href="" ng-click="delete(item);"></a>
-    </td>
   </tr>
   </tbody>
 </table>

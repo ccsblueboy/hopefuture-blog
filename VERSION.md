@@ -107,3 +107,8 @@
 * 解决文章内容太长时，报 "Request Entity Too Large" 错误，设置以下代码：app.use(bodyParser({limit: '10mb'}));
 * 升级npm和bower
 * 修复其他bug
+
+##version 0.3.1  老鼠-进拓
+* 加入markdown支持（未完成）
+* 后台启动定时发布新闻功能（未完成）
+* 自动保存功能（未完成）
