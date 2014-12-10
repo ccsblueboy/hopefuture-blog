@@ -477,7 +477,7 @@ module.exports = function (grunt) {
       },
       dev: {
         options: {
-          script: './bin/hopefuture-blog'
+          script: './bin/hopefuture-blog.js'
         }
       }
     },

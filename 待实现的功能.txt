@@ -33,11 +33,11 @@ errorMessage: err.message
 
 18、日志没有记录
 
-19、数据库密码的设置
+19、数据库密码的设置（已完成）
 
 20、技术站点加链接，列举相关技术站点，供学习参考（已完成）
 
-21、数据导入导出
+21、数据导入导出（不用实现）
 
 22、eonasdan-bootstrap-datetimepicker 回头换成指令
 https://github.com/andrej-zirko/angular-eonasdan-bootstrap-datetimepicker

@@ -32,7 +32,7 @@ app.set('view engine', 'html');
 
 app.use(favicon(__dirname + '/' + ('development' === app.get('env') ? 'app' : 'webapp') + '/favicon.png'));
 app.use(logger('dev'));
-app.use(bodyParser({limit: '10mb'}));
+app.use(bodyParser({limit: '10mb'}));//设置前端post提交最大内容
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser(config.cookieSecret));

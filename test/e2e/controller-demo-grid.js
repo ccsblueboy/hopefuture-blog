@@ -15,7 +15,7 @@ describe('my app', function () {
         return button.textContent.trim() === buttonText;
       });
     });
-    browser.get('example-grid');
+    browser.get('examples/grid');
   });
 
   var count = 0;
@@ -33,9 +33,9 @@ describe('my app', function () {
     titleInput.sendKeys('title1');
     expect(titleInput.getAttribute('value')).toBe('title1');
 
-    var contentText = element(by.model('demo.content'));
-    contentText.sendKeys('content1');
-    expect(contentText.getAttribute('value')).toBe('content1');
+    //var contentText = element(by.model('demo.content'));
+    //contentText.sendKeys('content1');
+    //expect(contentText.getAttribute('value')).toBe('content1');
 
     element(by.buttonTextSimple('OK')).click();
   });
@@ -58,12 +58,12 @@ describe('my app', function () {
       expect(titleInput.getAttribute('value')).toBe(oValue + 'update_title1');
     });
 
-    var contentText = element(by.model('demo.content'));
-    contentText.getAttribute('value').then(function (value) {
-      oValue = value;
-      contentText.sendKeys('update_content1');
-      expect(contentText.getAttribute('value')).toBe(oValue + 'update_content1');
-    });
+    //var contentText = element(by.model('demo.content'));
+    //contentText.getAttribute('value').then(function (value) {
+    //  oValue = value;
+    //  contentText.sendKeys('update_content1');
+    //  expect(contentText.getAttribute('value')).toBe(oValue + 'update_content1');
+    //});
 
     element(by.buttonTextSimple('OK')).click();
 
@@ -73,7 +73,7 @@ describe('my app', function () {
 
   it('测试删除一条记录功能，点击删除一条记录按钮', function () {
     element(by.css('.glyphicon-trash')).click();
-    element(by.buttonTextSimple('OK')).click();
+    element(by.buttonTextSimple('确定')).click();
 
     var list = element.all(by.repeater('item in items'));
     count--;
@@ -83,7 +83,7 @@ describe('my app', function () {
   it('测试删除多条记录功能，点击删除按钮', function () {
     element(by.model('grid.checked')).click();
     element(by.buttonTextSimple('删除')).click();
-    element(by.buttonTextSimple('OK')).click();
+    element(by.buttonTextSimple('确定')).click();
 
     var list = element.all(by.repeater('item in items'));
     count = 0;
