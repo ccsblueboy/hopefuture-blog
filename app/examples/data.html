@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>数据导入导出</title>
+  <meta name="description" content="">
+  <!-- 兼容性问题，使用浏览器最高版本来渲染-->
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- build:css ../styles/vendor-examples.css -->
+  <!-- bower:css -->
+  <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css" />
+  <link rel="stylesheet" href="../bower_components/fontawesome/css/font-awesome.css" />
+  <link rel="stylesheet" href="../bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
+  <!-- endbower -->
+  <!-- endbuild -->
+</head>
+<body ng-app="hopefutureBlogApp" ng-controller="DemoDataCtrl">
+<div class="jumbotron">
+  <div class="container">
+    <h1>数据导入导出例子</h1>
+
+  </div>
+</div>
+
+<div class="container">
+  <ul class="list-group">
+    <li class="list-group-item"><a href="" ng-click="mongodump();">数据导出</a></li>
+    <li class="list-group-item"><a href="" ng-click="mongorestore();">数据导入</a></li>
+  </ul>
+</div>
+
+<!-- build:js ../scripts/vendor-examples-data.js -->
+<!-- bower:js -->
+<script src="../bower_components/jquery/dist/jquery.js"></script>
+<script src="../bower_components/angular/angular.js"></script>
+<script src="../bower_components/jquery-validation/dist/jquery.validate.js"></script>
+<script src="../bower_components/bootstrap/dist/js/bootstrap.js"></script>
+<script src="../bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+<script src="../bower_components/tinymce/tinymce.min.js"></script>
+<script src="../bower_components/angular-ui-tinymce/src/tinymce.js"></script>
+<script src="../bower_components/moment/moment.js"></script>
+<script src="../bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+<script src="../bower_components/tinymce-syntaxhighlighter/plugin.js"></script>
+<!-- endbower -->
+<!-- endbuild -->
+
+<!-- build:js ../scripts/examples-data.js -->
+<script src="../scripts/apps/examples/app-demo-data.js"></script>
+<script src="../scripts/services/httpInterceptor.js"></script>
+<script src="../scripts/services/examples/service-demo-data.js"></script>
+<script src="../scripts/controllers/examples/controller-demo-data.js"></script>
+<script src="../scripts/controllers/controller-common.js"></script>
+<!-- endbuild -->
+</body>
+</html>
+

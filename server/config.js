@@ -1,10 +1,7 @@
 'use strict';
 
 /**
- * 该文件为项目发布配置文件
- * 等正式环境中，用该文件替换config.js
- * 该文件不会上传到github上
- * 配置mongodb 相关参数
+ * 项目配置文件，配置mongodb 等相关参数
  * @module config
  * @since 0.0.2
  * @version @@currentVersion
@@ -36,7 +33,8 @@ module.exports = {
     port: '27017',
     database: 'hfblog',
     user: '',
-    pass: ''
+    pass: '',
+    dataPath: 'data/mongodb'
   },
 
   /**

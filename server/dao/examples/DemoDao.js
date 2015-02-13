@@ -95,10 +95,10 @@ DemoDao.prototype.findById = function (id, callback) {
  * @param callback {function} 回调函数
  */
 DemoDao.prototype.delete = function (conditions, callback) {
-  var query = this.model.remove(conditions, function (err) {
+  this.model.remove(conditions, function (err) {
     return callback(err);
   });
-  //query.exec();
+
 };
 
 /**
