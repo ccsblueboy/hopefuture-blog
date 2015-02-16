@@ -46,6 +46,7 @@ angular.module('hopefutureBlogApp')
     };
 
     $scope.create = function () {
+      $scope.$parent.showPublishInfo=false;
       $location.path('/publish');
     };
 
