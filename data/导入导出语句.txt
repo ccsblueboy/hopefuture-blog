@@ -1,0 +1,7 @@
+导出
+
+mongodump -h localhost:27017 -d hfblog -o D:\gitworkspace\hopefuture-blog\data\mongodb
+
+导入
+
+mongorestore -h localhost:27017 -d hfblog  D:\gitworkspace\hopefuture-blog\data\mongodb\hfblog --drop
