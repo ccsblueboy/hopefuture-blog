@@ -13,7 +13,7 @@ angular.module('hopefutureBlogApp')
   .controller('DemoDataCtrl', function ($scope, $modal, demoDataService) {
     $scope.mongodump = function () {
       demoDataService.mongodump(function (data) {
-        if(data.sucess){
+        if(data.success){
           $modal.open({
             templateUrl: '../views/templates/alert-modal.html',
             controller: 'AlertModalCtrl',
@@ -31,7 +31,7 @@ angular.module('hopefutureBlogApp')
 
     $scope.mongorestore = function () {
       demoDataService.mongorestore(function (data) {
-        if(data.sucess){
+        if(data.success){
           $modal.open({
             templateUrl: '../views/templates/alert-modal.html',
             controller: 'AlertModalCtrl',

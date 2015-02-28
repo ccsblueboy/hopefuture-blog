@@ -40,9 +40,9 @@ angular.module('hopefutureBlogApp').directive('protectedValidator', function () 
     return {
       restrict: 'AC',
       link: function (scope, element) {
-        var catalogueHtml = scope.article.catalogueHtml;//目录
+        var catalogueHtml = scope.article.catalogueHtml;//目录，是创建文章时动态生成的
         var catalogueContent = scope.article.catalogueContent;//内容
-        var html = '<div class="article-content">';
+        var html = '<div class="article-content article-content-outline">';
         html += catalogueContent + '</div>';
         html += '<div class="article-catalogue-panel sr-only">';
         html += '<div class="article-catalogue-header"><span class="glyphicon glyphicon-list"></span></div>';

@@ -37,6 +37,138 @@
     margin-bottom: 1em;
   }
 }
+//博客内容目录大纲编号 start
+.article-content-outline{
+  counter-reset: outline1;
+}
+
+//如果大纲第一级别是 h1
+.article-content-outline > h1{
+  &:before{
+    content: counter(outline1, decimal) ". ";
+    counter-increment: outline1;
+    font-weight: bold;
+  }
+  counter-reset: outline2;
+  ~ h2{
+    counter-reset: outline3;
+  }
+  ~ h2:before {
+    content: counter(outline1, decimal) "." counter(outline2, decimal) ". ";
+    counter-increment: outline2;
+    font-weight: bold;
+  }
+  ~ h2 ~ h3{
+    counter-reset: outline4;
+  }
+  ~ h2 ~ h3:before{
+    content: counter(outline1, decimal) "." counter(outline2, decimal) "." counter(outline3, decimal) ". ";
+    counter-increment: outline3;
+    font-weight: bold;
+  }
+
+  ~ h2 ~ h3 ~ h4{
+    counter-reset: outline5;
+  }
+
+  ~ h2 ~ h3 ~ h4:before{
+    content: counter(outline1, decimal) "." counter(outline2, decimal) "." counter(outline3, decimal) "." counter(outline4, decimal) ". ";
+    counter-increment: outline4;
+    font-weight: bold;
+  }
+
+  ~ h2 ~ h3 ~ h4 ~ h5{
+    counter-reset: outline6;
+  }
+
+  ~ h2 ~ h3 ~ h4 ~ h5:before{
+    content: counter(outline1, decimal) "." counter(outline2, decimal) "." counter(outline3, decimal) "." counter(outline4, decimal) "." counter(outline5, decimal) ". ";
+    counter-increment: outline5;
+    font-weight: bold;
+  }
+
+  ~ h2 ~ h3 ~ h4 ~ h5 ~ h6:before{
+    content: counter(outline1, decimal) "." counter(outline2, decimal) "." counter(outline3, decimal) "." counter(outline4, decimal) "." counter(outline5, decimal) "." counter(outline6, decimal) ". ";
+    counter-increment: outline6;
+    font-weight: bold;
+  }
+}
+
+//如果大纲第一级别是 h2
+.article-content-outline > h2{
+  &:before{
+    content: counter(outline1, decimal) ". ";
+    counter-increment: outline1;
+    font-weight: bold;
+  }
+  counter-reset: outline2;
+  ~ h3{
+    counter-reset: outline3;
+  }
+  ~ h3:before {
+    content: counter(outline1, decimal) "." counter(outline2, decimal) ". ";
+    counter-increment: outline2;
+    font-weight: bold;
+  }
+  ~ h3 ~ h4{
+    counter-reset: outline4;
+  }
+  ~ h3 ~ h4:before{
+    content: counter(outline1, decimal) "." counter(outline2, decimal) "." counter(outline3, decimal) ". ";
+    counter-increment: outline3;
+    font-weight: bold;
+  }
+
+  ~ h3 ~ h4 ~ h5{
+    counter-reset: outline5;
+  }
+  ~ h3 ~ h4 ~ h5:before{
+    content: counter(outline1, decimal) "." counter(outline2, decimal) "." counter(outline3, decimal) "." counter(outline4, decimal) ". ";
+    counter-increment: outline4;
+    font-weight: bold;
+  }
+
+  ~ h3 ~ h4 ~ h5 ~ h6:before{
+    content: counter(outline1, decimal) "." counter(outline2, decimal) "." counter(outline3, decimal) "." counter(outline4, decimal) "." counter(outline5, decimal) ". ";
+    counter-increment: outline5;
+    font-weight: bold;
+  }
+}
+
+//如果大纲第一级别是 h3（h4以后的不再考虑）
+.article-content-outline > h3{
+  &:before{
+    content: counter(outline1, decimal) ". ";
+    counter-increment: outline1;
+    font-weight: bold;
+  }
+  counter-reset: outline2;
+  ~ h4{
+    counter-reset: outline3;
+  }
+  ~ h4:before {
+    content: counter(outline1, decimal) "." counter(outline2, decimal) ". ";
+    counter-increment: outline2;
+    font-weight: bold;
+  }
+  ~ h4 ~ h5{
+    counter-reset: outline4;
+  }
+  ~ h4 ~ h5:before{
+    content: counter(outline1, decimal) "." counter(outline2, decimal) "." counter(outline3, decimal) ". ";
+    counter-increment: outline3;
+    font-weight: bold;
+  }
+
+  ~ h4 ~ h5 ~ h6:before{
+    content: counter(outline1, decimal) "." counter(outline2, decimal) "." counter(outline3, decimal) "." counter(outline4, decimal) ". ";
+    counter-increment: outline4;
+    font-weight: bold;
+  }
+
+}
+
+//博客内容目录大纲编号 end
 
 //博客目录 start
 .article-catalogue-panel{
