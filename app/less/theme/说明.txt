@@ -1,0 +1,17 @@
+Bootstrap Customizer 需要修改的变量
+
+@body-bg
+
+@gray-lighter
+
+@gray-light
+
+@gray
+
+@brand-primary
+
+@gray-dark
+
+@table-border-color
+
+@navbar-inverse-bg

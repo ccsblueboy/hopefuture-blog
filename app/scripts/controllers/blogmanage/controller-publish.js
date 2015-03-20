@@ -34,7 +34,8 @@ angular.module('hopefutureBlogApp').controller('PublishCtrl', function ($scope, 
     articleLink: '',//文章永久链接，取相对地址
     type: 'richText',//文章类型
     categories: [],//文章所属分类
-    labels: []//文章标签
+    labels: [],//文章标签
+	catalogue: 0//是否生成目录
   };
 
   /**
