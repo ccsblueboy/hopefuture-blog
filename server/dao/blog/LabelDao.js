@@ -36,10 +36,12 @@ LabelDao.prototype.pagination = function (dataPage, searchContent, loginName, ca
   var conditions = {account: loginName};
   if (searchContent) {
     var match = new RegExp(searchContent, 'ig');
-    underscore.extend(conditions, { $or: [
-      { name: match } ,
-      { description: match }
-    ] });
+    underscore.extend(conditions, {
+      $or: [
+        {name: match},
+        {description: match}
+      ]
+    });
   }
   model.count(conditions, function (err, count) {
     if (err === null) {
@@ -106,21 +108,21 @@ LabelDao.prototype.find = function (conditions, callback, fields) {
 };
 
 /**
- * 取经常使用的标签，默认取前十条
+ * 取经常使用的标签，默认取前100条
  * @param num
  * @param loginName 用户名
  * @param callback
  */
 LabelDao.prototype.frequentList = function (num, loginName, callback) {
-  num = num || 10;//默认为10
+  num = num || 100;//默认为100
 
   //var conditions = {account: loginName, count: { $gt: 0 }};
   // 这里修改为取所有的
   var conditions = {account: loginName};
 
   this.model.find(conditions, {_id: 1, name: 1, count: 1}).sort({count: -1}).limit(num).exec(function (err, docs) {
-      return callback(err, docs);
-    });
+    return callback(err, docs);
+  });
 };
 
 /**
@@ -134,7 +136,7 @@ LabelDao.prototype.frequentList = function (num, loginName, callback) {
  */
 LabelDao.prototype.delete = function (ids, callback) {
   //要删除数据的条件，例如：{ field: { $n: [<value1>, <value2>, ... <valueN> ] } }
-  var conditions = { _id: { $in: ids } };
+  var conditions = {_id: {$in: ids}};
   this.model.remove(conditions, function (err) {
     return callback(err);
   });
@@ -152,23 +154,41 @@ LabelDao.prototype.update = function (loginName, labels, callback) {
   if (underscore.isEmpty(labels)) {
     return callback(null);
   }
-  var label;
+  var label,
+    model = this.model,
+    len = labels.length;
+
+  //注意这里循环异步的处理，在最后一次执行异步回调函数，调用callback()，确保后续操作（比如查询），是在全部保存完执行
+  /**
+   * 这里可以调用 Mongodb 的Bulk来处理，mongoose 3.x 目前不支持，待升级处理
+   * 参见 http://docs.mongodb.org/manual/reference/method/db.collection.initializeOrderedBulkOp/#db.collection.initializeOrderedBulkOp
+   * FIXME 也可以利用 mongoose 的 Promise 对象来处理，但不知怎样用
+   */
   /*jshint -W083*/
-  for (var i = 0, len = labels.length; i < len; i++) {
+  for (var i = 0; i < len; i++) {
     label = labels[i];
     var conditions = {name: label, account: loginName};
-    var update = {$inc: {count: 1}, $setOnInsert: { name: label, createdDate: new Date(), account: loginName}};
+    var update = {$inc: {count: 1}, $setOnInsert: {name: label, createdDate: new Date(), account: loginName}};
     if (underscore.isObject(label)) {
       conditions = {name: label.name, account: loginName};
-      update = {$inc: {count: label.increase ? 1 : -1}, $setOnInsert: { name: label.name, createdDate: new Date(), account: loginName}};
+      update = {
+        $inc: {count: label.increase ? 1 : -1},
+        $setOnInsert: {name: label.name, createdDate: new Date(), account: loginName}
+      };
     }
-    this.model.update(conditions, update, {upsert: true}, function (err, numberAffected, rawResponse) {
-      if(err){
-        return callback(err);
-      }
-     });
+    //注意这里闭包的应用
+    (function (index) {
+      model.update(conditions, update, {upsert: true}, function (err, numberAffected, rawResponse) {
+        if (err) {
+          return callback(err);
+        } else {
+          if (index === len - 1) {
+            return callback();
+          }
+        }
+      });
+    })(i);
   }
-  return callback();
 };
 
 /**
@@ -177,16 +197,22 @@ LabelDao.prototype.update = function (loginName, labels, callback) {
  * @param callback
  */
 LabelDao.prototype.reduceCount = function (labels, callback) {
-  var label;
+  var label, i = 0, len = 0, model = this.model;
   /*jshint -W083*/
-  for(label in labels){
-    if(labels.hasOwnProperty(label)){
-      this.model.update({_id: label}, {$inc: {count: -labels[label]}}, function (err, numberAffected, rawResponse) {
-        if(err){
-          return callback(err);
-        }
-      });
+  for (label in labels) {
+    if (labels.hasOwnProperty(label)) {
+      (function (index) {
+        model.update({_id: label}, {$inc: {count: -labels[label]}}, function (err, numberAffected, rawResponse) {
+          if (err) {
+            return callback(err);
+          }else{
+            if (index === len - 1) {
+              return callback();
+            }
+          }
+        });
+      })(i++);
+      len++;
     }
   }
-  return callback();
 };
