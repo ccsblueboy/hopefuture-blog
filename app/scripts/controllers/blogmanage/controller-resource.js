@@ -84,7 +84,14 @@ angular.module('hopefutureBlogApp')
       resourceService.save($scope.resource, function (data) {
         if (data.success === true) {
           if ($scope.resource._id) {//修改
-            angular.extend($scope.items[$scope.index], $scope.resource);
+            var categoryName = '';
+            angular.forEach($scope.categories, function (item, index) {
+              if (item._id === $scope.resource.categoryId) {
+                categoryName = item.name;
+                return false;
+              }
+            });
+            angular.extend($scope.items[$scope.index], $scope.resource, {categoryName: categoryName});
           } else {
             $scope.items.unshift(data.item);
           }

@@ -19,7 +19,7 @@ angular.module('hopefutureBlogApp')
 
     $scope.page = {currentPage: 1};
     $scope.maxSize = 5;
-    $scope.itemsPerPage = 20;
+    $scope.itemsPerPage = 50;
 
     $scope.loadPageData = function () {
       var params = {

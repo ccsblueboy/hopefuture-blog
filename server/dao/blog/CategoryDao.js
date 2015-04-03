@@ -39,7 +39,7 @@ CategoryDao.prototype.save = function (data, callback) {
       if (err) {
         return callback(err);
       } else {
-        self.model.find({account: loginName}, {_id: 1, name: 1, parent: 1}).sort({_id: 1})
+        self.model.find({account: loginName}, {_id: 1, name: 1, count: 1, parent: 1}).sort({_id: 1})
           .exec(function (err, docs) {
             return callback(err, docs);
           });
@@ -52,7 +52,7 @@ CategoryDao.prototype.save = function (data, callback) {
       if (err) {
         return callback(err);
       } else {
-        self.model.find({account: loginName}, {_id: 1, name: 1, parent: 1}).sort({_id: 1})
+        self.model.find({account: loginName}, {_id: 1, name: 1, count: 1, parent: 1}).sort({_id: 1})
           .exec(function (err, docs) {
             return callback(err, docs);
           });
@@ -130,7 +130,7 @@ CategoryDao.prototype.delete = function (loginName, items, callback) {
         }
       });
     }
-    model.find({account: loginName}, {_id: 1, name: 1, parent: 1}).sort({_id: 1})
+    model.find({account: loginName}, {_id: 1, name: 1, count: 1, parent: 1}).sort({_id: 1})
       .exec(function (err, docs) {
         return callback(err, docs);
       });
