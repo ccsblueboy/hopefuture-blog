@@ -40,7 +40,7 @@
   <tr ng-repeat="item in filterObject.items" id="{{item._id}}">
     <td><input type="checkbox" ng-model="item.checked" ng-change="selectItem()"/></td>
     <td>{{item.alias | truncate:40:true}}</td>
-    <td article-count="{{item.count}}"></td>
+    <td article-count="{{item.count}}" link="/{{loginName}}#/category/{{item._id}}"></td>
     <td>
       <a class="glyphicon glyphicon-pencil" href="" ng-click="edit(item._id);"></a>
       <a class="glyphicon glyphicon-trash" href="" ng-click="delete(item);"></a>

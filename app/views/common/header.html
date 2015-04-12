@@ -18,7 +18,7 @@
       <ul class="nav navbar-nav navbar-right">
         <% if (locals.logined) { %>
         <li><a ng-href="/<%= locals.loginName %>/manage#/accountInfo">欢迎 <%= locals.loginName %></a></li>
-        <li class="<% if (locals.personalBlogPage) { %>active<% } %>"><a href="" ng-href="/<%= locals.loginName %>">我的博客</a></li>
+        <li class="<% if (locals.personalBlogPage) { %>active<% } %>"><a href="" ng-href="/<%= locals.loginName %>#/articles">我的博客</a></li>
         <li><a href="" ng-href="/<%= locals.loginName %>/manage#/setting">换肤</a></li>
         <!-- 这里进入后台管理自己的博客-->
         <li><a href="" ng-href="/logout">退出</a></li>

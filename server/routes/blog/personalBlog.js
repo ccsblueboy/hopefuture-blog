@@ -49,8 +49,8 @@ var personalBlog = {
 
   blog: function (req, res) {
     var loginName = req.baseUrl.split('/')[1];
-    //以下会设置其他条件，比如栏目，标签等，待实现
-    articleDao.findBlogData(loginName, function (err, data) {
+    var isLoginAccount = sessionManage.isLoginAccount(req, loginName);
+    articleDao.findBlogData(loginName, isLoginAccount, function (err, data) {
       if (err) {
         res.send({
           success: false
@@ -70,8 +70,9 @@ var personalBlog = {
       currentPage: req.query.currentPage
     };
     var loginName = req.baseUrl.split('/')[1];
+    var isLoginAccount = sessionManage.isLoginAccount(req, loginName);
     var dataPage = new DataPage(options);
-    articleDao.list(loginName, dataPage, function (err, data) {
+    articleDao.list(loginName, isLoginAccount, dataPage, function (err, data) {
       if (err) {
         res.send({success: false});
       } else {
@@ -92,7 +93,8 @@ var personalBlog = {
       req.connection.socket.remoteAddress;
     var browserAgent = req.headers['user-agent'];
     var password = req.query.password;
-    articleDao.articleInfo(loginName, articleId, password, function (err, data) {
+    var isLoginAccount = sessionManage.isLoginAccount(req, loginName);
+    articleDao.articleInfo(loginName, isLoginAccount, articleId, password, function (err, data) {
       if (err) {
         res.send({
           success: false,
@@ -170,8 +172,9 @@ var personalBlog = {
 
   archive: function (req, res) {
     var loginName = req.baseUrl.split('/')[1];
+    var isLoginAccount = sessionManage.isLoginAccount(req, loginName);
     var month = req.params.month;
-    articleDao.archive(loginName, month, function (err, articles) {
+    articleDao.archive(loginName, isLoginAccount,  month, function (err, articles) {
       if (err) {
         res.send({
           success: false
@@ -187,8 +190,9 @@ var personalBlog = {
 
   category: function (req, res) {
     var loginName = req.baseUrl.split('/')[1];
+    var isLoginAccount = sessionManage.isLoginAccount(req, loginName);
     var id = req.params.id;
-    articleDao.category(loginName, id, function (err, articles, category) {
+    articleDao.category(loginName, isLoginAccount, id, function (err, articles, category) {
       if (err) {
         res.send({
           success: false
@@ -205,8 +209,9 @@ var personalBlog = {
 
   label: function (req, res) {
     var loginName = req.baseUrl.split('/')[1];
+    var isLoginAccount = sessionManage.isLoginAccount(req, loginName);
     var id = req.params.id;
-    articleDao.label(loginName, id, function (err, articles, label) {
+    articleDao.label(loginName, isLoginAccount, id, function (err, articles, label) {
       if (err) {
         res.send({
           success: false

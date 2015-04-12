@@ -1,4 +1,4 @@
-<div ng-controller="BlogCtrl" ng-init="logined = <%= locals.logined %>;loginName = '<%= locals.loginName %>';development = <%= locals.development %>;">
+<div ng-controller="BlogCtrl" ng-init="logined = <%= locals.logined %>;loginName = '<%= locals.loginName %>';">
   <div class="jumbotron">
     <div class="container">
       <h1>我的博客</h1>
@@ -110,7 +110,7 @@
           <h3>标签</h3>
 
           <div class="element-list clearfix" ng-if="blog.labels.length>0">
-            <a ng-href="#/label/{{label._id}}" ng-repeat="label in blog.labels" ng-style="label.style" ng-bind="label.name"></a>
+              <a ng-href="#/label/{{label._id}}" ng-repeat="label in blog.labels" ng-style="label.style" ng-bind="label.name+'('+ label.count +')'"></a>
           </div>
         </div>
 

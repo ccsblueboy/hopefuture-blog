@@ -10,7 +10,7 @@
  * */
 
 angular.module('hopefutureBlogApp')
-  .controller('ArticlesCtrl', function ($scope, blogService,blogMethod) {
+  .controller('ArticlesCtrl', function ($scope, $sce, blogService,blogMethod) {
 
     var pathname = window.location.pathname;
     var account = pathname.substring(1);
@@ -31,6 +31,9 @@ angular.module('hopefutureBlogApp')
       blogService.articles(account, {params: params}, function (data) {
         if (data.success === true) {
           $scope.articles = data.dataPage.items;
+          $scope.articles.forEach(function(item, index){
+            item.content = $sce.trustAsHtml(item.content);
+          });
           $scope.totalItems = data.dataPage.totalItems;
         }
       });

@@ -19,7 +19,8 @@
 </head>
 <body ng-app="hopefutureBlogApp" ng-controller="HopefutureBlogCtrl" start-ajax-loading="true">
 <% include ../views/common/header.html %>
-<div class="container-fluid" ng-controller="BlogManageCtrl">
+<div class="container-fluid" ng-controller="BlogManageCtrl"
+     ng-init="loginName = '<%= locals.loginName %>';">
 
   <div class="row">
 

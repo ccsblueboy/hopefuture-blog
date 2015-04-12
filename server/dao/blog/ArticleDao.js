@@ -381,13 +381,15 @@ ArticleDao.prototype.delete = function (loginName, ids, callback) {
 /**
  * 根据二级域名（账户登录名）返回 相关博客数据
  * @param loginName {String} 账户登录名
+ * @param isLoginAccount {Boollean} 账户名是否为当前登录账户
  * @param callback {function} 回调函数
  */
-ArticleDao.prototype.findBlogData = function (loginName, callback) {
+ArticleDao.prototype.findBlogData = function (loginName, isLoginAccount, callback) {
   //以下代码加载博客数据，包括个人信息，最热文章，近期文章，文章归档（近期五个月文章），分类目录，标签，近期评论，资源链接
   var data = {};
   var model = this.model;
-  var conditions = {account: loginName, status: {$in: ['publish', 'modified']}, publicityStatus: { $ne: 'private' }};
+  var conditions = isLoginAccount ? {account: loginName} :
+  {account: loginName, status: {$in: ['publish', 'modified']}, publicityStatus: {$ne: 'private'}};
   var articlesId = [];
 
   var promise = AccountModel.findOne({loginName: loginName}, {_id: 1, name: 1, sex: 1, headPortrait: 1, englishName: 1, residence: 1, position: 1,
@@ -416,14 +418,14 @@ ArticleDao.prototype.findBlogData = function (loginName, callback) {
      * 操作符介绍：
      $project：包含、排除、重命名和显示字段
      $match：查询，需要同find()一样的参数
-     $limit：限制结果数量
+     $limit：查询的记录数，即从limit个记录中分组
      $skip：忽略结果的数量
      $sort：按照给定的字段排序结果
      $group：按照给定表达式组合结果
      $unwind：分割嵌入数组到自己顶层文件
      */
-    return model.aggregate({$match: {account: loginName, status: {$in: ['publish', 'modified']}, publicityStatus: { $ne: 'private' }}},
-      {$limit: 10}, { $group: { _id: '$createdMonth', articleCount: { $sum: 1 }}},
+    return model.aggregate({$match: conditions},
+       { $group: { _id: '$createdMonth', articleCount: { $sum: 1 }}},
       { $sort: { createdDate: -1 } }).exec();
   }).then(function (articles) {
     data.articlesArchive = articles.map(function (item) {
@@ -439,6 +441,36 @@ ArticleDao.prototype.findBlogData = function (loginName, callback) {
     return LabelModel.find({account: loginName}, {_id: 1, name: 1, count: 1}).exec();
   }).then(function (labels) {
     data.labels = labels;// 标签
+
+    return model.find(conditions, {_id: 1, categories: 1, labels: 1}).exec();
+  }).then(function (articles) {
+    //根据访问的个人博客账户名是否为当前登录账户，重新计算其文章个数
+    var categoriesMap = {};
+    var labelsMap = {};
+    articles.forEach(function (item) {
+      item.categories.forEach(function (it) {
+        if(categoriesMap[it]){
+          categoriesMap[it]++;
+        }else{
+          categoriesMap[it] = 1;
+        }
+      });
+      item.labels.forEach(function (it) {
+        if(labelsMap[it]){
+          labelsMap[it]++;
+        }else{
+          labelsMap[it] = 1;
+        }
+      });
+    });
+
+    data.categories.forEach(function (item) {
+      item.count = categoriesMap[item._id.toString()] || 0;
+    });
+
+    data.labels.forEach(function (item) {
+      item.count = labelsMap[item._id.toString()] || 0;
+    });
 
     return CommentModel.find({account: loginName}, {_id: 1, articleID: 1, commentator: 1}, {limit: 5, sort: {createdDate: -1}}).exec();
   }).then(function (comments) {
@@ -474,14 +506,16 @@ ArticleDao.prototype.findBlogData = function (loginName, callback) {
  * 分页显示文章 个人博客
  * @method
  * @param loginName {String} 登录用户名
+ * @param isLoginAccount {Boollean} 账户名是否为当前登录账户
  * @param dataPage {DataPage} 分页数据
  * @param callback {function} 回调函数
  */
-ArticleDao.prototype.list = function (loginName, dataPage, callback) {
+ArticleDao.prototype.list = function (loginName, isLoginAccount, dataPage, callback) {
   var skip = dataPage.itemsPerPage * (dataPage.currentPage - 1);
   var limit = dataPage.itemsPerPage;
   var model = this.model;
-  var conditions = {account: loginName, status: {$in: ['publish', 'modified']}, publicityStatus: { $ne: 'private' }};
+  var conditions = isLoginAccount ? {account: loginName} :
+  {account: loginName, status: {$in: ['publish', 'modified']}, publicityStatus: {$ne: 'private'}};
 
   model.count(conditions, function (err, count) {
     if (err === null) {
@@ -497,15 +531,17 @@ ArticleDao.prototype.list = function (loginName, dataPage, callback) {
 /**
  * 获取文章相关数据
  * @param loginName {String} 账户登录名
+ * @param isLoginAccount {Boollean} 账户名是否为当前登录账户
  * @param articleId {String} 文章id
  * @param password {String} 受保护的文章密码
  * @param callback {function} 回调函数
  */
-ArticleDao.prototype.articleInfo = function (loginName, articleId, password, callback) {
+ArticleDao.prototype.articleInfo = function (loginName, isLoginAccount, articleId, password, callback) {
   //以下加载文章内容，相关文章，前后文章，评论列表
   var data = {};
   var model = this.model;
-  var conditions = {account: loginName, status: {$in: ['publish', 'modified']}, publicityStatus: { $ne: 'private' }};
+  var conditions = isLoginAccount ? {account: loginName} :
+  {account: loginName, status: {$in: ['publish', 'modified']}, publicityStatus: {$ne: 'private'}};
   var articleLabels;
   var categories;
 
@@ -617,33 +653,40 @@ ArticleDao.prototype.articleInfo = function (loginName, articleId, password, cal
 /**
  * 文章归档列表
  * @param loginName {String} 账户登录名
+ * @param isLoginAccount {Boollean} 账户名是否为当前登录账户
  * @param month {String} 月份
  * @param callback {function} 回调函数
  */
-ArticleDao.prototype.archive = function (loginName, month, callback) {
-  var conditions = {account: loginName, status: {$in: ['publish', 'modified']}, createdMonth: month, publicityStatus: { $ne: 'private' }};
+ArticleDao.prototype.archive = function (loginName, isLoginAccount, month, callback) {
+  var conditions = isLoginAccount ? {account: loginName, createdMonth: month} :
+  {account: loginName, status: {$in: ['publish', 'modified']}, createdMonth: month, publicityStatus: {$ne: 'private'}};
   getArticleList(this.model, conditions, 'archive', month, callback);
 };
 
 /**
  * 分类目录文章列表
  * @param loginName {String} 账户登录名
+ * @param isLoginAccount {Boollean} 账户名是否为当前登录账户
  * @param id {String} 分类目录id
  * @param callback {function} 回调函数
  */
-ArticleDao.prototype.category = function (loginName, id, callback) {
-  var conditions = {account: loginName, status: {$in: ['publish', 'modified']}, categories: {$elemMatch: {$in: [id]}}, publicityStatus: { $ne: 'private' }};
+ArticleDao.prototype.category = function (loginName, isLoginAccount, id, callback) {
+  var conditions = isLoginAccount ? {account: loginName, categories: {$elemMatch: {$in: [id]}}} :
+  {account: loginName, status: {$in: ['publish', 'modified']}, categories: {$elemMatch: {$in: [id]}}, publicityStatus: {$ne: 'private'}};
   getArticleList(this.model, conditions, 'category', id, callback);
 };
 
 /**
  * 标签文章列表
  * @param loginName {String} 账户登录名
+ * @param isLoginAccount {Boollean} 账户名是否为当前登录账户
  * @param id {String} 标签id
  * @param callback {function} 回调函数
  */
-ArticleDao.prototype.label = function (loginName, id, callback) {
-  var conditions = {account: loginName, status: {$in: ['publish', 'modified']}, labels: {$elemMatch: {$in: [id]}}, publicityStatus: { $ne: 'private' }};
+ArticleDao.prototype.label = function (loginName, isLoginAccount, id, callback) {
+  var conditions = isLoginAccount ? {account: loginName, labels: {$elemMatch: {$in: [id]}}} :
+  {account: loginName, status: {$in: ['publish', 'modified']}, labels: {$elemMatch: {$in: [id]}}, publicityStatus: {$ne: 'private'}};
+
   // 或者调用以下语句，本地测试成功，但百度开放云有问题，不能正确读出数据
   //var conditions = {account: loginName, status: {$in: ['publish', 'modified']}, labels: {$elemMatch: {$eq: id}}, publicityStatus: { $ne: 'private' }};
   getArticleList(this.model, conditions, 'label', id, callback);

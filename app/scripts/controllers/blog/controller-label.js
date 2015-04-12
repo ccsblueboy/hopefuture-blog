@@ -10,7 +10,7 @@
  * */
 
 angular.module('hopefutureBlogApp')
-  .controller('LabelCtrl', function ($scope, $location, $timeout, blogService) {
+  .controller('LabelCtrl', function ($scope, $location, $timeout, $sce, blogService) {
 
     var pathname = window.location.pathname;
     var account = pathname.substring(1);
@@ -24,6 +24,9 @@ angular.module('hopefutureBlogApp')
     blogService.label(account, id, function (data) {
       if (data.success === true) {
         $scope.articles = data.articles;
+        $scope.articles.forEach(function(item, index){
+          item.content = $sce.trustAsHtml(item.content);
+        });
         $scope.label = data.label;
         $timeout(function(){
           SyntaxHighlighter.all();

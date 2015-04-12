@@ -10,7 +10,7 @@
  * */
 
 angular.module('hopefutureBlogApp')
-  .controller('ArchiveCtrl', function ($scope, $location, $timeout, blogService) {
+  .controller('ArchiveCtrl', function ($scope, $location, $timeout, $sce, blogService) {
 
     var pathname = window.location.pathname;
     var account = pathname.substring(1);
@@ -26,6 +26,9 @@ angular.module('hopefutureBlogApp')
     blogService.archive(account, month, function (data) {
       if (data.success === true) {
         $scope.articles = data.articles;
+        $scope.articles.forEach(function(item, index){
+          item.content = $sce.trustAsHtml(item.content);
+        });
         $timeout(function(){
           SyntaxHighlighter.highlight();
           $scope.showArticleInfo = true;

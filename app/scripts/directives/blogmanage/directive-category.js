@@ -50,7 +50,7 @@ angular.module('hopefutureBlogApp')
       link: function postLink(scope, element, attrs) {
         var count = attrs.articleCount;
         if(count > 0){
-          element.html('<a href="">' + count + '</a>');
+          element.html('<a target="_blank" href="' + attrs.link + '">' + count + '</a>');
         }else{
           element.text('0');
         }

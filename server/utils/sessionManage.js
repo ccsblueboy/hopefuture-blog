@@ -60,6 +60,17 @@ var sessionManage = {
   },
 
   /**
+   * 判断给定账户是否为当前登录用户
+   * @param req
+   * @param loginName
+   * @returns {boolean}
+   */
+  isLoginAccount: function (req,loginName) {
+      var account = req.session.account;
+      return account ? account.loginName === loginName : false;
+  },
+
+  /**
    * 判断用户是否为超级管理员
    * @param req
    * @returns {boolean}
