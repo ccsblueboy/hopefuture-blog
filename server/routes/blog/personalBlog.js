@@ -25,6 +25,7 @@ var personalBlog = {
     validate({loginName: loginName}, function (valid) {
       if (valid) {
         res.locals.personalBlogPage = true;
+        res.locals.isLoginAccount = sessionManage.isLoginAccount(req, loginName);
         res.render('blog/blog', {
           title: '我的博客首页'
         });

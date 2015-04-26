@@ -1,6 +1,6 @@
 {
   "name": "hopefuture-blog",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "authors": [
     "linder0209 <linder0209@126.com>"
   ],
@@ -10,6 +10,10 @@
     "future",
     "blog"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/linder0209/hopefuture-blog"
+  },
   "dependencies": {
     "express": "~4.12.3",
     "serve-favicon": "~2.2.0",

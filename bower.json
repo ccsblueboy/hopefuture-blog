@@ -1,6 +1,6 @@
 {
   "name": "hopefuture-blog",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "authors": [
     "linder0209 <linder0209@126.com>"
   ],
@@ -16,7 +16,7 @@
     "jquery-validation": "~1.13.0",
     "bootstrap": "~3.3.1",
     "angular-bootstrap": "~0.12.0",
-    "tinymce": "~4.1.7",
+    "tinymce": "~4.1.9",
     "angular-ui-tinymce": "~0.0.5",
     "fontawesome": "~4.3.0",
     "eonasdan-bootstrap-datetimepicker": "~4.7.14",
