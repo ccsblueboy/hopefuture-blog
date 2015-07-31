@@ -199,7 +199,7 @@ routes(app);
 if ('development' === app.get('env')) {
   app.set('views', path.join(__dirname, 'app'));
   app.use(express.static(path.join(__dirname, 'app')));
-  process.env.PORT = 9000;
+  process.env.PORT = 9005;
 } else {
   app.set('views', path.join(__dirname, 'webapp'));
   app.use(express.static(path.join(__dirname, 'webapp')));
