@@ -41,7 +41,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser(config.cookieSecret));
 
 //上传文件中间件 https://www.npmjs.com/package/multer
-app.use(multer({
+/*app.use(multer({
   dest: rootPath + '/upload/tmp',
   rename: function (fieldname, filename) {
     return filename.replace(/\W+/g, '-').toLowerCase() + Date.now();
@@ -52,7 +52,7 @@ app.use(multer({
   onFileUploadComplete: function (file) {
     //console.log(file.fieldname + ' uploaded to  ' + file.path);
   }
-}));
+}));*/
 
 // Populates req.session
 app.use(session({

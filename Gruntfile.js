@@ -127,22 +127,33 @@ module.exports = function (grunt) {
 
     // Add vendor prefixed styles
     // 该任务用来分析css并为css3加上各浏览器前缀
-    autoprefixer: {
+    postcss: {
       options: {
-        //cascade: true,// 设置层叠显示分格
-        browsers: ['last 1 version']// 指定浏览器版本，该设置表示浏览器最新版本，详见 https://github.com/ai/autoprefixer#browsers
+        processors: [
+          require('autoprefixer-core')({browsers: ['last 1 version']})// 指定浏览器版本，该设置表示浏览器最新版本
+        ]
+      },
+      server: {
+        options: {
+          map: true
+        },
+        files: [{
+          expand: true,
+          cwd: '.tmp/styles/',
+          src: '{,*/}*.css',
+          dest: '.tmp/styles/'
+        }]
       },
       dist: {
-        files: [
-          {
-            expand: true,
-            cwd: '.tmp/styles/',// 指定当前文件夹
-            src: '{,*/}*.css',
-            dest: '.tmp/styles/'
-          }
-        ]
+        files: [{
+          expand: true,
+          cwd: '.tmp/styles/',
+          src: '{,*/}*.css',
+          dest: '.tmp/styles/'
+        }]
       }
     },
+
 
     // Automatically inject Bower components into the app
     // 由于项目中不同的文件加载的bower 组件不一样，故有些html文件去掉了bower install
@@ -284,25 +295,22 @@ module.exports = function (grunt) {
       }
     },
 
-    // Allow the use of non-minsafe AngularJS files. Automatically makes it
-    // minsafe compatible so Uglify does not destroy the ng references
-    // FIXME 该grunt 任务有 bug，对 service-publish.js 中的publishMethod没有自动加入
-    ngmin: {
+    // ng-annotate tries to make the code safe for minification automatically
+    // by using the Angular long form for dependency injection.
+    ngAnnotate: {
       dist: {
-        files: [
-          {
-            expand: true,
-            cwd: '.tmp/concat/scripts',
-            src: '*.js',
-            dest: '.tmp/concat/scripts'
-          },
+        files: [{
+          expand: true,
+          cwd: '.tmp/concat/scripts',
+          src: '*.js',
+          dest: '.tmp/concat/scripts'
+        },
           {
             expand: true,
             cwd: '.tmp/usemin/scripts',
             src: '*.js',
             dest: '.tmp/usemin/scripts'
-          }
-        ]
+          }]
       }
     },
 
@@ -769,7 +777,7 @@ module.exports = function (grunt) {
       'copy:stylesThemes',// copy 主题样式
       'less:publish',//把less转换为css
       'concurrent:server',// 把样式copy到临时目录中
-      'autoprefixer',// 分析css 并给css3加上浏览器前缀
+      'postcss:server',// 分析css 并给css3加上浏览器前缀
       'express:dev',// 启动 express
       'watch'
     ]);
@@ -791,9 +799,9 @@ module.exports = function (grunt) {
     'less:publish',//把less转换为css
     'useminPrepare',//合并压缩文件
     'concurrent:dist',//copy css image 和 svg
-    'autoprefixer',// 分析css 并给css3加上浏览器前缀
+    'postcss',// 分析css 并给css3加上浏览器前缀
     'concat',// 用 useminPrepare 生成的 concat config 连接文件
-    'ngmin',// 处理angular 在 .tmp下
+    'ngAnnotate',// 处理angular 在 .tmp下
     'copy:dist',// copy 文件
     //'cdnify',// 处理 google cdn，由于执行该task会报错，故暂先注掉
     'cssmin',// 用 useminPrepare 生成的 cssmin config 压缩 css

@@ -1,7 +1,11 @@
-导出
+瀵煎嚭
 
 mongodump -h localhost:27017 -d hfblog -o D:\gitworkspace\hopefuture-blog\data\mongodb
 
-导入
+瀵煎叆
 
 mongorestore -h localhost:27017 -d hfblog  D:\gitworkspace\hopefuture-blog\data\mongodb\hfblog --drop
+
+鍚姩
+
+mongod --dbpath E:\mongodb-data

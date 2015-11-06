@@ -16,6 +16,7 @@ router.get('/data', function (req, res) {
 
 /**
  * 数据导出
+ * mongodump -h localhost:27017 -d hfblog -o D:\gitworkspace\hopefuture-blog\data\mongodb
  */
 router.get('/data/mongodump', function (req, res) {
   var mongodb = config.mongodb;
@@ -48,6 +49,7 @@ router.get('/data/mongodump', function (req, res) {
 
 /**
  * 数据导入
+ * mongorestore -h localhost:27017 -d hfblog  D:\gitworkspace\hopefuture-blog\data\mongodb\hfblog --drop
  */
 router.get('/data/mongorestore', function (req, res) {
   var mongodb = config.mongodb;
