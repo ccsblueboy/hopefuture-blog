@@ -10,11 +10,11 @@
  * */
 
 angular.module('hopefutureBlogApp')
-  .controller('DemoDataCtrl', function ($scope, $modal, demoDataService) {
+  .controller('DemoDataCtrl', function ($scope, $uibModal, demoDataService) {
     $scope.mongodump = function () {
       demoDataService.mongodump(function (data) {
         if(data.success){
-          $modal.open({
+          $uibModal.open({
             templateUrl: '../views/templates/alert-modal.html',
             controller: 'AlertModalCtrl',
             resolve: {
@@ -32,7 +32,7 @@ angular.module('hopefutureBlogApp')
     $scope.mongorestore = function () {
       demoDataService.mongorestore(function (data) {
         if(data.success){
-          $modal.open({
+          $uibModal.open({
             templateUrl: '../views/templates/alert-modal.html',
             controller: 'AlertModalCtrl',
             resolve: {

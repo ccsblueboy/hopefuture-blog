@@ -155,24 +155,24 @@
       <h3 class="panel-title">分类目录</h3>
     </div>
     <div class="panel-body">
-      <tabset>
-        <tab heading="所有分类目录">
+      <uib-tabset>
+        <uib-tab heading="所有分类目录">
           <div class="category-list">
             <div class="checkbox" ng-repeat="category in categories" ng-style="category.style">
               <label><input type="checkbox" name="category" ng-model="category.checked" ng-change="changeCategory(category,'all')"/>{{category.name}}</label>
             </div>
           </div>
-        </tab>
+        </uib-tab>
 
-        <tab>
+        <uib-tab>
           <tab-heading>最常用</tab-heading>
           <div class="category-list">
             <div class="checkbox" ng-repeat="category in frequentCategories">
               <label><input type="checkbox" name="category" ng-model="category.checked" ng-change="changeCategory(category,'frequent')"/>{{category.name}}</label>
             </div>
           </div>
-        </tab>
-      </tabset>
+        </uib-tab>
+      </uib-tabset>
 
       <div class="margin-top-md">
         <a href="" ng-click="showAddCategory = !showAddCategory;"> <span class="fa fa-plus"></span> 添加新分类目录</a>

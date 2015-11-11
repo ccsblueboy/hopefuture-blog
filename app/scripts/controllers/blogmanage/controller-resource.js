@@ -10,7 +10,7 @@
  * */
 
 angular.module('hopefutureBlogApp')
-  .controller('ResourceCtrl', function ($scope, $modal, resourceService) {
+  .controller('ResourceCtrl', function ($scope, $uibModal, resourceService) {
 
     var resource = {
       _id: undefined,
@@ -109,7 +109,7 @@ angular.module('hopefutureBlogApp')
       if (!item) {//没有传参数，表示执行的是删除多条记录
         ids = [];
         if ($scope.grid.checked === false) {
-          $modal.open({
+          $uibModal.open({
             templateUrl: '../views/templates/alert-modal.html',
             controller: 'AlertModalCtrl',
             resolve: {
@@ -132,7 +132,7 @@ angular.module('hopefutureBlogApp')
       }
       var json = {params: {ids: ids}};
 
-      var modalInstance = $modal.open({
+      var modalInstance = $uibModal.open({
         backdrop: 'static',
         templateUrl: '../views/templates/confirm-modal.html',
         controller: 'ConfirmModalCtrl',
@@ -184,7 +184,7 @@ angular.module('hopefutureBlogApp')
       $scope.grid.checked = checked;
     };
   })
-  .controller('ResourceCategoryCtrl', function ($scope, $modal, resourceService, resourceMethod, errorCodes) {
+  .controller('ResourceCategoryCtrl', function ($scope, $uibModal, resourceService, resourceMethod, errorCodes) {
     $scope.resourceCategory = {
       _id: undefined,
       name: ''
@@ -277,7 +277,7 @@ angular.module('hopefutureBlogApp')
     };
 
     $scope.deleteCategory = function (category, index) {
-      var modalInstance = $modal.open({
+      var modalInstance = $uibModal.open({
         backdrop: 'static',
         templateUrl: '../views/templates/confirm-modal.html',
         controller: 'ConfirmModalCtrl',

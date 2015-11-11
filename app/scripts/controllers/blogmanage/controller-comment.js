@@ -10,7 +10,7 @@
  * */
 
 angular.module('hopefutureBlogApp')
-  .controller('CommentCtrl', function ($scope, $modal, commentService) {
+  .controller('CommentCtrl', function ($scope, $uibModal, commentService) {
 
     $scope.index = undefined;
 
@@ -61,7 +61,7 @@ angular.module('hopefutureBlogApp')
       var json;
       if (!comment) {//没有传参数，表示执行的是删除多条记录
         if ($scope.grid.checked === false) {
-          $modal.open({
+          $uibModal.open({
             templateUrl: '../views/templates/alert-modal.html',
             controller: 'AlertModalCtrl',
             resolve: {
@@ -84,7 +84,7 @@ angular.module('hopefutureBlogApp')
       } else {
         json = {params: {ids: comment._id}};
       }
-      var modalInstance = $modal.open({
+      var modalInstance = $uibModal.open({
         backdrop: 'static',
         templateUrl: '../views/templates/confirm-modal.html',
         controller: 'ConfirmModalCtrl',

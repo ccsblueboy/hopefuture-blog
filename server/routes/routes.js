@@ -19,6 +19,7 @@ var setting = require('./blogmanage/setting');
 var auditArticle = require('./blogmanage/auditArticle');
 var blog = require('./blog/blog');
 var blogSetting = require('./blog/blogSetting');
+var captureData = require('./examples/capture-data');
 
 var sessionManage = require('../utils/sessionManage');
 
@@ -41,6 +42,7 @@ module.exports = function (app) {
   app.use('/examples', examples);
   app.use('/examples/grid', grid);
   app.use('/examples/pagination', pagination);
+  app.use('/examples/capture', captureData);
 
   app.use('/login', login);
   app.use('/logout', function (req, res) {

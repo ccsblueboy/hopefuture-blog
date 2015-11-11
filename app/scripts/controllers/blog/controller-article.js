@@ -10,7 +10,7 @@
  * */
 
 angular.module('hopefutureBlogApp')
-  .controller('ArticleCtrl', function ($scope, $location, $modal, $timeout, $sce, blogService, errorCodes, blogMethod) {
+  .controller('ArticleCtrl', function ($scope, $location, $uibModal, $timeout, $sce, blogService, errorCodes, blogMethod) {
 
     var pathname = window.location.pathname;
     var account = pathname.substring(1);
@@ -126,7 +126,7 @@ angular.module('hopefutureBlogApp')
         } else {
           $scope.showArticleInfo = false;
           if (data.errorMessage === 'protected') {
-            $modal.open({
+            $uibModal.open({
               backdrop: 'static',// 设置为 static 表示当鼠标点击页面其他地方，modal不会关闭
               //keyboard: false,// 设为false，按 esc键不会关闭 modal
               templateUrl: 'protectedPasswordModal.html',
@@ -179,7 +179,7 @@ angular.module('hopefutureBlogApp')
           $scope.resetComment(false);
         } else {
           var errCode = data.errMessage;
-          $modal.open({
+          $uibModal.open({
             templateUrl: '../views/templates/alert-modal.html',
             controller: 'AlertModalCtrl',
             resolve: {

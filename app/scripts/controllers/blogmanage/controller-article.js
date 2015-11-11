@@ -10,7 +10,7 @@
  * */
 
 angular.module('hopefutureBlogApp')
-  .controller('ArticleCtrl', function ($scope, $location, $modal, articleService, articleStatus) {
+  .controller('ArticleCtrl', function ($scope, $location, $uibModal, articleService, articleStatus) {
     //初始化记录
     $scope.items = [];
     $scope.grid = {
@@ -63,7 +63,7 @@ angular.module('hopefutureBlogApp')
       var json;
       if (!item) {//没有传参数，表示执行的是删除多条记录
         if ($scope.grid.checked === false) {
-          $modal.open({
+          $uibModal.open({
             templateUrl: '../views/templates/alert-modal.html',
             controller: 'AlertModalCtrl',
             resolve: {
@@ -86,7 +86,7 @@ angular.module('hopefutureBlogApp')
       } else {
         json = {params: {ids: [item._id]}};
       }
-      var modalInstance = $modal.open({
+      var modalInstance = $uibModal.open({
         backdrop: 'static',
         templateUrl: '../views/templates/confirm-modal.html',
         controller: 'ConfirmModalCtrl',

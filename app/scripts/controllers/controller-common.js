@@ -9,15 +9,15 @@
  * @createdDate 2014-5-9
  * */
 angular.module('hopefutureBlogApp')
-  .controller('ConfirmModalCtrl', function ($scope, $modalInstance, config) {
+  .controller('ConfirmModalCtrl', function ($scope, $uibModalInstance, config) {
     $scope.modalTitle = config.modalTitle;
     $scope.modalContent = config.modalContent;
     $scope.ok = function () {
-      $modalInstance.close();
+      $uibModalInstance.close();
     };
 
     $scope.cancel = function () {
-      $modalInstance.dismiss('cancel');
+      $uibModalInstance.dismiss('cancel');
     };
   })
 
@@ -29,15 +29,15 @@ angular.module('hopefutureBlogApp')
  * @author Linder linder0209@126.com
  * @createdDate 2014-5-9
  * */
-  .controller('AlertModalCtrl', function ($scope, $modalInstance, config) {
+  .controller('AlertModalCtrl', function ($scope, $uibModalInstance, config) {
     $scope.modalTitle = config.modalTitle;
     $scope.modalContent = config.modalContent;
     $scope.hideClose = config.hideClose;
     $scope.ok = function () {
-      $modalInstance.close();
+      $uibModalInstance.close();
     };
 
     $scope.cancel = function () {
-      $modalInstance.dismiss('cancel');
+      $uibModalInstance.dismiss('cancel');
     };
   });

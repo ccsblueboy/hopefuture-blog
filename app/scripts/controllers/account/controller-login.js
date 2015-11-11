@@ -10,12 +10,12 @@
  * */
 
 angular.module('hopefutureBlogApp')
-  .controller('LoginCtrl', function ($scope, $location, $modal, loginService, errorCodes) {
+  .controller('LoginCtrl', function ($scope, $location, $uibModal, loginService, errorCodes) {
 
     var url = $location.absUrl();
     var error = url.match(/errorCode=(\w+)/);
     if (error !== null) {
-      var modalInstance = $modal.open({
+      var modalInstance = $uibModal.open({
         templateUrl: '../views/templates/alert-modal.html',
         controller: 'AlertModalCtrl',
         resolve: {

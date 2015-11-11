@@ -10,7 +10,7 @@
  * */
 
 angular.module('hopefutureBlogApp')
-  .controller('AccountInfoCtrl', function ($scope, $modal, accountInfoService, accountInfo) {
+  .controller('AccountInfoCtrl', function ($scope, $uibModal, accountInfoService, accountInfo) {
 
   $scope.account = {
     loginName: '',
@@ -59,7 +59,7 @@ angular.module('hopefutureBlogApp')
     delete account.loginName;
     delete account.email;
     accountInfoService.update(account, function (data) {
-      $modal.open({
+      $uibModal.open({
         templateUrl: '../views/templates/alert-modal.html',
         controller: 'AlertModalCtrl',
         resolve: {
@@ -76,7 +76,7 @@ angular.module('hopefutureBlogApp')
 
   //修改密码
   $scope.updatePassword = function () {
-    $modal.open({
+    $uibModal.open({
       backdrop: 'static',// 设置为 static 表示当鼠标点击页面其他地方，modal不会关闭
       //keyboard: false,// 设为false，按 esc键不会关闭 modal
       templateUrl: 'updatePassword.html',
@@ -91,7 +91,7 @@ angular.module('hopefutureBlogApp')
       }
     });
   };
-}).controller('UpdatePasswordCtrl', function ($scope, $modalInstance, $timeout, accountInfoService, formData) {
+}).controller('UpdatePasswordCtrl', function ($scope, $uibModalInstance, $timeout, accountInfoService, formData) {
   var accountScope = formData.accountScope;
 
   $scope.account = {
@@ -114,7 +114,7 @@ angular.module('hopefutureBlogApp')
         accountScope.$parent.$parent.alerts = [
           {type: 'success', message: '密码修改成功！'}
         ];
-        $modalInstance.close();
+        $uibModalInstance.close();
         $timeout(function () {
           accountScope.$parent.$parent.alerts = [];
         }, 1000);
@@ -130,7 +130,7 @@ angular.module('hopefutureBlogApp')
   };
 
   $scope.cancel = function () {
-    $modalInstance.dismiss('cancel');
+    $uibModalInstance.dismiss('cancel');
   };
 
 });

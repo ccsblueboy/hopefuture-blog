@@ -10,7 +10,7 @@
  * */
 
 angular.module('hopefutureBlogApp')
-  .controller('LabelCtrl', function ($scope, $modal, $timeout, labelService, errorCodes) {
+  .controller('LabelCtrl', function ($scope, $uibModal, $timeout, labelService, errorCodes) {
 
     $scope.label = {
       _id: undefined,
@@ -119,7 +119,7 @@ angular.module('hopefutureBlogApp')
       var json;
       if (!label) {//没有传参数，表示执行的是删除多条记录
         if ($scope.grid.checked === false) {
-          $modal.open({
+          $uibModal.open({
             templateUrl: '../views/templates/alert-modal.html',
             controller: 'AlertModalCtrl',
             resolve: {
@@ -142,7 +142,7 @@ angular.module('hopefutureBlogApp')
       } else {
         json = {params: {ids: label._id}};
       }
-      var modalInstance = $modal.open({
+      var modalInstance = $uibModal.open({
         backdrop: 'static',
         templateUrl: '../views/templates/confirm-modal.html',
         controller: 'ConfirmModalCtrl',

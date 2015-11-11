@@ -121,7 +121,18 @@
 
 ##version 0.4.0  狮子狗-勇敢
 * 预览文章详细信息时，如果是登录并且是本人的文章，则可以编辑修改
-* 增加点击图片查看原图，并可以缩放图片大小功能
+* 重新修改 useminPrepare(grunt-usemin) 对应html中js规则，相同的库只引入一次即可，提高构建速度
+* 升级Angular-Bootstrap，并解决以下兼容问题
+     1. $modal is now deprecated. Use $uibModal instead.
+     2. TabsetController is now deprecated. Use UibTabsetController instead.
+     3. tab is now deprecated. Use uib-tab instead.
+     4. tabset is now deprecated. Use uib-tabset instead.
+     5. $tooltip is now deprecated. Use $uibTooltip instead.（实际上是popover，源代码提示有问题）
+     6. PaginationController is now deprecated. Use UibPaginationController instead.
+     7. pagination is now deprecated. Use uib-pagination instead.
+     8. $modalInstance is now deprecated. Use $uibModalInstance instead.
+* 增加点击图片查看原图，并可以缩放图片大小功能（未完成）
+* 发布博客时，可以同时往第三方添加博客，目前没有实现，主要是没有解决登录的问题，后期有时间再考虑
 * 发布博客时，支持上传附件（未完成）
 * 加入markdown支持（未完成）
 * 后台启动定时发布新闻功能（未完成）

@@ -10,7 +10,7 @@
  * */
 
 angular.module('hopefutureBlogApp')
-  .controller('CategoryCtrl', function ($scope, $modal, $sce, $filter, categoryService, categoryMethod) {
+  .controller('CategoryCtrl', function ($scope, $uibModal, $sce, $filter, categoryService, categoryMethod) {
     /**
      * 列表数据
      * @type {Array}
@@ -57,12 +57,12 @@ angular.module('hopefutureBlogApp')
      * 创建新的记录
      */
     $scope.create = function () {
-      categoryMethod.openFormModal($modal, $scope);
+      categoryMethod.openFormModal($uibModal, $scope);
     };
 
     $scope.edit = function (id) {
       categoryService.edit(id, function (data) {
-        categoryMethod.openFormModal($modal, $scope, data.item);
+        categoryMethod.openFormModal($uibModal, $scope, data.item);
       });
     };
 
@@ -74,7 +74,7 @@ angular.module('hopefutureBlogApp')
       var json;
       if (!item) {//没有传参数，表示执行的是删除多条记录
         if ($scope.grid.checked === false) {
-          $modal.open({
+          $uibModal.open({
             templateUrl: '../views/templates/alert-modal.html',
             controller: 'AlertModalCtrl',
             resolve: {
@@ -103,7 +103,7 @@ angular.module('hopefutureBlogApp')
             }
           }};
       }
-      var modalInstance = $modal.open({
+      var modalInstance = $uibModal.open({
         backdrop: 'static',
         templateUrl: '../views/templates/confirm-modal.html',
         controller: 'ConfirmModalCtrl',
@@ -157,7 +157,7 @@ angular.module('hopefutureBlogApp')
 //    });
   })
   //这里需要注意的是：此处的 controller 不能命名为 form name + Ctrl，即CategoryFormCtrl，因为会与Angular本身生成的form controller 冲突，
-  .controller('CategoryFormModalCtrl', function ($scope, $modalInstance, categoryService, formData, categoryMethod) {
+  .controller('CategoryFormModalCtrl', function ($scope, $uibModalInstance, categoryService, formData, categoryMethod) {
     $scope.items = formData.items;
     $scope.filterObject = formData.filterObject;
     $scope.dialogTitle = '添加分类目录';
@@ -221,11 +221,11 @@ angular.module('hopefutureBlogApp')
            **/
         }
       });
-      $modalInstance.close();
+      $uibModalInstance.close();
     };
 
     $scope.cancel = function () {
-      $modalInstance.dismiss('cancel');
+      $uibModalInstance.dismiss('cancel');
     };
 
     $scope.validateName = function () {

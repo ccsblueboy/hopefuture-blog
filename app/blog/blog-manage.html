@@ -55,7 +55,7 @@
 
 <% include ../views/common/manage-footer.html %>
 
-<!-- build:js ../scripts/vendor-blog-manage.js -->
+<!-- build:js ../scripts/vendor2.js -->
 <script src="../bower_components/jquery/dist/jquery.js"></script>
 <script src="../bower_components/angular/angular.js"></script>
 <script src="../bower_components/angular-route/angular-route.js"></script>
@@ -64,6 +64,12 @@
 <script src="../bower_components/jquery-validation/dist/jquery.validate.js"></script>
 <script src="../bower_components/bootstrap/dist/js/bootstrap.js"></script>
 <script src="../bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+
+<!--校验国际化 -->
+<script src="../bower_components/jquery-validation/src/localization/messages_zh.js"></script>
+<!-- endbuild -->
+
+<!-- build:js ../scripts/vendor-blog-manage.js -->
 <!-- TinyMCE -->
 <script src="../bower_components/tinymce/tinymce.jquery.js"></script>
 <script src="../scripts/components/tinymce/langs/zh_CN.js"></script>
@@ -74,10 +80,7 @@
 <!-- datetimepicker -->
 <script src="../bower_components/moment/moment.js"></script>
 <script src="../bower_components/moment/locale/zh-cn.js"></script>
-<script src="../bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
-
-<!--校验国际化 -->
-<script src="../bower_components/jquery-validation/src/localization/messages_zh.js"></script>
+<script src="../bower_components/eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js"></script>
 <!-- endbuild -->
 
 <!-- build:js ../scripts/blog-manage.js -->

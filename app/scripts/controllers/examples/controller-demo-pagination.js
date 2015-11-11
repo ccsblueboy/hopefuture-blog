@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('hopefutureBlogApp')
-  .controller('DemoPaginationCtrl', function ($scope, $modal, demoPaginationService) {
+  .controller('DemoPaginationCtrl', function ($scope, $uibModal, demoPaginationService) {
     //初始化记录
     $scope.items = [];
     $scope.grid = {
@@ -35,17 +35,17 @@ angular.module('hopefutureBlogApp')
     $scope.loadPageData();
 
     $scope.create = function () {
-      openFormModal($modal, $scope);
+      openFormModal($uibModal, $scope);
     };
 
     $scope.edit = function (id, index) {
       demoPaginationService.edit(id, function (data) {
-        openFormModal($modal, $scope, data.item, index);
+        openFormModal($uibModal, $scope, data.item, index);
       });
     };
 
     $scope.delete = function (item) {
-      var modalInstance = $modal.open({
+      var modalInstance = $uibModal.open({
         backdrop: 'static',
         templateUrl: '../views/templates/confirm-modal.html',
         controller: 'ConfirmModalCtrl',
@@ -66,7 +66,7 @@ angular.module('hopefutureBlogApp')
 
     $scope.deleteAll = function () {
       if ($scope.grid.checked === false) {
-        $modal.open({
+        $uibModal.open({
           templateUrl: '../views/templates/alert-modal.html',
           controller: 'AlertModalCtrl',
           resolve: {
@@ -79,7 +79,7 @@ angular.module('hopefutureBlogApp')
         });
         return;
       }
-      var modalInstance = $modal.open({
+      var modalInstance = $uibModal.open({
         backdrop: 'static',
         templateUrl: '../views/templates/confirm-modal.html',
         controller: 'ConfirmModalCtrl',
@@ -127,8 +127,8 @@ angular.module('hopefutureBlogApp')
       $scope.grid.checked = checked;
     };
 
-    function openFormModal($modal, $scope, item, index) {
-      $modal.open({
+    function openFormModal($uibModal, $scope, item, index) {
+      $uibModal.open({
         backdrop: 'static',// 设置为 static 表示当鼠标点击页面其他地方，modal不会关闭
         //keyboard: false,// 设为false，按 esc键不会关闭 modal
         templateUrl: 'demoModalContent.html',
@@ -147,7 +147,7 @@ angular.module('hopefutureBlogApp')
       });
     }
   })
-  .controller('FormModalCtrl', function ($scope, $modalInstance, $timeout, demoPaginationService, formData) {
+  .controller('FormModalCtrl', function ($scope, $uibModalInstance, $timeout, demoPaginationService, formData) {
     $scope.items = formData.items;
     $scope.loadPageData = formData.loadPageData;
     $scope.demo = {
@@ -174,11 +174,11 @@ angular.module('hopefutureBlogApp')
           }
         }
       });
-      $modalInstance.close();
+      $uibModalInstance.close();
     };
 
     $scope.cancel = function () {
-      $modalInstance.dismiss('cancel');
+      $uibModalInstance.dismiss('cancel');
     };
 
     $timeout(function () {

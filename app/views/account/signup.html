@@ -78,7 +78,7 @@
       <label for="sex" class="control-label col-sm-3">性别</label>
 
       <div class="col-sm-6">
-        <div class="input-group select-box" dropdown is-open="selectBox.sex">
+        <div class="input-group select-box" uib-dropdown is-open="selectBox.sex">
           <input placeholder="" type="text" class="form-control dropdown-input"
                  ng-model="account.sex" ng-click="openDropDown($event,'sex');"
                  id="sex" name="sex" ng-readonly="true">
@@ -126,7 +126,7 @@
       <label for="residence" class="control-label col-sm-3">来自</label>
 
       <div class="col-sm-6">
-        <div class="input-group select-box" dropdown is-open="selectBox.residence">
+        <div class="input-group select-box" uib-dropdown is-open="selectBox.residence">
           <input placeholder="如果列表中没有您的城市，可直接输入" type="text" class="form-control dropdown-input"
                  ng-model="account.residence" ng-click="openDropDown($event,'residence');"
                  id="residence" name="residence" maxlength="80">
@@ -149,7 +149,7 @@
       <label for="position" class="control-label col-sm-3">职位</label>
 
       <div class="col-sm-6">
-        <div class="input-group select-box" dropdown is-open="selectBox.position">
+        <div class="input-group select-box" uib-dropdown is-open="selectBox.position">
           <input placeholder="" type="text" class="form-control dropdown-input"
                  ng-model="account.position" ng-click="openDropDown($event,'position');"
                  id="position" name="position" ng-readonly="true">
